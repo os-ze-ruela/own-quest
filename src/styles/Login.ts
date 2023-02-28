@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
-export const Loginstyle = styled.div`
+export const LoginStyle = styled.div`
     background-color: red;
+    height: 500px ;
+    width: 500px;
 `
