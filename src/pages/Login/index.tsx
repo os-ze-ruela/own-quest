@@ -1,13 +1,15 @@
 import React from 'react'
 import Header from '../../components/Header/Header'
-import { Bar, BarTitle, ButtonLogin, ButtonRegister, Foot, LoginStyle, RegisterLink, Wrt } from '../../styles/Login'
+import { Bar, BarTitle, ButtonLogin, ButtonRegister, Foot, ImgAstro, Input, Label, LoginStyle, RegisterLink, Wrt } from '../../styles/Login'
 import LOGO from "../../assets/img/ownquest-logo.png";
+import ASTRO from "../../assets/img/astronauta-saturno 1.png";
 
 function Login() {
   return (
     <>
     <Header/>
     <LoginStyle>
+      <ImgAstro src={ASTRO} />
       <Wrt>
         Bem-vindo de volta!
       </Wrt>
@@ -15,22 +17,20 @@ function Login() {
       <p style={{color: "white", marginLeft: "0.5em"}}>Ainda não tem uma conta? 
       <RegisterLink href='register'> Cadastre-se</RegisterLink>
       </p>
-      {/* LEMBRAR DE ESTILISAR OS INPUTS */}
-      <input style={{display: "flex", marginLeft: "0.5em"}}
+      <Label htmlFor="login">Email ou nickname</Label>
+      <Input
         type="text"
         name="login"
-        placeholder="Email ou nickname"
         value=''
-      /> 
-      <input style={{display: "flex", marginLeft: "0.5em"}}
+      />
+      <Label htmlFor="senha">Senha</Label> 
+      <Input
         type="text"
         name="senha"
-        placeholder="Senha"
         value=''
       />
       <ButtonLogin>Entrar</ButtonLogin>          
     </LoginStyle>
-    {/* LEMBRAR DE MUDAR A COR DO BAR - TÁ ERRADA DE PROPÓSITO */}
     <Bar>
       <BarTitle>Ainda não possui uma conta?</BarTitle>
       <ButtonRegister>Crie sua conta grátis agora</ButtonRegister>

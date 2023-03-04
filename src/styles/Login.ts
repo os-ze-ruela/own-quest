@@ -23,8 +23,32 @@ export const RegisterLink = styled.a`
         color: white;
     }
 `
+export const Label = styled.label`
+    margin-left: 0.5em;
+    color: #FFFFFF99;
+`
+
+export const Input = styled.input`
+    display: flex;
+    margin-left: 0.5em;
+    flex-direction: column;
+    background-color: #30354B;
+    margin-bottom: 1em;
+    border: none;
+    padding: 0.6em;
+    border-radius: 0.7em;
+    width: 700px;
+`
+export const ImgAstro = styled.img`
+    position: absolute;
+    width: 290px;
+    height: 380px;
+    margin-left: 1120px;
+    margin-top: 50px;
+`
+
 export const ButtonLogin = styled.button`
-    background-color: #4d92cb;
+    background-color: #568EA3;
     color: #FFF;
     margin-top: 0.5em;
     margin-left: 0.5em;
@@ -43,14 +67,14 @@ export const Bar = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: black;
+    background-color: #202331;
 `
 export const BarTitle = styled.h4`
     font-size: 1.5em;
     color: white;
 `
 export const ButtonRegister = styled.button`
-    background-color: #4d92cb;
+    background-color: #568EA3;
     color: #FFF;
     padding: 0.5em 1em;
     text-decoration: none;
