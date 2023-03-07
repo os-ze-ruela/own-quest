@@ -1,7 +1,6 @@
 import React from 'react'
 import Header from '../../components/Header/Header'
 import { Bar, BarTitle, ButtonLogin, ButtonRegister, FieldsDiv, ImgAstro, Input, Label, LoginStyle, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login'
-import LOGO from "../../assets/img/ownquest-logo.png";
 import ASTRO from "../../assets/img/astronauta-saturno 1.png";
 import Footer from '../../components/Footer/Footer';
 
