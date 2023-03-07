@@ -56,15 +56,16 @@ export const Label = styled.label`
 `
 
 export const InputButtonDiv = styled.div`
-    display: flex;
-    position:relative;
+    position: relative;
+    width: 700px;
 `
 export const HideButton = styled.img`
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
     width:35px;
     height:35px;
-    padding: 4px;
-    position: absolute;
-    padding-left: 670px;
 `
 
 export const Input = styled.input`
