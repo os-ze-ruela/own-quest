@@ -1,12 +1,21 @@
 import styled from "styled-components";
 
+export const HeaderActions = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding-right: 1rem;
+`
+
+
+
 export const HeaderStyle = styled.header`
     height: 100px ;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 0rem;
     background-color: #282C3E;
     
 `
@@ -23,7 +32,7 @@ export const ButtonStyle = styled.button`
     font-weight: bold;
     font-size: 14pt;
     height: 40px ;
-    width: 80px;
+    width: 100px;
     color: #E0E1DD;
     border: transparent;
     border-radius: 8px;
@@ -33,5 +42,5 @@ export const ButtonStyle = styled.button`
 export const LinkStyle = styled.a`
     color: #E0E1DD;
     font-size: 14pt;
-    padding-right: 80px;
+   
 `

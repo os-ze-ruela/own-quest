@@ -11,3 +11,29 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+@font-face {
+  font-family: 'FiraCode';
+  src: local('FiraCode'), url(./assets/Fonts/FireCode/FiraCode-Regular.ttf) format('opentype');
+}
+
+@font-face {
+  font-family: 'FiraCode';
+  src: local('FiraCode'), url(./assets/Fonts/FireCode/FiraCode-Light.ttf) format('opentype');
+}
+
+@font-face {
+  font-family: 'FiraCode';
+  src: local('FiraCode'), url(./assets/Fonts/FireCode/FiraCode-Bold.ttf) format('opentype');
+}
+
+@font-face {
+  font-family: 'FiraCode';
+  src: local('FiraCode'), url(./assets/Fonts/FireCode/FiraCode-SemiBold.ttf) format('opentype');
+}
+
+@font-face {
+  font-family: 'FiraCode';
+  src: local('FiraCode'), url(./assets/Fonts/FireCode/FiraCode-Medium.ttf) format('opentype');
+}

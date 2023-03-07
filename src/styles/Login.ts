@@ -4,28 +4,55 @@ export const LoginStyle = styled.div`
     background-color: #282C3E;
     height: 500px ;
     width: 100%;
+    
 `
 
-export const Wrt = styled.div`
+export const FieldsDiv = styled.div`
+    padding-left: 20px;
+`
+
+export const Title = styled.div`
     font-weight: bold;
     color: white;
     padding-top: 5rem;
     padding-bottom: 0em;
     font-size: 3.5rem;
     margin-left: 0.1em;
+    font-family: FiraCode;
+    font-weight: 700;
 `
 
+export const SubTitle = styled.div`
+    color: white;
+    font-family: FiraCode;
+    font-weight: 300;
+    margin-left: 0.5em;
+    opacity: 60%;
+
+`
+
+export const RegisterText = styled.p`
+    color: white;
+    margin-top: 30px;
+    font-family: FiraCode;
+    font-weight: 500;
+    margin-left: 0.5em;
+`
 export const RegisterLink = styled.a`
     color: #4d92cb;
     cursor: pointer;
     text-decoration: none;
     &:hover a{
-        color: white;
+        color: #E0E1DD;
     }
+    font-family: FiraCode;
+    font-weight: 500;
 `
 export const Label = styled.label`
     margin-left: 0.5em;
     color: #FFFFFF99;
+    font-family: FiraCode;
+    font-weight: 300;
 `
 
 export const Input = styled.input`
@@ -38,6 +65,8 @@ export const Input = styled.input`
     padding: 0.6em;
     border-radius: 0.7em;
     width: 700px;
+    height: 25px;
+
 `
 export const ImgAstro = styled.img`
     position: absolute;
@@ -59,6 +88,9 @@ export const ButtonLogin = styled.button`
     font-size: 1.2em;
     width: max-content;
     cursor: pointer;
+    font-family: FiraCode;
+    font-weight: 500;
+    border-color: transparent;
 `
 
 export const Bar = styled.div`
@@ -72,6 +104,8 @@ export const Bar = styled.div`
 export const BarTitle = styled.h4`
     font-size: 1.5em;
     color: white;
+    font-family: FiraCode;
+    font-weight: 700;
 `
 export const ButtonRegister = styled.button`
     background-color: #568EA3;
@@ -83,11 +117,8 @@ export const ButtonRegister = styled.button`
     font-size: 1.2em;
     width: fit-content;
     cursor: pointer;
+    font-family: FiraCode;
+    font-weight: 400;
+    border-color: transparent;
 `
-export const Foot = styled.footer`
-    height: 150px ;
-    width: 100%;
-    display: flex;
-    background-color: #282C3E;
-` 
 
