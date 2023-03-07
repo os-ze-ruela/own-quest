@@ -1,12 +1,11 @@
 import styled from "styled-components";
 
-export const LoginStyle = styled.div`
+export const RegisterStyle = styled.div`
     background-color: #282C3E;
-    height: 500px ;
+    height: 850px ;
     width: 100%;
     
 `
-
 export const FieldsDiv = styled.div`
     padding-left: 40px;
 `
@@ -14,9 +13,10 @@ export const FieldsDiv = styled.div`
 export const Title = styled.div`
     font-weight: bold;
     color: white;
+    width: 50%;
     padding-top: 5rem;
     padding-bottom: 0em;
-    font-size: 3.5rem;
+    font-size: 2.0rem;
     margin-left: 0.1em;
     font-family: FiraCode;
     font-weight: 700;
@@ -31,14 +31,14 @@ export const SubTitle = styled.div`
 
 `
 
-export const RegisterText = styled.p`
+export const LoginText = styled.p`
     color: white;
     margin-top: 30px;
     font-family: FiraCode;
     font-weight: 500;
     margin-left: 0.5em;
 `
-export const RegisterLink = styled.a`
+export const LoginLink = styled.a`
     color: #4d92cb;
     cursor: pointer;
     text-decoration: none;
@@ -66,6 +66,7 @@ export const HideButton = styled.img`
     position: absolute;
     padding-left: 670px;
 `
+
 export const Input = styled.input`
     display: flex;
     margin-left: 0.5em;
@@ -81,13 +82,13 @@ export const Input = styled.input`
 `
 export const ImgAstro = styled.img`
     position: absolute;
-    width: 290px;
+    width: 380px;
     height: 380px;
-    margin-left: 1120px;
+    margin-left: 1000px;
     margin-top: 50px;
 `
 
-export const ButtonLogin = styled.button`
+export const ButtonRegister = styled.button`
     background-color: #568EA3;
     color: #FFF;
     margin-top: 0.5em;
@@ -118,7 +119,7 @@ export const BarTitle = styled.h4`
     font-family: FiraCode;
     font-weight: 700;
 `
-export const ButtonRegister = styled.button`
+export const ButtonLogin = styled.button`
     background-color: #568EA3;
     color: #FFF;
     padding: 0.5em 1em;

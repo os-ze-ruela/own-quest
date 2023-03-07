@@ -1,11 +1,18 @@
 import React from 'react'
+import {useState} from 'react'
 import Header from '../../components/Header/Header'
-import { Bar, BarTitle, ButtonLogin, ButtonRegister, FieldsDiv, ImgAstro, Input, Label, LoginStyle, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login'
-import LOGO from "../../assets/img/ownquest-logo.png";
+import { Bar, BarTitle, ButtonLogin, ButtonRegister, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginStyle, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login'
 import ASTRO from "../../assets/img/astronauta-saturno 1.png";
 import Footer from '../../components/Footer/Footer';
 
+
+import showPasswordImg from "../../assets/img/hide.svg";
+import hidePasswordImg from "../../assets/img/show.svg";
+
+
 function Login() {
+  const [password, setPassword] = useState('');
+  const [isRevealPassword, setIsRevealPassword] = useState(false);
   return (
     <>
     <Header page='Registrar'/>
@@ -28,11 +35,19 @@ function Login() {
           value=''
         />
         <Label htmlFor="senha">Senha</Label> 
+        <InputButtonDiv>
         <Input
-          type="text"
           name="senha"
-          value=''
+          type={isRevealPassword ? "text" : "password"}
+          value={password}
+          onChange={e => setPassword(e.target.value)}
         />
+        <HideButton
+          title={isRevealPassword ? "Hide password" : "Show password"}
+          src={isRevealPassword ? hidePasswordImg : showPasswordImg}
+          onClick={() => setIsRevealPassword(prevState => !prevState)}
+        />
+        </InputButtonDiv>
         <ButtonLogin>Entrar</ButtonLogin>
       </FieldsDiv>          
     </LoginStyle>

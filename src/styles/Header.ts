@@ -23,7 +23,7 @@ export const LogoStyle = styled.img`
     height: 80px ;
     width: 140px;
     align-self: center; 
-    padding-left: 20px;
+    padding-left: 40px;
 `
 
 
