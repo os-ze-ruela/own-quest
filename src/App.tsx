@@ -4,7 +4,9 @@ import Login from './pages/Login';
 
 function App() {
   return (
-    <Login/>
+    <div style={{}}>
+      <Login/>
+    </div>
   );
 }
 

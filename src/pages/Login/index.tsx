@@ -8,7 +8,7 @@ function Login() {
   return (
     <>
     <Header/>
-    <LoginStyle>Eu adoro desenvolvimento Web</LoginStyle>
+    <LoginStyle>Faça suas histórias </LoginStyle>
     </>
   )
 }
