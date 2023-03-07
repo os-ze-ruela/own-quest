@@ -1,7 +1,7 @@
 import React from 'react'
 import {useState} from 'react'
 import Header from '../../components/Header/Header'
-import { Bar, BarTitle, ButtonLogin, ButtonRegister, FieldsDiv, ImgAstro, Input, Label, LoginStyle, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login'
+import { Bar, BarTitle, ButtonLogin, ButtonRegister, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginStyle, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login'
 import ASTRO from "../../assets/img/astronauta-saturno 1.png";
 import Footer from '../../components/Footer/Footer';
 

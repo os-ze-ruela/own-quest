@@ -3,6 +3,9 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import NewPword from './pages/NewPword';
+import Recover from './pages/Recover';
+import Register from './pages/Register';
 
 function App() {
   return (
@@ -12,6 +15,7 @@ function App() {
             <Route path="/login" element={<Login />} > </Route>
             <Route path="/recover" element={<Recover />} > </Route>
             <Route path="/newpword" element={<NewPword />} > </Route>
+            <Route path="/register" element={<Register />} > </Route>
         </Routes>
     </Router>
   );
