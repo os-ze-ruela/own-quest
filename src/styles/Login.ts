@@ -91,4 +91,3 @@ export const Foot = styled.footer`
     background-color: #282C3E;
 ` 
 
-
