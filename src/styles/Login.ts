@@ -82,11 +82,29 @@ export const Input = styled.input`
 
 `
 export const ImgAstro = styled.img`
+
+    @keyframes animation {
+        0% {
+            transform: translateY(-40px);
+        }
+        25% {
+            transform: translateY(80px);
+        }
+        75% {
+            transform: translateY(-80px);
+        }
+        100% {
+            transform: translateY(40px);
+        }
+    }
+
     position: absolute;
     width: 290px;
     height: 380px;
     margin-left: 1120px;
     margin-top: 50px;
+    animation: animation  3s infinite;
+    
 `
 
 export const ButtonLogin = styled.button`
