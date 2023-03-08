@@ -36,11 +36,12 @@ export const ButtonStyle = styled.button`
     color: #E0E1DD;
     border: transparent;
     border-radius: 8px;
+    cursor: pointer;
 
 `
 
 export const LinkStyle = styled.a`
     color: #E0E1DD;
     font-size: 14pt;
-   
+    cursor: pointer;
 `

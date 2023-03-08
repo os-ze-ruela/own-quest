@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const RecoverStyle = styled.div`
+export const ValidateStyle = styled.div`
     background-color: #282C3E;
     height: 500px ;
     width: 100%;
@@ -13,7 +13,7 @@ export const Title = styled.div`
     font-weight: bold;
     color: white;
     padding-top: 5rem;
-    padding-bottom: 0em;
+    padding-bottom: 0.5em;
     font-size: 2.5rem;
     margin-left: 0.1em;
     margin-top: 1em;
@@ -51,10 +51,10 @@ export const Input = styled.input`
 
 `
 
-export const ButtonRecover = styled.button`
+export const ButtonSend = styled.button`
     background-color: #568EA3;
     color: #FFF;
-    margin-top: 1em;
+    margin-top: 2.5em;
     margin-left: 0.5em;
     padding: 0.2em 1.8em;
     text-decoration: none;
@@ -73,6 +73,7 @@ export const Bar = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     background-color: #202331;
 `
 export const BarTitle = styled.h4`
@@ -80,18 +81,4 @@ export const BarTitle = styled.h4`
     color: white;
     font-family: FiraCode;
     font-weight: 700;
-`
-export const ButtonRegister = styled.button`
-    background-color: #568EA3;
-    color: #FFF;
-    padding: 0.5em 1em;
-    text-decoration: none;
-    transition: 0.5s;
-    border-radius: 0.5em;
-    font-size: 1.2em;
-    width: fit-content;
-    cursor: pointer;
-    font-family: FiraCode;
-    font-weight: 400;
-    border-color: transparent;
 `

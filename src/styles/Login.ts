@@ -83,19 +83,16 @@ export const Input = styled.input`
 `
 export const ImgAstro = styled.img`
 
-    @keyframes animation {
+    @keyframes float {
         0% {
-            transform: translateY(-40px);
+		transform: translatey(0px);
         }
-        25% {
-            transform: translateY(80px);
-        }
-        75% {
-            transform: translateY(-80px);
+        50% {
+            transform: translatey(-20px);
         }
         100% {
-            transform: translateY(40px);
-        }
+            transform: translatey(0px);
+	    }
     }
 
     position: absolute;
@@ -103,7 +100,7 @@ export const ImgAstro = styled.img`
     height: 380px;
     margin-left: 1120px;
     margin-top: 50px;
-    animation: animation  3s infinite;
+    animation: float 3s ease-in-out infinite;
     
 `
 

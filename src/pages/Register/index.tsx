@@ -25,7 +25,7 @@ function Register() {
 
         <LoginText>
           Já possui uma conta? 
-        <LoginLink href='register'> Entre agora </LoginLink>
+        <LoginLink href='login'> Entre agora </LoginLink>
         </LoginText>
 
         <Label htmlFor="login">Nickname</Label>
