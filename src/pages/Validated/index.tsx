@@ -10,7 +10,7 @@ import { Bar, BarTitle, ButtonSend, Title, ValidateStyle } from '../../styles/Va
 export default function Validated(){
     return(
         <>
-            <Header page='Minha conta'/>
+            <Header page='Minha conta' redirect=''/>
             <ValidateStyle>
                 <Title>, seu e-mail foi verificado com sucesso</Title>
                 <SubTitle>Agora você pode criar milhares de histórias e compartilhar com seus amigos!</SubTitle> 

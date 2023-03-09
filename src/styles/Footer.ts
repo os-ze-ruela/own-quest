@@ -5,7 +5,7 @@ export const FooterStyle= styled.footer`
     height: 150px ;
     display: flex;
     background-color: #282C3E;
-    font-family: FiraCode;
+    font-family: FiraCode-Regular;
     font-weight: 700;
     align-items: center;
     justify-content: space-between;
@@ -30,11 +30,11 @@ export const LinksDiv = styled.div`
 export const LinkTitle = styled.p`
     color: #E0E1DD;
     opacity: 60%;
-    font-family: FiraCode;
+    font-family: FiraCode-Regular;
     font-weight: 700;
 `
 export const LinkText = styled.p`
     color: white;
-    font-family: FiraCode;
+    font-family: FiraCode-Light;
     font-weight: 700;
 `

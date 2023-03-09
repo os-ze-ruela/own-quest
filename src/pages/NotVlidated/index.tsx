@@ -10,7 +10,7 @@ import { Bar, BarTitle, ButtonSend, Title, ValidateStyle } from '../../styles/No
 export default function NotValidated(){
     return(
         <>
-            <Header page='Minha conta'/>
+            <Header page='Minha conta' redirect=''/>
             <ValidateStyle>
                 <Title>Valide sua conta!</Title>
                 <SubTitle>Para começar criar suas histórias com Own Quest é necessário validar seu e-mail.</SubTitle> 

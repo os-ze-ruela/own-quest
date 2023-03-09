@@ -17,12 +17,12 @@ export const Title = styled.div`
     font-size: 2.5rem;
     margin-left: 0.1em;
     margin-top: 1em;
-    font-family: FiraCode;
+    font-family: FiraCode-Bold;
     font-weight: 700;
 `
 export const SubTitle = styled.div`
     color: white;
-    font-family: FiraCode;
+    font-family: FiraCode-Regular;
     font-weight: 300;
     margin-left: 0.5em;
     opacity: 60%;
@@ -31,7 +31,7 @@ export const SubTitle = styled.div`
 export const Label = styled.label`
     margin-left: 0.5em;
     color: #FFFFFF99;
-    font-family: FiraCode;
+    font-family: FiraCode-Light;
     font-weight: 300;
     padding-top: 1.2em;
     padding-right: 39rem;
@@ -63,7 +63,7 @@ export const ButtonSend = styled.button`
     font-size: 1.2em;
     width: max-content;
     cursor: pointer;
-    font-family: FiraCode;
+    font-family: FiraCode-SemiBold;
     font-weight: 500;
     border-color: transparent;
 `
@@ -79,6 +79,6 @@ export const Bar = styled.div`
 export const BarTitle = styled.h4`
     font-size: 1.5em;
     color: white;
-    font-family: FiraCode;
+    font-family: FiraCode-SemiBold;
     font-weight: 700;
 `

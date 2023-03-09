@@ -9,7 +9,7 @@ import { Bar, BarTitle, ButtonRecover, ButtonRegister, Input, Label, Label2, Rec
 export default function NewPword(){
     return(
         <>
-            <Header page='Login'/>
+            <Header page='Login' redirect='/login'/>
             <RecoverStyle>
                 <Title>Definir nova senha</Title>
                 <SubTitle>Como você pediu, aqui você pode definir sua nova senha</SubTitle>

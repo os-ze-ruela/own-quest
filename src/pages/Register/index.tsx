@@ -15,7 +15,7 @@ function Register() {
     const [isRevealConfirmPassword, setIsRevealConfirmPassword] = useState(false);
   return (
     <>
-    <Header page='Login'/>
+    <Header page='Login' redirect='/login'/>
     <RegisterStyle>
       <ImgAstro src={ASTRO} />
       <FieldsDiv>

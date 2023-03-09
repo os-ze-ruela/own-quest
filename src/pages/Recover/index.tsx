@@ -9,7 +9,7 @@ import { Bar, BarTitle, ButtonRecover, ButtonRegister, Input, Label, RecoverStyl
 export default function Recover(){
     return(
         <>
-            <Header page='Login'/>
+            <Header page='Login' redirect='/login'/>
             <RecoverStyle>
                 <Title>Recuperar sua senha</Title>
                 <SubTitle>Entendemos que lembrar todas suas senhas pode ser difícil.</SubTitle>

@@ -15,7 +15,7 @@ function Login() {
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   return (
     <>
-    <Header page='Registrar'/>
+    <Header page='Registrar' redirect='/register'/>
     <LoginStyle>
       <ImgAstro src={ASTRO} />
       <FieldsDiv>
