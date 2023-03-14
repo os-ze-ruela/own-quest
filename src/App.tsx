@@ -8,6 +8,8 @@ import Recover from './pages/Recover';
 import Register from './pages/Register';
 import NotValidated from './pages/NotVlidated';
 import Validated from './pages/Validated';
+import HomeLogged from './pages/HomeLogged/HomeLogged';
+import Creation from './pages/Creation/Creation';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
             <Route path="/newpassword" element={<NewPword />} > </Route>
             <Route path="/notvalidated" element={<NotValidated />} > </Route>
             <Route path="/validated" element={<Validated />} > </Route>
+            <Route path="/logged" element={<HomeLogged />} > </Route>
+            <Route path="/creation" element={<Creation />} > </Route>
         </Routes>
     </Router>
   );
