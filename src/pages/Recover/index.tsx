@@ -2,7 +2,8 @@ import React from 'react'
 import Footer from '../../components/Footer/Footer'
 import Header from '../../components/Header/Header'
 import { SubTitle } from '../../styles/Login'
-import { Bar, BarTitle, ButtonRecover, ButtonRegister, Input, Label, RecoverStyle, Title } from '../../styles/Recover'
+import { ButtonRecover, Input, Label, RecoverStyle, Title } from '../../styles/Recover'
+import AskRegisterBar from '../../components/Bar/AskRegisterBar'
 
 
 
@@ -22,10 +23,7 @@ export default function Recover(){
                 />
                 <ButtonRecover>Recuperar Senha</ButtonRecover>
             </RecoverStyle>
-            <Bar>
-                <BarTitle>Ainda não possui uma conta?</BarTitle>
-                <ButtonRegister>Cria sua conta grátis agora</ButtonRegister>
-            </Bar>
+            <AskRegisterBar/>
             <Footer/>
         </>
     )
