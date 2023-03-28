@@ -3,9 +3,10 @@ import {useState} from 'react'
 import Header from '../../components/Header/Header'
 import ASTRO from "../../assets/img/astronauta-controle 1.png";
 import Footer from '../../components/Footer/Footer';
-import { HideButton, InputButtonDiv, LoginLink, LoginText, RegisterStyle,Bar, BarTitle, ButtonLogin, ButtonRegister, FieldsDiv, ImgAstro, Input, Label, SubTitle, Title } from '../../styles/Register';
+import { HideButton, InputButtonDiv, LoginLink, LoginText, RegisterStyle, ButtonRegister, FieldsDiv, ImgAstro, Input, Label, SubTitle, Title } from '../../styles/Register';
 import showPasswordImg from "../../assets/img/hide.svg";
 import hidePasswordImg from "../../assets/img/show.svg";
+import AskLoginBar from '../../components/Bar/AskLoginBar';
 
 
 function Register() {
@@ -84,10 +85,7 @@ function Register() {
         <ButtonRegister>Criar Conta</ButtonRegister>
       </FieldsDiv>          
     </RegisterStyle>
-    <Bar>
-      <BarTitle>Já possui uma conta?</BarTitle>
-      <ButtonLogin>Entre agora com sua conta aqui</ButtonLogin>
-    </Bar>
+    <AskLoginBar/>
 
     <Footer/>
     </>

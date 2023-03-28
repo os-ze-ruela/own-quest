@@ -48,6 +48,33 @@ export const RegisterLink = styled.a`
     font-family: FiraCode-SemiBold;
     font-weight: 500;
 `
+
+export const LoginRecoverItemsDiv = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #282C3E;
+    height: 50px ;
+    width: 50%;
+`
+
+export const RecoverText = styled.p`
+    color: white;
+    margin-top: 30px;
+    font-family: FiraCode-Regular;
+    font-weight: 500;
+    margin-left: 0.5em;
+`
+export const RecoverLink = styled.a`
+    color: #4d92cb;
+    cursor: pointer;
+    text-decoration: none;
+    &:hover a{
+        color: #E0E1DD;
+    }
+    font-family: FiraCode-SemiBold;
+    font-weight: 500;
+`
 export const Label = styled.label`
     margin-left: 0.5em;
     color: #FFFFFF99;
@@ -73,6 +100,8 @@ export const Input = styled.input`
     margin-left: 0.5em;
     flex-direction: column;
     background-color: #30354B;
+    color: white;
+    font-family: FiraCode-Regular;
     margin-bottom: 1em;
     border: none;
     padding: 0.6em;
@@ -118,35 +147,6 @@ export const ButtonLogin = styled.button`
     cursor: pointer;
     font-family: FiraCode-SemiBold;
     font-weight: 500;
-    border-color: transparent;
-`
-
-export const Bar = styled.div`
-    height: 170px ;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #202331;
-`
-export const BarTitle = styled.h4`
-    font-size: 1.5em;
-    color: white;
-    font-family: FiraCode-SemiBold;
-    font-weight: 700;
-`
-export const ButtonRegister = styled.button`
-    background-color: #568EA3;
-    color: #FFF;
-    padding: 0.5em 1em;
-    text-decoration: none;
-    transition: 0.5s;
-    border-radius: 0.5em;
-    font-size: 1.2em;
-    width: fit-content;
-    cursor: pointer;
-    font-family: FiraCode-SemiBold;
-    font-weight: 400;
     border-color: transparent;
 `
 

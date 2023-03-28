@@ -1,18 +1,20 @@
 import React from 'react'
 import {useState} from 'react'
 import Header from '../../components/Header/Header'
-import { Bar, BarTitle, ButtonLogin, ButtonRegister, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginStyle, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login'
+import { ButtonLogin, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginStyle, RegisterLink, RegisterText, RecoverLink, LoginRecoverItemsDiv, RecoverText, SubTitle, Title } from '../../styles/Login'
 import ASTRO from "../../assets/img/astronauta-saturno 1.png";
 import Footer from '../../components/Footer/Footer';
 
 
 import showPasswordImg from "../../assets/img/hide.svg";
 import hidePasswordImg from "../../assets/img/show.svg";
+import AskRegisterBar from '../../components/Bar/AskRegisterBar';
 
 
 function Login() {
   const [password, setPassword] = useState('');
   const [isRevealPassword, setIsRevealPassword] = useState(false);
+  const [nickname, setNickname] = useState('');
   return (
     <>
     <Header page='Registrar' redirect='/register'/>
@@ -32,7 +34,8 @@ function Login() {
         <Input
           type="text"
           name="login"
-          value=''
+          value={nickname}
+          onChange={e => setNickname(e.target.value)}
         />
         <Label htmlFor="senha">Senha</Label> 
         <InputButtonDiv>
@@ -48,13 +51,18 @@ function Login() {
           onClick={() => setIsRevealPassword(prevState => !prevState)}
         />
         </InputButtonDiv>
-        <ButtonLogin>Entrar</ButtonLogin>
+        
+        <LoginRecoverItemsDiv>
+          <ButtonLogin>Entrar</ButtonLogin>
+          <RecoverText>
+            Esqueceu sua senha? <br/>
+            <RecoverLink href='recover'>Recupere aqui</RecoverLink>
+          </RecoverText>
+        </LoginRecoverItemsDiv>
+        
       </FieldsDiv>          
     </LoginStyle>
-    <Bar>
-      <BarTitle>Ainda não possui uma conta?</BarTitle>
-      <ButtonRegister>Crie sua conta grátis agora</ButtonRegister>
-    </Bar>
+    <AskRegisterBar/>
     <Footer/>
     </>
   )

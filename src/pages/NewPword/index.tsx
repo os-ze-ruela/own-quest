@@ -2,7 +2,8 @@ import React from 'react'
 import Footer from '../../components/Footer/Footer'
 import Header from '../../components/Header/Header'
 import { SubTitle } from '../../styles/Login'
-import { Bar, BarTitle, ButtonRecover, ButtonRegister, Input, Label, Label2, RecoverStyle, Title } from '../../styles/NewPword'
+import { ButtonRecover, Input, Label, Label2, RecoverStyle, Title } from '../../styles/NewPword'
+import AskRegisterBar from '../../components/Bar/AskRegisterBar'
 
 
 
@@ -28,10 +29,7 @@ export default function NewPword(){
                 />
                 <ButtonRecover>Definir Senha</ButtonRecover>
             </RecoverStyle>
-            <Bar>
-                <BarTitle>Ainda não possui uma conta?</BarTitle>
-                <ButtonRegister>Cria sua conta grátis agora</ButtonRegister>
-            </Bar>
+            <AskRegisterBar/>
             <Footer/>
         </>
     )
