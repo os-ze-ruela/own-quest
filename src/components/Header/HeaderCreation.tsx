@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FaSave } from 'react-icons/fa';
+import { BsCloudCheck } from 'react-icons/bs';
 import { MdArrowBack } from 'react-icons/md';
 
 interface HeaderProps {
@@ -16,6 +16,7 @@ const HeaderContainer = styled.div`
   align-items: center;
   background: linear-gradient(90deg, #568EA3 0.03%, #6FFFE9 100.03%);
   padding: 10px;
+
 `;
 
 const BackButton = styled.button`
@@ -31,18 +32,33 @@ const CreateButton = styled.button`
   border-radius: 10px;
   padding: 10px 20px;
   cursor: pointer;
+  font-family: FiraCode-Semibold;
 `;
 
-const TextHeader = styled.h1`
+const HeaderText = styled.text`
   font-size: 20px;
   margin: 0;
   color:white;
+  font-family: FiraCode-Light;
 `;
 
-const TextIcon = styled.h1`
-  font-size: 16px;
+const StorieTitle = styled.input`
+  font-size: 20px;
   margin: 0;
-  color: white;
+  color:white;
+  font-family: FiraCode-Light;
+  background-color:transparent;
+  border: 0;
+  outline: none;
+  outline-color: #202331;
+
+  ::placeholder{
+
+    color: white;
+    opacity: 70%;
+  }
+
+
 `;
 
 const SavedIcon = styled.div<{ isSaved: boolean }>`
@@ -57,12 +73,17 @@ const HeaderCreation: React.FC<HeaderProps> = ({ onBackClick, onCreateClick, isS
       <BackButton onClick={onBackClick}>
         <MdArrowBack color="#fff" size={20} />
       </BackButton>
-      <TextHeader>Início</TextHeader>
+      <HeaderText>Início</HeaderText>
       <SavedIcon isSaved={isSaved}>
-        <FaSave size={25} color="#fff" />
-        <TextIcon>Salvo</TextIcon>
+        <BsCloudCheck size={30} color="#fff" />
       </SavedIcon>
-      <TextHeader>Minha primeira história</TextHeader>
+      <StorieTitle       
+          type="text"
+          name="StorieTitle"
+          value=''
+          placeholder="Minha primeira história"
+        >
+        </StorieTitle>
       <CreateButton onClick={onCreateClick}>Testar</CreateButton>
     </HeaderContainer>
   );
