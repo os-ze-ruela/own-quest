@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+interface ColorPickerProps {
+  color: string;
+  setColor: (color: string) => void;
+}
+
 const Button = styled.input`
   border: none;
 
@@ -13,8 +18,7 @@ const ColorPickerContainer = styled.div`
 
 `;
 
-const ColorPicker = () => {
-  const [color, setColor] = useState('#568EA3');
+const ColorPicker = ({ color, setColor }: ColorPickerProps) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setColor(event.target.value);
@@ -27,14 +31,12 @@ const ColorPicker = () => {
   );
 };
 
-const ButtonWithColorPicker = () => {
+// const ButtonWithColorPicker = () => {
+//   return (
+//     <>
+//       <ColorPicker color setColor={}></ColorPicker>
+//     </>
+//   );
+// };
 
-
-  return (
-    <>
-      <ColorPicker></ColorPicker>
-    </>
-  );
-};
-
-export default ButtonWithColorPicker;
+export default ColorPicker;

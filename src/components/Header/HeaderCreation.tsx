@@ -12,11 +12,11 @@ interface HeaderProps {
 
 const HeaderContainer = styled.div`
   display: flex;
+  height: 5%;
   justify-content: space-between;
   align-items: center;
   background: linear-gradient(90deg, #568EA3 0.03%, #6FFFE9 100.03%);
   padding: 10px;
-
 `;
 
 const BackButton = styled.button`
@@ -29,7 +29,7 @@ const CreateButton = styled.button`
   background-color: white;
   color: black;
   border: none;
-  border-radius: 10px;
+  border-radius: 5px;
   padding: 10px 20px;
   cursor: pointer;
   font-family: FiraCode-Semibold;
@@ -66,25 +66,37 @@ const SavedIcon = styled.div<{ isSaved: boolean }>`
   display:flex;
   flex-direction:row;
 `;
+
+const WrapItems = styled.div`
+    
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+`
+
  
 const HeaderCreation: React.FC<HeaderProps> = ({ onBackClick, onCreateClick, isSaved }) => {
   return (
     <HeaderContainer>
-      <BackButton onClick={onBackClick}>
-        <MdArrowBack color="#fff" size={20} />
-      </BackButton>
-      <HeaderText>Início</HeaderText>
-      <SavedIcon isSaved={isSaved}>
-        <BsCloudCheck size={30} color="#fff" />
-      </SavedIcon>
-      <StorieTitle       
-          type="text"
-          name="StorieTitle"
-          value=''
-          placeholder="Minha primeira história"
-        >
-        </StorieTitle>
-      <CreateButton onClick={onCreateClick}>Testar</CreateButton>
+      <WrapItems>
+        <BackButton onClick={onBackClick}>
+          <MdArrowBack color="#fff" size={20} />
+        </BackButton>
+        <HeaderText>Início</HeaderText>
+        <SavedIcon isSaved={isSaved}>
+          <BsCloudCheck size={30} color="#fff" />
+        </SavedIcon>
+      </WrapItems>
+      <WrapItems>
+        <StorieTitle       
+            type="text"
+            name="StorieTitle"
+            value=''
+            placeholder="Minha primeira história"
+          >
+          </StorieTitle>
+        <CreateButton onClick={onCreateClick}>Testar</CreateButton>
+      </WrapItems>
     </HeaderContainer>
   );
 };

@@ -1,10 +1,12 @@
 import styled from "styled-components";
 
+
 export const LoginStyle = styled.div`
     background-color: #282C3E;
-    height: 500px ;
     width: 100%;
+    padding: 40px 0;
     
+
 `
 
 export const FieldsDiv = styled.div`

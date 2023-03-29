@@ -12,7 +12,7 @@ export const Bar = styled.div`
 export const BarTitle = styled.h4`
     font-size: 1.5em;
     color: white;
-    font-family: FiraCode;
+    font-family: FiraCode-Semibold;
     font-weight: 700;
 `
 // export const ButtonLogin = styled.button`
@@ -40,7 +40,7 @@ export const ButtonLogin = styled.a`
     font-size: 1.2em;
     width: fit-content;
     cursor: pointer;
-    font-family: FiraCode-SemiBold;
+    font-family: FiraCode-Semibold;
     font-weight: 400;
     border-color: transparent;
 `
