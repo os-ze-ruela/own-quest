@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import { BsCloudCheck } from 'react-icons/bs';
 import { MdArrowBack } from 'react-icons/md';
+import styled from 'styled-components';
 
 interface HeaderProps {
     onBackClick: () => void;
@@ -12,11 +12,11 @@ interface HeaderProps {
 
 const HeaderContainer = styled.div`
   display: flex;
-  height: 5%;
+  height: 8%;
   justify-content: space-between;
   align-items: center;
   background: linear-gradient(90deg, #568EA3 0.03%, #6FFFE9 100.03%);
-  padding: 10px;
+  padding: 0px 10px;
 `;
 
 const BackButton = styled.button`
@@ -30,7 +30,7 @@ const CreateButton = styled.button`
   color: black;
   border: none;
   border-radius: 5px;
-  padding: 10px 20px;
+  /* padding: 10px 20px; */
   cursor: pointer;
   font-family: FiraCode-Semibold;
 `;
@@ -53,11 +53,9 @@ const StorieTitle = styled.input`
   outline-color: #202331;
 
   ::placeholder{
-
     color: white;
     opacity: 70%;
   }
-
 
 `;
 
@@ -68,7 +66,6 @@ const SavedIcon = styled.div<{ isSaved: boolean }>`
 `;
 
 const WrapItems = styled.div`
-    
   display: flex;
   align-items: center;
   gap: 2rem;

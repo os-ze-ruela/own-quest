@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { MdOutlineAddCircleOutline } from 'react-icons/md';
+import { useState } from 'react';
 import { BiTrash } from 'react-icons/bi';
 import { HiPlus } from 'react-icons/hi';
-import HeaderCreation from '../../components/Header/HeaderCreation';
+import { MdOutlineAddCircleOutline } from 'react-icons/md';
 import ColorPicker from '../../components/ButtonWithColorPicker/ButtonWithColorPicker';
 import CheckBoxButton from '../../components/CheckBoxButton/CheckBoxButton';
-import { CreationBody, CreationStyle, Body, PageBody, ActionsBar, CheckBoxText, DeleteButton, ActualPage, Page, PageTitle, PageDescription, ButtonContainer, EditableButton, AddButton, PagesMenu, PageListContainer, MiniPage, AddPage } from '../../styles/Creation';
+import HeaderCreation from '../../components/Header/HeaderCreation';
 import { Page as PageModel } from '../../models/Page';
+import { ActionsBar, ActualPage, AddButton, AddPage, Body, ButtonContainer, CheckBoxText, CreationBody, CreationStyle, DeleteButton, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PagesMenu, PageTitle } from '../../styles/Creation';
 
 
 const handleBackClick = () => {
@@ -35,8 +34,10 @@ const Creation = () => {
   };
 
   const handleAddButtonClick = () => {
-    setButtonList([...buttonList, newButtonText]);
-    setNewButtonText('');
+    if(buttonList.length < 4) {
+      setButtonList([...buttonList, newButtonText]);
+      setNewButtonText('');
+    }
   };
 
   const handleAddPageClick = (index: number) => {
@@ -77,7 +78,9 @@ const Creation = () => {
               />
               <CheckBoxText>Última página?</CheckBoxText>
               <CheckBoxButton checked={isChecked} onClick={handleCheckboxClick}></CheckBoxButton>
-              <DeleteButton>
+              <DeleteButton onClick={() => {
+                
+              }}>
                 <BiTrash size={30} color="#000" />
               </DeleteButton>
             </ActionsBar>
@@ -88,13 +91,21 @@ const Creation = () => {
                   name="PageTitle"
                   value={pages[indexSelected].title}
                   placeholder="Exemplo de título"
-                  onChange={(event) => { }}
+                  onChange={(event) => {
+                    let pagesTemp = [...pages];
+                    pagesTemp[indexSelected].title = event.target.value;
+                    setPages(pagesTemp);
+                  }}
                 />
                 <PageDescription
                   name="PageDescription"
                   value={pages[indexSelected].description}
                   placeholder="Esse é um exemplo de descrição"
-                  onChange={(event) => { }}
+                  onChange={(event) => {
+                    let pagesTemp = [...pages];
+                    pagesTemp[indexSelected].description = event.target.value;
+                    setPages(pagesTemp);
+                  }}
                 />
                 <ButtonContainer>
                   {buttonList.map((text, index) => (
@@ -105,7 +116,7 @@ const Creation = () => {
                       onChange={(event) => handleTextChange(index, event.target.value)}
                     />
                   ))}
-                  <AddButton onClick={handleAddButtonClick}>
+                  <AddButton onClick={handleAddButtonClick} canAdd={buttonList.length < 4} >
                     <MdOutlineAddCircleOutline size={25} color="#fff" />
                   </AddButton>
                 </ButtonContainer>
@@ -115,7 +126,7 @@ const Creation = () => {
               <PageListContainer>
                 {pages.map((page, index) => (
                   <MiniPage
-                    isSelected={index == indexSelected}
+                    isSelected={index === indexSelected}
                     background={pages[index].color}
                     key={index}
                     value={index}

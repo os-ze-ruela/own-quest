@@ -8,7 +8,7 @@ export const CreationBody= styled.div`
 export const CreationStyle = styled.div`
   background-color: #282C3E;
   width: 100%;
-  height: 90%;
+  height: 92%;
 `
 export const Body = styled.div`
   display: flex;
@@ -30,20 +30,18 @@ export const Sidebar = styled.div`
   background-color: #202331;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 0;
+  /* padding: 20px 0; */
 `;
 
 export const ActionsBar = styled.div`
-  display:flex;
+  display: flex;
   flex-direction: row;
   width: 100%;
-  height: 5%;
+  height: 10%;
   background-color: white;
   align-items: center;
-  padding: 10px 20px;
   justify-content: flex-start;
   gap: 1rem;
-
 `;
 
 export const CheckBoxText = styled.text`
@@ -70,8 +68,18 @@ export const PagesMenu = styled.div`
   background-color: white;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 0;
+  /* padding: 10px 0; */
 `;
+
+export const PageListContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+`;
+
 
 export const Page = styled.div.attrs((props: {background: string}) => props)`
   display: flex;
@@ -94,7 +102,7 @@ export const SideBarButton = styled.div`
   background-color: transparent;
   border: none;
   color: white;
-  padding: 10px;
+  /* padding: 10px; */
   margin: 10px;
   flex-direction:column;
   cursor: pointer;
@@ -128,18 +136,18 @@ export const PageTitle = styled.input`
 export const PageDescription = styled.textarea`
   width:80%;
   height: 200px;
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
   flex-wrap: wrap;
   font-size: 14pt;
   color: white;
   font-family: FiraCode-Light;
   text-align: center;
-  background-color:transparent;
+  background-color: transparent;
   border: 0;
   outline: none;
   outline-color: #202331;
-
+  resize: none;
 
   ::placeholder{
   color: white;
@@ -156,11 +164,6 @@ export const DeleteButton = styled.button`
 
 `
 
-interface EditableButtonProps {
-  text: string;
-  onChange: (newText: string) => void;
-}
-
 export const ButtonContainer = styled.div`
   width:100%;
   height:200px;
@@ -170,7 +173,7 @@ export const ButtonContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-export const AddButton = styled.button`
+export const AddButton = styled.button.attrs((props: {canAdd: boolean}) => props)`
   display: flex;
   color: white;
   background-color: #202331;
@@ -178,9 +181,13 @@ export const AddButton = styled.button`
   border: 0;
   outline: none;
   border-radius: 5px;
-  padding: 5px 5px 5px 5px;
+  padding: 5px;
   align-items: center;
   opacity: 50%;
+
+  &:hover {
+    cursor: ${props => props.canAdd ? 'pointer' : 'not-allowed'};
+  }
 `;
 
 export const EditableButton = styled.input`
@@ -200,18 +207,6 @@ export const EditableButton = styled.input`
   }
 `;
 
-interface EditablePagesProps {
-  onChange: (newPage: string) => void;
-}
-
-export const PageListContainer = styled.div`
-  width:100%;
-  height:50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 export const AddPage = styled.button`
   display: flex;
   width: 75px;
@@ -222,7 +217,7 @@ export const AddPage = styled.button`
   border: 0;
   outline: none;
   border-radius: 5px;
-  padding: 5px 5px 5px 5px;
+  /* padding: 5px 5px 5px 5px; */
   align-items: center;
   justify-content: center;
 `;
@@ -239,7 +234,7 @@ export const MiniPage = styled.button.attrs((props: {isSelected: boolean, backgr
   border-style: ${props => props.isSelected ? 'dotted' : 'none'};
   outline: none;
   border-radius: 5px;
-  padding: 10px 0;
+  /* padding: 10px 0; */
   align-items: center;
   justify-content: center;
 

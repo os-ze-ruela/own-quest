@@ -61,11 +61,10 @@ export const ButtonStyle = styled.button`
 export const LinkStyle = styled.a`
     color: #E0E1DD;
     font-size: 14pt;
-    /* animation:  2s ease-in-out infinite; */
-    animation-duration: 2s;
-    animation-timing-function: ease;
+    transition: all 0.3s ease-in-out 0.2s;
     font-family: FiraCode-Regular;
     font-weight: 300;
+    text-decoration: none;
    
 
     &:hover {
