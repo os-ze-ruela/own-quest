@@ -1,0 +1,5 @@
+</IfModule>
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^ownquest.com.br [NC]
+RewriteRule ^(.*)$ http://www.ownquest.com.br/$1 [L,R=301]
