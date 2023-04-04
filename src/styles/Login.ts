@@ -5,41 +5,39 @@ export const LoginStyle = styled.div`
     background-color: #282C3E;
     width: 100%;
     padding: 40px 0;
-    
-
 `
 
 export const FieldsDiv = styled.div`
+    width: 70%;
     padding-left: 40px;
-`
+    `
 
-export const Title = styled.div`
+export const Title = styled.h1`
     font-weight: bold;
     color: white;
-    padding-top: 5rem;
-    padding-bottom: 0em;
+    padding: 1.5rem 0px 0px;
     font-size: 3.5rem;
     margin-left: 0.1em;
     font-family: FiraCode-Bold;
     font-weight: 700;
-`
+    `
 
-export const SubTitle = styled.div`
-    color: white;
-    font-family: FiraCode-Regular;
+export const SubTitle = styled.p`
+color: white;
+font-family: FiraCode-Regular;
     font-weight: 300;
     margin-left: 0.5em;
     opacity: 60%;
-
 `
 
 export const RegisterText = styled.p`
     color: white;
-    margin-top: 30px;
+    margin-top: 12px;
     font-family: FiraCode-Regular;
     font-weight: 500;
     margin-left: 0.5em;
 `
+
 export const RegisterLink = styled.a`
     color: #4d92cb;
     cursor: pointer;
@@ -51,13 +49,16 @@ export const RegisterLink = styled.a`
     font-weight: 500;
 `
 
+export const LoginInputs = styled.div`
+    width: 70%;
+`
+
 export const LoginRecoverItemsDiv = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #282C3E;
-    height: 50px ;
-    width: 50%;
+    height: 50px;
+    width: 70%;
 `
 
 export const RecoverText = styled.p`
@@ -66,6 +67,7 @@ export const RecoverText = styled.p`
     font-family: FiraCode-Regular;
     font-weight: 500;
     margin-left: 0.5em;
+    text-align: end;
 `
 export const RecoverLink = styled.a`
     color: #4d92cb;
@@ -86,7 +88,7 @@ export const Label = styled.label`
 
 export const InputButtonDiv = styled.div`
     position: relative;
-    width: 700px;
+    width: 100%;
 `
 export const HideButton = styled.img`
     position: absolute;
@@ -99,17 +101,16 @@ export const HideButton = styled.img`
 `
 export const Input = styled.input`
     display: flex;
-    margin-left: 0.5em;
+    /* margin-left: 0.5em; */
     flex-direction: column;
     background-color: #30354B;
     color: white;
     font-family: FiraCode-Regular;
     margin-bottom: 1em;
     border: none;
-    padding: 0.6em;
     border-radius: 0.7em;
-    width: 700px;
-    height: 25px;
+    width: 100%;
+    height: 40px;
 
 `
 export const ImgAstro = styled.img`
@@ -139,7 +140,6 @@ export const ButtonLogin = styled.button`
     background-color: #568EA3;
     color: #FFF;
     margin-top: 0.5em;
-    margin-left: 0.5em;
     padding: 0.2em 1.8em;
     text-decoration: none;
     transition: 0.5s;
