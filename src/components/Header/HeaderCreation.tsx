@@ -30,7 +30,7 @@ const CreateButton = styled.button`
   color: black;
   border: none;
   border-radius: 5px;
-  /* padding: 10px 20px; */
+  padding: 10px 20px;
   cursor: pointer;
   font-family: FiraCode-Semibold;
 `;

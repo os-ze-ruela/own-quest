@@ -1,16 +1,17 @@
-import { Button } from './Button'; 
+import { Button } from './Button';
 export class Page {
   id: number;
   title: string;
   description: string;
   color: string;
-  list: Button[];
+  isLastPage: boolean = false;
+  buttons: Button[];
 
-  constructor(id: number, title: string,  description: string, color: string, list: Button[]) {
+  constructor(id: number, title: string,  description: string, color: string, buttons: Button[]) {
     this.id = id;
     this.title = title;
-    this.color = color;
+    this.color = color ?? '#568EA3';
     this.description = description;
-    this.list = list;
+    this.buttons = buttons;
   }
 }

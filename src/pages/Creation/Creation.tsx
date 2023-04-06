@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiTrash } from 'react-icons/bi';
 import { HiPlus } from 'react-icons/hi';
 import { MdOutlineAddCircleOutline } from 'react-icons/md';
 import ColorPicker from '../../components/ButtonWithColorPicker/ButtonWithColorPicker';
 import CheckBoxButton from '../../components/CheckBoxButton/CheckBoxButton';
 import HeaderCreation from '../../components/Header/HeaderCreation';
+import { Button, Button as ButtonModel } from '../../models/Button';
 import { Page as PageModel } from '../../models/Page';
-import { ActionsBar, ActualPage, AddButton, AddPage, Body, ButtonContainer, CheckBoxText, CreationBody, CreationStyle, DeleteButton, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PagesMenu, PageTitle } from '../../styles/Creation';
+import { ActionsBar, ActualPage, AddButton, AddPage, Body, ButtonContainer, CheckBoxText, CreationBody, CreationStyle, DeleteButton, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu } from '../../styles/Creation';
 
 
 const handleBackClick = () => {
@@ -17,27 +18,64 @@ const handleCreateClick = () => {
   // Lógica para criar o conteúdo
 };
 
+interface PageResponse {
+  id: number;
+  title: string;
+  description: string;
+  color: string;
+  is_last_page: boolean;
+  buttons: Button[];
+}
 
 const Creation = () => {
+
+  useEffect(() => {
+    async function fetchData() {
+      const endPoint = 'http://ec2-15-228-202-185.sa-east-1.compute.amazonaws.com:3000/game/3/pages'
+      // const endPoint = 'http://localhost:5000/game/3/pages'
+      const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoiZ2FicmlwYWxteXJvMTM1NzlAZ21haWwuY29tIiwiaWF0IjoxNjgwNzk3NzgyLCJleHAiOjE2ODA3OTg2ODJ9.kMu1wZQLsBzwedCJbADa06KEGhIbqTmVwoSkDI6CVOc'
+
+      try {
+        const response = await fetch(endPoint, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const data: PageResponse[] = await response.json();
+        const pages: PageModel[] = data.map(page => new PageModel(page.id, page.title, page.description, page.color, page.buttons));
+        setPages(pages);
+
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchData()
+
+  }, [])
+
+  const [indexSelected, setIndexSelected] = useState(0);
 
   const [pages, setPages] = useState<PageModel[]>([
     new PageModel(1, "História 1", "Descrição teste", '#568EA3', []),
   ])
-  const [indexSelected, setIndexSelected] = useState(0);
-  const [isChecked, setIsChecked] = useState(false);
-
-  const [buttonList, setButtonList] = useState<string[]>([]);
-  const [newButtonText, setNewButtonText] = useState('');
 
   const handleCheckboxClick = () => {
-    setIsChecked(!isChecked);
+    let pagesTemp = [...pages];
+    pagesTemp[indexSelected].isLastPage = !pagesTemp[indexSelected].isLastPage;
+    setPages(pagesTemp);
   };
 
-  const handleAddButtonClick = () => {
-    if(buttonList.length < 4) {
-      setButtonList([...buttonList, newButtonText]);
-      setNewButtonText('');
-    }
+  const handleAddButtonClick = (index: number) => {
+    const newButton = new ButtonModel(1, '', 1, '', '#202331')
+    let pagesTemp = [...pages];
+    const buttons = pagesTemp[index].buttons
+    const updatedButtons = [...buttons, newButton]
+    pagesTemp[index].buttons = updatedButtons
+    setPages(pagesTemp)
   };
 
   const handleAddPageClick = (index: number) => {
@@ -48,10 +86,12 @@ const Creation = () => {
     console.log(pages);
   };
 
-  const handleTextChange = (index: number, newText: string) => {
-    const updatedList = [...buttonList];
-    updatedList[index] = newText;
-    setButtonList(updatedList);
+  const handleTextChange = (pageIndex: number, buttonIndex: number, newButtonText: string) => {
+    let pagesTemp = [...pages];
+    let buttons = [...pagesTemp[pageIndex].buttons]
+    buttons[buttonIndex].title = newButtonText
+    pagesTemp[pageIndex].buttons = buttons
+    setPages(pagesTemp)
   };
 
 
@@ -77,9 +117,9 @@ const Creation = () => {
                 }}
               />
               <CheckBoxText>Última página?</CheckBoxText>
-              <CheckBoxButton checked={isChecked} onClick={handleCheckboxClick}></CheckBoxButton>
+              <CheckBoxButton checked={pages[indexSelected].isLastPage} onClick={handleCheckboxClick}></CheckBoxButton>
               <DeleteButton onClick={() => {
-                
+
               }}>
                 <BiTrash size={30} color="#000" />
               </DeleteButton>
@@ -108,15 +148,17 @@ const Creation = () => {
                   }}
                 />
                 <ButtonContainer>
-                  {buttonList.map((text, index) => (
+                  {pages[indexSelected].buttons.map((button, index) => (
                     <EditableButton
                       key={index}
-                      value={text}
+                      value={button.title}
                       placeholder={"Botão " + (index + 1).toString()}
-                      onChange={(event) => handleTextChange(index, event.target.value)}
+                      onChange={(event) => handleTextChange(indexSelected, index, event.target.value)}
                     />
                   ))}
-                  <AddButton onClick={handleAddButtonClick} canAdd={buttonList.length < 4} >
+                  <AddButton onClick={
+                    () => { handleAddButtonClick(indexSelected); }}
+                    canAdd={pages[indexSelected].buttons.length < 4} >
                     <MdOutlineAddCircleOutline size={25} color="#fff" />
                   </AddButton>
                 </ButtonContainer>
@@ -127,7 +169,7 @@ const Creation = () => {
                 {pages.map((page, index) => (
                   <MiniPage
                     isSelected={index === indexSelected}
-                    background={pages[index].color}
+                    background={page.color}
                     key={index}
                     value={index}
                     onClick={() => {

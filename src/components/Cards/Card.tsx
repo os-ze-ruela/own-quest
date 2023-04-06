@@ -20,9 +20,9 @@ const CardWrapper = styled.div`
   background-color: #202331;
   border-radius: 15px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 16px;
   width: 500px;
   transition: all 0.2s ease-in-out;
+  height: 220px;
 
   &:hover {
     transform: translateY(-4px);
@@ -35,39 +35,50 @@ const CardWrapper = styled.div`
 
     .button-wrapper {
       opacity: 1;
-      transform: translateY(-8px);
+      transform: translateY(-12px);
     }
   }
 `;
 
+const ImageSpace = styled.div`
+  height: 100%;
+  width: 40%;
+`
+
 const CardImage = styled.img`
-  flex: 1;
-  height: 150px;
-  object-fit: cover;
+  height: 100%;
+  width: 100%;
   border-radius: 4px;
+  object-fit: cover;
+  mask-image: linear-gradient(to right, #000, rgba(0,0,0,0.0));
 `;
 
-
-
-
 const CardContentWrapper = styled.div`
+  height: 100%;
+  width: 60%;
   display: flex;
+  justify-content: center;
   flex-direction: column;
   color: white;
+
+  p {
+    margin-right: 12px;
+  }
 `;
 
 const CardTitle = styled.h3`
   color: white;
+  margin: 0;
   font-size: 24px;
   font-weight: 600;
-  margin: 0 0 8px 0;
+  margin-top: 12px;
 `;
 
 const CategoryLabelWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   opacity: 1;
   transition: all 0.2s ease-in-out;
   border-radius: 16px;
@@ -118,18 +129,20 @@ const Card: React.FC<CardProps> = ({ imageSrc, title, description, categories })
 
   return (
     <CardWrapper onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-      <CardImage src={imageSrc} alt={title} />
+      <ImageSpace>
+        <CardImage src={imageSrc} alt={title} />
+      </ImageSpace>
       <CardContentWrapper>
         <CardTitle>{title}</CardTitle>
         <p>{description}</p>
-        <CategoryLabelWrapper className="category-label-wrapper">
-        {categories.map((category) => (
+        <CategoryLabelWrapper className='category-label-wrapper'>
+          {categories.map((category) => (
             <CategoryLabel key={category} color={categoryColors[category]}>
               {category}
             </CategoryLabel>
           ))}
         </CategoryLabelWrapper>
-        <ButtonWrapper className="button-wrapper">
+        <ButtonWrapper className='button-wrapper'>
           <Button>Jogar</Button>
         </ButtonWrapper>
       </CardContentWrapper>
