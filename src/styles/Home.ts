@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const HomeDiv = styled.div`
+export const HomeDiv = styled.section`
     background-color: #282C3E;
     width: 100%;
 `
@@ -13,7 +13,16 @@ export const MainContent = styled.section`
     grid-template-columns: 60% 40%;
     color: #FFFFFF;
     font-family: FiraCode-Semibold;
-    margin: 4rem auto 0px;
+    margin: 2rem auto 0px;
+
+    @media screen and (max-width: 1024px) {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;   
+        margin: 1rem 0px 2rem 0px;
+    }
+
 `
 
 export const MainInfos = styled.div`
@@ -53,6 +62,24 @@ export const MainInfos = styled.div`
     li p {
         color: #FFFFFF;
     }
+
+    
+    @media screen and (max-width: 1024px) {
+        padding: 12px 2rem 2rem;
+
+        h1 {
+            font-size: 2rem;
+            font-family: FiraCode-Bold;
+            margin: 0; 
+        }
+
+        p {
+            font-size: 1rem;
+            width: 100%;
+            line-height: 120%;
+            color: rgba(255,255,255,0.4);
+        }
+    }
 `
 
 export const ImgAstroHome = styled.img`
@@ -61,6 +88,11 @@ export const ImgAstroHome = styled.img`
     z-index: 1;
     bottom: -120px;
     right: -50px;
+
+    @media screen and (max-width: 1024px) {
+        width: 50%;
+        position: static;
+    }
 `
 
 export const BannerInfo = styled.div`
@@ -81,6 +113,10 @@ export const BannerInfo = styled.div`
     p {
         text-align: center;
         margin: 0px;
+    }
+
+    @media screen and (max-width: 1024px) {
+        font-size: 1.2rem;
     }
 `
 
@@ -112,9 +148,13 @@ export const ListOfFuncs = styled.ul`
     color: #FFFFFF;
     font-family: FiraCode-Light;
     gap: 2rem;
+
+    @media screen and (max-width: 1024px) {
+        margin: 0.5rem 0; 
+    }
 `
 
-export const FunctionItem = styled.li.attrs((props: {flexDirection: string}) => props)`
+export const FunctionItem = styled.li.attrs((props: { flexDirection: string }) => props)`
     width: 60%;
     display: flex;
     flex-direction: ${props => props.flexDirection ?? 'row'};
@@ -150,5 +190,31 @@ export const FunctionItem = styled.li.attrs((props: {flexDirection: string}) => 
         border-radius: 12px;
         height: 90%;
         width: 60%;
+    }
+
+    @media screen and (max-width: 1024px) {
+        height: 350px;
+        flex-direction: column;
+        width: 90%;
+
+        div p {
+            width: 100%;
+            color: rgba(255,255,255,0.4);
+        }
+
+        div h3 {
+            margin: 0px;
+            width: 90%;
+            font-size: 1rem;
+            font-family: FiraCode-Bold;
+        }
+
+        .img-example {
+            background: grey;
+            border-radius: 12px;
+            height: 150px;
+            width: 100%;
+            margin-top: 12px;
+        }
     }
 `

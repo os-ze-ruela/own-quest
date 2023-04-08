@@ -27,12 +27,16 @@ export const HeaderActions = styled.div`
 
 
 export const HeaderStyle = styled.header`
-    height: 100px ;
+    height: 100px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: #282C3E;
+
+
+    @media screen and (max-width: 1024px) {
+    }
     
 `
 export const LogoStyle = styled.img`
@@ -41,7 +45,6 @@ export const LogoStyle = styled.img`
     align-self: center; 
     padding-left: 40px;
 `
-
 
 export const ButtonStyle = styled.button`
     background-color: #568EA3;
@@ -72,5 +75,10 @@ export const LinkStyle = styled.a`
         transform: scale(1.05);
         cursor: pointer;
     }
+
+    @media screen and (max-width: 1024px) {
+        display: none;
+    }
+    
 
 `
