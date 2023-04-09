@@ -14,7 +14,8 @@ export const FooterStyle= styled.footer`
     padding-left: 10em;
 
     @media screen and (max-width: 1024px) {
-        width: 90%;
+        width: 85%;
+        height: auto;
         flex-direction: column;
         align-items: flex-start;
         padding-top: 2rem;

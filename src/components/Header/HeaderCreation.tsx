@@ -57,18 +57,30 @@ const StorieTitle = styled.input`
     opacity: 70%;
   }
 
+  @media screen and (max-width: 1024px) {
+      display: none;
+  }
+
 `;
 
 const SavedIcon = styled.div<{ isSaved: boolean }>`
   border-radius: 50%;
   display:flex;
   flex-direction:row;
+
+  @media screen and (max-width: 1024px) {
+      margin-left: 12px;
+  }
 `;
 
 const WrapItems = styled.div`
   display: flex;
   align-items: center;
   gap: 2rem;
+
+  @media screen and (max-width: 1024px) {
+      gap: 1rem;
+  }
 `
 
  

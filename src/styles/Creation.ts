@@ -9,6 +9,10 @@ export const CreationStyle = styled.div`
   background-color: #282C3E;
   width: 100%;
   height: 92%;
+  
+  @media screen and (max-width: 1024px) {
+      height: 90%;
+  }
 `
 export const Body = styled.div`
   display: flex;
@@ -26,7 +30,7 @@ export const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
   width: 100px;
-  height:900px;
+  height: 900px;
   background-color: #202331;
   align-items: center;
   justify-content: space-between;
@@ -53,22 +57,32 @@ export const CheckBoxText = styled.text`
 
 
 export const ActualPage = styled.div`
-  display: flex;
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
   background-color: #282C3E;
 `;
 
-
-export const PagesMenu = styled.div`
+export const Page = styled.div.attrs((props: {background: string}) => props)`
   display: flex;
-  width: 100%;
-  height: 10%;
-  margin-top: 100px;
-  background-color: white;
   align-items: center;
-  justify-content: space-between;
-  /* padding: 10px 0; */
+  justify-content: center;
+  background-color: ${props => props.background};
+  width: 60%;
+  height: 90%;
+  max-width: 1024px;
+  max-height: 720px;
+  margin: 0 auto;
+  /* margin-top: 50px; */
+  text-align: center;
+  flex-direction: column;
+  border-radius: 5px;
+
+  @media screen and (max-width: 1024px) {
+    width: 80%;
+    height: 80%;
+  }
 `;
 
 export const PageListContainer = styled.div`
@@ -80,19 +94,19 @@ export const PageListContainer = styled.div`
   background-color: white;
 `;
 
-
-export const Page = styled.div.attrs((props: {background: string}) => props)`
+export const PagesMenu = styled.div`
   display: flex;
+  width: 100%;
+  height: 10%;
+  margin-top: 100px;
+  background-color: white;
   align-items: center;
-  justify-content: center;
-  background-color: ${props => props.background};
-  width: 60%;
-  height: 100%;
-  margin: 0 auto;
-  margin-top: 50px;
-  text-align: center;
-  flex-direction: column;
-  border-radius: 5px;
+  justify-content: space-between;
+  /* padding: 10px 0; */
+
+  @media screen and (max-width: 1024px) {
+    height: 20%;
+  }
 `;
 
 export const SideBarButton = styled.div`
@@ -128,8 +142,12 @@ export const PageTitle = styled.input`
   outline-color: #202331;
 
   ::placeholder{
-  color: white;
-  opacity: 70%;
+    color: white;
+    opacity: 70%;
+  }
+
+  @media screen and (max-width: 1024px) {
+    margin-top: 24px;
   }
 
 `
@@ -161,7 +179,6 @@ export const DeleteButton = styled.button`
   background-color:transparent;
   border: 0;
   cursor: pointer;
-
 `
 
 export const ButtonContainer = styled.div`
@@ -202,8 +219,8 @@ export const EditableButton = styled.input`
   text-align: center;
 
   ::placeholder{
-  color: white;
-  opacity: 70%;
+    color: white;
+    opacity: 70%;
   }
 `;
 

@@ -5,12 +5,24 @@ export const LoginStyle = styled.div`
     background-color: #282C3E;
     width: 100%;
     padding: 40px 0;
+
+    @media screen and (max-width: 1024px) {
+        padding: 0px 0px;
+    }
 `
 
 export const FieldsDiv = styled.div`
     width: 70%;
     padding-left: 40px;
-    `
+
+    @media screen and (max-width: 1024px) {
+        padding-left: 0px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+`
 
 export const Title = styled.h1`
     font-weight: bold;
@@ -20,14 +32,23 @@ export const Title = styled.h1`
     margin-left: 0.1em;
     font-family: FiraCode-Bold;
     font-weight: 700;
-    `
+    
+    @media screen and (max-width: 1024px) {
+        font-size: 2rem;
+        margin: 0;
+    }
+`
 
 export const SubTitle = styled.p`
-color: white;
-font-family: FiraCode-Regular;
+    color: white;
+    font-family: FiraCode-Regular;
     font-weight: 300;
     margin-left: 0.5em;
     opacity: 60%;
+
+    @media screen and (max-width: 1024px) {
+        margin-left: 0;
+    }
 `
 
 export const RegisterText = styled.p`
@@ -36,6 +57,10 @@ export const RegisterText = styled.p`
     font-family: FiraCode-Regular;
     font-weight: 500;
     margin-left: 0.5em;
+
+    @media screen and (max-width: 1024px) {
+        margin-left: 0;
+    }
 `
 
 export const RegisterLink = styled.a`
@@ -51,6 +76,10 @@ export const RegisterLink = styled.a`
 
 export const LoginInputs = styled.div`
     width: 70%;
+
+    @media screen and (max-width: 1024px) {
+        width: 80%;
+    }
 `
 
 export const LoginRecoverItemsDiv = styled.div`
@@ -59,6 +88,12 @@ export const LoginRecoverItemsDiv = styled.div`
     justify-content: space-between;
     height: 50px;
     width: 70%;
+
+    @media screen and (max-width: 1024px) {
+        width: 80%;
+        align-items: flex-start;
+        margin-top: 24px;
+    }
 `
 
 export const RecoverText = styled.p`
@@ -68,6 +103,11 @@ export const RecoverText = styled.p`
     font-weight: 500;
     margin-left: 0.5em;
     text-align: end;
+
+    @media screen and (max-width: 1024px) {
+        margin: 0;
+        font-size: 12px;
+    }
 `
 export const RecoverLink = styled.a`
     color: #4d92cb;
@@ -133,6 +173,10 @@ export const ImgAstro = styled.img`
     margin-left: 1120px;
     margin-top: 50px;
     animation: float 3s ease-in-out infinite;
+
+    @media screen and (max-width: 1024px) {
+        display: none;
+    }
     
 `
 
@@ -150,5 +194,10 @@ export const ButtonLogin = styled.button`
     font-family: FiraCode-SemiBold;
     font-weight: 500;
     border-color: transparent;
+
+    @media screen and (max-width: 1024px) {
+        font-size: 1rem;
+        margin-top: 0;
+    }
 `
 

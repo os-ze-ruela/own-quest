@@ -33,24 +33,25 @@ export const HeaderStyle = styled.header`
     align-items: center;
     justify-content: space-between;
     background-color: #282C3E;
-
-
-    @media screen and (max-width: 1024px) {
-    }
     
 `
 export const LogoStyle = styled.img`
-    height: 80px ;
+    height: 80px;
     width: 140px;
     align-self: center; 
     padding-left: 40px;
+
+    @media screen and (max-width: 1024px) {
+        height: 60px;
+        width: 100px ;
+    }
 `
 
 export const ButtonStyle = styled.button`
     background-color: #568EA3;
     font-weight: bold;
     font-size: 14pt;
-    height: 40px ;
+    height: 40px;
     padding: 0 12px;
     color: #E0E1DD;
     border: transparent;
@@ -58,6 +59,10 @@ export const ButtonStyle = styled.button`
     cursor: pointer;
     font-family: FiraCode-SemiBold;
     font-weight: 400;
+    
+    @media screen and (max-width: 1024px) {
+        font-size: 1rem;
+    }
 
 `
 

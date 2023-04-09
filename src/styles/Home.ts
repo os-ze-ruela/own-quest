@@ -17,10 +17,10 @@ export const MainContent = styled.section`
 
     @media screen and (max-width: 1024px) {
         width: 100%;
-        height: 100vh;
+        height: auto;
         display: flex;
         flex-direction: column;   
-        margin: 1rem 0px 2rem 0px;
+        margin-top: 1rem;
     }
 
 `
@@ -33,7 +33,7 @@ export const MainInfos = styled.div`
     padding: 12px 4rem 5rem;
 
     h1 {
-        font-size: 4rem;
+        font-size: 3.5rem;
         font-family: FiraCode-Bold;
         margin: 0; 
     }
@@ -65,7 +65,7 @@ export const MainInfos = styled.div`
 
     
     @media screen and (max-width: 1024px) {
-        padding: 12px 2rem 2rem;
+        padding: 12px 2rem 0.5rem;
 
         h1 {
             font-size: 2rem;
@@ -92,6 +92,8 @@ export const ImgAstroHome = styled.img`
     @media screen and (max-width: 1024px) {
         width: 50%;
         position: static;
+        align-self: flex-end;
+        transform: translateY(20px);
     }
 `
 
@@ -193,9 +195,10 @@ export const FunctionItem = styled.li.attrs((props: { flexDirection: string }) =
     }
 
     @media screen and (max-width: 1024px) {
-        height: 350px;
+        height: 200px;
         flex-direction: column;
         width: 90%;
+        margin: 1rem 0px;
 
         div p {
             width: 100%;
@@ -210,11 +213,7 @@ export const FunctionItem = styled.li.attrs((props: { flexDirection: string }) =
         }
 
         .img-example {
-            background: grey;
-            border-radius: 12px;
-            height: 150px;
-            width: 100%;
-            margin-top: 12px;
+            display: none;
         }
     }
 `

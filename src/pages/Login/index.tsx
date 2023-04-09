@@ -60,7 +60,6 @@ function Login() {
               <RecoverLink href='recover'>Recupere aqui</RecoverLink>
             </RecoverText>
           </LoginRecoverItemsDiv>
-
         </FieldsDiv>
       </LoginStyle>
       <AskRegisterBar />
