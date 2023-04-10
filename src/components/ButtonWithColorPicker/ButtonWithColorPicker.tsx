@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 interface ColorPickerProps {
@@ -7,11 +7,13 @@ interface ColorPickerProps {
 }
 
 const Button = styled.input`
-  border: none;
-
+  background-color: transparent;
+  border: 0;
+  border-radius: 100%;
   cursor: pointer;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
+  margin-left: 1rem;
 `;
 
 const ColorPickerContainer = styled.div`

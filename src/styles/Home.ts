@@ -8,12 +8,12 @@ export const HomeDiv = styled.section`
 export const MainContent = styled.section`
     position: relative;
     width: 80%;
-    height: 75vh;
+    height: 80vh;
     display: grid;
     grid-template-columns: 60% 40%;
     color: #FFFFFF;
     font-family: FiraCode-Semibold;
-    margin: 2rem auto 0px;
+    margin: 4px auto 24px;
 
     @media screen and (max-width: 1024px) {
         width: 100%;

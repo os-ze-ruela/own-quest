@@ -11,7 +11,7 @@ export const CreationStyle = styled.div`
   height: 92%;
   
   @media screen and (max-width: 1024px) {
-      height: 90%;
+      height: 92%;
   }
 `
 export const Body = styled.div`
@@ -41,7 +41,7 @@ export const ActionsBar = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 10%;
+  height: 30%;
   background-color: white;
   align-items: center;
   justify-content: flex-start;
@@ -51,14 +51,14 @@ export const ActionsBar = styled.div`
 export const CheckBoxText = styled.text`
   font-size: 12px;
   margin: 0;
-  color:black;
+  color: black;
   font-family: FiraCode-Semibold;
 `;
 
 
 export const ActualPage = styled.div`
   width: 100%;
-  height: 100%;
+  height: 1400px;
   display: flex;
   align-items: center;
   background-color: #282C3E;
@@ -74,7 +74,6 @@ export const Page = styled.div.attrs((props: {background: string}) => props)`
   max-width: 1024px;
   max-height: 720px;
   margin: 0 auto;
-  /* margin-top: 50px; */
   text-align: center;
   flex-direction: column;
   border-radius: 5px;
@@ -97,16 +96,11 @@ export const PageListContainer = styled.div`
 export const PagesMenu = styled.div`
   display: flex;
   width: 100%;
-  height: 10%;
-  margin-top: 100px;
+  height: 30%;
   background-color: white;
   align-items: center;
   justify-content: space-between;
   /* padding: 10px 0; */
-
-  @media screen and (max-width: 1024px) {
-    height: 20%;
-  }
 `;
 
 export const SideBarButton = styled.div`
@@ -140,6 +134,7 @@ export const PageTitle = styled.input`
   border: 0;
   outline: none;
   outline-color: #202331;
+  margin-top: 24px;
 
   ::placeholder{
     color: white;
@@ -147,13 +142,13 @@ export const PageTitle = styled.input`
   }
 
   @media screen and (max-width: 1024px) {
-    margin-top: 24px;
+    margin-top: 32px;
   }
 
 `
 export const PageDescription = styled.textarea`
-  width:80%;
-  height: 200px;
+  width: 80%;
+  height: 150px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;

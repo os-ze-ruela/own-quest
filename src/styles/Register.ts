@@ -104,18 +104,27 @@ export const ImgAstro = styled.img`
 `
 
 export const ButtonRegister = styled.button`
-    background-color: #568EA3;
+     background-color: #568EA3;
     color: #FFF;
     margin-top: 0.5em;
     margin-left: 0.5em;
     padding: 0.2em 1.8em;
     text-decoration: none;
     transition: 0.5s;
-    border-radius: 0.8em;
+    border-radius: 8px;
     font-size: 1.2em;
     width: max-content;
     cursor: pointer;
     font-family: FiraCode-SemiBold;
     font-weight: 500;
     border-color: transparent;
+
+    &:hover {
+        box-shadow: 1px 2px 12px #FFFFFF4C;
+    }
+
+    @media screen and (max-width: 1024px) {
+        font-size: 1rem;
+        margin-top: 0;
+    }
 `

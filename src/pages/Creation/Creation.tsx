@@ -70,12 +70,14 @@ const Creation = () => {
   };
 
   const handleAddButtonClick = (index: number) => {
-    const newButton = new ButtonModel(1, '', 1, '', '#202331')
-    let pagesTemp = [...pages];
-    const buttons = pagesTemp[index].buttons
-    const updatedButtons = [...buttons, newButton]
-    pagesTemp[index].buttons = updatedButtons
-    setPages(pagesTemp)
+    if (pages[indexSelected].buttons.length < 4) {
+      const newButton = new ButtonModel(1, '', 1, '', '#202331')
+      let pagesTemp = [...pages];
+      const buttons = pagesTemp[index].buttons
+      const updatedButtons = [...buttons, newButton]
+      pagesTemp[index].buttons = updatedButtons
+      setPages(pagesTemp)
+    }
   };
 
   const handleAddPageClick = (index: number) => {
