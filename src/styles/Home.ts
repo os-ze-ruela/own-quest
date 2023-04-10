@@ -21,6 +21,7 @@ export const MainContent = styled.section`
         display: flex;
         flex-direction: column;   
         margin-top: 1rem;
+        margin-bottom: 12px;
     }
 
 `
@@ -86,14 +87,14 @@ export const ImgAstroHome = styled.img`
     width: 100%;
     position: relative;
     z-index: 1;
-    bottom: -120px;
+    bottom: -140px;
     right: -50px;
 
     @media screen and (max-width: 1024px) {
         width: 50%;
         position: static;
         align-self: flex-end;
-        transform: translateY(20px);
+        transform: translateY(40px);
     }
 `
 
