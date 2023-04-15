@@ -78,7 +78,10 @@ export const Input = styled.input`
     padding: 0.6em;
     border-radius: 0.7em;
     width: 700px;
+    width: 100%
     height: 25px;
+    font-family: FiraCode-Regular;
+    color: white;
 
 `
 export const ImgAstro = styled.img`

@@ -205,3 +205,55 @@ export const ButtonLogin = styled.button`
     }
 `
 
+
+export const MessageError = styled.div`
+    @keyframes shake {
+        0% {
+        transform: translate(0);
+        }
+        20% {
+        transform: translate(-10px, 0);
+        }
+        40% {
+        transform: translate(10px, 0);
+        }
+        60% {
+        transform: translate(-10px, 0);
+        }
+        80% {
+        transform: translate(10px, 0);
+        }
+        100% {
+        transform: translate(0);
+        }
+    }
+
+    animation-name: shake;
+    animation-duration: 0.5s;
+    animation-iteration-count: 1;
+
+    color: white;
+    background-color: #E03140;
+    opacity: 0.8;
+    font-family: FiraCode-SemiBold;
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.8em 1.5em;
+
+    width: 70%;
+    position: absolute
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    padding: 0.8em 1.5em;
+
+    border: 1px solid #E0E1DD;
+    border-radius: 8px;
+
+    @media screen and (max-width: 1024px) {
+        width: 80%;
+    }
+`

@@ -10,6 +10,10 @@ import AskLoginBar from '../../components/Bar/AskLoginBar';
 
 
 function Register() {
+    const [nickname, setNickname] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [birthDate, setBirthDate] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isRevealPassword, setIsRevealPassword] = useState(false);
@@ -29,29 +33,33 @@ function Register() {
         <LoginLink href='login'> Entre agora </LoginLink>
         </LoginText>
 
-        <Label htmlFor="login">Nickname</Label>
+        <Label htmlFor="nickname">Nickname</Label>
         <Input
           type="text"
-          name="login"
-          value=''
+          name="nickname"
+          value={nickname}
+          onChange={e => setNickname(e.target.value)}
         />
-        <Label htmlFor="login">Nome Completo</Label>
+        <Label htmlFor="name">Nome Completo</Label>
         <Input
           type="text"
-          name="login"
-          value=''
+          name="name"
+          value={name}
+          onChange={e => setName(e.target.value)}
         />
-        <Label htmlFor="login">Email</Label>
+        <Label htmlFor="email">Email</Label>
         <Input
           type="text"
-          name="login"
-          value=''
+          name="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
         />
-        <Label htmlFor="login">Data de Nascimento</Label>
+        <Label htmlFor="birthDate">Data de Nascimento</Label>
         <Input
-          type="text"
-          name="login"
-          value=''
+          type="date"
+          name="birthDate"
+          value={birthDate}
+          onChange={e => setBirthDate(e.target.value)}
         />
         <Label htmlFor="senha">Senha</Label> 
         <InputButtonDiv>

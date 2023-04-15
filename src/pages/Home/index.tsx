@@ -78,7 +78,7 @@ export default function Home() {
                     Seja bem-vindo a um novo jeito<br />
                     de criar histórias.
                 </p>
-                <HomeActionButton href="/login" >Crie sua conta grátis agora!</HomeActionButton>
+                <HomeActionButton href="/register" >Crie sua conta grátis agora!</HomeActionButton>
             </BannerInfo>
             <Footer />
         </HomeDiv>

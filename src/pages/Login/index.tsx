@@ -1,19 +1,65 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import ASTRO from "../../assets/img/astronauta-saturno 1.png";
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
-import { ButtonLogin, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginInputs, LoginRecoverItemsDiv, LoginStyle, RecoverLink, RecoverText, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login';
+import { ButtonLogin, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginInputs, LoginRecoverItemsDiv, LoginStyle, MessageError, RecoverLink, RecoverText, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login';
 
 
 import showPasswordImg from "../../assets/img/hide.svg";
 import hidePasswordImg from "../../assets/img/show.svg";
 import AskRegisterBar from '../../components/Bar/AskRegisterBar';
 
-
 function Login() {
+
+  function SubmitLogin() {
+    setShowError(false)
+    if (isValid()) {
+      const data = { email: email, password: password}
+      fetch('http://localhost:3000/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        console.log(response.status)
+        if (response.status != 200) {
+          setShowError(true)
+          return response.json()
+        }
+      })
+      .then( data => {
+        setMessageError(data.message)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+      
+    } else {
+      setShowError(true)
+      if (email == '') {
+        setMessageError('Informe um email cadastrado.')
+      } else if(password == '') {
+        setMessageError('Informe a senha.')
+      }
+    }
+  }
+
+  function isValid() {
+    if( email == '' || password == ''){
+      return false
+    } else {
+      return true
+    }
+  }
+
+
   const [password, setPassword] = useState('');
   const [isRevealPassword, setIsRevealPassword] = useState(false);
-  const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState('');
+
+  const [showError, setShowError] = useState(false)
+  const [messageError, setMessageError] = useState('')
+
   return (
     <>
       <Header page='Registrar' redirect='/register' />
@@ -35,8 +81,8 @@ function Login() {
             <Input
               type="text"
               name="login"
-              value={nickname}
-              onChange={e => setNickname(e.target.value)}
+              value={email}
+              onChange={e => setEmail(e.target.value)}
             />
             <Label htmlFor="senha">Senha</Label>
             <InputButtonDiv>
@@ -53,8 +99,11 @@ function Login() {
               />
             </InputButtonDiv>
           </LoginInputs>
+          { showError &&
+            <MessageError>{messageError}</MessageError>}
+          
           <LoginRecoverItemsDiv>
-            <ButtonLogin>Entrar</ButtonLogin>
+            <ButtonLogin onClick={SubmitLogin}>Entrar</ButtonLogin>
             <RecoverText>
               Esqueceu sua senha? <br />
               <RecoverLink href='recover'>Recupere aqui</RecoverLink>
