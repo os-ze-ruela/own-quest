@@ -1,9 +1,9 @@
-import { useRef, useState } from 'react';
+import { useState, useContext } from 'react';
 import ASTRO from "../../assets/img/astronauta-saturno 1.png";
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
 import { ButtonLogin, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginInputs, LoginRecoverItemsDiv, LoginStyle, MessageError, RecoverLink, RecoverText, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login';
-
+import { AuthContext } from '../../contexts/auth';
 
 import showPasswordImg from "../../assets/img/hide.svg";
 import hidePasswordImg from "../../assets/img/show.svg";
@@ -11,47 +11,32 @@ import AskRegisterBar from '../../components/Bar/AskRegisterBar';
 
 function Login() {
 
-  function SubmitLogin() {
+  async function SubmitLogin() {
     setShowError(false)
     if (isValid()) {
-      const data = { email: email, password: password}
-      fetch('http://localhost:3000/auth/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      })
-      .then(response => {
-        console.log(response.status)
-        if (response.status != 200) {
-          setShowError(true)
-          return response.json()
-        }
-      })
-      .then( data => {
-        setMessageError(data.message)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-      
+      const response = await login(email, password)
+      setMessageError(response['message'])
+      setShowError(!response['sucess'])
+
     } else {
       setShowError(true)
-      if (email == '') {
+      if (email === '') {
         setMessageError('Informe um email cadastrado.')
-      } else if(password == '') {
+      } else if(password === '') {
         setMessageError('Informe a senha.')
       }
     }
   }
 
   function isValid() {
-    if( email == '' || password == ''){
+    if( email === '' || password === ''){
       return false
     } else {
       return true
     }
   }
 
+  const { authenticated, login } = useContext(AuthContext)
 
   const [password, setPassword] = useState('');
   const [isRevealPassword, setIsRevealPassword] = useState(false);
@@ -67,7 +52,6 @@ function Login() {
         <ImgAstro src={ASTRO} />
         <FieldsDiv>
           <LoginInputs>
-
             <Title>Bem-vindo de volta!</Title>
 
             <SubTitle>É um prazer te ver de novo por aqui!</SubTitle>
@@ -77,17 +61,17 @@ function Login() {
               <RegisterLink href='register'> Cadastre-se </RegisterLink>
             </RegisterText>
 
-            <Label htmlFor="login">Email ou nickname</Label>
+            <Label htmlFor="email">Email ou nickname</Label>
             <Input
-              type="text"
-              name="login"
+              type="email"
+              name="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
             />
-            <Label htmlFor="senha">Senha</Label>
+            <Label htmlFor="password">Senha</Label>
             <InputButtonDiv>
               <Input
-                name="senha"
+                name="password"
                 type={isRevealPassword ? "text" : "password"}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
@@ -103,7 +87,7 @@ function Login() {
             <MessageError>{messageError}</MessageError>}
           
           <LoginRecoverItemsDiv>
-            <ButtonLogin onClick={SubmitLogin}>Entrar</ButtonLogin>
+            <ButtonLogin onClick={async () => await SubmitLogin()}>Entrar</ButtonLogin>
             <RecoverText>
               Esqueceu sua senha? <br />
               <RecoverLink href='recover'>Recupere aqui</RecoverLink>
