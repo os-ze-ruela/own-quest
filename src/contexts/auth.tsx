@@ -12,8 +12,9 @@ type AuthContextType = {
   }
 
 interface User {
-    id: string;
     email: string;
+    name: string;
+    nickname: string;
 }
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType)
@@ -34,14 +35,14 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
     async function login(email: string, password: string): Promise<{sucess: boolean, message: string}> {
         let retorno = {sucess: false, message: ''}
         if (!!user) {
-            retorno['sucess'] = false
-            retorno['message'] = 'Já há um usuário logado.'
+            retorno.sucess = false
+            retorno.message = 'Já há um usuário logado.'
         } else {
             try{
                 const response = await createSession(email, password)
-                retorno['sucess'] = true
-                console.log('createSession response', response)
-                retorno['message'] = 'Usuário autenticado com sucesso.'
+                retorno.sucess = true
+                // console.log('createSession response', response)
+                retorno.message = 'Usuário autenticado com sucesso.'
                 const loggedUser = await response.data.user
                 const tokens = await response.data.tokens
     
@@ -57,13 +58,13 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
                 const error = await e as AxiosError
                 // console.log('erro:',error)
                 if(error.response?.status === 400) {
-                    retorno['message'] = 'Credenciais incorretas.'
+                    retorno.message = 'Credenciais incorretas.'
                 } else if(error.response?.status === 401) {
-                    retorno['message'] = 'Verifique seu e-mail por favor.'
+                    retorno.message = 'Verifique seu e-mail por favor.'
                 } else if(error.response?.status === 403) {
-                    retorno['message'] = 'Credenciais incorretas.'
+                    retorno.message = 'Credenciais incorretas.'
                 }
-                retorno['sucess'] = false
+                retorno.sucess = false
             }    
         }
         

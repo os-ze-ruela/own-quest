@@ -15,8 +15,8 @@ function Login() {
     setShowError(false)
     if (isValid()) {
       const response = await login(email, password)
-      setMessageError(response['message'])
-      setShowError(!response['sucess'])
+      setMessageError(response.message)
+      setShowError(!response.sucess)
 
     } else {
       setShowError(true)

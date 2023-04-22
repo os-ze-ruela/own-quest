@@ -24,8 +24,6 @@ export const HeaderActions = styled.div`
     padding-right: 1rem;
 `
 
-
-
 export const HeaderStyle = styled.header`
     height: 100px;
     width: 100%;
@@ -86,4 +84,51 @@ export const LinkStyle = styled.a`
     }
     
 
+`
+
+export const PerfilLinkContainer = styled.div`
+    position: relative;
+`
+
+export const UserImage = styled.img`
+    width: 50px;
+    height: 50px;
+    border: 2px solid #FFFFFF;
+    box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.25);
+    border-radius: 50%
+`
+
+export const PerfilLink = styled.a`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 11px 12px;
+    gap: 2rem;
+    cursor: pointer;
+
+    width: 180px;
+    height: 50px;
+
+    background: #202331;
+    border-radius: 4px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+    // Font
+
+    color: #FFFFFF;
+    font-size: 14pt;
+    transition: all 0.3s ease-in-out 0.2s;
+    font-family: FiraCode-Regular;
+    font-weight: 300;
+    text-decoration: none;
+   
+    &:hover {
+        color: #b0b0b0;
+        transform: scale(1.05);
+        cursor: pointer;
+    }
 `
