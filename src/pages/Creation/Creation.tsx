@@ -31,15 +31,18 @@ const Creation = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const endPoint = 'http://ec2-15-228-202-185.sa-east-1.compute.amazonaws.com:3000/game/3/pages'
+      const endPoint = `https://deploy.ownquest.games/game/3/pages`
       // const endPoint = 'http://localhost:5000/game/3/pages'
-      const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoiZ2FicmlwYWxteXJvMTM1NzlAZ21haWwuY29tIiwiaWF0IjoxNjgwNzk3NzgyLCJleHAiOjE2ODA3OTg2ODJ9.kMu1wZQLsBzwedCJbADa06KEGhIbqTmVwoSkDI6CVOc'
 
+      const tokensJSON = localStorage.getItem('token')
+
+      const tokens = JSON.parse(tokensJSON!)
+      
       try {
         const response = await fetch(endPoint, {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${bearerToken}`,
+            'Authorization': `Bearer ${tokens.access_token}`,
             'Content-Type': 'application/json'
           }
         });
@@ -58,7 +61,7 @@ const Creation = () => {
   }, [])
 
   const [indexSelected, setIndexSelected] = useState(0);
-
+  
   const [pages, setPages] = useState<PageModel[]>([
     new PageModel(1, "História 1", "Descrição teste", '#568EA3', []),
   ])
