@@ -4,7 +4,7 @@ interface IGame {
     id: number;
     title: string;
     description: string;
-    image: string;
+    image: string | null;
     isEditing: boolean;
     isPublished: boolean;
     isDeleted: boolean;
@@ -27,12 +27,15 @@ class Game {
         this.id = constructor.id;
         this.title = constructor.title;
         this.description = constructor.description;
-        this.image = constructor.image;
+        this.image = constructor.image!;
         this.isEditing = constructor.isEditing;
         this.isPublished = constructor.isPublished;
         this.isDeleted = constructor.isDeleted;
         this.createdAt = constructor.createdAt;
-        this.categories = constructor.categories.map(category => new Category(category));
+        this.categories = constructor.categories.map((category) => {
+            console.log(category)
+            return new Category(category)
+        });
     }
 }
 

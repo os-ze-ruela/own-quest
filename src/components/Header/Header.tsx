@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import LOGO from "../../assets/img/ownquest-logo.png";
+import { HOME } from "../../core/app-urls";
 import { ButtonStyle, HeaderActions, HeaderStyle, LinkStyle, LogoStyle } from '../../styles/Header';
 
 interface HeaderProps { page: string, redirect: string }
@@ -9,7 +10,7 @@ function Header(props: HeaderProps) {
 
     return (
         <HeaderStyle>
-            <a href='/'>
+            <a href={HOME}>
                 <LogoStyle src={LOGO} alt="Logo" />
             </a>
             <HeaderActions>

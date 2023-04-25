@@ -2,13 +2,14 @@ import ASTRO_HOME from "../../assets/img/astronauta-home.png";
 import CHECK from "../../assets/img/check.svg";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
+import { LOGIN, REGISTER } from "../../core/app-urls";
 import { BannerInfo, FunctionItem, HomeActionButton, HomeDiv, ImgAstroHome, ListOfFuncs, MainContent, MainInfos } from "../../styles/Home";
 
 
 export default function Home() {
     return (
         <HomeDiv>
-            <Header page='Login' redirect='/login' />
+            <Header page='Login' redirect={LOGIN} />
             <MainContent id="main">
                 <MainInfos>
                     <h1>
@@ -78,7 +79,7 @@ export default function Home() {
                     Seja bem-vindo a um novo jeito<br />
                     de criar histórias.
                 </p>
-                <HomeActionButton href="/register" >Crie sua conta grátis agora!</HomeActionButton>
+                <HomeActionButton href={REGISTER} >Crie sua conta grátis agora!</HomeActionButton>
             </BannerInfo>
             <Footer />
         </HomeDiv>

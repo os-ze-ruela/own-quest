@@ -1,27 +1,11 @@
 import { useContext, useEffect } from 'react';
-import styled from 'styled-components';
 import Card from '../../components/Cards/Card';
 import EmptyCard from '../../components/Cards/EmptyCard';
 import HeaderLogged from '../../components/Header/HeaderLogged';
 import { AuthContext } from '../../contexts/auth';
 import { GameContext } from '../../contexts/game';
 import AppError from '../../core/app-error';
-import { LoggedStyle, Title } from '../../styles/HomeLogged';
-
-const PageWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-`;
-
-const CardWrapper = styled.div`
-  width: 48%;
-  margin-bottom: 20px;
-`;
-
+import { CardWrapper, LoggedStyle, PageWrapper, Title } from '../../styles/HomeLogged';
 
 const HomeLogged = () => {
   const { user, refresh, logout } = useContext(AuthContext)
