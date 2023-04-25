@@ -17,3 +17,8 @@ export const refreshToken = async () => {
 export const getUserGamesByToken = async () => {
     return await api.get('/user/games')
 }
+
+//VERIFY CONTEXT
+export const sendEmail = async () => {
+    return await api.post('/user/send-verification-email')
+}
