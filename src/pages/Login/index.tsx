@@ -1,13 +1,14 @@
-import { useState, useContext } from 'react';
+import { useContext, useState } from 'react';
 import ASTRO from "../../assets/img/astronauta-saturno 1.png";
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
-import { ButtonLogin, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginInputs, LoginRecoverItemsDiv, LoginStyle, MessageError, RecoverLink, RecoverText, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login';
 import { AuthContext } from '../../contexts/auth';
+import { ButtonLogin, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginInputs, LoginRecoverItemsDiv, LoginStyle, MessageError, RecoverLink, RecoverText, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login';
 
 import showPasswordImg from "../../assets/img/hide.svg";
 import hidePasswordImg from "../../assets/img/show.svg";
 import AskRegisterBar from '../../components/Bar/AskRegisterBar';
+import { GameContext } from '../../contexts/game';
 
 function Login() {
 
@@ -17,6 +18,7 @@ function Login() {
       const response = await login(email, password)
       setMessageError(response.message)
       setShowError(!response.sucess)
+      await getUserGames()
 
     } else {
       setShowError(true)
@@ -37,6 +39,7 @@ function Login() {
   }
 
   const { authenticated, login } = useContext(AuthContext)
+  const { getUserGames } = useContext(GameContext)
 
   const [password, setPassword] = useState('');
   const [isRevealPassword, setIsRevealPassword] = useState(false);

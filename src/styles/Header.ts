@@ -103,11 +103,12 @@ export const PerfilLink = styled.a`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 11px 12px;
+    padding: 11px 1rem;
     gap: 2rem;
     cursor: pointer;
 
-    width: 180px;
+    width: auto;
+    max-width: 350px;
     height: 50px;
 
     background: #202331;

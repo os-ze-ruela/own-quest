@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Category from '../../models/Category';
 
 type CardProps = {
   imageSrc: string;
   title: string;
   description: string;
-  categories: string[];
+  categories: Category[];
 };
 
 type CategoryLabelProps = {
@@ -116,14 +117,6 @@ const Button = styled.button`
   }
 `;
 
-const categoryColors: { [key: string]: string } = {
-  technology: '#8400f8',
-  food: '#ddff00',
-  fashion: '#0dff00',
-  travel: '#f10000',
-  health: '#1900ff',
-};
-
 const Card: React.FC<CardProps> = ({ imageSrc, title, description, categories }) => {
   const [hovered, setHovered] = useState(false);
 
@@ -137,8 +130,8 @@ const Card: React.FC<CardProps> = ({ imageSrc, title, description, categories })
         <p>{description}</p>
         <CategoryLabelWrapper className='category-label-wrapper'>
           {categories.map((category) => (
-            <CategoryLabel key={category} color={categoryColors[category]}>
-              {category}
+            <CategoryLabel key={category.id} color={category.color}>
+              {category.title}
             </CategoryLabel>
           ))}
         </CategoryLabelWrapper>
