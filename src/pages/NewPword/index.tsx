@@ -1,16 +1,16 @@
-import React from 'react'
+import AskRegisterBar from '../../components/Bar/AskRegisterBar'
 import Footer from '../../components/Footer/Footer'
 import Header from '../../components/Header/Header'
+import { LOGIN } from '../../core/app-urls'
 import { SubTitle } from '../../styles/Login'
 import { ButtonRecover, Input, Label, Label2, RecoverStyle, Title } from '../../styles/NewPword'
-import AskRegisterBar from '../../components/Bar/AskRegisterBar'
 
 
 
 export default function NewPword(){
     return(
         <>
-            <Header page='Login' redirect='/login'/>
+            <Header page='Login' redirect={LOGIN}/>
             <RecoverStyle>
                 <Title>Definir nova senha</Title>
                 <SubTitle>Como você pediu, aqui você pode definir sua nova senha</SubTitle>

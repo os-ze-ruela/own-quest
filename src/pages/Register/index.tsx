@@ -1,12 +1,12 @@
-import React from 'react'
-import {useState} from 'react'
-import Header from '../../components/Header/Header'
+import { useState } from 'react';
 import ASTRO from "../../assets/img/astronauta-controle 1.png";
-import Footer from '../../components/Footer/Footer';
-import { HideButton, InputButtonDiv, LoginLink, LoginText, RegisterStyle, ButtonRegister, FieldsDiv, ImgAstro, Input, Label, SubTitle, Title } from '../../styles/Register';
 import showPasswordImg from "../../assets/img/hide.svg";
 import hidePasswordImg from "../../assets/img/show.svg";
 import AskLoginBar from '../../components/Bar/AskLoginBar';
+import Footer from '../../components/Footer/Footer';
+import Header from '../../components/Header/Header';
+import { LOGIN } from '../../core/app-urls';
+import { ButtonRegister, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginLink, LoginText, RegisterStyle, SubTitle, Title } from '../../styles/Register';
 
 
 function Register() {
@@ -20,7 +20,7 @@ function Register() {
     const [isRevealConfirmPassword, setIsRevealConfirmPassword] = useState(false);
   return (
     <>
-    <Header page='Login' redirect='/login'/>
+    <Header page='Login' redirect={LOGIN}/>
     <RegisterStyle>
       <ImgAstro src={ASTRO} />
       <FieldsDiv>
@@ -30,7 +30,7 @@ function Register() {
 
         <LoginText>
           Já possui uma conta? 
-        <LoginLink href='login'> Entre agora </LoginLink>
+        <LoginLink href={LOGIN}> Entre agora </LoginLink>
         </LoginText>
 
         <Label htmlFor="nickname">Nickname</Label>
