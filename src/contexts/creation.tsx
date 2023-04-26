@@ -1,8 +1,9 @@
 import { AxiosError } from "axios";
 import React, { ReactNode, createContext, useEffect, useState } from "react";
 import AppError from "../core/app-error";
-import { Page as PageModel } from '../models/Page';
+import { Page, Page as PageModel } from '../models/Page';
 import { Button, Button as ButtonModel } from '../models/Button';
+import { api, getPagesByGameID, patchButton, patchPage } from "../services/api";
 
 
 type CreationContextType = {
@@ -24,6 +25,8 @@ type CreationContextType = {
     handleButtonActionBar: (index: number, actionBarSelected:boolean) => void
     handlePageActionBar: (index: number, actionBarSelected:boolean) => void
     getPagesFromGameID: (id: number) => void
+    updatePage: (page: PageModel) => void
+    updateButton: (button: ButtonModel) => void
 }
 
 interface PageResponse {
@@ -42,25 +45,37 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
 
 
   async function getPagesFromGameID(id: number) {
-    const endPoint = `https://deploy.ownquest.games/game/${id}/pages`
-    // const endPoint = 'http://localhost:5000/game/3/pages'
+    try {
 
     const tokensJSON = localStorage.getItem('token')
-
     const tokens = JSON.parse(tokensJSON!)
+    api.defaults.headers.Authorization = `Bearer ${tokens.access_token}` 
     
-    try {
-        const response = await fetch(endPoint, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${tokens.access_token}`,
-            'Content-Type': 'application/json'
-        }
-    });
+    
+    const response = await getPagesByGameID(id)
 
-    const data: PageResponse[] = await response.json();
+    const data: PageResponse[] = await response.data;
     const pages: PageModel[] = data.map(page => new PageModel(page.id, page.title, page.description, page.color, page.buttons));
     setPages(pages);
+
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+
+  async function updatePage(page: PageModel) {
+    try {
+    await patchPage(page.id, page.title, page.description, page.color, "", indexSelected, page.isLastPage)
+
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+  async function updateButton(button: ButtonModel) {
+    try {
+    await patchButton(button.id, button.title, button.color, "")
 
   } catch (error) {
     console.error(error)
@@ -99,11 +114,11 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const handleAddPageClick = (index: number) => {
+    setActionBarSelected(true)
     const newPage = new PageModel(index + 1, "História " + index, "Descrição teste", '#568EA3', []);
     let pagesTemp = [...pages, newPage];
     setPages(pagesTemp);
     setIndexSelected(pages.length);
-    console.log(pages);
   };
 
   const handleTextChange = (pageIndex: number, buttonIndex: number, newButtonText: string) => {
@@ -166,7 +181,9 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
                                             handleButtonActionBar,
                                             handlePageActionBar,
                                             setActionBarSelected,
-                                            getPagesFromGameID
+                                            getPagesFromGameID,
+                                            updatePage,
+                                            updateButton
                                             }}>
             {children}
         </CreationContext.Provider>

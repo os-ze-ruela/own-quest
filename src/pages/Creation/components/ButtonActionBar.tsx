@@ -16,6 +16,7 @@ function ButtonActionBar (){
     const {handleAddPageClick} = useContext(CreationContext)
     const {handleCheckboxClick} = useContext(CreationContext)
     const {handleButtonColorChange} = useContext(CreationContext)
+    const {updateButton} = useContext(CreationContext)
 
     const [selectedPage, setSelectedPage] = useState("");
     const pageList = ["Página 1", "Página 2", "Página 3"];
@@ -29,6 +30,7 @@ function ButtonActionBar (){
         color={pages[indexSelected].buttons[indexButton].color}
         setColor={(color) => {
           handleButtonColorChange(indexSelected, indexButton, color)
+          updateButton(pages[indexSelected].buttons[indexButton])
         } } />
      <SelectBoxComponent pageList={pageList} onChange={handleSelectChange} />
       <DeleteButton onClick={() => {

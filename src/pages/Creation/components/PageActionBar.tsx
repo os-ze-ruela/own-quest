@@ -12,7 +12,8 @@ function PageActionBar() {
     const {handleAddButtonClick} = useContext(CreationContext)
     const {handleAddPageClick} = useContext(CreationContext)
     const {handleCheckboxClick} = useContext(CreationContext)
-
+    const {updatePage} = useContext(CreationContext)
+    
 
     return <ActionsBar>
       <ColorPicker
@@ -21,6 +22,7 @@ function PageActionBar() {
           let pagesTemp = [...pages];
           pagesTemp[indexSelected].color = color;
           setPages(pagesTemp);
+          updatePage(pagesTemp[indexSelected])
         } } />
       <CheckBoxText>Última página?</CheckBoxText>
       <CheckBoxButton checked={pages[indexSelected].isLastPage} onClick={handleCheckboxClick}></CheckBoxButton>

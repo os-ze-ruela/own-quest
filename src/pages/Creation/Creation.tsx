@@ -27,9 +27,12 @@ const Creation = () => {
   const { handlePageActionBar } = useContext(CreationContext)
   const { actionBarSelected, setActionBarSelected } = useContext(CreationContext)
   const { getPagesFromGameID } = useContext(CreationContext)
+  const { updatePage } = useContext(CreationContext)
+  const { updateButton } = useContext(CreationContext)
   
   useEffect(() => {
     getPagesFromGameID(3)
+    console.log(pages)
   }, [])
 
 
@@ -61,6 +64,7 @@ const Creation = () => {
                     let pagesTemp = [...pages];
                     pagesTemp[indexSelected].title = event.target.value;
                     setPages(pagesTemp);
+                    updatePage(pages[indexSelected])
                   }}
                 />
                 <PageDescription
@@ -71,6 +75,7 @@ const Creation = () => {
                     let pagesTemp = [...pages];
                     pagesTemp[indexSelected].description = event.target.value;
                     setPages(pagesTemp);
+                    updatePage(pages[indexSelected])
                   }}
                 />
                 <ButtonContainer>
@@ -78,10 +83,12 @@ const Creation = () => {
                     <EditableButton
                       key={index}
                       value={button.title}
+                      isSelected={index === indexButton}
                       placeholder={"Botão " + (index + 1).toString()}
                       background={button.color}
-                      onFocus= {() => {handleButtonActionBar(index, actionBarSelected)}}
+                      onFocus= {() => {handleButtonActionBar(index, actionBarSelected); setIndexButton(index)}}
                       onChange={(event) => {handleTextChange(indexSelected, index, event.target.value);
+                        updateButton(button)
                       }}
                     />
                     ))}
@@ -102,6 +109,7 @@ const Creation = () => {
                     key={index}
                     value={index}
                     onClick={() => {
+                      setActionBarSelected(true)
                       setIndexSelected(index)
                     }}
                   >

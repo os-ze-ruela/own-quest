@@ -202,16 +202,22 @@ export const AddButton = styled.button.attrs((props: {canAdd: boolean}) => props
   }
 `;
 
-export const EditableButton = styled.input.attrs((props: {background: string}) => props)`
+export const EditableButton = styled.input.attrs((props: {isSelected: boolean, background: string}) => props)`
   margin-right: 10px;
   color: white;
   background-color: ${props => props.background};
   font-family: FiraCode-Light;
+  padding: 10px 0;
+  text-align: center;
   border: 0;
   outline: none;
   border-radius: 5px;
-  padding: 10px 0;
-  text-align: center;
+
+  :focus{
+    border-color: ${props => props.isSelected ? '#6BF0DF' : 'none'};
+    border-style: ${props => props.isSelected ? 'dashed' : 'none'};
+    border-width: 2px;
+  }
 
   ::placeholder{
     color: white;
@@ -243,9 +249,10 @@ export const MiniPage = styled.button.attrs((props: {isSelected: boolean, backgr
   color: white;
   background-color: ${props => props.background};
   border-color: ${props => props.isSelected ? '#6BF0DF' : 'none'};
-  border-style: ${props => props.isSelected ? 'dotted' : 'none'};
+  border-style: ${props => props.isSelected ? 'dashed' : 'none'};
   outline: none;
   border-radius: 5px;
+  border-width: 3.5px;
   /* padding: 10px 0; */
   align-items: center;
   justify-content: center;
