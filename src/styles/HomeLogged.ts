@@ -17,8 +17,8 @@ export const LoggedStyle = styled.div`
 export const Title = styled.div`
     font-weight: bold;
     color: white;
-    padding-top: 1rem;
-    padding-bottom: 1em;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5em;
     font-size: 2.0rem;
     margin-left: 0.5em;
     font-family: FiraCode-Bold;
@@ -29,9 +29,10 @@ export const PageWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  width: 95%;
+  width: 98%;
+  gap: 2rem;
   /* max-width: 1100px; */
-  margin: 0 auto;
+  margin: 12px auto;
 `;
 
 export const CardWrapper = styled.div`
@@ -47,23 +48,30 @@ export const CardWrapperCard = styled.div`
   background-color: #202331;
   border-radius: 15px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%;
+  width: 48%;
+  min-width: 400px;
   /* max-width: 500px; */
   transition: all 0.2s ease-in-out;
-  height: 200px;
-
+  height: 180px;
+  
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     cursor: pointer;
+    background-color: #323440;
 
     .category-label-wrapper {
+      opacity: 0;
+    }
+
+    .description {
       opacity: 0;
     }
 
     .button-wrapper {
       opacity: 1;
       transform: translateY(-12px);
+      margin-top: 12px;
     }
   }
 `;
@@ -122,7 +130,8 @@ export const CategoryLabelWrapper = styled.div`
 export const CategoryLabel = styled.span<CategoryLabelProps>`
   font-size: 12px;
   font-weight: 500;
-  background-color: ${(props) => props.color};
+  /* background-color: ${(props) => props.color}; */
+  background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
   color: #ffffff;
   padding: 4px 8px;
 `;
@@ -202,4 +211,115 @@ export const EmptyCardTitle = styled.p`
   text-align: center;
   margin-top: 40px;
  
+`;
+
+//! CARD USER GAME
+
+export const PageUserGameWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 98%;
+  gap: 2rem;
+  /* max-width: 1100px; */
+  margin: 0 auto;
+  margin-bottom: 2rem;
+`;
+
+export const UserGameState = styled.span.attrs((props: { isPublished: string, }) => props)`
+  position: absolute; 
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  background-color:  ${props => props.isPublished ? '#66AB4E' : '#C79334'};
+  height: 25px;
+  width: auto;
+  max-width: 150px;
+  padding: 0px 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  color: #FFFFFF;
+  font-family: 'FiraCode-Light';
+  opacity: 1;
+`
+
+export const CardUserGameWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background-color: #202331;
+  border-radius: 15px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  width: 23%;
+  min-width: 250px;
+  transition: all 0.2s ease-in-out;
+  height: 350px;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    background-color: #323440;
+
+    .category-label-wrapper {
+      opacity: 0;
+    }
+
+    .description {
+      opacity: 0;
+    }
+
+    .button-wrapper {
+      opacity: 1;
+      transform: translateY(-12px);
+      margin-top: 1rem;
+    }
+    .game-state {
+      opacity: 1;
+    }
+  }
+`;
+
+export const UserGameImageSpace = styled.div`
+  height: 40%;
+  width: 100%;
+`
+
+export const CardUserGameImage = styled.img`
+  height: 100%;
+  width: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+  mask-image: linear-gradient(to bottom, #000, rgba(0,0,0,0.0));
+`;
+
+export const CardUserGameContentWrapper = styled.div`
+  height: 100%;
+  width: 90%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  margin: 0px 1rem;
+  text-align: start;
+  font-family: 'FiraCode-Regular';
+
+  .description { 
+    font-family: 'FiraCode-Light';
+    font-size: 0.9rem;
+    max-lines: 3;
+    line-break: auto;
+  }
+ 
+`;
+
+export const CardUserGameTitle = styled.h3`
+  color: white;
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 12px;
 `;

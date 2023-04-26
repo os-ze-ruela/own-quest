@@ -17,3 +17,7 @@ export const refreshToken = async () => {
 export const getUserGamesByToken = async () => {
     return await api.get('/user/games')
 }
+
+export const getHotGames = async () => {
+    return await api.get('/game/hot')
+}
