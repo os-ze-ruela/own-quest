@@ -41,7 +41,7 @@ export const ActionsBar = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 30%;
+  height: 20%;
   background-color: white;
   align-items: center;
   justify-content: flex-start;
@@ -202,10 +202,10 @@ export const AddButton = styled.button.attrs((props: {canAdd: boolean}) => props
   }
 `;
 
-export const EditableButton = styled.input`
+export const EditableButton = styled.input.attrs((props: {background: string}) => props)`
   margin-right: 10px;
   color: white;
-  background-color: #202331;
+  background-color: ${props => props.background};
   font-family: FiraCode-Light;
   border: 0;
   outline: none;
