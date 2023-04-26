@@ -6,13 +6,17 @@ type CardUserGameProps = {
     imageSrc: string;
     title: string;
     description: string;
+    isPublished: boolean;
     categories: Category[];
 };
 
-const CardUserGame: React.FC<CardUserGameProps> = ({ imageSrc, title, description, categories }) => {
+const CardUserGame: React.FC<CardUserGameProps> = ({ imageSrc, title, description, isPublished, categories }) => {
 
     return (
         <CardUserGameWrapper >
+            {/* <UserGameState className='game-state'>
+                <p>{isPublished ? 'Publicado' : 'Editando'}</p>
+            </UserGameState> */}
             <UserGameImageSpace>
                 <CardUserGameImage src={imageSrc} alt={title} />
             </UserGameImageSpace>
@@ -27,7 +31,7 @@ const CardUserGame: React.FC<CardUserGameProps> = ({ imageSrc, title, descriptio
                     ))}
                 </CategoryLabelWrapper>
                 <ButtonWrapper className='button-wrapper'>
-                    <Button>Jogar</Button>
+                    <Button>{isPublished ? 'Jogar' : 'Editar'}</Button>
                 </ButtonWrapper>
             </CardUserGameContentWrapper>
         </CardUserGameWrapper>

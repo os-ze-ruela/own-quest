@@ -131,7 +131,7 @@ export const CategoryLabel = styled.span<CategoryLabelProps>`
   font-size: 12px;
   font-weight: 500;
   /* background-color: ${(props) => props.color}; */
-  background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color+'AD'});
+  background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
   color: #ffffff;
   padding: 4px 8px;
 `;
@@ -222,8 +222,27 @@ export const PageUserGameWrapper = styled.div`
   gap: 2rem;
   /* max-width: 1100px; */
   margin: 0 auto;
+  margin-bottom: 2rem;
 `;
 
+export const UserGameState = styled.span.attrs((props: { isPublished: string, }) => props)`
+  position: absolute; 
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  background-color:  ${props => props.isPublished ? '#66AB4E' : '#C79334'};
+  height: 25px;
+  width: auto;
+  max-width: 150px;
+  padding: 0px 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  color: #FFFFFF;
+  font-family: 'FiraCode-Light';
+  opacity: 1;
+`
 
 export const CardUserGameWrapper = styled.div`
   display: flex;
@@ -257,6 +276,9 @@ export const CardUserGameWrapper = styled.div`
       transform: translateY(-12px);
       margin-top: 1rem;
     }
+    .game-state {
+      opacity: 1;
+    }
   }
 `;
 
@@ -285,9 +307,11 @@ export const CardUserGameContentWrapper = styled.div`
   text-align: start;
   font-family: 'FiraCode-Regular';
 
-  p { 
+  .description { 
     font-family: 'FiraCode-Light';
     font-size: 0.9rem;
+    max-lines: 3;
+    line-break: auto;
   }
  
 `;

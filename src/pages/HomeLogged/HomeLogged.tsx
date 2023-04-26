@@ -32,6 +32,14 @@ const HomeLogged = () => {
     fetchGames()
   }, [])
 
+  const randomInt = (): number => {
+    const min = 1;
+    const max = 100;
+    const rand = min + Math.random() * (max - min);
+    return rand;
+  }
+
+
   return (
     <>
       <HeaderLogged nickname={user.nickname} img={"https://100k-faces.glitch.me/random-image"} />
@@ -39,13 +47,13 @@ const HomeLogged = () => {
         <Title>Histórias mais bem avaliadas</Title>
         <PageWrapper>
           {games.map((game, index) => (
-              <Card
-                key={index}
-                title={game.title}
-                imageSrc="https://picsum.photos/300/200?random=1"
-                description={game.description}
-                categories={game.categories}
-              />
+            <Card
+              key={index}
+              title={game.title}
+              imageSrc={`https://picsum.photos/300/200?random=${randomInt()}`}
+              description={game.description}
+              categories={game.categories}
+            />
           ))}
         </PageWrapper>
         <Title>Minhas histórias</Title>
@@ -58,7 +66,8 @@ const HomeLogged = () => {
                 <CardUserGame
                   key={index}
                   title={game.title}
-                  imageSrc="https://picsum.photos/300/200?random=1"
+                  imageSrc={`https://picsum.photos/300/200?random=${randomInt()}`}
+                  isPublished={game.isPublished}
                   description={game.description}
                   categories={game.categories}
                 />
@@ -72,3 +81,7 @@ const HomeLogged = () => {
 };
 
 export default HomeLogged;
+
+function handleClick() {
+  throw new Error('Function not implemented.');
+}

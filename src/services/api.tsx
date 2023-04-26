@@ -19,5 +19,5 @@ export const getUserGamesByToken = async () => {
 }
 
 export const getHotGames = async () => {
-    return await api.get('/game')
+    return await api.get('/game/hot')
 }

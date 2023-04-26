@@ -32,7 +32,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
             const gamesData = response.data;
 
-            const userGames = gamesData.map((gameData: { categories: any[]; id: any; title: any; description: any; image: any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any; }) => {
+            const userGames = gamesData.map((gameData: { categories: any[]; id: any; title: any; description: any; favorites: any; image: any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any; }) => {
                 const categories = gameData.categories.map((categoryData) => {
                     return new Category(categoryData.category);
                 });
@@ -42,6 +42,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                     title: gameData.title,
                     description: gameData.description,
                     image: gameData.image,
+                    favorites: gameData.favorites,
                     isEditing: gameData.isEditing,
                     isPublished: gameData.isPublished,
                     isDeleted: gameData.isDeleted,
@@ -77,7 +78,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
             console.log(response.data)
 
-            const hotGames = gamesData.map((gameData: { game: { categories: any[]; id: any; title: any; description: any; image: any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any; }; }) => {
+            const hotGames = gamesData.map((gameData: { game: { categories: any[]; id: any; title: any; description: any; image: any; favorites:any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any; }; }) => {
                 const categories = gameData.game.categories.map((categoryData) => {
                     return new Category(categoryData.category);
                 });
@@ -87,6 +88,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                     title: gameData.game.title,
                     description: gameData.game.description,
                     image: gameData.game.image,
+                    favorites: gameData.game.favorites,
                     isEditing: gameData.game.isEditing,
                     isPublished: gameData.game.isPublished,
                     isDeleted: gameData.game.isDeleted,

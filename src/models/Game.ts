@@ -4,6 +4,7 @@ interface IGame {
     id: number;
     title: string;
     description: string;
+    favorites: number;
     image: string | null;
     isEditing: boolean;
     isPublished: boolean;
@@ -17,6 +18,7 @@ class Game {
     title: string;
     description: string;
     image: string;
+    favorites: number;
     isEditing: boolean = false;
     isPublished: boolean = false;
     isDeleted: boolean = false;
@@ -28,6 +30,7 @@ class Game {
         this.title = constructor.title;
         this.description = constructor.description;
         this.image = constructor.image!;
+        this.favorites = constructor.favorites;
         this.isEditing = constructor.isEditing;
         this.isPublished = constructor.isPublished;
         this.isDeleted = constructor.isDeleted;
