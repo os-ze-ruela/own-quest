@@ -17,8 +17,12 @@ function ButtonActionBar (){
     const {handleCheckboxClick} = useContext(CreationContext)
     const {handleButtonColorChange} = useContext(CreationContext)
     const {updateButton} = useContext(CreationContext)
+    const {updatePage} = useContext(CreationContext)
+    const { handleDeleteButton } = useContext(CreationContext)
+
 
     const [selectedPage, setSelectedPage] = useState("");
+    
     const pageList = ["Página 1", "Página 2", "Página 3"];
     
     const handleSelectChange = (selected: string) => {
@@ -31,10 +35,13 @@ function ButtonActionBar (){
         setColor={(color) => {
           handleButtonColorChange(indexSelected, indexButton, color)
           updateButton(pages[indexSelected].buttons[indexButton])
+          
         } } />
      <SelectBoxComponent pageList={pageList} onChange={handleSelectChange} />
       <DeleteButton onClick={() => {
-      } }>
+        handleDeleteButton(); 
+        updatePage(pages[indexSelected])
+        }}>
         <BiTrash size={30} color="#000" />
       </DeleteButton>
     </ActionsBar>;

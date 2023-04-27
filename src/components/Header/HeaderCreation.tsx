@@ -1,7 +1,8 @@
-import React from 'react';
-import { BsCloudCheck } from 'react-icons/bs';
+import React, { useContext } from 'react';
+import { BsCloudArrowDown, BsCloudCheck } from 'react-icons/bs';
 import { MdArrowBack } from 'react-icons/md';
 import styled from 'styled-components';
+import { CreationContext } from '../../contexts/creation';
 
 interface HeaderProps {
     onBackClick: () => void;
@@ -89,6 +90,9 @@ const WrapItems = styled.div`
 
  
 const HeaderCreation: React.FC<HeaderProps> = ({ onBackClick, onCreateClick, isSaved }) => {
+
+  const { loading } = useContext(CreationContext)
+
   return (
     <HeaderContainer>
       <WrapItems>
@@ -97,7 +101,11 @@ const HeaderCreation: React.FC<HeaderProps> = ({ onBackClick, onCreateClick, isS
         </BackButton>
         <HeaderText>Início</HeaderText>
         <SavedIcon isSaved={isSaved}>
-          <BsCloudCheck size={30} color="#fff" />
+          {loading ? (
+              <BsCloudArrowDown size={30} color="#fff" />
+            ):(
+              <BsCloudCheck size={30} color="#fff" />
+          )}
         </SavedIcon>
       </WrapItems>
       <WrapItems>
