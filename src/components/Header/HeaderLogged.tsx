@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import LOGO from "../../assets/img/ownquest-logo.png";
-import { GAME, HOME } from "../../core/app-urls";
+import { GAME, LANDING_PAGE } from "../../core/app-urls";
 import { ButtonStyle, HeaderActions, HeaderStyle, LinkStyle, LogoStyle, PerfilLink, UserImage } from '../../styles/Header';
 
 interface HeaderProps {
@@ -12,7 +12,7 @@ function HeaderLogged(props: HeaderProps) {
 
     return (
         <HeaderStyle>
-            <a href={HOME}>
+            <a href={LANDING_PAGE}>
                 <LogoStyle src={LOGO} alt="Logo" />
             </a>
             <HeaderActions>

@@ -1,8 +1,10 @@
 import React from 'react';
+import { GAME } from '../../core/app-urls';
 import Category from '../../models/Category';
 import { Button, ButtonWrapper, CardUserGameContentWrapper, CardUserGameImage, CardUserGameTitle, CardUserGameWrapper, CategoryLabel, CategoryLabelWrapper, UserGameImageSpace } from '../../styles/HomeLogged';
 
 type CardUserGameProps = {
+    id: number;
     imageSrc: string;
     title: string;
     description: string;
@@ -10,7 +12,7 @@ type CardUserGameProps = {
     categories: Category[];
 };
 
-const CardUserGame: React.FC<CardUserGameProps> = ({ imageSrc, title, description, isPublished, categories }) => {
+const CardUserGame: React.FC<CardUserGameProps> = ({ id, imageSrc, title, description, isPublished, categories }) => {
 
     return (
         <CardUserGameWrapper >
@@ -31,7 +33,7 @@ const CardUserGame: React.FC<CardUserGameProps> = ({ imageSrc, title, descriptio
                     ))}
                 </CategoryLabelWrapper>
                 <ButtonWrapper className='button-wrapper'>
-                    <Button>{isPublished ? 'Jogar' : 'Editar'}</Button>
+                    <Button href={GAME + '/' + id} >{isPublished ? 'Jogar' : 'Editar'}</Button>
                 </ButtonWrapper>
             </CardUserGameContentWrapper>
         </CardUserGameWrapper>

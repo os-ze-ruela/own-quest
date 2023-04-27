@@ -65,6 +65,7 @@ const HomeLogged = () => {
               {userGames.map((game, index) => (
                 <CardUserGame
                   key={index}
+                  id={game.id}
                   title={game.title}
                   imageSrc={`https://picsum.photos/300/200?random=${randomInt()}`}
                   isPublished={game.isPublished}
@@ -81,7 +82,3 @@ const HomeLogged = () => {
 };
 
 export default HomeLogged;
-
-function handleClick() {
-  throw new Error('Function not implemented.');
-}

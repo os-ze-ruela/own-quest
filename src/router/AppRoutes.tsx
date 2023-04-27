@@ -36,7 +36,7 @@ function AppRoutes() {
             <GameProvider>
                 <AuthProvider>
                     <CreationProvider>
-                      <Routes>
+                       <Routes>
                           <Route path={LANDING_PAGE} element={<Home />} > </Route>
                           <Route path={LOGIN} element={<Login />} > </Route>
                           <Route path={REGISTER} element={<Register />} > </Route>
@@ -45,7 +45,7 @@ function AppRoutes() {
                           <Route path={EMAIL_NOT_VALIDATED} element={<NotValidated />} > </Route>
                           <Route path={EMAIL_VALIDATED} element={<Validated />} > </Route>
                           <Route path={HOME} element={<Private><HomeLogged /></Private>} > </Route>
-                          <Route path={GAME} element={<Private><Creation /></Private>} > </Route>
+                          <Route path={GAME + '/:id'} element={<Private><Creation /></Private>} > </Route>
                       </Routes>
                     </CreationProvider>
                 </AuthProvider>

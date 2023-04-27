@@ -145,7 +145,7 @@ export const ButtonWrapper = styled.div`
   transition: all 0.2s ease-in-out;
 `;
 
-export const Button = styled.button`
+export const Button = styled.a`
   background-color: #6C5B7B;
   color: #ffffff;
   border-radius: 4px;
@@ -154,6 +154,7 @@ export const Button = styled.button`
   font-size: 16px;
   font-weight: 600;
   transition: all 0.2s ease-in-out;
+  text-decoration: none;
 
   &:hover {
     cursor: pointer;
