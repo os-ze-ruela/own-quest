@@ -1,16 +1,16 @@
-import React from 'react'
+import AskRegisterBar from '../../components/Bar/AskRegisterBar'
 import Footer from '../../components/Footer/Footer'
 import Header from '../../components/Header/Header'
+import { LOGIN } from '../../core/app-urls'
 import { SubTitle } from '../../styles/Login'
 import { ButtonRecover, Input, Label, RecoverStyle, Title } from '../../styles/Recover'
-import AskRegisterBar from '../../components/Bar/AskRegisterBar'
 
 
 
 export default function Recover(){
     return(
         <>
-            <Header page='Login' redirect='/login'/>
+            <Header page='Login' redirect={LOGIN}/>
             <RecoverStyle>
                 <Title>Recuperar sua senha</Title>
                 <SubTitle>Entendemos que lembrar todas suas senhas pode ser difícil.</SubTitle>

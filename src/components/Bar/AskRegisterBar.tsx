@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { REGISTER } from '../../core/app-urls'
 
 const Bar = styled.div`
     height: 170px;
@@ -52,7 +53,7 @@ function AskRegisterBar() {
     return (
         <Bar>
             <BarTitle>Ainda não possui uma conta?</BarTitle>
-            <ButtonRegister href='register'>Crie sua conta grátis agora</ButtonRegister>
+            <ButtonRegister href={REGISTER}>Crie sua conta grátis agora</ButtonRegister>
         </Bar>
     )
 }
