@@ -11,6 +11,8 @@ import { ActionsBar, ActualPage, AddButton, AddPage, Body, ButtonContainer, Chec
 import ButtonActionBar from './components/ButtonActionBar';
 import PageActionBar from './components/PageActionBar';
 import { CreationContext } from '../../contexts/creation';
+import { useParams } from 'react-router-dom';
+import NoPagePlaceholder from './components/NoPagePlaceholder';
 
 
 const Creation = () => {
@@ -29,11 +31,11 @@ const Creation = () => {
   const { getPagesFromGameID } = useContext(CreationContext)
   const { updatePage } = useContext(CreationContext)
   const { updateButton } = useContext(CreationContext)
-  
-  
+
+  const { id } = useParams()
+
   useEffect(() => {
-    getPagesFromGameID(3)
-    console.log(indexButton)
+    getPagesFromGameID(id!)
   }, [])
 
 
@@ -43,18 +45,20 @@ const Creation = () => {
       <CreationStyle>
         <Body>
           <PageBody>
-            {actionBarSelected ?
+            { pages.length > 0 ? actionBarSelected ?
               (
                 <PageActionBar />
               )
               :
               (
                 <ButtonActionBar />
-              )
+              ) : (<></>)
             }
 
             <ActualPage>
-              <Page background={pages[indexSelected].color}  
+              {pages.length < 1 ? (
+                <NoPagePlaceholder />
+              ) : (<Page background={pages[indexSelected].color}
                 onDoubleClick={() => handlePageActionBar(indexButton, actionBarSelected)}   >
                 <PageTitle
                   type="text"
@@ -87,19 +91,21 @@ const Creation = () => {
                       isSelected={index === indexButton}
                       placeholder={"Botão " + (index + 1).toString()}
                       background={button.color}
-                      onFocus= {() => {handleButtonActionBar(index, actionBarSelected); setIndexButton(index)}}
-                      onChange={(event) => {handleTextChange(indexSelected, index, event.target.value);
+                      onClick={() => { handleButtonActionBar(index, actionBarSelected); setIndexButton(index) }}
+                      onChange={(event) => {
+                        handleTextChange(indexSelected, index, event.target.value);
                         updateButton(button)
                       }}
                     />
-                    ))}
+                  ))}
                   <AddButton onClick={
                     () => { handleAddButtonClick(indexSelected); }}
                     canAdd={pages[indexSelected].buttons.length < 4} >
                     <MdOutlineAddCircleOutline size={25} color="#fff" />
                   </AddButton>
                 </ButtonContainer>
-              </Page>
+              </Page>)}
+
             </ActualPage>
             <PagesMenu>
               <PageListContainer>
@@ -117,7 +123,7 @@ const Creation = () => {
                     <span>{index + 1}</span>
                   </MiniPage>
                 ))}
-                <AddPage onClick={() => { handleAddPageClick(pages.length + 1) }}>
+                <AddPage onClick={() => { handleAddPageClick(id!) }}>
                   <HiPlus size={25} color="#000" />
                 </AddPage>
               </PageListContainer>
@@ -125,7 +131,7 @@ const Creation = () => {
           </PageBody>
         </Body>
       </CreationStyle>
-    </CreationBody>
+    </CreationBody >
   );
 
 };

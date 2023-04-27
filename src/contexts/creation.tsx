@@ -13,7 +13,7 @@ type CreationContextType = {
   actionBarSelected: boolean,
   handleCheckboxClick: () => void,
   handleAddButtonClick: (index: number) => void,
-  handleAddPageClick: (index: number) => void,
+  handleAddPageClick: (gameId: string) => void,
   handleTextChange: (pageIndex: number, buttonIndex: number, newButtonText: string) => void,
   setIndexSelected: (index: number) => void,
   setIndexButton: (index: number) => void,
@@ -24,15 +24,20 @@ type CreationContextType = {
   setActionBarSelected: (value: boolean) => void,
   handleButtonActionBar: (index: number, actionBarSelected: boolean) => void
   handlePageActionBar: (index: number, actionBarSelected: boolean) => void
-  getPagesFromGameID: (id: number) => void
+  getPagesFromGameID: (id: string) => void
   updatePage: (page: PageModel) => void
   updateButton: (button: ButtonModel) => void
-  addPage: (page: PageModel) => void
+  addPage: (gameId: number, numberPage: number) => void
   deletePageByID: (id: number) => void
   addButton: (pageId: number) => Promise<ButtonModel>
   deleteButtonByID: (id: number) => void
   loading: boolean
   handleDeleteButton: () => void
+  handleDeletePage: () => void
+  selectedPage: number
+  setSelectedPage: (index: number) => void
+  handleSelectChange: (selected: string) => void
+  findPageIndex: (pages: PageModel[], nextPageId: number) => number
 }
 
 interface PageResponse {
@@ -40,6 +45,8 @@ interface PageResponse {
   title: string;
   description: string;
   color: string;
+  number_page: number;
+  icon: string;
   is_last_page: boolean;
   buttons: Button[];
 }
@@ -50,25 +57,40 @@ export const CreationContext = createContext<CreationContextType>({} as Creation
 export const CreationProvider = ({ children }: { children: ReactNode }) => {
 
   //---Page---
-  async function addPage(page: PageModel) {
+  async function addPage(gameId: number, numberPage: number): Promise<PageModel> {
     try {
-      await postPage(page.title, page.description, page.color, "", page.id, page.isLastPage, 1)
-      console.log("Page added")
+      setLoading(true)
+      const response = await postPage({
+        title: '',
+        description: '',
+        icon: '',
+        color: '#568EA3',
+        number_page: numberPage,
+        is_last_page: false,
+        game_id: gameId
+      })
+      const { id, title, description, color, number_page, is_last_page, icon } = response.data
+      setLoading(false)
+      return new PageModel(id, title, description, color, number_page, is_last_page, icon, []);
     } catch (error) {
+      setLoading(false)
       console.error(error)
+      throw new AppError(500, 'Ocorreu um erro tente novamente mais tarde')
     }
   }
 
   async function deletePageByID(id: number) {
     try {
+      setLoading(true)
       await deletePage(id)
-
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
       console.error(error)
     }
   }
 
-  async function getPagesFromGameID(id: number) {
+  async function getPagesFromGameID(id: string) {
     try {
 
       const tokensJSON = localStorage.getItem('token')
@@ -79,7 +101,16 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
       const response = await getPagesByGameID(id)
 
       const data: PageResponse[] = await response.data;
-      const pages: PageModel[] = data.map(page => new PageModel(page.id, page.title, page.description, page.color, page.buttons));
+      const pages: PageModel[] = data.map(page => new PageModel(
+        page.id,
+        page.title,
+        page.description,
+        page.color,
+        page.number_page,
+        page.is_last_page,
+        page.icon,
+        page.buttons
+      ));
       setPages(pages);
 
     } catch (error) {
@@ -104,7 +135,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
   async function updateButton(button: ButtonModel) {
     try {
       setLoading(true)
-      await patchButton(button.id, button.title, button.color, "")
+      await patchButton(button.id, button.title, button.color, "", button.nextPageId)
       setLoading(false)
     } catch (error) {
       setLoading(false)
@@ -114,10 +145,13 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
 
   async function addButton(pageId: number): Promise<ButtonModel> {
     try {
-      const response = await postButton(pageId, '', '#202331', "", 1)
+      setLoading(true)
+      const response = await postButton(pageId, '', '#202331', "", 0)
       const { id, title, color, nextPageId, icon } = response.data
+      setLoading(false)
       return new ButtonModel(id, title, nextPageId, icon, color);
     } catch (error) {
+      setLoading(false)
       console.error(error)
       throw new AppError(500, 'Ocorreu um erro ao criar o botão')
     }
@@ -125,8 +159,11 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
 
   async function deleteButtonByID(id: number) {
     try {
+      setLoading(true)
       await deleteButton(id)
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
       console.error(error)
     }
   }
@@ -140,6 +177,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
   const [indexSelected, setIndexSelected] = useState(0);
   const [indexButton, setIndexButton] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [selectedPage, setSelectedPage] = useState(0);
 
 
   // 0 - PAGE | 1 - BUTTON
@@ -147,7 +185,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
 
 
   const [pages, setPages] = useState<PageModel[]>([
-    new PageModel(1, "História 1", "Descrição teste", '#568EA3', []),
+    new PageModel(1, "História 1", "Descrição teste", '#568EA3',1,false, '', []),
   ])
 
 
@@ -160,7 +198,6 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
   const handleAddButtonClick = async (index: number) => {
     if (pages[indexSelected].buttons.length < 4) {
       const newButton = await addButton(pages[indexSelected].id)
-      console.log(newButton)
       let pagesTemp = [...pages];
       const buttons = pagesTemp[index].buttons
       const updatedButtons = [...buttons, newButton]
@@ -169,13 +206,11 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const handleAddPageClick = (index: number) => {
+  const handleAddPageClick = async (gameId: string) => {
     setActionBarSelected(true)
-    const newPage = new PageModel(index + 1, "História " + index, "Descrição teste", '#568EA3', []);
+    const newPage = await addPage(Number(gameId), pages.length + 1)
     let pagesTemp = [...pages, newPage];
     setPages(pagesTemp);
-    console.log(pagesTemp)
-    addPage(pagesTemp[index])
     setIndexSelected(pages.length);
     setIndexButton(0)
   };
@@ -198,22 +233,16 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const handleButtonActionBar = (index: number, actionBarSelected: boolean) => {
-    console.log(pages[indexSelected].buttons[index].color)
-    console.log("Button Index = " + index)
     setIndexButton(index)
     setActionBarSelected(false)
   }
 
   const handlePageActionBar = (index: number, actionBarSelected: boolean) => {
-    console.log(pages[indexSelected].buttons[index].color)
-    console.log("Button Index = " + index)
     setIndexButton(index)
     setActionBarSelected(true)
-    console.log(actionBarSelected)
   }
 
   const handleDeleteButton = () => {
-    console.log(pages[indexSelected].buttons[indexButton].id)
     let pagesTemp = [...pages];
     const buttons = pagesTemp[indexSelected].buttons
 
@@ -230,6 +259,54 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
     pagesTemp[indexSelected].buttons = updatedButtons
     setPages(pagesTemp)
   };
+
+  const handleDeletePage = () => {
+    let pagesTemp = [...pages]
+
+    deletePageByID(pagesTemp[indexSelected].id)
+    setActionBarSelected(true)
+
+    if (indexSelected > 0) {
+      pagesTemp.splice(indexSelected, 1);
+      setIndexSelected(indexSelected-1)
+    }
+    else if(indexSelected-1 == 0 && pagesTemp.length != indexSelected){
+      setIndexSelected(indexSelected+1)
+    }
+    else{
+      pagesTemp = []
+    }
+
+
+    setPages(pagesTemp)
+  };
+
+
+  const handleSelectChange = (selected: string) => {
+    console.log(Number(selected.slice(selected.length - 1)))
+    setSelectedPage(Number(selected.slice(selected.length - 1)));
+
+    let pagesTemp = [...pages];
+    let buttons = [...pagesTemp[indexSelected].buttons]
+
+    buttons[indexButton].nextPageId = pagesTemp[selectedPage].id
+    pagesTemp[indexSelected].buttons = buttons
+    updateButton(pagesTemp[indexSelected].buttons[indexButton])
+    setPages(pagesTemp);
+    updatePage(pages[indexSelected])
+    console.log(pages[indexSelected].buttons[indexButton])
+  };
+
+  const findPageIndex = (pages: PageModel[], nextPageId: number) => {
+    for (let i = 0; i < pages.length; i++) {
+      const page = pages[i];
+      if(page.id === nextPageId){
+        return i+1;
+      }
+    }
+    return 0;
+  }
+
 
   const handleBackClick = () => {
 
@@ -267,7 +344,12 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
       addButton,
       deleteButtonByID,
       loading,
-      handleDeleteButton
+      handleDeleteButton,
+      handleDeletePage,
+      selectedPage,
+      setSelectedPage,
+      handleSelectChange,
+      findPageIndex
     }}>
       {children}
     </CreationContext.Provider>

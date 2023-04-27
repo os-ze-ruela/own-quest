@@ -3,6 +3,7 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import styled from "styled-components";
 
 interface SelectBoxProps {
+  selectedPage: number,
   pageList: string[];
   onChange: (selected: string) => void;
 }
@@ -34,15 +35,23 @@ const Option = styled.option`
 
 
 const SelectBoxComponent: React.FC<SelectBoxProps> = ({
+  selectedPage,
   pageList,
   onChange,
 }) => {
   return (
     <SelectBoxWrapper>
       <SelectBox onChange={(e) => onChange(e.target.value)}>
-        <Option value="" disabled selected hidden>
-          Ir para página
-        </Option>
+        {selectedPage > 0  ?
+              (
+              <Option defaultValue={`Página ${selectedPage}`} disabled selected hidden>{`Página ${selectedPage}`}</Option>
+              )
+              :
+              (
+              <Option defaultValue={"Ir para página"} disabled selected hidden>Ir para página</Option>
+              ) 
+            }
+
         {pageList.map((page) => (
           <Option key={page} value={page}>
             {page}
