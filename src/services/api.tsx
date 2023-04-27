@@ -65,16 +65,17 @@ export const patchButton = async (id: number, title: string, color: string, icon
         "id": id,
         "title": title,
         "color": color,
-        "icon": icon
+        "icon": icon,
     })
 }
 
-export const postButton = async (id: number, title: string, color: string, icon: string) => {
+export const postButton = async (pageID: number, title: string, color: string, icon: string, nextPageId: number) => {
     return await api.post(`/button`, {
-        "id": id,
+        "pageId": pageID,
         "title": title,
         "color": color,
-        "icon": icon
+        "icon": icon,
+        "nextPageId": nextPageId
     })
 }
 

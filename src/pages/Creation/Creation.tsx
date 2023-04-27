@@ -30,9 +30,10 @@ const Creation = () => {
   const { updatePage } = useContext(CreationContext)
   const { updateButton } = useContext(CreationContext)
   
+  
   useEffect(() => {
     getPagesFromGameID(3)
-    console.log(pages)
+    console.log(indexButton)
   }, [])
 
 
