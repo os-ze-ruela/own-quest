@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { BiTrash } from 'react-icons/bi';
 import { HiPlus } from 'react-icons/hi';
 import { MdOutlineAddCircleOutline } from 'react-icons/md';
@@ -8,96 +8,32 @@ import HeaderCreation from '../../components/Header/HeaderCreation';
 import { Button, Button as ButtonModel } from '../../models/Button';
 import { Page as PageModel } from '../../models/Page';
 import { ActionsBar, ActualPage, AddButton, AddPage, Body, ButtonContainer, CheckBoxText, CreationBody, CreationStyle, DeleteButton, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu } from '../../styles/Creation';
+import ButtonActionBar from './components/ButtonActionBar';
+import PageActionBar from './components/PageActionBar';
+import { CreationContext } from '../../contexts/creation';
 
-
-const handleBackClick = () => {
-  // Lógica para voltar para a página anterior
-};
-
-const handleCreateClick = () => {
-  // Lógica para criar o conteúdo
-};
-
-interface PageResponse {
-  id: number;
-  title: string;
-  description: string;
-  color: string;
-  is_last_page: boolean;
-  buttons: Button[];
-}
 
 const Creation = () => {
-
-  useEffect(() => {
-    async function fetchData() {
-      const endPoint = `https://deploy.ownquest.games/game/3/pages`
-      // const endPoint = 'http://localhost:5000/game/3/pages'
-
-      const tokensJSON = localStorage.getItem('token')
-
-      const tokens = JSON.parse(tokensJSON!)
-      
-      try {
-        const response = await fetch(endPoint, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${tokens.access_token}`,
-            'Content-Type': 'application/json'
-          }
-        });
-
-        const data: PageResponse[] = await response.json();
-        const pages: PageModel[] = data.map(page => new PageModel(page.id, page.title, page.description, page.color, page.buttons));
-        setPages(pages);
-
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
-    fetchData()
-
-  }, [])
-
-  const [indexSelected, setIndexSelected] = useState(0);
+  const { pages, setPages } = useContext(CreationContext)
+  const { indexButton, setIndexButton } = useContext(CreationContext)
+  const { indexSelected, setIndexSelected } = useContext(CreationContext)
+  const { handleAddButtonClick } = useContext(CreationContext)
+  const { handleAddPageClick } = useContext(CreationContext)
+  const { handleCheckboxClick } = useContext(CreationContext)
+  const { handleBackClick } = useContext(CreationContext)
+  const { handleCreateClick } = useContext(CreationContext)
+  const { handleTextChange } = useContext(CreationContext)
+  const { handleButtonActionBar } = useContext(CreationContext)
+  const { handlePageActionBar } = useContext(CreationContext)
+  const { actionBarSelected, setActionBarSelected } = useContext(CreationContext)
+  const { getPagesFromGameID } = useContext(CreationContext)
+  const { updatePage } = useContext(CreationContext)
+  const { updateButton } = useContext(CreationContext)
   
-  const [pages, setPages] = useState<PageModel[]>([
-    new PageModel(1, "História 1", "Descrição teste", '#568EA3', []),
-  ])
-
-  const handleCheckboxClick = () => {
-    let pagesTemp = [...pages];
-    pagesTemp[indexSelected].isLastPage = !pagesTemp[indexSelected].isLastPage;
-    setPages(pagesTemp);
-  };
-
-  const handleAddButtonClick = (index: number) => {
-    if (pages[indexSelected].buttons.length < 4) {
-      const newButton = new ButtonModel(1, '', 1, '', '#202331')
-      let pagesTemp = [...pages];
-      const buttons = pagesTemp[index].buttons
-      const updatedButtons = [...buttons, newButton]
-      pagesTemp[index].buttons = updatedButtons
-      setPages(pagesTemp)
-    }
-  };
-
-  const handleAddPageClick = (index: number) => {
-    const newPage = new PageModel(index + 1, "História " + index, "Descrição teste", '#568EA3', []);
-    let pagesTemp = [...pages, newPage];
-    setPages(pagesTemp);
-    setIndexSelected(pages.length);
-    console.log(pages);
-  };
-
-  const handleTextChange = (pageIndex: number, buttonIndex: number, newButtonText: string) => {
-    let pagesTemp = [...pages];
-    let buttons = [...pagesTemp[pageIndex].buttons]
-    buttons[buttonIndex].title = newButtonText
-    pagesTemp[pageIndex].buttons = buttons
-    setPages(pagesTemp)
-  };
+  useEffect(() => {
+    getPagesFromGameID(3)
+    console.log(pages)
+  }, [])
 
 
   return (
@@ -105,32 +41,20 @@ const Creation = () => {
       <HeaderCreation onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} />
       <CreationStyle>
         <Body>
-          {/* <Sidebar>
-          <SideBarButton onClick={() => handlePageClick(1)}>
-            <IoMdAddCircleOutline size={30} color="#fff" />
-            <TextButton>Adicionar botão</TextButton>
-          </SideBarButton>
-        </Sidebar> */}
           <PageBody>
-            <ActionsBar>
-              <ColorPicker
-                color={pages[indexSelected].color}
-                setColor={(color) => {
-                  let pagesTemp = [...pages];
-                  pagesTemp[indexSelected].color = color;
-                  setPages(pagesTemp);
-                }}
-              />
-              <CheckBoxText>Última página?</CheckBoxText>
-              <CheckBoxButton checked={pages[indexSelected].isLastPage} onClick={handleCheckboxClick}></CheckBoxButton>
-              <DeleteButton onClick={() => {
+            {actionBarSelected ?
+              (
+                <PageActionBar />
+              )
+              :
+              (
+                <ButtonActionBar />
+              )
+            }
 
-              }}>
-                <BiTrash size={30} color="#000" />
-              </DeleteButton>
-            </ActionsBar>
             <ActualPage>
-              <Page background={pages[indexSelected].color} >
+              <Page background={pages[indexSelected].color}  
+                onDoubleClick={() => handlePageActionBar(indexButton, actionBarSelected)}   >
                 <PageTitle
                   type="text"
                   name="PageTitle"
@@ -140,6 +64,7 @@ const Creation = () => {
                     let pagesTemp = [...pages];
                     pagesTemp[indexSelected].title = event.target.value;
                     setPages(pagesTemp);
+                    updatePage(pages[indexSelected])
                   }}
                 />
                 <PageDescription
@@ -150,6 +75,7 @@ const Creation = () => {
                     let pagesTemp = [...pages];
                     pagesTemp[indexSelected].description = event.target.value;
                     setPages(pagesTemp);
+                    updatePage(pages[indexSelected])
                   }}
                 />
                 <ButtonContainer>
@@ -157,10 +83,15 @@ const Creation = () => {
                     <EditableButton
                       key={index}
                       value={button.title}
+                      isSelected={index === indexButton}
                       placeholder={"Botão " + (index + 1).toString()}
-                      onChange={(event) => handleTextChange(indexSelected, index, event.target.value)}
+                      background={button.color}
+                      onFocus= {() => {handleButtonActionBar(index, actionBarSelected); setIndexButton(index)}}
+                      onChange={(event) => {handleTextChange(indexSelected, index, event.target.value);
+                        updateButton(button)
+                      }}
                     />
-                  ))}
+                    ))}
                   <AddButton onClick={
                     () => { handleAddButtonClick(indexSelected); }}
                     canAdd={pages[indexSelected].buttons.length < 4} >
@@ -178,6 +109,7 @@ const Creation = () => {
                     key={index}
                     value={index}
                     onClick={() => {
+                      setActionBarSelected(true)
                       setIndexSelected(index)
                     }}
                   >
@@ -194,6 +126,7 @@ const Creation = () => {
       </CreationStyle>
     </CreationBody>
   );
+
 };
 
 export default Creation;
