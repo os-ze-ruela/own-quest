@@ -26,7 +26,7 @@ export const getHotGames = async () => {
 // CREATION CONTEXT
 
 //---- Page ----
-export const getPagesByGameID = async (id: number) => {
+export const getPagesByGameID = async (id: string) => {
     return await api.get(`/game/${id}/pages`)
 }
 
@@ -42,15 +42,25 @@ export const patchPage = async (id: number, title: string, description: string, 
     })
 }
 
-export const postPage = async (title: string, description: string, color: string, icon: string, number_page: number, is_last_page: boolean, game_id: number) => {
+interface IPostPage {
+    title: string;
+    description: string;
+    color: string;
+    icon: string;
+    number_page: number;
+    is_last_page: boolean;
+    game_id: number;
+}
+
+export const postPage = async (request: IPostPage) => {
     return await api.post(`/page`, {
-        "title": title,
-        "description": description,
-        "color": color,
-        "icon": icon,
-        "number_page": number_page,
-        "is_last_page": is_last_page,
-        "game_id": game_id
+        "title": request.title,
+        "description": request.description,
+        "color": request.color,
+        "icon": request.icon,
+        "number_page": request.number_page,
+        "is_last_page": request.is_last_page,
+        "game_id": request.game_id
     })
 }
 
@@ -60,12 +70,13 @@ export const deletePage = async (id: number) => {
 
 //---- Button  ----
 
-export const patchButton = async (id: number, title: string, color: string, icon: string) => {
+export const patchButton = async (id: number, title: string, color: string, icon: string, nextPageId: number) => {
     return await api.patch(`/button`, {
         "id": id,
         "title": title,
         "color": color,
         "icon": icon,
+        "nextPageId": nextPageId
     })
 }
 

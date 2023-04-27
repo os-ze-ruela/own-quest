@@ -13,6 +13,7 @@ function PageActionBar() {
     const {handleAddPageClick} = useContext(CreationContext)
     const {handleCheckboxClick} = useContext(CreationContext)
     const {updatePage} = useContext(CreationContext)
+    const {handleDeletePage} = useContext(CreationContext)
     
 
     return <ActionsBar>
@@ -27,7 +28,8 @@ function PageActionBar() {
       <CheckBoxText>Última página?</CheckBoxText>
       <CheckBoxButton checked={pages[indexSelected].isLastPage} onClick={handleCheckboxClick}></CheckBoxButton>
       <DeleteButton onClick={() => {
-      } }>
+        handleDeletePage(); 
+        }}>
         <BiTrash size={30} color="#000" />
       </DeleteButton>
     </ActionsBar>;

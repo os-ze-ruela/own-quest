@@ -36,7 +36,7 @@ const CreateButton = styled.button`
   font-family: FiraCode-Semibold;
 `;
 
-const HeaderText = styled.text`
+const HeaderText = styled.p`
   font-size: 20px;
   margin: 0;
   color:white;
