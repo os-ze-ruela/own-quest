@@ -34,10 +34,11 @@ type CreationContextType = {
   loading: boolean
   handleDeleteButton: () => void
   handleDeletePage: () => void
-  selectedPage: number
-  setSelectedPage: (index: number) => void
   handleSelectChange: (selected: string) => void
   findPageIndex: (pages: PageModel[], nextPageId: number) => number
+  destinyPage: number
+  setDestinyPage: (page: number) => void
+  handleButton: (index: number, button: ButtonModel) => void
 }
 
 interface PageResponse {
@@ -146,10 +147,10 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
   async function addButton(pageId: number): Promise<ButtonModel> {
     try {
       setLoading(true)
-      const response = await postButton(pageId, '', '#202331', "", 0)
-      const { id, title, color, nextPageId, icon } = response.data
+      const response = await postButton(pageId, '', '#202331', "", -1)
+      const { id, title, color,  icon, nextPageId,} = response.data
       setLoading(false)
-      return new ButtonModel(id, title, nextPageId, icon, color);
+      return new ButtonModel(id, title, color, icon, nextPageId);
     } catch (error) {
       setLoading(false)
       console.error(error)
@@ -178,6 +179,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
   const [indexButton, setIndexButton] = useState(0);
   const [loading, setLoading] = useState(false);
   const [selectedPage, setSelectedPage] = useState(0);
+  const [destinyPage, setDestinyPage] = useState(-1);
 
 
   // 0 - PAGE | 1 - BUTTON
@@ -270,7 +272,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
       pagesTemp.splice(indexSelected, 1);
       setIndexSelected(indexSelected-1)
     }
-    else if(indexSelected-1 == 0 && pagesTemp.length != indexSelected){
+    else if(indexSelected-1 === 0 && pagesTemp.length != indexSelected){
       setIndexSelected(indexSelected+1)
     }
     else{
@@ -282,31 +284,33 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
   };
 
 
-  const handleSelectChange = (selected: string) => {
-    console.log(Number(selected.slice(selected.length - 1)))
-    setSelectedPage(Number(selected.slice(selected.length - 1)));
+  const handleButton = (index: number, button: ButtonModel) => {
+    setIndexButton(index) 
+    handleButtonActionBar(index, actionBarSelected); 
+    setDestinyPage(findPageIndex(pages, button.nextPageId))
+  };
 
+  const handleSelectChange = (selected: string) => {
+    let selectedSliced = Number(selected.slice(selected.length - 1))
     let pagesTemp = [...pages];
     let buttons = [...pagesTemp[indexSelected].buttons]
-
-    buttons[indexButton].nextPageId = pagesTemp[selectedPage].id
-    pagesTemp[indexSelected].buttons = buttons
+    buttons[indexButton].nextPageId = pagesTemp[selectedSliced-1].id
+    setDestinyPage(findPageIndex(pages, buttons[indexButton].nextPageId))
     updateButton(pagesTemp[indexSelected].buttons[indexButton])
+    pagesTemp[indexSelected].buttons = buttons
     setPages(pagesTemp);
     updatePage(pages[indexSelected])
-    console.log(pages[indexSelected].buttons[indexButton])
   };
 
   const findPageIndex = (pages: PageModel[], nextPageId: number) => {
     for (let i = 0; i < pages.length; i++) {
       const page = pages[i];
       if(page.id === nextPageId){
-        return i+1;
+        return i
       }
     }
-    return 0;
+    return -1
   }
-
 
   const handleBackClick = () => {
 
@@ -346,10 +350,11 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
       loading,
       handleDeleteButton,
       handleDeletePage,
-      selectedPage,
-      setSelectedPage,
       handleSelectChange,
-      findPageIndex
+      findPageIndex,
+      destinyPage,
+      setDestinyPage,
+      handleButton
     }}>
       {children}
     </CreationContext.Provider>

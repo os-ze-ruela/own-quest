@@ -112,7 +112,6 @@ const HeaderCreation: React.FC<HeaderProps> = ({ onBackClick, onCreateClick, isS
         <StorieTitle       
             type="text"
             name="StorieTitle"
-            value=''
             placeholder="Minha primeira história"
           >
           </StorieTitle>
