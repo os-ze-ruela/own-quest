@@ -9,6 +9,10 @@ export const createSession = async (email: string, password: string) => {
     return await api.post('/auth/signin', { email, password })
 }
 
+export const signupUser = async (name: string, nickname: string, email: string, password: string, birthDate: string) => {
+    return await api.post('/auth/signup', {name, nickname, email, password, birthDate})
+}
+
 export const refreshToken = async () => {
     return await api.post('/auth/refresh')
 }

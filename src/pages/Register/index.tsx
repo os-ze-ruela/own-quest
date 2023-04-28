@@ -1,3 +1,4 @@
+import React, { useContext } from 'react'
 import { useState } from 'react';
 import ASTRO from "../../assets/img/astronauta-controle 1.png";
 import showPasswordImg from "../../assets/img/hide.svg";
@@ -6,10 +7,24 @@ import AskLoginBar from '../../components/Bar/AskLoginBar';
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
 import { LOGIN } from '../../core/app-urls';
-import { ButtonRegister, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginLink, LoginText, RegisterStyle, SubTitle, Title } from '../../styles/Register';
+import { ButtonRegister, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginLink, LoginText, RegisterStyle, SubTitle, Title, MessageError } from '../../styles/Register';
+import { AuthContext } from '../../contexts/auth';
+import AppError from '../../core/app-error';
 
 
 function Register() {
+
+  async function SubmitRegister() {
+    setShowError(false)
+    try {
+      await register(name, nickname, email, password, confirmPassword, new Date(birthDate).toISOString())
+    } catch (e) {
+      const error = await e as AppError
+      setMessageError(error.message)
+      setShowError(true) 
+    }
+  }
+
     const [nickname, setNickname] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -18,6 +33,12 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isRevealPassword, setIsRevealPassword] = useState(false);
     const [isRevealConfirmPassword, setIsRevealConfirmPassword] = useState(false);
+
+    const [showError, setShowError] = useState(false)
+    const [messageError, setMessageError] = useState('')
+
+    const { register } = useContext(AuthContext)
+
   return (
     <>
     <Header page='Login' redirect={LOGIN}/>
@@ -90,7 +111,9 @@ function Register() {
           onClick={() => setIsRevealConfirmPassword(prevState => !prevState)}
         />
         </InputButtonDiv>
-        <ButtonRegister>Criar Conta</ButtonRegister>
+        { showError &&
+            <MessageError>{messageError}</MessageError>}
+        <ButtonRegister onClick={async () => await SubmitRegister()}>Criar Conta</ButtonRegister>
       </FieldsDiv>          
     </RegisterStyle>
     <AskLoginBar/>

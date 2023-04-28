@@ -31,23 +31,34 @@ function AppRoutes() {
         return <>{children}</>
     }
 
+    function NotLogged( { children }: { children: ReactNode }) {
+        const { authenticated, loading } = useContext(AuthContext)
+
+        if (loading) {
+            return <div>Carregando...</div>
+        }
+
+        if (authenticated) {
+            return <Navigate to={HOME} />
+        }
+        return <>{children}</>
+    }
+
     return (
         <Router>
             <GameProvider>
                 <AuthProvider>
-                    <CreationProvider>
-                       <Routes>
-                          <Route path={LANDING_PAGE} element={<Home />} > </Route>
-                          <Route path={LOGIN} element={<Login />} > </Route>
-                          <Route path={REGISTER} element={<Register />} > </Route>
-                          <Route path={RECOVER_PASSWORD} element={<Recover />} > </Route>
-                          <Route path={NEW_PASSWORD} element={<NewPword />} > </Route>
-                          <Route path={EMAIL_NOT_VALIDATED} element={<NotValidated />} > </Route>
-                          <Route path={EMAIL_VALIDATED} element={<Validated />} > </Route>
-                          <Route path={HOME} element={<Private><HomeLogged /></Private>} > </Route>
-                          <Route path={GAME + '/:id'} element={<Private><Creation /></Private>} > </Route>
-                      </Routes>
-                    </CreationProvider>
+                    <Routes>
+                        <Route path="/" element={<Home />} > </Route>
+                        <Route path="/login" element={<NotLogged><Login /></NotLogged>} > </Route>
+                        <Route path="/register" element={<NotLogged><Register /></NotLogged>} > </Route>
+                        <Route path="/recover" element={<Recover />} > </Route>
+                        <Route path="/newpassword" element={<NewPword />} > </Route>
+                        <Route path="/notvalidated" element={<NotValidated />} > </Route>
+                        <Route path="/validated" element={<Validated />} > </Route>
+                        <Route path="/logged" element={<Private><HomeLogged /></Private>} > </Route>
+                        <Route path="/creation" element={<Private><Creation /></Private>} > </Route>
+                    </Routes>
                 </AuthProvider>
             </GameProvider>
         </Router>
