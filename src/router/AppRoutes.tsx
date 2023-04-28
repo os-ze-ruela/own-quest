@@ -13,7 +13,6 @@ import Validated from '../pages/Validated';
 
 import { AuthContext, AuthProvider } from '../contexts/auth';
 import { GameProvider } from '../contexts/game';
-import { CreationProvider } from '../contexts/creation';
 import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, GAME, HOME, LANDING_PAGE, LOGIN, NEW_PASSWORD, RECOVER_PASSWORD, REGISTER } from '../core/app-urls';
 
 function AppRoutes() {
@@ -49,15 +48,15 @@ function AppRoutes() {
             <GameProvider>
                 <AuthProvider>
                     <Routes>
-                        <Route path="/" element={<Home />} > </Route>
-                        <Route path="/login" element={<NotLogged><Login /></NotLogged>} > </Route>
-                        <Route path="/register" element={<NotLogged><Register /></NotLogged>} > </Route>
-                        <Route path="/recover" element={<Recover />} > </Route>
-                        <Route path="/newpassword" element={<NewPword />} > </Route>
-                        <Route path="/notvalidated" element={<NotValidated />} > </Route>
-                        <Route path="/validated" element={<Validated />} > </Route>
-                        <Route path="/logged" element={<Private><HomeLogged /></Private>} > </Route>
-                        <Route path="/creation" element={<Private><Creation /></Private>} > </Route>
+                        <Route path={LANDING_PAGE} element={<Home />} > </Route>
+                        <Route path={LOGIN} element={<NotLogged><Login /></NotLogged>} > </Route>
+                        <Route path={REGISTER} element={<NotLogged><Register /></NotLogged>} > </Route>
+                        <Route path={RECOVER_PASSWORD} element={<Recover />} > </Route>
+                        <Route path={NEW_PASSWORD} element={<NewPword />} > </Route>
+                        <Route path={EMAIL_NOT_VALIDATED} element={<NotValidated />} > </Route>
+                        <Route path={EMAIL_VALIDATED} element={<Validated />} > </Route>
+                        <Route path={HOME} element={<Private><HomeLogged /></Private>} > </Route>
+                        <Route path={GAME} element={<Private><Creation /></Private>} > </Route>
                     </Routes>
                 </AuthProvider>
             </GameProvider>
