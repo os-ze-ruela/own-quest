@@ -40,9 +40,6 @@ const Creation = () => {
     console.log("index button = "+indexButton)
   }, [indexButton])
 
-  useEffect(() => {
-    console.log("destiny page = "+destinyPage)
-  }, [destinyPage])
 
 
   return (

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import styled from "styled-components";
 import { CreationContext } from "../../contexts/creation";
@@ -38,25 +38,45 @@ const SelectBoxComponent: React.FC<SelectBoxProps> = ({
   pageList,
   onChange,
 }) => {
+
   const { destinyPage } = useContext(CreationContext)
+  const { indexSelected } = useContext(CreationContext)
+
+  useEffect(() => {
+    console.log("destiny page = "+destinyPage)
+  }, [destinyPage])
+
   return (
     <SelectBoxWrapper>
-      <SelectBox onChange={(e) => onChange(e.target.value)}>
+      <SelectBox  onChange={(e) => {
+        console.log(e.target.value)
+        onChange(e.target.value)
+      }}>
         {destinyPage > 0  ?
               (
-              <Option defaultValue={`Página ${destinyPage+1}`} disabled selected hidden>{`Página ${destinyPage+1}`}</Option>
+                <></>
               )
               :
               (
-              <Option defaultValue={`Ir para página`}  disabled selected hidden>Ir para página</Option>
+              <Option selected>Ir para página</Option>
               ) 
             }
+            {/* <Option>Ir para página</Option> */}
+            {pageList.map((page, index) => {
+              if(destinyPage == index) {
+                return (
+                  <Option key={index} value={page} selected >
+                    {page}
+                  </Option>
+                )} else {
+                  return (
+                <Option key={index} value={page}  >
+                  {page}
+                </Option>
+              )}
+            }
+            )}
 
-        {pageList.map((page) => (
-          <Option key={page} >
-            {page}
-          </Option>
-        ))}
       </SelectBox>
     </SelectBoxWrapper>
   );
