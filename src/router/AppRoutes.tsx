@@ -29,14 +29,27 @@ function AppRoutes() {
         return <>{children}</>
     }
 
+    function NotLogged( { children }: { children: ReactNode }) {
+        const { authenticated, loading } = useContext(AuthContext)
+
+        if (loading) {
+            return <div>Carregando...</div>
+        }
+
+        if (authenticated) {
+            return <Navigate to={'/logged'} />
+        }
+        return <>{children}</>
+    }
+
     return (
         <Router>
             <GameProvider>
                 <AuthProvider>
                     <Routes>
                         <Route path="/" element={<Home />} > </Route>
-                        <Route path="/login" element={<Login />} > </Route>
-                        <Route path="/register" element={<Register />} > </Route>
+                        <Route path="/login" element={<NotLogged><Login /></NotLogged>} > </Route>
+                        <Route path="/register" element={<NotLogged><Register /></NotLogged>} > </Route>
                         <Route path="/recover" element={<Recover />} > </Route>
                         <Route path="/newpassword" element={<NewPword />} > </Route>
                         <Route path="/notvalidated" element={<NotValidated />} > </Route>
