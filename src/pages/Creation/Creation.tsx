@@ -4,6 +4,7 @@ import { MdOutlineAddCircleOutline } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import HeaderCreation from '../../components/Header/HeaderCreation';
 import { CreationContext } from '../../contexts/creation';
+import { GameContext } from '../../contexts/game';
 import { ActualPage, AddButton, AddPage, Body, ButtonContainer, CreationBody, CreationStyle, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu } from '../../styles/Creation';
 import ButtonActionBar from './components/ButtonActionBar';
 import NoPagePlaceholder from './components/NoPagePlaceholder';
@@ -29,11 +30,13 @@ const Creation = () => {
   const { findPageIndex } = useContext(CreationContext)
   const { destinyPage, setDestinyPage} = useContext(CreationContext)
   const { handleButton } = useContext(CreationContext)
+  const { getGameById } = useContext(GameContext)
 
   const { id } = useParams()
 
   useEffect(() => {
     getPagesFromGameID(id!)
+    getGameById(id!)
   }, [])
 
   useEffect(() => {

@@ -3,13 +3,19 @@ import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
 import Category from "../models/Category";
 import Game from "../models/Game";
-import { api, getHotGames, getUserGamesByToken } from "../services/api";
+import { api, fetchGameById, getHotGames, getUserGamesByToken, patchGame, postGame } from "../services/api";
 
 type GameContextType = {
+
+    setEditingGame: (game: Game) => void,
+    getGameById: (id: string) => Promise<void>,
+    createGame: () => Promise<number>,
+    updateGame: (game: Game) => Promise<void>,
     getUserGames: () => Promise<void>,
     getHotGamesForHome: () => Promise<void>,
     userGames: Game[],
-    games: Game[]
+    games: Game[],
+    actualEditingGame: Game | null,
 }
 
 export const GameContext = createContext<GameContextType>({} as GameContextType)
@@ -19,7 +25,57 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     // const navigate = useNavigate()
     const [userGames, setUserGames] = useState<Game[]>([])
     const [games, setGames] = useState<Game[]>([])
+    const [actualEditingGame, setEditingGame] = useState<Game | null>(null)
     // const [loading, setLoading] =useState(true)
+
+    async function createGame(): Promise<number> {
+        try {
+            const response = await postGame()
+            return response.data.game.id;
+        } catch (e) {
+            const error = await e as AxiosError
+            console.log(error)
+            throw new AppError(error.response!.status, error.message);
+        }
+    }
+
+    async function updateGame(game: Game): Promise<void> {
+        try {
+            //   setLoading(true)
+            await patchGame(game.id, game.title, game.description, game.image, game.isEditing, game.isPublished, game.isDeleted);
+            console.log(game)
+            //   setLoading(false)
+        } catch (error) {
+            //   setLoading(false)
+            console.error(error)
+        }
+    }
+
+    async function getGameById(id: string): Promise<void> {
+        try {
+            //   setLoading(true)
+            const response = await fetchGameById(id);
+            const idGame = Number(id);
+            const { title, description, image, isEditing, isPublished, isDeleted, createdAt, favorites, categories } = response.data.game;
+            setEditingGame(new Game({
+                id: idGame,
+                title: title,
+                description: description,
+                createdAt: createdAt,
+                categories: categories,
+                favorites: favorites,
+                image: image,
+                isEditing: isEditing,
+                isPublished: isPublished,
+                isDeleted: isDeleted,
+            }))
+            //   setLoading(false)
+        } catch (error) {
+            //   setLoading(false)
+            console.error(error)
+            throw error
+        }
+    }
 
     async function getUserGames(): Promise<void> {
         try {
@@ -78,7 +134,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
             console.log(response.data)
 
-            const hotGames = gamesData.map((gameData: { game: { categories: any[]; id: any; title: any; description: any; image: any; favorites:any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any; }; }) => {
+            const hotGames = gamesData.map((gameData: { game: { categories: any[]; id: any; title: any; description: any; image: any; favorites: any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any; }; }) => {
                 const categories = gameData.game.categories.map((categoryData) => {
                     return new Category(categoryData.category);
                 });
@@ -112,7 +168,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <GameContext.Provider value={{ getUserGames, getHotGamesForHome, userGames, games }}>
+        <GameContext.Provider value={{ setEditingGame, getGameById, createGame, updateGame, getUserGames, getHotGamesForHome, userGames, games, actualEditingGame }}>
             {children}
         </GameContext.Provider>
     )

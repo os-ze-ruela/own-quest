@@ -3,6 +3,7 @@ import { BsCloudArrowDown, BsCloudCheck } from 'react-icons/bs';
 import { MdArrowBack } from 'react-icons/md';
 import styled from 'styled-components';
 import { CreationContext } from '../../contexts/creation';
+import { GameContext } from '../../contexts/game';
 
 interface HeaderProps {
     onBackClick: () => void;
@@ -92,6 +93,13 @@ const WrapItems = styled.div`
 const HeaderCreation: React.FC<HeaderProps> = ({ onBackClick, onCreateClick, isSaved }) => {
 
   const { loading } = useContext(CreationContext)
+  const { actualEditingGame, updateGame, setEditingGame,  } = useContext(GameContext)
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let pageTemp = actualEditingGame!
+    pageTemp.title = event.target.value
+    setEditingGame(pageTemp);
+  };
 
   return (
     <HeaderContainer>
@@ -112,7 +120,10 @@ const HeaderCreation: React.FC<HeaderProps> = ({ onBackClick, onCreateClick, isS
         <StorieTitle       
             type="text"
             name="StorieTitle"
+            autoComplete="off"
+            value={actualEditingGame?.title ?? ''}
             placeholder="Minha primeira história"
+            onChange={handleChange}
           >
           </StorieTitle>
         <CreateButton onClick={onCreateClick}>Testar</CreateButton>

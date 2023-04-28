@@ -1,8 +1,7 @@
-import { AxiosError } from "axios";
-import React, { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
-import { Page, Page as PageModel } from '../models/Page';
 import { Button, Button as ButtonModel } from '../models/Button';
+import { Page as PageModel } from '../models/Page';
 import { api, deleteButton, deletePage, getPagesByGameID, patchButton, patchPage, postButton, postPage } from "../services/api";
 
 
@@ -187,7 +186,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
 
 
   const [pages, setPages] = useState<PageModel[]>([
-    new PageModel(1, "História 1", "Descrição teste", '#568EA3',1,false, '', []),
+    // new PageModel(1, "História 1", "Descrição teste", '#568EA3',1,false, '', []),
   ])
 
 

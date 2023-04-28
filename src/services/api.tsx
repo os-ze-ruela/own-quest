@@ -100,6 +100,9 @@ export const deleteButton = async (id: number) => {
 
 //---- Game  ----
 
+export const fetchGameById = async (id: string) => {
+    return await api.get(`/game/${id}`)
+}
 
 export const patchGame = async (id: number, title: string, description: string, image: string, isEditing: boolean, isPublished: boolean, isDeleted: boolean) => {
     return await api.patch(`/game`, {
@@ -113,12 +116,12 @@ export const patchGame = async (id: number, title: string, description: string, 
     })
 }
 
-export const postGame = async (title: string, description: string, image: string, categories: string) => {
+export const postGame = async () => {
     return await api.post(`/game`, {
-        "title": title,
-        "description": description,
-        "image": image,
-        "categories": categories
+        "title": 'Nova história',
+        "description": 'Essa é uma nova história criado no Own QUest.',
+        "image": null,
+        "categories": []
     })
 }
 

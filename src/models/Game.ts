@@ -35,10 +35,10 @@ class Game {
         this.isPublished = constructor.isPublished;
         this.isDeleted = constructor.isDeleted;
         this.createdAt = constructor.createdAt;
-        this.categories = constructor.categories.map((category) => {
+        this.categories =   constructor.categories.length > 0 ? constructor.categories.map((category) => {
             console.log(category)
             return new Category(category)
-        });
+        }): [];
     }
 }
 

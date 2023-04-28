@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from "react";
-import { IoMdArrowDropdown } from "react-icons/io";
 import styled from "styled-components";
 import { CreationContext } from "../../contexts/creation";
 
@@ -63,10 +62,10 @@ const SelectBoxComponent: React.FC<SelectBoxProps> = ({
             }
             {/* <Option>Ir para página</Option> */}
             {pageList.map((page, index) => {
-              if(destinyPage == index) {
+              if(destinyPage === index) {
                 return (
                   <Option key={index} value={page} selected >
-                    {page}0
+                    {page}
                   </Option>
                 )} else {
                   return (
