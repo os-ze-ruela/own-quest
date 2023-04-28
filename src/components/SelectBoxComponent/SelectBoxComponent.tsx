@@ -66,7 +66,7 @@ const SelectBoxComponent: React.FC<SelectBoxProps> = ({
               if(destinyPage == index) {
                 return (
                   <Option key={index} value={page} selected >
-                    {page}
+                    {page}0
                   </Option>
                 )} else {
                   return (

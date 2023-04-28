@@ -195,6 +195,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
     let pagesTemp = [...pages];
     pagesTemp[indexSelected].isLastPage = !pagesTemp[indexSelected].isLastPage;
     setPages(pagesTemp);
+    updatePage(pages[indexSelected])
   };
 
   const handleAddButtonClick = async (index: number) => {
