@@ -3,7 +3,7 @@ import { ReactNode, createContext, useEffect, useState } from "react";
 import AppError from "../core/app-error";
 import { api, createSession, refreshToken, signupUser } from '../services/api';
 import { useNavigate } from "react-router-dom";
-import { HOME, LANDING_PAGE } from "../core/app-urls";
+import { HOME, LANDING_PAGE, EMAIL_NOT_VALIDATED } from "../core/app-urls";
 
 
 type AuthContextType = {
@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             if (error.response?.status === 400) {
                 throw new AppError(400, 'Não foi possível encontrar uma conta com as credenciais fornecidas. Por favor, confira seu e-mail e senha.')
             } else if (error.response?.status === 401) {
-                navigate('/notvalidated')
+                navigate(EMAIL_NOT_VALIDATED)
                 throw new AppError(401, 'Usuário com o e-mail não verificado. Por favor, verifique o seu e-mail para realizar o login.')
             } else if (error.response?.status === 403) {
                 throw new AppError(403, 'Não foi possível encontrar uma conta com as credenciais fornecidas. Por favor, confira seu e-mail.')
@@ -153,7 +153,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
             // api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
 
-            navigate('/notvalidated')
+            navigate(EMAIL_NOT_VALIDATED)
         } catch (e) {
             const error = await e as AxiosError
             console.error(`Erro (${error.response?.status}) ao realizar cadastro:`, error);

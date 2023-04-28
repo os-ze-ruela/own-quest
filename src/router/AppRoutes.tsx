@@ -39,7 +39,7 @@ function AppRoutes() {
         }
 
         if (authenticated) {
-            return <Navigate to={'/logged'} />
+            return <Navigate to={HOME} />
         }
         return <>{children}</>
     }
