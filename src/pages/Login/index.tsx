@@ -9,6 +9,7 @@ import AppError from '../../core/app-error';
 import showPasswordImg from "../../assets/img/hide.svg";
 import hidePasswordImg from "../../assets/img/show.svg";
 import AskRegisterBar from '../../components/Bar/AskRegisterBar';
+import { RECOVER_PASSWORD, REGISTER } from '../../core/app-urls';
 
 function Login() {
 
@@ -33,7 +34,7 @@ function Login() {
 
   return (
     <>
-      <Header page='Registrar' redirect='/register' />
+      <Header page='Registrar' redirect={REGISTER} />
       <LoginStyle>
         <ImgAstro src={ASTRO} />
         <FieldsDiv>
@@ -44,7 +45,7 @@ function Login() {
 
             <RegisterText>
               Ainda não tem uma conta?
-              <RegisterLink href='register'> Cadastre-se </RegisterLink>
+              <RegisterLink href={REGISTER}> Cadastre-se </RegisterLink>
             </RegisterText>
 
             <Label htmlFor="email">Email ou nickname</Label>
@@ -76,7 +77,7 @@ function Login() {
             <ButtonLogin onClick={async () => await SubmitLogin()}>Entrar</ButtonLogin>
             <RecoverText>
               Esqueceu sua senha? <br />
-              <RecoverLink href='recover'>Recupere aqui</RecoverLink>
+              <RecoverLink href={RECOVER_PASSWORD}>Recupere aqui</RecoverLink>
             </RecoverText>
           </LoginRecoverItemsDiv>
         </FieldsDiv>

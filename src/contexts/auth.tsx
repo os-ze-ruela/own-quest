@@ -3,6 +3,7 @@ import { ReactNode, createContext, useEffect, useState } from "react";
 import AppError from "../core/app-error";
 import { api, createSession, refreshToken, signupUser } from '../services/api';
 import { useNavigate } from "react-router-dom";
+import { HOME, LANDING_PAGE } from "../core/app-urls";
 
 
 type AuthContextType = {
@@ -67,7 +68,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
 
             setUser(loggedUser)
-            navigate('/logged')
+            navigate(HOME)
+
         } catch (e) {
             const error = await e as AxiosError
             console.error(`Erro (${error.response?.status}) ao realizar login:`, error);
@@ -109,7 +111,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem('token')
         api.defaults.headers.Authorization = null
         setUser(null)
-        navigate('/')
+        navigate(LANDING_PAGE)
     };
 
     async function validRegister(name: string, nickname: string, email: string, password: string, confirmPassword: string, birthDate: string) {

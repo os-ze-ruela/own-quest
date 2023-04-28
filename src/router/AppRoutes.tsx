@@ -13,6 +13,8 @@ import Validated from '../pages/Validated';
 
 import { AuthContext, AuthProvider } from '../contexts/auth';
 import { GameProvider } from '../contexts/game';
+import { CreationProvider } from '../contexts/creation';
+import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, GAME, HOME, LANDING_PAGE, LOGIN, NEW_PASSWORD, RECOVER_PASSWORD, REGISTER } from '../core/app-urls';
 
 function AppRoutes() {
     function Private({ children }: { children: ReactNode }) {
@@ -23,7 +25,7 @@ function AppRoutes() {
         }
 
         if (!authenticated) {
-            return <Navigate to={'/login'} />
+            return <Navigate to={LOGIN} />
         }
 
         return <>{children}</>

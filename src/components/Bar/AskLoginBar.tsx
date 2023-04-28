@@ -1,5 +1,5 @@
-import React from 'react'
 import styled from 'styled-components'
+import { LOGIN } from '../../core/app-urls'
 
 export const Bar = styled.div`
     height: 170px ;
@@ -49,7 +49,7 @@ function AskLoginBar() {
     return (
         <Bar>
             <BarTitle>Já possui uma conta?</BarTitle>
-            <ButtonLogin href='login'>Entre agora com sua conta aqui</ButtonLogin>
+            <ButtonLogin href={LOGIN}>Entre agora com sua conta aqui</ButtonLogin>
         </Bar>
     )
 }
