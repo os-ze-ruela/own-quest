@@ -126,6 +126,7 @@ export const TextButton = styled.p`
 
 
 export const PageTitle = styled.input`
+  width: 90%;
   font-size: 18pt;
   color: white;
   font-family: FiraCode-Semibold;
@@ -177,8 +178,8 @@ export const DeleteButton = styled.button`
 `
 
 export const ButtonContainer = styled.div`
-  width:100%;
-  height:200px;
+  width: 100%;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;

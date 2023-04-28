@@ -1,18 +1,13 @@
-import { useContext, useEffect, useState } from 'react';
-import { BiTrash } from 'react-icons/bi';
+import { useContext, useEffect } from 'react';
 import { HiPlus } from 'react-icons/hi';
 import { MdOutlineAddCircleOutline } from 'react-icons/md';
-import ColorPicker from '../../components/ButtonWithColorPicker/ButtonWithColorPicker';
-import CheckBoxButton from '../../components/CheckBoxButton/CheckBoxButton';
-import HeaderCreation from '../../components/Header/HeaderCreation';
-import { Button, Button as ButtonModel } from '../../models/Button';
-import { Page as PageModel } from '../../models/Page';
-import { ActionsBar, ActualPage, AddButton, AddPage, Body, ButtonContainer, CheckBoxText, CreationBody, CreationStyle, DeleteButton, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu } from '../../styles/Creation';
-import ButtonActionBar from './components/ButtonActionBar';
-import PageActionBar from './components/PageActionBar';
-import { CreationContext } from '../../contexts/creation';
 import { useParams } from 'react-router-dom';
+import HeaderCreation from '../../components/Header/HeaderCreation';
+import { CreationContext } from '../../contexts/creation';
+import { ActualPage, AddButton, AddPage, Body, ButtonContainer, CreationBody, CreationStyle, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu } from '../../styles/Creation';
+import ButtonActionBar from './components/ButtonActionBar';
 import NoPagePlaceholder from './components/NoPagePlaceholder';
+import PageActionBar from './components/PageActionBar';
 
 
 const Creation = () => {
@@ -63,6 +58,7 @@ const Creation = () => {
                 <PageTitle
                   type="text"
                   name="PageTitle"
+                  autoComplete="off"
                   value={pages[indexSelected].title}
                   placeholder="Exemplo de título"
                   onChange={(event) => {
@@ -74,6 +70,7 @@ const Creation = () => {
                 />
                 <PageDescription
                   name="PageDescription"
+                  autoComplete="off"
                   value={pages[indexSelected].description}
                   placeholder="Esse é um exemplo de descrição"
                   onChange={(event) => {
