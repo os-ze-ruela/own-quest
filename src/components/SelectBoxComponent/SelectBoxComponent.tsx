@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import styled from "styled-components";
+import { CreationContext } from "../../contexts/creation";
 
 interface SelectBoxProps {
-  selectedPage: number,
   pageList: string[];
   onChange: (selected: string) => void;
 }
@@ -35,25 +35,25 @@ const Option = styled.option`
 
 
 const SelectBoxComponent: React.FC<SelectBoxProps> = ({
-  selectedPage,
   pageList,
   onChange,
 }) => {
+  const { destinyPage } = useContext(CreationContext)
   return (
     <SelectBoxWrapper>
       <SelectBox onChange={(e) => onChange(e.target.value)}>
-        {selectedPage > 0  ?
+        {destinyPage > 0  ?
               (
-              <Option defaultValue={`Página ${selectedPage}`} disabled selected hidden>{`Página ${selectedPage}`}</Option>
+              <Option defaultValue={`Página ${destinyPage+1}`} disabled selected hidden>{`Página ${destinyPage+1}`}</Option>
               )
               :
               (
-              <Option defaultValue={"Ir para página"} disabled selected hidden>Ir para página</Option>
+              <Option defaultValue={`Ir para página`}  disabled selected hidden>Ir para página</Option>
               ) 
             }
 
         {pageList.map((page) => (
-          <Option key={page} value={page}>
+          <Option key={page} >
             {page}
           </Option>
         ))}

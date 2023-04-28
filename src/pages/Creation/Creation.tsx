@@ -26,12 +26,23 @@ const Creation = () => {
   const { getPagesFromGameID } = useContext(CreationContext)
   const { updatePage } = useContext(CreationContext)
   const { updateButton } = useContext(CreationContext)
+  const { findPageIndex } = useContext(CreationContext)
+  const { destinyPage, setDestinyPage} = useContext(CreationContext)
+  const { handleButton } = useContext(CreationContext)
 
   const { id } = useParams()
 
   useEffect(() => {
     getPagesFromGameID(id!)
   }, [])
+
+  useEffect(() => {
+    console.log("index button = "+indexButton)
+  }, [indexButton])
+
+  useEffect(() => {
+    console.log("destiny page = "+destinyPage)
+  }, [destinyPage])
 
 
   return (
@@ -88,7 +99,9 @@ const Creation = () => {
                       isSelected={index === indexButton}
                       placeholder={"Botão " + (index + 1).toString()}
                       background={button.color}
-                      onClick={() => { handleButtonActionBar(index, actionBarSelected); setIndexButton(index) }}
+                      onClick={()=>{
+                        handleButton(index, button)
+                      }}
                       onChange={(event) => {
                         handleTextChange(indexSelected, index, event.target.value);
                         updateButton(button)

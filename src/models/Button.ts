@@ -1,16 +1,16 @@
 export class Button {
     id: number;
     title: string;
-    nextPageId: number;
-    icon: string;
     color: string;
+    icon: string;
+    nextPageId: number;
   
-    constructor(id: number, title: string, nextPageId: number, icon: string, color: string) {
+    constructor(id: number, title: string,  color: string, icon: string,  nextPageId: number,) {
       this.id = id;
       this.title = title;
-      this.nextPageId = nextPageId;
-      this.icon = icon;
       this.color = color;
+      this.icon = icon;
+      this.nextPageId = nextPageId;
     }
   }
   
