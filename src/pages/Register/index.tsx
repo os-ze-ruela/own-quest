@@ -82,7 +82,7 @@ function Register() {
           value={birthDate}
           onChange={e => setBirthDate(e.target.value)}
         />
-        <Label htmlFor="senha">Senha</Label> 
+        <Label htmlFor="password">Senha</Label> 
         <InputButtonDiv>
         <Input
           name="senha"
@@ -97,11 +97,11 @@ function Register() {
         />
         </InputButtonDiv>
 
-        <Label htmlFor="senha">Confirmar Senha</Label> 
+        <Label htmlFor="confirmPassword">Confirmar Senha</Label> 
         <InputButtonDiv>
         <Input
           name="confirmar senha"
-          type={isRevealConfirmPassword ? "text" : "confirmPassword"}
+          type={isRevealConfirmPassword ? "text" : "password"}
           value={confirmPassword}
           onChange={e => setConfirmPassword(e.target.value)}
         />
