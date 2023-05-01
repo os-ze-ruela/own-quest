@@ -58,6 +58,7 @@ export const Label = styled.label`
 export const InputButtonDiv = styled.div`
     position: relative;
     width: 700px;
+    flex-direction: column;
 `
 export const HideButton = styled.img`
     position: absolute;
@@ -71,7 +72,6 @@ export const HideButton = styled.img`
 export const Input = styled.input`
     display: flex;
     margin-left: 0.5em;
-    flex-direction: column;
     background-color: #30354B;
     margin-bottom: 1em;
     border: none;
