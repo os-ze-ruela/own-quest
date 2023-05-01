@@ -60,6 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 retorno.message = 'Credenciais incorretas.'
             } else if (error.response?.status === 401) {
                 retorno.message = 'Verifique seu e-mail por favor.'
+                navigate('/notvalidated')
             } else if (error.response?.status === 403) {
                 retorno.message = 'Credenciais incorretas.'
             }
