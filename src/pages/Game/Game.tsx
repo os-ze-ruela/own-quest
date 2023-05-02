@@ -1,65 +1,78 @@
-import { useContext, useEffect } from 'react';
-import { HiPlus } from 'react-icons/hi';
-import { MdOutlineAddCircleOutline } from 'react-icons/md';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import HeaderCreation from '../../components/Header/HeaderCreation';
 import { CreationContext } from '../../contexts/creation';
-import { GameContext } from '../../contexts/game';
-import { ActualPage, Body, ButtonContainer, EditableButton, GameBody, GameStyle, Page, PageBody, PageDescription, PageTitle } from '../../styles/Game';
+import { ActualPage, Body, ButtonGame, ButtonContainer, GameBody, GameStyle, Page, PageBody, PageDescription, PageTitle, NextButton } from '../../styles/Game';
+import HeaderTestingGame from '../../components/Header/HeaderTestingGame';
 
 const Game = () => {
-  const { pages, setPages } = useContext(CreationContext)
-  const { indexButton, setIndexButton } = useContext(CreationContext)
-  const { indexSelected, setIndexSelected } = useContext(CreationContext)
-  const { getPagesFromGameID } = useContext(CreationContext)
-  const { findPageIndex } = useContext(CreationContext)
-  const { destinyPage, setDestinyPage} = useContext(CreationContext)
-  const { handleButton } = useContext(CreationContext)
-  const { getGameById } = useContext(GameContext)
+    const { getPagesFromGameID } = useContext(CreationContext)
+    const [ indexPage, setIndexPage ] = useState(0)
+    const [ buttonIndex, setButtonIndex ] = useState(0)
+    const { pages, setPages } = useContext(CreationContext)
+    const { id } = useParams()
+    
 
-  const { id } = useParams()
-
-  useEffect(() => {
-    getPagesFromGameID(id!)
-    getGameById(id!)
-  }, [])
-
-  useEffect(() => {
-    console.log("index button = "+indexButton)
-  }, [indexButton])
+    useEffect( () =>  {
+        getPagesFromGameID(id!)
+      }, [])  
 
 
-
+    const handleBackClick = () => {
+        
+      };
+      
+    const handleButton = (index: number) => {
+        setButtonIndex(index) 
+      };
+      
+    const handleClickButton = () => {
+    const nextPageId = pages[indexPage].buttons[buttonIndex].nextPageId;
+    const nextPageIndex = pages.findIndex((page) => page.id === nextPageId);
+    setIndexPage(nextPageIndex);
+    setButtonIndex(0);
+    };
+      
   return (
     <GameBody>
+        <HeaderTestingGame onBackClick={handleBackClick}/>
       <GameStyle>
         <Body>
           <PageBody>
             <ActualPage>
-                <Page background={pages[indexSelected].color} >
+            {pages.length < 1 ? (
+                <></>
+              ) : (
+                <Page background={pages[indexPage].color} >
                 <PageTitle
                   type="text"
                   name="PageTitle"
                   autoComplete="off"
-                  value={pages[indexSelected].title}
+                  value={pages[indexPage].title}
                 />
                 <PageDescription
                   name="PageDescription"
                   autoComplete="off"
-                  value={pages[indexSelected].description}
+                  value={pages[indexPage].description}
                 />
                 <ButtonContainer>
-                  {pages[indexSelected].buttons.map((button, index) => (
-                    <EditableButton
+                  {pages[indexPage].buttons.map((button, index) => (
+                    <ButtonGame
+                      readOnly
                       key={index}
                       value={button.title}
-                      isSelected={index === indexButton}
-                      placeholder={"Botão " + (index + 1).toString()}
+                      isSelected={index === buttonIndex}
                       background={button.color}
+                      onClick={() => handleButton(index)}
                     />
                   ))}
                 </ButtonContainer>
+                <NextButton
+                    readOnly
+                    value={"Continuar"}
+                    onClick={handleClickButton}
+                />
               </Page>
+              )}
             </ActualPage>
           </PageBody>
         </Body>

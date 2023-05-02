@@ -10,11 +10,12 @@ import NotValidated from '../pages/NotVlidated';
 import Recover from '../pages/Recover';
 import Register from '../pages/Register';
 import Validated from '../pages/Validated';
+import Game from '../pages/Game/Game';
 
 import { AuthContext, AuthProvider } from '../contexts/auth';
 import { CreationProvider } from '../contexts/creation';
 import { GameProvider } from '../contexts/game';
-import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, GAME, HOME, LANDING_PAGE, LOGIN, NEW_PASSWORD, RECOVER_PASSWORD, REGISTER } from '../core/app-urls';
+import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, GAME, HOME, LANDING_PAGE, LOGIN, NEW_PASSWORD, PLAYGAME, RECOVER_PASSWORD, REGISTER } from '../core/app-urls';
 
 function AppRoutes() {
     function Private({ children }: { children: ReactNode }) {
@@ -59,6 +60,7 @@ function AppRoutes() {
                             <Route path={EMAIL_VALIDATED} element={<Validated />} > </Route>
                             <Route path={HOME} element={<Private><HomeLogged /></Private>} > </Route>
                             <Route path={GAME + '/:id'} element={<Private><Creation /></Private>} > </Route>
+                            <Route path={PLAYGAME + '/:id'} element={<Private><Game/></Private>} > </Route>
                         </Routes>
                     </CreationProvider>
                 </AuthProvider>

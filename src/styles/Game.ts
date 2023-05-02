@@ -123,9 +123,9 @@ export const ButtonContainer = styled.div`
 
 
 
-export const EditableButton = styled.input.attrs((props: {isSelected: boolean, background: string}) => props)`
+export const ButtonGame = styled.input.attrs((props: {isSelected: boolean, background: string}) => props)`
   margin-right: 10px;
-  color: white;
+  color: white; 
   background-color: ${props => props.background};
   font-family: FiraCode-Light;
   padding: 10px 0;
@@ -133,6 +133,7 @@ export const EditableButton = styled.input.attrs((props: {isSelected: boolean, b
   border: 0;
   outline: none;
   border-radius: 5px;
+  cursor: pointer;
 
   :focus{
     border-color: ${props => props.isSelected ? '#6BF0DF' : 'none'};
@@ -140,9 +141,21 @@ export const EditableButton = styled.input.attrs((props: {isSelected: boolean, b
     border-width: 2px;
   }
 
-  ::placeholder{
-    color: white;
-    opacity: 70%;
-  }
 `;
+
+export const NextButton = styled.input`
+  margin-right: 10px;
+  color: white; 
+  background-color: #568EA3;
+  font-family: FiraCode-Light;
+  padding: 10px 0;
+  text-align: center;
+  border: 0;
+  outline: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+
+`;
+
 

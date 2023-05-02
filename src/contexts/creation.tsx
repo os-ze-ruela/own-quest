@@ -97,9 +97,10 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
       const tokens = JSON.parse(tokensJSON!)
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
 
-
+      
       const response = await getPagesByGameID(id)
-
+      
+      
       const data: PageResponse[] = await response.data;
       const pages: PageModel[] = data.map(page => new PageModel(
         page.id,
@@ -114,6 +115,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
       setPages(pages);
 
     } catch (error) {
+      setLoading(false)
       console.error(error)
     }
   }
