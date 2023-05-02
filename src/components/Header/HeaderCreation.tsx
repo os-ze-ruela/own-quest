@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { BsCloudArrowDown, BsCloudCheck } from 'react-icons/bs';
 import { MdArrowBack } from 'react-icons/md';
 import styled from 'styled-components';
@@ -93,15 +93,33 @@ const WrapItems = styled.div`
 const HeaderCreation: React.FC<HeaderProps> = ({ onBackClick, onCreateClick, isSaved }) => {
 
   const { loading } = useContext(CreationContext)
-  const { actualEditingGame, updateGame, setEditingGame,  } = useContext(GameContext)
+  const { editingGame, updateGame, setEditingGame,  } = useContext(GameContext)
+  const [titleTemp, setTitleTemp] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let pageTemp = actualEditingGame!
-    pageTemp.title = event.target.value
-    setEditingGame(pageTemp);
+    setTitleTemp(event.target.value);
   };
+  
+
+  useEffect(() => {
+    if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0)) {
+      const newEditingGame = {...editingGame, title: titleTemp};
+      setEditingGame(newEditingGame);
+      updateGame(newEditingGame);
+    }
+  }, [titleTemp])
+
+
+  useEffect(() => {
+    if (editingGame) {
+      setTitleTemp(editingGame.title);
+    }
+  }, [editingGame]);
+
+  
 
   return (
+    
     <HeaderContainer>
       <WrapItems>
         <BackButton onClick={onBackClick}>
@@ -121,7 +139,7 @@ const HeaderCreation: React.FC<HeaderProps> = ({ onBackClick, onCreateClick, isS
             type="text"
             name="StorieTitle"
             autoComplete="off"
-            value={actualEditingGame?.title ?? ''}
+            value={titleTemp!}
             placeholder="Minha primeira história"
             onChange={handleChange}
           >
