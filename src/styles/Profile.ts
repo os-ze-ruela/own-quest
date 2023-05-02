@@ -50,7 +50,7 @@ export const Email = styled.b`
 export const BtnOpt = styled.button`
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     padding: 11px 1rem;
     margin-bottom: 0.5em;
@@ -118,6 +118,7 @@ export const EditButton = styled.button`
     font-family: FiraCode-light;
     font-weight: 400;
     font-size: 14px;
+    padding: 0.5em;
 `
 
 export const Titles = styled.p`

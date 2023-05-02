@@ -1,6 +1,8 @@
 import HeaderLogged from "../../components/Header/HeaderLogged";
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/auth';
+import { MdOutlineLockPerson } from "react-icons/md";
+import { BiUserCircle } from "react-icons/bi";
 import { BtnCancel, BtnOpt, EditButton, Email, LoginInfo, LoginTitle, 
 Name, NameEmail, ProfileIdent, ProfileInfo, ProfileOpt, ProfileStyle, Select, Separator, Text, Text2, Titles, TitlesInfo, UserImage, WrapTextButton, YourProfileTitle } from "../../styles/Profile";
 
@@ -34,12 +36,50 @@ export default function Profile(){
                             <Email>{user.email}</Email>
                         </NameEmail>
                     </ProfileIdent>
-                    <BtnOpt onClick={handleClick}>Sua conta</BtnOpt>
-                    <BtnOpt onClick={handleClick2}>Login e Segurança</BtnOpt>
+                    <BtnOpt onClick={handleClick2}><BiUserCircle/>Sua conta</BtnOpt>
+                    <BtnOpt onClick={handleClick}><MdOutlineLockPerson/>Login e Segurança</BtnOpt>
                 </ProfileOpt>
-                {isSelected?
+                {!isSelected?
                 
+                <ProfileInfo>
+                <YourProfileTitle>Sua conta</YourProfileTitle>
+                <Separator/>
 
+                <WrapTextButton>
+                    <Text>
+                        <Titles>Nome</Titles>
+                        <TitlesInfo>{user.name}</TitlesInfo>
+                    </Text>
+                    <EditButton>Editar</EditButton>
+                </WrapTextButton>
+                <Separator/>
+                
+                <WrapTextButton>
+                    <Text>
+                        <Titles>Endereço de email</Titles>
+                        <TitlesInfo>{user.email}</TitlesInfo>
+                    </Text>
+                    <EditButton>Editar</EditButton>
+                </WrapTextButton>
+                <Separator/>
+
+                <WrapTextButton>
+                    <Text>
+                        <Titles>Nickname</Titles>
+                        <TitlesInfo>{user.nickname}</TitlesInfo>
+                    </Text>
+                    <EditButton>Editar</EditButton>
+                </WrapTextButton>
+                <Separator/>
+
+                <Titles>Que uso você vai dar ao Own Quest?</Titles>
+                <Select>
+                    <option>Selecione uma opção</option>
+                </Select>
+            </ProfileInfo>
+
+
+                :
                 <LoginInfo>
                 <LoginTitle>Login e Segurança</LoginTitle>
                 <Separator/>
@@ -61,43 +101,6 @@ export default function Profile(){
                 <BtnCancel>Exlcuir conta</BtnCancel>
                 </LoginInfo>
                 
-                :
-                <ProfileInfo>
-                    <YourProfileTitle>Sua conta</YourProfileTitle>
-                    <Separator/>
-
-                    <WrapTextButton>
-                        <Text>
-                            <Titles>Nome</Titles>
-                            <TitlesInfo>{user.name}</TitlesInfo>
-                        </Text>
-                        <EditButton>Editar</EditButton>
-                    </WrapTextButton>
-                    <Separator/>
-                    
-                    <WrapTextButton>
-                        <Text>
-                            <Titles>Endereço de email</Titles>
-                            <TitlesInfo>{user.email}</TitlesInfo>
-                        </Text>
-                        <EditButton>Editar</EditButton>
-                    </WrapTextButton>
-                    <Separator/>
-
-                    <WrapTextButton>
-                        <Text>
-                            <Titles>Nickname</Titles>
-                            <TitlesInfo>{user.nickname}</TitlesInfo>
-                        </Text>
-                        <EditButton>Editar</EditButton>
-                    </WrapTextButton>
-                    <Separator/>
-
-                    <Titles>Que uso você vai dar ao Own Quest?</Titles>
-                    <Select>
-                        <option>Selecione uma opção</option>
-                    </Select>
-                </ProfileInfo>
 
                 }
             </ProfileStyle>
