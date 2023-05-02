@@ -39,6 +39,29 @@ export default function Profile(){
                 </ProfileOpt>
                 {isSelected?
                 
+
+                <LoginInfo>
+                <LoginTitle>Login e Segurança</LoginTitle>
+                <Separator/>
+
+                <WrapTextButton>
+                    <Text>
+                        <Titles>Senha</Titles>
+                        <TitlesInfo>Última atualização de senha: chevers/04</TitlesInfo>
+                    </Text>
+                    <EditButton>Atualizar</EditButton>
+                </WrapTextButton>
+                <Separator/>
+
+                <Text2>
+                    <Titles>Escluir sua conta</Titles>
+                    <TitlesInfo>Ao excluir sua conta, você não poderá mais acessar suas histórias criadas, 
+                    nem mesmo sua conta.</TitlesInfo>
+                </Text2>
+                <BtnCancel>Exlcuir conta</BtnCancel>
+                </LoginInfo>
+                
+                :
                 <ProfileInfo>
                     <YourProfileTitle>Sua conta</YourProfileTitle>
                     <Separator/>
@@ -75,29 +98,7 @@ export default function Profile(){
                         <option>Selecione uma opção</option>
                     </Select>
                 </ProfileInfo>
-                
-                :
 
-                <LoginInfo>
-                    <LoginTitle>Login e Segurança</LoginTitle>
-                    <Separator/>
-
-                    <WrapTextButton>
-                        <Text>
-                            <Titles>Senha</Titles>
-                            <TitlesInfo>Última atualização de senha: chevers/04</TitlesInfo>
-                        </Text>
-                        <EditButton>Atualizar</EditButton>
-                    </WrapTextButton>
-                    <Separator/>
-
-                    <Text2>
-                        <Titles>Escluir sua conta</Titles>
-                        <TitlesInfo>Ao excluir sua conta, você não poderá mais acessar suas histórias criadas, 
-                        nem mesmo sua conta.</TitlesInfo>
-                    </Text2>
-                    <BtnCancel>Exlcuir conta</BtnCancel>
-                </LoginInfo>
                 }
             </ProfileStyle>
         </>
