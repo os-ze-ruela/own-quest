@@ -68,6 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
 
             setUser(loggedUser)
+            console.log('set user')
             navigate(HOME)
 
         } catch (e) {
