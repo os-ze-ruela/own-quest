@@ -1,5 +1,9 @@
-import { Link } from "react-router-dom";
+import { useContext } from 'react';
+import { useNavigate } from "react-router-dom";
 import LOGO from "../../assets/img/ownquest-logo.png";
+import { GameContext } from "../../contexts/game";
+import AppError from "../../core/app-error";
+import { GAME, LANDING_PAGE } from "../../core/app-urls";
 import { ButtonStyle, HeaderActions, HeaderStyle, LinkStyle, LogoStyle, PerfilLink, UserImage } from '../../styles/Header';
 
 interface HeaderProps {
@@ -9,19 +13,27 @@ interface HeaderProps {
 
 function HeaderLogged(props: HeaderProps) {
 
+    const {createGame} = useContext(GameContext)
+    const navigate = useNavigate()
+
     return (
         <HeaderStyle>
-            <a href='/'>
+            <a href={LANDING_PAGE}>
                 <LogoStyle src={LOGO} alt="Logo" />
             </a>
             <HeaderActions>
                 <LinkStyle href="/explorer" >Explorar</LinkStyle>
                 <LinkStyle href="mygames">Meus Jogos</LinkStyle>
-                <Link to={"/creation"}>
-                    <ButtonStyle onClick={() => { }}>Criar</ButtonStyle>
-                </Link>
-                <PerfilLink>
-                    <UserImage src={props.img} alt="Perfil image"/>
+                <ButtonStyle onClick={ async () => {
+                    try {
+                        const id = await createGame();
+                        navigate(GAME + '/' + id)
+                    } catch (e) {
+                        const error = await e as AppError;
+                    }
+                }}>Criar</ButtonStyle>
+                <PerfilLink href="/profile">
+                    <UserImage src={props.img} alt="Perfil image" />
                     {props.nickname}
                 </PerfilLink>
             </HeaderActions>

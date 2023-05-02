@@ -1,7 +1,9 @@
-import React from 'react';
-import { BsCloudCheck } from 'react-icons/bs';
+import React, { useContext } from 'react';
+import { BsCloudArrowDown, BsCloudCheck } from 'react-icons/bs';
 import { MdArrowBack } from 'react-icons/md';
 import styled from 'styled-components';
+import { CreationContext } from '../../contexts/creation';
+import { GameContext } from '../../contexts/game';
 
 interface HeaderProps {
     onBackClick: () => void;
@@ -35,7 +37,7 @@ const CreateButton = styled.button`
   font-family: FiraCode-Semibold;
 `;
 
-const HeaderText = styled.text`
+const HeaderText = styled.p`
   font-size: 20px;
   margin: 0;
   color:white;
@@ -89,6 +91,16 @@ const WrapItems = styled.div`
 
  
 const HeaderCreation: React.FC<HeaderProps> = ({ onBackClick, onCreateClick, isSaved }) => {
+
+  const { loading } = useContext(CreationContext)
+  const { actualEditingGame, updateGame, setEditingGame,  } = useContext(GameContext)
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let pageTemp = actualEditingGame!
+    pageTemp.title = event.target.value
+    setEditingGame(pageTemp);
+  };
+
   return (
     <HeaderContainer>
       <WrapItems>
@@ -97,15 +109,21 @@ const HeaderCreation: React.FC<HeaderProps> = ({ onBackClick, onCreateClick, isS
         </BackButton>
         <HeaderText>Início</HeaderText>
         <SavedIcon isSaved={isSaved}>
-          <BsCloudCheck size={30} color="#fff" />
+          {loading ? (
+              <BsCloudArrowDown size={30} color="#fff" />
+            ):(
+              <BsCloudCheck size={30} color="#fff" />
+          )}
         </SavedIcon>
       </WrapItems>
       <WrapItems>
         <StorieTitle       
             type="text"
             name="StorieTitle"
-            value=''
+            autoComplete="off"
+            value={actualEditingGame?.title ?? ''}
             placeholder="Minha primeira história"
+            onChange={handleChange}
           >
           </StorieTitle>
         <CreateButton onClick={onCreateClick}>Testar</CreateButton>

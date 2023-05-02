@@ -245,7 +245,7 @@ export const MessageError = styled.div`
     padding: 0.8em 1.5em;
 
     width: 70%;
-    position: absolute
+    position: absolute;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     padding: 0.8em 1.5em;

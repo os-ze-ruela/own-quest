@@ -4,43 +4,27 @@ import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
 import { AuthContext } from '../../contexts/auth';
 import { ButtonLogin, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginInputs, LoginRecoverItemsDiv, LoginStyle, MessageError, RecoverLink, RecoverText, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login';
+import AppError from '../../core/app-error';
 
 import showPasswordImg from "../../assets/img/hide.svg";
 import hidePasswordImg from "../../assets/img/show.svg";
 import AskRegisterBar from '../../components/Bar/AskRegisterBar';
-import { GameContext } from '../../contexts/game';
+import { RECOVER_PASSWORD, REGISTER } from '../../core/app-urls';
 
 function Login() {
 
   async function SubmitLogin() {
     setShowError(false)
-    if (isValid()) {
-      const response = await login(email, password)
-      setMessageError(response.message)
-      setShowError(!response.sucess)
-      await getUserGames()
-
-    } else {
-      setShowError(true)
-      if (email === '') {
-        setMessageError('Informe um email cadastrado.')
-      } else if(password === '') {
-        setMessageError('Informe a senha.')
-      }
+    try {
+      await login(email, password)
+    } catch(e) {
+      const error = await e as AppError
+      setMessageError(error.message)
+      setShowError(true)  
     }
   }
 
-  function isValid() {
-    if( email === '' || password === ''){
-      return false
-    } else {
-      return true
-    }
-  }
-
-  const { authenticated, login } = useContext(AuthContext)
-  const { getUserGames } = useContext(GameContext)
-
+  const { login } = useContext(AuthContext)
   const [password, setPassword] = useState('');
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -50,7 +34,7 @@ function Login() {
 
   return (
     <>
-      <Header page='Registrar' redirect='/register' />
+      <Header page='Registrar' redirect={REGISTER} />
       <LoginStyle>
         <ImgAstro src={ASTRO} />
         <FieldsDiv>
@@ -61,7 +45,7 @@ function Login() {
 
             <RegisterText>
               Ainda não tem uma conta?
-              <RegisterLink href='register'> Cadastre-se </RegisterLink>
+              <RegisterLink href={REGISTER}> Cadastre-se </RegisterLink>
             </RegisterText>
 
             <Label htmlFor="email">Email ou nickname</Label>
@@ -93,7 +77,7 @@ function Login() {
             <ButtonLogin onClick={async () => await SubmitLogin()}>Entrar</ButtonLogin>
             <RecoverText>
               Esqueceu sua senha? <br />
-              <RecoverLink href='recover'>Recupere aqui</RecoverLink>
+              <RecoverLink href={RECOVER_PASSWORD}>Recupere aqui</RecoverLink>
             </RecoverText>
           </LoginRecoverItemsDiv>
         </FieldsDiv>

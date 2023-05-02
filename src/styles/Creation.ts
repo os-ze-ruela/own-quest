@@ -41,14 +41,14 @@ export const ActionsBar = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 30%;
+  height: 20%;
   background-color: white;
   align-items: center;
   justify-content: flex-start;
   gap: 1rem;
 `;
 
-export const CheckBoxText = styled.text`
+export const CheckBoxText = styled.p`
   font-size: 12px;
   margin: 0;
   color: black;
@@ -97,7 +97,7 @@ export const PagesMenu = styled.div`
   display: flex;
   width: 100%;
   height: 30%;
-  background-color: white;
+  background-color: #D9D9D9;
   align-items: center;
   justify-content: space-between;
   /* padding: 10px 0; */
@@ -116,7 +116,7 @@ export const SideBarButton = styled.div`
   cursor: pointer;
 
 `
-export const TextButton = styled.text`
+export const TextButton = styled.p`
   font-size: 10pt;
   color: white;
   font-family: FiraCode-Light;
@@ -126,6 +126,7 @@ export const TextButton = styled.text`
 
 
 export const PageTitle = styled.input`
+  width: 90%;
   font-size: 18pt;
   color: white;
   font-family: FiraCode-Semibold;
@@ -177,8 +178,8 @@ export const DeleteButton = styled.button`
 `
 
 export const ButtonContainer = styled.div`
-  width:100%;
-  height:200px;
+  width: 100%;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -202,16 +203,22 @@ export const AddButton = styled.button.attrs((props: {canAdd: boolean}) => props
   }
 `;
 
-export const EditableButton = styled.input`
+export const EditableButton = styled.input.attrs((props: {isSelected: boolean, background: string}) => props)`
   margin-right: 10px;
   color: white;
-  background-color: #202331;
+  background-color: ${props => props.background};
   font-family: FiraCode-Light;
+  padding: 10px 0;
+  text-align: center;
   border: 0;
   outline: none;
   border-radius: 5px;
-  padding: 10px 0;
-  text-align: center;
+
+  :focus{
+    border-color: ${props => props.isSelected ? '#6BF0DF' : 'none'};
+    border-style: ${props => props.isSelected ? 'dashed' : 'none'};
+    border-width: 2px;
+  }
 
   ::placeholder{
     color: white;
@@ -243,11 +250,13 @@ export const MiniPage = styled.button.attrs((props: {isSelected: boolean, backgr
   color: white;
   background-color: ${props => props.background};
   border-color: ${props => props.isSelected ? '#6BF0DF' : 'none'};
-  border-style: ${props => props.isSelected ? 'dotted' : 'none'};
+  border-style: ${props => props.isSelected ? 'dashed' : 'none'};
   outline: none;
   border-radius: 5px;
+  border-width: 3.5px;
   /* padding: 10px 0; */
   align-items: center;
   justify-content: center;
+  box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3);
 
 `;
