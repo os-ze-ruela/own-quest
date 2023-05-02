@@ -33,21 +33,16 @@ const Creation = () => {
   const { getGameById } = useContext(GameContext)
 
   const { id } = useParams()
-
-  useEffect(() => {
+  
+  
+  useEffect( () =>  {
     getPagesFromGameID(id!)
-    getGameById(id!)
-  }, [])
-
-  useEffect(() => {
-    console.log("index button = "+indexButton)
-  }, [indexButton])
-
-
-
+  }, [])  
+  
+  
   return (
     <CreationBody>
-      <HeaderCreation onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} />
+      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} />
       <CreationStyle>
         <Body>
           <PageBody>

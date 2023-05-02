@@ -15,7 +15,7 @@ type GameContextType = {
     getHotGamesForHome: () => Promise<void>,
     userGames: Game[],
     games: Game[],
-    actualEditingGame: Game | null,
+    editingGame: Game | null,
 }
 
 export const GameContext = createContext<GameContextType>({} as GameContextType)
@@ -25,7 +25,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     // const navigate = useNavigate()
     const [userGames, setUserGames] = useState<Game[]>([])
     const [games, setGames] = useState<Game[]>([])
-    const [actualEditingGame, setEditingGame] = useState<Game | null>(null)
+    const [editingGame, setEditingGame] = useState<Game | null>(null)
     // const [loading, setLoading] =useState(true)
 
     async function createGame(): Promise<number> {
@@ -168,7 +168,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <GameContext.Provider value={{ setEditingGame, getGameById, createGame, updateGame, getUserGames, getHotGamesForHome, userGames, games, actualEditingGame }}>
+        <GameContext.Provider value={{ setEditingGame, getGameById, createGame, updateGame, getUserGames, getHotGamesForHome, userGames, games, editingGame }}>
             {children}
         </GameContext.Provider>
     )

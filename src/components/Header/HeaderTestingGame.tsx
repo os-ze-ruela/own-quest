@@ -7,10 +7,7 @@ import { GameContext } from '../../contexts/game';
 import { PLAYGAME } from '../../core/app-urls';
 
 interface HeaderProps {
-    id: number;
     onBackClick: () => void;
-    onCreateClick: () => void;
-    isSaved: boolean;
   }
   
 
@@ -92,33 +89,10 @@ const WrapItems = styled.div`
 `
 
  
-const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick, isSaved }) => {
+const HeaderTestingGame: React.FC<HeaderProps> = ({ onBackClick }) => {
 
   const { loading } = useContext(CreationContext)
-  const { editingGame, updateGame, setEditingGame,  } = useContext(GameContext)
-  const [titleTemp, setTitleTemp] = useState('');
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitleTemp(event.target.value);
-  };
-  
-
-  useEffect(() => {
-    if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0)) {
-      const newEditingGame = {...editingGame, title: titleTemp};
-      setEditingGame(newEditingGame);
-      updateGame(newEditingGame);
-    }
-  }, [titleTemp])
-
-
-  useEffect(() => {
-    if (editingGame) {
-      setTitleTemp(editingGame.title);
-    }
-  }, [editingGame]);
-
-  
 
   return (
     
@@ -128,29 +102,10 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
           <MdArrowBack color="#fff" size={20} />
         </BackButton>
         <HeaderText>Voltar</HeaderText>
-        <SavedIcon isSaved={isSaved}>
-          {loading ? (
-              <BsCloudArrowDown size={30} color="#fff" />
-            ):(
-              <BsCloudCheck size={30} color="#fff" />
-          )}
-        </SavedIcon>
-      </WrapItems>
-      <WrapItems>
-        <StorieTitle       
-            type="text"
-            name="StorieTitle"
-            autoComplete="off"
-            value={titleTemp!}
-            placeholder="Minha primeira história"
-            onChange={handleChange}
-          >
-          </StorieTitle>
-        <CreateButton href={PLAYGAME + '/' + id} onClick={onCreateClick}>Testar</CreateButton>
       </WrapItems>
     </HeaderContainer>
   );
 };
 
 
-export default HeaderCreation;
+export default HeaderTestingGame;
