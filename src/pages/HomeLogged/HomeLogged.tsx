@@ -30,6 +30,7 @@ const HomeLogged = () => {
 
   useEffect(() => {
     fetchGames()
+    
   }, [])
 
   const randomInt = (): number => {
