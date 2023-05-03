@@ -9,6 +9,7 @@ import { ActualPage, AddButton, AddPage, Body, ButtonContainer, CreationBody, Cr
 import ButtonActionBar from './components/ButtonActionBar';
 import NoPagePlaceholder from './components/NoPagePlaceholder';
 import PageActionBar from './components/PageActionBar';
+import Popup from '../../components/Popup/Popup';
 
 
 const Creation = () => {
@@ -37,11 +38,13 @@ const Creation = () => {
   
   useEffect( () =>  {
     getPagesFromGameID(id!)
+    getGameById(id!)
   }, [])  
   
   
   return (
     <CreationBody>
+      <Popup message="Após selecionar um botão, clique duas vezes na página para voltar a edita-lá" />
       <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} />
       <CreationStyle>
         <Body>

@@ -102,23 +102,22 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
     setTitleTemp(event.target.value);
   };
   
-
-  useEffect(() => {
-    if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0)) {
-      const newEditingGame = {...editingGame, title: titleTemp};
-      setEditingGame(newEditingGame);
-      updateGame(newEditingGame);
-    }
-  }, [titleTemp])
-
-
   useEffect(() => {
     if (editingGame) {
       setTitleTemp(editingGame.title);
     }
   }, [editingGame]);
 
-  
+  useEffect(() => {
+    console.log(editingGame)
+    if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0)) {
+      console.log("Entrou")
+      const newEditingGame = {...editingGame, title: titleTemp};
+      setEditingGame(newEditingGame);
+      updateGame(newEditingGame);
+    }
+  }, [titleTemp])
+
 
   return (
     
