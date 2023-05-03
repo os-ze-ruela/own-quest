@@ -11,6 +11,7 @@ import { ActualPage, AddButton, AddPage, Body, ButtonContainer, CreationBody, Cr
 import ButtonActionBar from './components/ButtonActionBar';
 import NoPagePlaceholder from './components/NoPagePlaceholder';
 import PageActionBar from './components/PageActionBar';
+import Popup from '../../components/Popup/Popup';
 
 
 const Creation = () => {
@@ -47,7 +48,8 @@ const Creation = () => {
   
   return (
     <CreationBody>
-    {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
+      <Popup message="Após selecionar um botão, clique duas vezes na página para voltar a edita-lá" />
+      {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} />
       <CreationStyle>
         <Body>
