@@ -94,7 +94,6 @@ export default function Profile() {
                         </Select>
                     </ProfileInfo>
 
-
                     :
                     <LoginInfo>
                         <LoginTitle>Login e Segurança</LoginTitle>
