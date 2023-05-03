@@ -1,14 +1,14 @@
 import { AxiosError } from "axios";
 import { ReactNode, createContext, useEffect, useState } from "react";
-import AppError from "../core/app-error";
-import { api, createSession, refreshToken, signupUser } from '../services/api';
 import { useNavigate } from "react-router-dom";
-import { HOME, LANDING_PAGE, EMAIL_NOT_VALIDATED } from "../core/app-urls";
+import AppError from "../core/app-error";
+import { EMAIL_NOT_VALIDATED, HOME, LANDING_PAGE } from "../core/app-urls";
+import { api, createSession, refreshToken, signupUser } from '../services/api';
 
 
 type AuthContextType = {
     authenticated: boolean,
-    user: any,
+    user: User | null,
     loading: boolean,
     validLogin: (email: string, password: string) => Promise<void>,
     login: (email: string, password: string) => Promise<void>,
@@ -19,6 +19,8 @@ type AuthContextType = {
 }
 
 interface User {
+    photo: string;
+    email_validated: boolean;
     email: string;
     name: string;
     nickname: string;

@@ -1,11 +1,14 @@
 import { useContext, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import Card from '../../components/Cards/Card';
 import CardUserGame from '../../components/Cards/CardUserGame';
 import EmptyCard from '../../components/Cards/EmptyCard';
 import HeaderLogged from '../../components/Header/HeaderLogged';
+import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated';
 import { AuthContext } from '../../contexts/auth';
 import { GameContext } from '../../contexts/game';
 import AppError from '../../core/app-error';
+import { GAME } from '../../core/app-urls';
 import { LoggedStyle, PageUserGameWrapper, PageWrapper, Title } from '../../styles/HomeLogged';
 
 const HomeLogged = () => {
@@ -30,7 +33,7 @@ const HomeLogged = () => {
 
   useEffect(() => {
     fetchGames()
-    
+
   }, [])
 
   const randomInt = (): number => {
@@ -40,10 +43,14 @@ const HomeLogged = () => {
     return rand;
   }
 
+  const { createGame } = useContext(GameContext)
+  const navigate = useNavigate()
+
 
   return (
     <>
-      <HeaderLogged nickname={user.nickname} img={"https://100k-faces.glitch.me/random-image"} />
+      <HeaderLogged nickname={user!.nickname} photo={user!.photo} />
+      {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <LoggedStyle>
         <Title>Histórias mais bem avaliadas</Title>
         <PageWrapper>
@@ -60,7 +67,15 @@ const HomeLogged = () => {
         <Title>Minhas histórias</Title>
         <PageUserGameWrapper>
           {userGames.length === 0 ? (
-            <EmptyCard onClick={() => { }} />
+            <EmptyCard onClick={async () => {
+              try {
+                const id = await createGame();
+                navigate(GAME + '/' + id)
+              } catch (e) {
+                const error = await e as AppError;
+                alert(error)
+              }
+            }} />
           ) : (
             <>
               {userGames.map((game, index) => (

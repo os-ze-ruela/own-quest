@@ -98,13 +98,25 @@ export const UserImage = styled.img`
     border-radius: 50%
 `
 
+export const UserImagePlaceholder = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: #568EA3;
+    border: 2px solid #FFFFFF;
+    box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.25);
+    border-radius: 50%
+`
+
 export const PerfilLink = styled.a`
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     padding: 11px 1rem;
-    gap: 2rem;
+    gap: 1rem;
     cursor: pointer;
 
     width: auto;
@@ -128,8 +140,8 @@ export const PerfilLink = styled.a`
     text-decoration: none;
    
     &:hover {
-        color: #b0b0b0;
-        transform: scale(1.05);
+        background: #202331AB;
+        transform: scale(1.02);
         cursor: pointer;
     }
 `

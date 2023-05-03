@@ -1,10 +1,10 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BsCloudArrowDown, BsCloudCheck } from 'react-icons/bs';
 import { MdArrowBack } from 'react-icons/md';
 import styled from 'styled-components';
 import { CreationContext } from '../../contexts/creation';
 import { GameContext } from '../../contexts/game';
-import { PLAYGAME } from '../../core/app-urls';
+import { HOME, PLAYGAME } from '../../core/app-urls';
 
 interface HeaderProps {
     id: number;
@@ -23,10 +23,14 @@ const HeaderContainer = styled.div`
   padding: 0px 10px;
 `;
 
-const BackButton = styled.button`
+const BackButton = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: transparent;
   border: none;
   cursor: pointer;
+  margin-left: 1rem;
 `;
 
 const CreateButton = styled.a`
@@ -36,6 +40,7 @@ const CreateButton = styled.a`
   border-radius: 5px;
   padding: 10px 20px;
   cursor: pointer;
+  text-decoration: none;
   font-family: FiraCode-Semibold;
 `;
 
@@ -84,6 +89,7 @@ const SavedIcon = styled.div<{ isSaved: boolean }>`
 const WrapItems = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 2rem;
 
   @media screen and (max-width: 1024px) {
@@ -123,8 +129,8 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
     
     <HeaderContainer>
       <WrapItems>
-        <BackButton onClick={onBackClick}>
-          <MdArrowBack color="#fff" size={20} />
+        <BackButton href={HOME}>
+          <MdArrowBack color="#fff" size={24} />
         </BackButton>
         <HeaderText>Voltar</HeaderText>
         <SavedIcon isSaved={isSaved}>
