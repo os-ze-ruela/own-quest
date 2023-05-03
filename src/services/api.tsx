@@ -130,3 +130,13 @@ export const getButton = async (id: number) => {
 }
 
 // --- Category ---
+
+// --- Verification ---
+
+export const sendEmail = async() =>{
+    return await api.post('/user/send-verification-email')
+}
+
+export const verifyEmail = async (token: string) =>{
+    return await api.post(`/user/verify-email/${token}`)
+}
