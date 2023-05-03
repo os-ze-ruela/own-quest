@@ -32,7 +32,7 @@ function HeaderLogged(props: HeaderProps) {
                         const error = await e as AppError;
                     }
                 }}>Criar</ButtonStyle>
-                <PerfilLink>
+                <PerfilLink href="/profile">
                     <UserImage src={props.img} alt="Perfil image" />
                     {props.nickname}
                 </PerfilLink>
