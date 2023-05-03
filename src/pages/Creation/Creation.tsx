@@ -3,6 +3,8 @@ import { HiPlus } from 'react-icons/hi';
 import { MdOutlineAddCircleOutline } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import HeaderCreation from '../../components/Header/HeaderCreation';
+import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated';
+import { AuthContext } from '../../contexts/auth';
 import { CreationContext } from '../../contexts/creation';
 import { GameContext } from '../../contexts/game';
 import { ActualPage, AddButton, AddPage, Body, ButtonContainer, CreationBody, CreationStyle, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu } from '../../styles/Creation';
@@ -12,6 +14,8 @@ import PageActionBar from './components/PageActionBar';
 
 
 const Creation = () => {
+  
+  const { user } = useContext(AuthContext)
   const { pages, setPages } = useContext(CreationContext)
   const { indexButton, setIndexButton } = useContext(CreationContext)
   const { indexSelected, setIndexSelected } = useContext(CreationContext)
@@ -37,11 +41,13 @@ const Creation = () => {
   
   useEffect( () =>  {
     getPagesFromGameID(id!)
+    getGameById(id!)
   }, [])  
   
   
   return (
     <CreationBody>
+    {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} />
       <CreationStyle>
         <Body>

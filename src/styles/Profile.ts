@@ -14,10 +14,10 @@ export const ProfileOpt = styled.div`
 `
 
 export const ProfileIdent = styled.div`
-    flex-direction: row;
+    height: 200px;
     display: flex;
-    padding-bottom: 2.5em;
     align-items: center;
+    flex-direction: row;
 `
 export const UserImage = styled.img`
     width: 50px;
@@ -29,9 +29,9 @@ export const UserImage = styled.img`
     margin-top: 0.9em
 `
 export const NameEmail = styled.div`
+    display: grid;
     flex-direction: column;
     justify-content: space-between;
-    display: grid;
 `
 
 export const Name = styled.p`
