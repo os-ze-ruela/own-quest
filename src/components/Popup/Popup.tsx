@@ -17,8 +17,6 @@ const PopupContainer = styled.div`
   display: flex;
   width: 300px;
   position: fixed;
-  top: 200px;
-  left: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,7 +36,8 @@ const PopupContent = styled.div`
   position: fixed;
   top: 200px;
   left: 20px;
-  animation: fadeIn 0.8s ease-out forwards;
+  opacity: 0;
+  animation: fadeIn 1.5s 0.8s ease-out forwards;
 
   @keyframes fadeIn {
     from {

@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 import { CreationContext } from '../../contexts/creation';
 import { ActualPage, Body, ButtonGame, ButtonContainer, GameBody, GameStyle, Page, PageBody, PageDescription, PageTitle, NextButton } from '../../styles/Game';
 import HeaderTestingGame from '../../components/Header/HeaderTestingGame';
+import { useNavigate  } from 'react-router-dom';
+import { GAME } from '../../core/app-urls';
+
 
 const Game = () => {
     const { getPagesFromGameID } = useContext(CreationContext)
@@ -10,8 +13,8 @@ const Game = () => {
     const [ buttonIndex, setButtonIndex ] = useState(0)
     const { pages, setPages } = useContext(CreationContext)
     const { id } = useParams()
+    const navigate = useNavigate();
     
-
     useEffect( () =>  {
         getPagesFromGameID(id!)
       }, [])  
@@ -25,11 +28,18 @@ const Game = () => {
         setButtonIndex(index) 
       };
       
+
+    //BUG TO FIX - quando um botão é deselecionado o index ainda é mantidado e caso o botão Continuar seja pressionado será redirecionado
     const handleClickButton = () => {
-    const nextPageId = pages[indexPage].buttons[buttonIndex].nextPageId;
-    const nextPageIndex = pages.findIndex((page) => page.id === nextPageId);
-    setIndexPage(nextPageIndex);
-    setButtonIndex(0);
+      if(pages[indexPage].isLastPage === true){
+        navigate(GAME+"/"+id);
+      }
+      else{
+      const nextPageId = pages[indexPage].buttons[buttonIndex].nextPageId;
+      const nextPageIndex = pages.findIndex((page) => page.id === nextPageId);
+      setIndexPage(nextPageIndex);
+      setButtonIndex(0);
+      }
     };
       
   return (
@@ -42,7 +52,7 @@ const Game = () => {
             {pages.length < 1 ? (
                 <></>
               ) : (
-                <Page background={pages[indexPage].color} >
+                <Page background={pages[indexPage].color}>
                 <PageTitle
                   type="text"
                   name="PageTitle"
@@ -63,12 +73,13 @@ const Game = () => {
                       isSelected={index === buttonIndex}
                       background={button.color}
                       onClick={() => handleButton(index)}
+                      
                     />
                   ))}
                 </ButtonContainer>
                 <NextButton
                     readOnly
-                    value={"Continuar"}
+                    value={pages[indexPage].isLastPage ? "Finalizar" : "Continuar"}
                     onClick={handleClickButton}
                 />
               </Page>

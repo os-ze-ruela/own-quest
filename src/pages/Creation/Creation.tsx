@@ -7,7 +7,7 @@ import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated
 import { AuthContext } from '../../contexts/auth';
 import { CreationContext } from '../../contexts/creation';
 import { GameContext } from '../../contexts/game';
-import { ActualPage, AddButton, AddPage, Body, ButtonContainer, CreationBody, CreationStyle, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu } from '../../styles/Creation';
+import { ActualPage, AddButton, AddPage, Body, ButtonContainer, CreationBody, CreationStyle, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu, PopupContainer } from '../../styles/Creation';
 import ButtonActionBar from './components/ButtonActionBar';
 import NoPagePlaceholder from './components/NoPagePlaceholder';
 import PageActionBar from './components/PageActionBar';
@@ -48,7 +48,10 @@ const Creation = () => {
   
   return (
     <CreationBody>
-      <Popup message="Após selecionar um botão, clique duas vezes na página para voltar a edita-lá" />
+      <PopupContainer>
+        <Popup message="🚨Após selecionar um botão, clique duas vezes na página para voltar a edita-lá" />
+        <Popup message="🚨Após selecionar a página destino do botão, aperte o atalho F4 para ir até ela" />
+      </PopupContainer>
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} />
       <CreationStyle>
@@ -109,6 +112,12 @@ const Creation = () => {
                         handleTextChange(indexSelected, index, event.target.value);
                         updateButton(button)
                       }}
+                      onKeyDown={(event) => {
+                        if (event.key === "F4" && button.nextPageId !== -1) {
+                          setActionBarSelected(true)
+                          setIndexSelected(findPageIndex(pages, button.nextPageId))
+                        }
+                      }}
                     />
                   ))}
                   <AddButton onClick={
@@ -124,6 +133,7 @@ const Creation = () => {
               <PageListContainer>
                 {pages.map((page, index) => (
                   <MiniPage
+                    isLastPage = {page.isLastPage}
                     isSelected={index === indexSelected}
                     background={page.color}
                     key={index}

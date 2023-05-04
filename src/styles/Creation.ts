@@ -241,7 +241,7 @@ export const AddPage = styled.button`
   justify-content: center;
 `;
 
-export const MiniPage = styled.button.attrs((props: {isSelected: boolean, background: string}) => props)`
+export const MiniPage = styled.button.attrs((props: {isLastPage: boolean, isSelected: boolean, background: string}) => props)`
   display: flex;
   margin-right: 10px;
   width: 75px;
@@ -249,14 +249,24 @@ export const MiniPage = styled.button.attrs((props: {isSelected: boolean, backgr
   flex-direction: column;
   color: white;
   background-color: ${props => props.background};
-  border-color: ${props => props.isSelected ? '#6BF0DF' : 'none'};
+  border-color: ${props => 
+    props.isLastPage && props.isSelected ? '#9c0202' :
+    props.isSelected ? '#6BF0DF' : 
+    'none'};
   border-style: ${props => props.isSelected ? 'dashed' : 'none'};
-  outline: none;
+  outline: ${props => props.isLastPage ? 'auto' : 'none'};
+  outline-color: ${props => props.isLastPage ? '#9c0202' : 'none'};
   border-radius: 5px;
   border-width: 3.5px;
   /* padding: 10px 0; */
   align-items: center;
   justify-content: center;
   box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3);
+
+`;
+
+export const PopupContainer = styled.div`
+  width: 300px;
+
 
 `;
