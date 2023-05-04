@@ -9,6 +9,7 @@ import {
   refreshToken,
   signupUser,
   verifyEmail,
+  sendEmail,
 } from "../services/api";
 
 type AuthContextType = {
@@ -36,6 +37,7 @@ type AuthContextType = {
   refresh: () => Promise<void>;
   logout: () => void;
   validateEmail: (access_token: string, token: string) => Promise<void>;
+  sendValidateEmail: ()=> Promise<void>;
 };
 
 interface User {
@@ -44,6 +46,11 @@ interface User {
   email: string;
   name: string;
   nickname: string;
+}
+
+interface Token {
+  access_token: string;
+  refresh_token: string;
 }
 
 export const AuthContext = createContext<AuthContextType>(
@@ -242,15 +249,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   async function validateEmail(access_token: string, token: string): Promise<void>{
     try {
-        api.defaults.headers.Authorization = `Bearer ${access_token}`;
-        await verifyEmail(token);
+        const recoveredToken = localStorage.getItem("token")
+        if (recoveredToken) {
+          const tokenJSON = JSON.parse(recoveredToken)
+          api.defaults.headers.Authorization = `Bearer ${tokenJSON.access_token}`;
+          await verifyEmail(token);
+          
+          const recoveredUser = localStorage.getItem("user");
+          if (recoveredUser) {
+            let validatedUser = JSON.parse(recoveredUser)
+            validatedUser.email_validated = true
+            setUser(validatedUser)
+            localStorage.setItem("user", JSON.stringify(validatedUser));
+          }              
+        } else {
+          api.defaults.headers.Authorization = `Bearer ${access_token}`;
+          await verifyEmail(token);
+        }
         // user!.email_validated=true;
-        navigate(HOME)
     } catch (e) {
       const error = (await e) as AxiosError;
       console.log(error);
+    }
   }
-}
+
+  async function sendValidateEmail(): Promise<void> {
+    try {
+      const tokensJSON = localStorage.getItem('token')
+      const tokens = JSON.parse(tokensJSON!)
+      api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
+
+      await sendEmail()
+    } catch(e) {
+      const error = (await e) as AxiosError;
+      console.log(error);
+    }
+  }
 
   return (
     <AuthContext.Provider
@@ -264,7 +298,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         register,
         refresh,
         logout,
-        validateEmail
+        validateEmail,
+        sendValidateEmail
       }}
     >
       {children}

@@ -5,6 +5,7 @@ import { SubTitle } from '../../styles/Login'
 import { FaUnlock } from "react-icons/fa";
 import { Bar, BarTitle, ButtonSend, Title, ValidateStyle } from '../../styles/Validated'
 import { AuthContext } from '../../contexts/auth';
+import { HOME } from '../../core/app-urls';
 
 
 
@@ -27,11 +28,11 @@ export default function Validated(){
         <>
             <Header page='Minha conta' redirect=''/>
             <ValidateStyle>
-                <Title>, seu e-mail foi verificado com sucesso</Title>
+                <Title>Seu e-mail foi verificado com sucesso</Title>
                 <SubTitle>Agora você pode criar milhares de histórias e compartilhar com seus amigos!</SubTitle> 
                 <SubTitle>Seu e-mail foi validado e você não irá precisar passar mais por esse processo para</SubTitle>
                 <SubTitle>acessar a sua conta novamente!</SubTitle>
-                <ButtonSend>Continuar na plataforma</ButtonSend>
+                <ButtonSend href={HOME}>Continuar na plataforma</ButtonSend>
             </ValidateStyle>
             <Bar>
                 <BarTitle>Seu acesso à criação e visualização de histórias foi garantido! <FaUnlock/> </BarTitle>

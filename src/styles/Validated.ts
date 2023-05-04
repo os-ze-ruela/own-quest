@@ -51,7 +51,7 @@ export const Input = styled.input`
 
 `
 
-export const ButtonSend = styled.button`
+export const ButtonSend = styled.a`
     background-color: #568EA3;
     color: #FFF;
     margin-top: 2.5em;
