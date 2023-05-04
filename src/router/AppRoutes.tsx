@@ -64,7 +64,7 @@ function AppRoutes() {
                             <Route path={GAME + '/:id'} element={<Private><Creation /></Private>} > </Route>
                             <Route path={PLAYGAME + '/:id'} element={<Private><Game/></Private>} > </Route>
                             <Route path={PROFILE} element={<Private><Profile/></Private>} > </Route>
-                            <Route path={EXPLORER} element={<Private><Explorer/></Private>} > </Route>
+                            <Route path={EXPLORER} element={<Explorer/>} > </Route>
                         </Routes>
                     </CreationProvider>
                 </AuthProvider>
