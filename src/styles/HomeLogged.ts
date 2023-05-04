@@ -53,6 +53,31 @@ export const CardWrapperCard = styled.div`
   /* max-width: 500px; */
   transition: all 0.2s ease-in-out;
   height: 180px;
+
+  .shimmer {
+    background-color: #f6f7f8;
+    background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+    background-repeat: no-repeat;
+    background-size: 800px 104px;
+    display: inline-block;
+    position: relative;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: shimmer;
+    animation-timing-function: linear;
+    border-radius: 5px;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -468px 0;
+    }
+
+    100% {
+      background-position: 468px 0;
+    }
+  }
   
   &:hover {
     transform: translateY(-4px);
@@ -221,7 +246,6 @@ export const PageUserGameWrapper = styled.div`
   flex-wrap: wrap;
   width: 98%;
   gap: 2rem;
-  /* max-width: 1100px; */
   margin: 0 auto;
   margin-bottom: 2rem;
 `;
@@ -231,7 +255,7 @@ export const UserGameState = styled.span.attrs((props: { isPublished: string, })
   top: 10px;
   right: 10px;
   z-index: 2;
-  background-color:  ${props => props.isPublished ? '#66AB4E' : '#C79334'};
+  background-color:  ${(props) => (props.isPublished === 'true' ? '#66AB4E' : '#C79334')};
   height: 25px;
   width: auto;
   max-width: 150px;
@@ -242,10 +266,11 @@ export const UserGameState = styled.span.attrs((props: { isPublished: string, })
   border-radius: 4px;
   color: #FFFFFF;
   font-family: 'FiraCode-Light';
-  opacity: 1;
-`
+  opacity: 0;
+`;
 
 export const CardUserGameWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -277,9 +302,11 @@ export const CardUserGameWrapper = styled.div`
       transform: translateY(-12px);
       margin-top: 1rem;
     }
-    .game-state {
+  
+    ${UserGameState} {
       opacity: 1;
     }
+
   }
 `;
 

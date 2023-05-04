@@ -1,7 +1,7 @@
 import React from 'react';
 import { GAME } from '../../core/app-urls';
 import Category from '../../models/Category';
-import { Button, ButtonWrapper, CardUserGameContentWrapper, CardUserGameImage, CardUserGameTitle, CardUserGameWrapper, CategoryLabel, CategoryLabelWrapper, UserGameImageSpace } from '../../styles/HomeLogged';
+import { Button, ButtonWrapper, CardUserGameContentWrapper, CardUserGameImage, CardUserGameTitle, CardUserGameWrapper, CategoryLabel, CategoryLabelWrapper, UserGameImageSpace, UserGameState } from '../../styles/HomeLogged';
 
 type CardUserGameProps = {
     id: number;
@@ -16,9 +16,9 @@ const CardUserGame: React.FC<CardUserGameProps> = ({ id, imageSrc, title, descri
 
     return (
         <CardUserGameWrapper >
-            {/* <UserGameState className='game-state'>
+            <UserGameState isPublished={isPublished ? 'true' : 'false'}>
                 <p>{isPublished ? 'Publicado' : 'Editando'}</p>
-            </UserGameState> */}
+            </UserGameState>
             <UserGameImageSpace>
                 <CardUserGameImage src={imageSrc} alt={title} />
             </UserGameImageSpace>

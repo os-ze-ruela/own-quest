@@ -1,4 +1,5 @@
 import Category from "./Category";
+import CreatedBy from "./CreatedBy";
 
 interface IGame {
     id: number;
@@ -11,6 +12,7 @@ interface IGame {
     isDeleted: boolean;
     createdAt: Date;
     categories: Category[];
+    createdBy?: CreatedBy | null;
 }
 
 class Game {
@@ -24,6 +26,7 @@ class Game {
     isDeleted: boolean = false;
     createdAt: Date;
     categories: Category[];
+    createdBy: CreatedBy | null;
 
     constructor(constructor: IGame) {
         this.id = constructor.id;
@@ -35,6 +38,7 @@ class Game {
         this.isPublished = constructor.isPublished;
         this.isDeleted = constructor.isDeleted;
         this.createdAt = constructor.createdAt;
+        this.createdBy = constructor.createdBy ?? null;
         this.categories =   constructor.categories.length > 0 ? constructor.categories.map((category) => {
             console.log(category)
             return new Category(category)

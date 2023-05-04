@@ -1,6 +1,7 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Card from '../../components/Cards/Card';
+import { LoadingCard } from '../../components/Cards/CardHomeShimmer';
 import CardUserGame from '../../components/Cards/CardUserGame';
 import EmptyCard from '../../components/Cards/EmptyCard';
 import HeaderLogged from '../../components/Header/HeaderLogged';
@@ -14,11 +15,14 @@ import { LoggedStyle, PageUserGameWrapper, PageWrapper, Title } from '../../styl
 const HomeLogged = () => {
   const { user, refresh, logout } = useContext(AuthContext)
   const { userGames, games, getUserGames, getHotGamesForHome } = useContext(GameContext)
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchGames = async () => {
     try {
       await Promise.all([getUserGames(), getHotGamesForHome()]);
+      setIsLoading(false);
     } catch (e) {
+      setIsLoading(false);
       const error = await e as AppError
       if (error.statusCode === 401) {
         try {
@@ -33,7 +37,6 @@ const HomeLogged = () => {
 
   useEffect(() => {
     fetchGames()
-
   }, [])
 
   const randomInt = (): number => {
@@ -54,15 +57,22 @@ const HomeLogged = () => {
       <LoggedStyle>
         <Title>Histórias mais bem avaliadas</Title>
         <PageWrapper>
-          {games.map((game, index) => (
-            <Card
-              key={index}
-              title={game.title}
-              imageSrc={`https://picsum.photos/300/200?random=${randomInt()}`}
-              description={game.description}
-              categories={game.categories}
-            />
-          ))}
+          {isLoading ? (
+            <>
+              <LoadingCard />
+              <LoadingCard />
+              <LoadingCard />
+            </>
+          ) :
+            games.map((game, index) => (
+              <Card
+                key={index}
+                title={game.title}
+                imageSrc={`https://picsum.photos/300/200?random=${randomInt()}`}
+                description={game.description}
+                categories={game.categories}
+              />
+            ))}
         </PageWrapper>
         <Title>Minhas histórias</Title>
         <PageUserGameWrapper>
