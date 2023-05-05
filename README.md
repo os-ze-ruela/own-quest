@@ -42,7 +42,7 @@
     <a href="https://github.com/os-ze-ruela/own-quest-server"><strong>Explore o projeto »</strong></a>
     <br />
     <br />
-    <a href="https://ownquest.games">Veja um demo</a>
+    <a href="https://www.ownquest.com.br">Veja um demo</a>
     ·
     <a href="https://github.com/os-ze-ruela/own-quest-server/issues">Reporte um bug</a>
     ·
