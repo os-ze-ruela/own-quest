@@ -16,6 +16,7 @@ export const CreationStyle = styled.div`
 `
 export const Body = styled.div`
   display: flex;
+  position: relative;
   flex-direction: row;
   width: 100%;
   height: 100%;

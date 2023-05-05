@@ -12,6 +12,7 @@ import ButtonActionBar from './components/ButtonActionBar';
 import NoPagePlaceholder from './components/NoPagePlaceholder';
 import PageActionBar from './components/PageActionBar';
 import Popup from '../../components/Popup/Popup';
+import Sidebar from '../../components/Sidebar/Sidebar';
 
 
 
@@ -97,7 +98,7 @@ const Creation = () => {
         <Popup message="🚨 Após selecionar um botão, clique duas vezes na página para voltar a edita-lá" />
         <Popup message="🚨 Após selecionar a página destino do botão, você pode usar o atalho F4 para ir até ela" />
       </PopupContainer>
-      <PopupContainer top={'550px'} left={'1100px'}>
+      <PopupContainer top={'700px'} left={'1200px'}>
         <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" />
       </PopupContainer>
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
@@ -203,6 +204,7 @@ const Creation = () => {
               </PageListContainer>
             </PagesMenu>
           </PageBody>
+          <Sidebar/>
         </Body>
       </CreationStyle>
     </CreationBody >

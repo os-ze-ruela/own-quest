@@ -15,8 +15,9 @@ import Game from '../pages/Game/Game';
 import { AuthContext, AuthProvider } from '../contexts/auth';
 import { CreationProvider } from '../contexts/creation';
 import { GameProvider } from '../contexts/game';
-import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, GAME, HOME, LANDING_PAGE, LOGIN, NEW_PASSWORD, PROFILE, PLAYGAME, RECOVER_PASSWORD, REGISTER } from '../core/app-urls';
+import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, GAME, HOME, LANDING_PAGE, LOGIN, NEW_PASSWORD, PROFILE, PLAYGAME, RECOVER_PASSWORD, REGISTER, TEST } from '../core/app-urls';
 import Profile from '../pages/Profile';
+import VisualizationTest from '../pages/VisualizationTest/VisualizationTest';
 
 function AppRoutes() {
     function Private({ children }: { children: ReactNode }) {
@@ -63,6 +64,7 @@ function AppRoutes() {
                             <Route path={GAME + '/:id'} element={<Private><Creation /></Private>} > </Route>
                             <Route path={PLAYGAME + '/:id'} element={<Private><Game/></Private>} > </Route>
                             <Route path={PROFILE} element={<Private><Profile/></Private>} > </Route>
+                            <Route path={TEST} element={<VisualizationTest />} > </Route>
                         </Routes>
                     </CreationProvider>
                 </AuthProvider>
