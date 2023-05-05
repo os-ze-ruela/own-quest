@@ -16,29 +16,25 @@ const PopupContainer = styled.div`
   justify-content: center;
   display: flex;
   width: 300px;
-  position: fixed;
-  top: 200px;
-  left: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  background-color: red;
-  
+  box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+
 `;
 const PopupContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #568EA3;
+  background: #3e4357;
   padding: 20px;
   border-radius: 10px;
   width: 300px;
-  position: fixed;
-  top: 200px;
-  left: 20px;
-  animation: fadeIn 0.8s ease-out forwards;
+  opacity: 0;
+  animation: fadeIn 1.5s 0.8s ease-out forwards;
 
   @keyframes fadeIn {
     from {

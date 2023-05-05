@@ -77,6 +77,7 @@ export const PageTitle = styled.input`
   outline: none;
   outline-color: #202331;
   margin-top: 24px;
+  cursor: default;
 
   ::placeholder{
     color: white;
@@ -103,6 +104,7 @@ export const PageDescription = styled.textarea`
   outline: none;
   outline-color: #202331;
   resize: none;
+  cursor: default;
 
   ::placeholder{
   color: white;
@@ -146,7 +148,7 @@ export const ButtonGame = styled.input.attrs((props: {isSelected: boolean, backg
 export const NextButton = styled.input`
   margin-right: 10px;
   color: white; 
-  background-color: #568EA3;
+  background-color: #282C3E;
   font-family: FiraCode-Light;
   padding: 10px 0;
   text-align: center;
@@ -154,7 +156,7 @@ export const NextButton = styled.input`
   outline: none;
   border-radius: 5px;
   cursor: pointer;
-
+  box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3);
 
 `;
 
