@@ -14,7 +14,7 @@ export const ProfileOpt = styled.div`
 `
 
 export const ProfileIdent = styled.div`
-    height: 200px;
+    height: 150px;
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -25,13 +25,15 @@ export const UserImage = styled.img`
     border: 2px solid #FFFFFF;
     box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.25);
     border-radius: 50%;
-    margin-right: 0.5em;
+    margin-right: 1.2em;
     margin-top: 0.9em
 `
 export const NameEmail = styled.div`
     display: grid;
     flex-direction: column;
     justify-content: space-between;
+    padding-left: 0.9em;
+    padding-bottom: 1.5em;
 `
 
 export const Name = styled.p`
