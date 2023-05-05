@@ -22,6 +22,11 @@ export const HeaderActions = styled.div`
     justify-content: center;
     gap: 2rem;
     padding-right: 1rem;
+
+    @media screen and (max-width: 1024px) {
+        padding-right: 12px;
+        gap: 1rem;
+    }
 `
 
 export const HeaderStyle = styled.header`
@@ -42,6 +47,7 @@ export const LogoStyle = styled.img`
     @media screen and (max-width: 1024px) {
         height: 60px;
         width: 100px ;
+        padding-left: 24px;
     }
 `
 
@@ -82,8 +88,6 @@ export const LinkStyle = styled.a`
     @media screen and (max-width: 1024px) {
         display: none;
     }
-    
-
 `
 
 export const PerfilLinkContainer = styled.div`
@@ -107,7 +111,7 @@ export const UserImagePlaceholder = styled.div`
     background-color: #568EA3;
     border: 2px solid #FFFFFF;
     box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.25);
-    border-radius: 50%
+    border-radius: 50%;
 `
 
 export const PerfilLink = styled.a`
@@ -143,5 +147,14 @@ export const PerfilLink = styled.a`
         background: #202331AB;
         transform: scale(1.02);
         cursor: pointer;
+    }
+
+    @media screen and (max-width: 1024px) {
+       .nickname-header {
+        display: none;
+       }
+
+        background-color: #282C3E;
+        padding: 0px 6px;
     }
 `

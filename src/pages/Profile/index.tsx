@@ -53,7 +53,7 @@ export default function Profile() {
                     </ProfileIdent>
                     <BtnOpt onClick={handleClick2}><BiUserCircle />Sua conta</BtnOpt>
                     <BtnOpt onClick={handleClick}><MdOutlineLockPerson />Login e Segurança</BtnOpt>
-                    <BtnOpt onClick={handleLogoutClick}><FiLogOut />Deslogar</BtnOpt>
+                    <BtnOpt onClick={handleLogoutClick}><FiLogOut />Sair</BtnOpt>
                 </ProfileOpt>
                 {!isSelected ?
                     <ProfileInfo>

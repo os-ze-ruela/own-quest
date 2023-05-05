@@ -5,13 +5,17 @@ type CategoryLabelProps = {
 };
 
 export const LoggedStyle = styled.div`
-    background-color: #282C3E;
-    width: 100%;
-    padding: 12px 24px;
-    -moz-box-sizing: border-box; 
-    -webkit-box-sizing: border-box; 
-     box-sizing: border-box; 
-    
+  background-color: #282C3E;
+  width: 100%;
+  padding: 12px 24px;
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box; 
+  box-sizing: border-box; 
+
+  
+  @media screen and (max-width: 1024px) {
+    padding: 4px 12px;
+  }
 `
 
 export const Title = styled.div`
@@ -23,6 +27,11 @@ export const Title = styled.div`
     margin-left: 0.5em;
     font-family: FiraCode-Bold;
     font-weight: 700;
+
+    @media screen and (max-width: 1024px) {
+      font-size: 1.5rem;
+      padding-bottom: 12px;
+    }
 `
 
 export const PageWrapper = styled.div`
@@ -41,6 +50,7 @@ export const CardWrapper = styled.div`
 `;
 
 export const CardWrapperCard = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -74,6 +84,10 @@ export const CardWrapperCard = styled.div`
       margin-top: 12px;
     }
   }
+
+  @media screen and (max-width: 1024px) {
+      width: 100%;
+    }
 `;
 
 export const ImageSpace = styled.div`
@@ -94,10 +108,11 @@ export const CardContentWrapper = styled.div`
   width: 60%;
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
   color: white;
   margin: 0px 1rem;
+  padding-top: 12px;
   text-align: end;
   font-family: 'FiraCode-Regular';
 
@@ -137,12 +152,16 @@ export const CategoryLabel = styled.span<CategoryLabelProps>`
 `;
 
 export const ButtonWrapper = styled.div`
+  position: absolute;
+  bottom: 10px;
+  left: 15px;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 8px;
   opacity: 0;
   transition: all 0.2s ease-in-out;
+  font-family: 'FiraCode-Light';
 `;
 
 export const Button = styled.a`
@@ -221,7 +240,6 @@ export const PageUserGameWrapper = styled.div`
   flex-wrap: wrap;
   width: 98%;
   gap: 2rem;
-  /* max-width: 1100px; */
   margin: 0 auto;
   margin-bottom: 2rem;
 `;
@@ -231,7 +249,7 @@ export const UserGameState = styled.span.attrs((props: { isPublished: string, })
   top: 10px;
   right: 10px;
   z-index: 2;
-  background-color:  ${props => props.isPublished ? '#66AB4E' : '#C79334'};
+  background-color:  ${(props) => (props.isPublished === 'true' ? '#66AB4E' : '#C79334')};
   height: 25px;
   width: auto;
   max-width: 150px;
@@ -242,10 +260,11 @@ export const UserGameState = styled.span.attrs((props: { isPublished: string, })
   border-radius: 4px;
   color: #FFFFFF;
   font-family: 'FiraCode-Light';
-  opacity: 1;
-`
+  opacity: 0;
+`;
 
 export const CardUserGameWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -277,9 +296,15 @@ export const CardUserGameWrapper = styled.div`
       transform: translateY(-12px);
       margin-top: 1rem;
     }
-    .game-state {
+  
+    ${UserGameState} {
       opacity: 1;
     }
+
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: 100%;
   }
 `;
 

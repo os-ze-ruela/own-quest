@@ -143,7 +143,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
             console.log(response.data)
 
-            const hotGames = gamesData.map((gameData: { game: { categories: any[]; id: any; title: any; description: any; image: any; favorites: any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any; }; }) => {
+            const hotGames = gamesData.map((gameData: {
+                game: {
+                    createdBy: any; categories: any[]; id: any; title: any; description: any; image: any; favorites: any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any;
+                };
+            }) => {
                 const categories = gameData.game.categories.map((categoryData) => {
                     return new Category(categoryData.category);
                 });
@@ -158,10 +162,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                     isPublished: gameData.game.isPublished,
                     isDeleted: gameData.game.isDeleted,
                     createdAt: gameData.game.createdAt,
-                    categories: categories
+                    createdBy: gameData.game.createdBy,
+                    categories: categories,
                 };
             });
-
             setGames(hotGames);
         } catch (e: any) {
             setGames([]);
