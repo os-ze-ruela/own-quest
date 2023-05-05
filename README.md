@@ -83,7 +83,7 @@
 <!-- ABOUT THE PROJECT -->
 ## Sobre o Projeto
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+![Product Name Screen Shot](https://raw.githubusercontent.com/os-ze-ruela/own-quest/master/src/assets/img/Captura%20de%20tela%202023-05-05%20131500.png)
 
 A Own Quest é uma plataforma de criação de histórias personalizadas jogáveis onde você determina os caminhos possíveis para alcançar diferentes finais.
 
@@ -101,6 +101,8 @@ Esta seção deve listar as principais estruturas/bibliotecas usadas para inicia
 
 * [![Nest][Nest.js]][Nest-url]
 * [![MySQL][MySQL]][MySQL-url]
+* [![React][React]][React-url]
+* [![AWS][AWS]][AWS-url]
 
 <p align="right">(<a href="#readme-top">Voltar ao topo</a>)</p>
 
@@ -158,11 +160,20 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 ## Roadmap
 
 - [x] Criação do schema e das tabelas
-- [ ] Módulo de Registro
-    - [ ] Configuração do JWT
-    - [ ] Registro com JWT
-- [ ] Módulo de Login
-    - [ ] Autenticação com JWT
+- [x] Módulo de Registro
+    - [x] Configuração do JWT
+    - [x] Registro com JWT
+- [x] Módulo de Login
+    - [x] Autenticação com JWT
+- [ ] Módulo de Histórias
+ - [x] Criar Histórias
+ - [x] Testar Histórias
+ - [ ] Publicar Histórias
+ - [ ] Jogar Histórias
+- [ ] Módulo de Comunidade
+ - [x] Explorar
+ - [ ] Seguir Usuários
+ - [ ] Comentar histórias
 
 Olhe em [open issues](https://github.com/os-ze-ruela/own-quest-server/issues) para obter uma lista completa de recursos propostos (e problemas conhecidos).
 
@@ -227,3 +238,7 @@ Project Link: [https://github.com/os-ze-ruela/own-quest-server](https://github.c
 [Nest-url]: https://nestjs.com
 [MySQL]: https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white
 [MySQL-url]: https://www.mysql.com/
+[React]: https://img.shields.io/badge/-ReactJs-61DAFB?logo=react&logoColor=black&style=for-the-badge
+[React-url]: https://react.dev/
+[AWS]: https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white
+[AWS-url]: https://aws.amazon.com
