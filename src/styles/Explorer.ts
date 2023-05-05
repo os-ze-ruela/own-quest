@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const ExplorerMain = styled.main`
     width: 100%;
@@ -248,5 +248,42 @@ export const PlayButton = styled.a`
   &:hover {
     cursor: pointer;
     background-color: #8c7daf;
+  }
+`;
+
+interface LoadingShimmerProps {
+  width?: string;
+  height?: string;
+}
+
+const shimmer = keyframes`
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+`;
+
+export const LoadingShimmer = styled.div<LoadingShimmerProps>`
+  background-color: #202331;
+  display: inline-block;
+  height: ${(props) => props.height || '400px'};
+  width: ${(props) => props.width || '95%'};
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: -200px;
+    right: -200px;
+    bottom: 0;
+    background: linear-gradient(to right, #364764 0%, #3647645B 20%, #364764 40%, #364764 100%);
+    background-size: 400px 100%;
+    animation: ${shimmer} 1.5s infinite linear;
   }
 `;

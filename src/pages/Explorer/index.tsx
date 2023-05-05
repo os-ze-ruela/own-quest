@@ -1,6 +1,7 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { BsSearch } from "react-icons/bs";
 import nextIcon from '../../assets/img/next-icon.svg';
+import CardHighlightGame from '../../components/Cards/CardHighlightGame';
 import CardMostViewGame from '../../components/Cards/CardMostViewGame';
 import Header from '../../components/Header/Header';
 import HeaderLogged from '../../components/Header/HeaderLogged';
@@ -9,18 +10,21 @@ import { AuthContext } from '../../contexts/auth';
 import { GameContext } from '../../contexts/game';
 import AppError from '../../core/app-error';
 import { LOGIN } from '../../core/app-urls';
-import { ExplorerMain, FiltersContainer, GameListContainer, ListGamesCardContainer, PaginationContainer, SearchContainer, SearchInput, TitleListGames } from "../../styles/Explorer";
+import { ExplorerMain, FiltersContainer, GameListContainer, ListGamesCardContainer, LoadingShimmer, PaginationContainer, SearchContainer, SearchInput, TitleListGames } from "../../styles/Explorer";
 
 
 const Explorer = () => {
 
   const { authenticated, user, refresh, logout } = useContext(AuthContext)
   const { games, getHotGamesForHome } = useContext(GameContext)
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchGames = async () => {
     try {
       await Promise.all([getHotGamesForHome()]);
+      setIsLoading(false)
     } catch (e) {
+      setIsLoading(false)
       const error = await e as AppError
       if (error.statusCode === 401) {
         try {
@@ -43,7 +47,7 @@ const Explorer = () => {
         (<HeaderLogged nickname={user!.nickname} photo={user!.photo} />) :
         (<Header page='Login' redirect={LOGIN} />)
       }
-      {authenticated && user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
+      {authenticated === true && user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <FiltersContainer>
         <SearchContainer>
           <BsSearch className='search-icon' />
@@ -63,10 +67,25 @@ const Explorer = () => {
               createdByNickname={game.createdBy!.nickname}
             />
           ))}
-        <PaginationContainer>
-          <img src={nextIcon} alt="next games" className='nextIcon' />
-        </PaginationContainer>
+          <PaginationContainer>
+            <img src={nextIcon} alt="next games" className='nextIcon' />
+          </PaginationContainer>
         </ListGamesCardContainer>
+      </GameListContainer>
+      <GameListContainer>
+        <TitleListGames>Histórias em Destaque</TitleListGames>
+        {isLoading ? (<>
+         <LoadingShimmer style={{marginLeft: '2rem'}}/>
+        </>) : (<>
+          <CardHighlightGame
+            key={0}
+            title={games[0].title}
+            imageSrc={`https://picsum.photos/300/200?random=5}`}
+            description={games[0].description}
+            categories={games[0].categories}
+            createdByNickname={games[0].createdBy!.nickname}
+          />
+        </>)}
       </GameListContainer>
     </ExplorerMain>
   );

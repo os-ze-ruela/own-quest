@@ -5,13 +5,17 @@ type CategoryLabelProps = {
 };
 
 export const LoggedStyle = styled.div`
-    background-color: #282C3E;
-    width: 100%;
-    padding: 12px 24px;
-    -moz-box-sizing: border-box; 
-    -webkit-box-sizing: border-box; 
-     box-sizing: border-box; 
-    
+  background-color: #282C3E;
+  width: 100%;
+  padding: 12px 24px;
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box; 
+  box-sizing: border-box; 
+
+  
+  @media screen and (max-width: 1024px) {
+    padding: 4px 12px;
+  }
 `
 
 export const Title = styled.div`
@@ -23,6 +27,11 @@ export const Title = styled.div`
     margin-left: 0.5em;
     font-family: FiraCode-Bold;
     font-weight: 700;
+
+    @media screen and (max-width: 1024px) {
+      font-size: 1.5rem;
+      padding-bottom: 12px;
+    }
 `
 
 export const PageWrapper = styled.div`
@@ -41,6 +50,7 @@ export const CardWrapper = styled.div`
 `;
 
 export const CardWrapperCard = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -53,31 +63,6 @@ export const CardWrapperCard = styled.div`
   /* max-width: 500px; */
   transition: all 0.2s ease-in-out;
   height: 180px;
-
-  .shimmer {
-    background-color: #f6f7f8;
-    background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
-    background-repeat: no-repeat;
-    background-size: 800px 104px;
-    display: inline-block;
-    position: relative;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
-    animation-name: shimmer;
-    animation-timing-function: linear;
-    border-radius: 5px;
-  }
-
-  @keyframes shimmer {
-    0% {
-      background-position: -468px 0;
-    }
-
-    100% {
-      background-position: 468px 0;
-    }
-  }
   
   &:hover {
     transform: translateY(-4px);
@@ -99,6 +84,10 @@ export const CardWrapperCard = styled.div`
       margin-top: 12px;
     }
   }
+
+  @media screen and (max-width: 1024px) {
+      width: 100%;
+    }
 `;
 
 export const ImageSpace = styled.div`
@@ -119,10 +108,11 @@ export const CardContentWrapper = styled.div`
   width: 60%;
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
   color: white;
   margin: 0px 1rem;
+  padding-top: 12px;
   text-align: end;
   font-family: 'FiraCode-Regular';
 
@@ -162,12 +152,16 @@ export const CategoryLabel = styled.span<CategoryLabelProps>`
 `;
 
 export const ButtonWrapper = styled.div`
+  position: absolute;
+  bottom: 10px;
+  left: 15px;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 8px;
   opacity: 0;
   transition: all 0.2s ease-in-out;
+  font-family: 'FiraCode-Light';
 `;
 
 export const Button = styled.a`
@@ -307,6 +301,10 @@ export const CardUserGameWrapper = styled.div`
       opacity: 1;
     }
 
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: 100%;
   }
 `;
 

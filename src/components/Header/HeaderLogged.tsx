@@ -47,7 +47,7 @@ function HeaderLogged(props: HeaderProps) {
                             <UserImage src={props.photo} alt="Perfil image" />
                         </>
                     )}
-                    {props.nickname}
+                    <p className='nickname-header' >{props.nickname}</p>
                 </PerfilLink>
             </HeaderActions>
         </HeaderStyle>
