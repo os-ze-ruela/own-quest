@@ -3,13 +3,14 @@ import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
 import Category from "../models/Category";
 import Game from "../models/Game";
-import { api, fetchGameById, getHotGames, getUserGamesByToken, patchGame, postGame } from "../services/api";
+import { api, deleteGame, fetchGameById, getHotGames, getUserGamesByToken, patchGame, postGame } from "../services/api";
 
 type GameContextType = {
 
     setEditingGame: (game: Game) => void,
     getGameById: (id: string) => Promise<void>,
     createGame: () => Promise<number>,
+    deleteGameByID: (id: number) => void,
     updateGame: (game: Game) => Promise<void>,
     getUserGames: () => Promise<void>,
     getHotGamesForHome: () => Promise<void>,
@@ -38,6 +39,14 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             throw new AppError(error.response!.status, error.message);
         }
     }
+
+    async function deleteGameByID(id: number) {
+        try {
+          await deleteGame(id)
+        } catch (error) {
+          console.error(error)
+        }
+      }
 
     async function updateGame(game: Game): Promise<void> {
         try {
@@ -134,7 +143,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
             console.log(response.data)
 
-            const hotGames = gamesData.map((gameData: { game: { categories: any[]; id: any; title: any; description: any; image: any; favorites: any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any; }; }) => {
+            const hotGames = gamesData.map((gameData: {
+                game: {
+                    createdBy: any; categories: any[]; id: any; title: any; description: any; image: any; favorites: any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any;
+                };
+            }) => {
                 const categories = gameData.game.categories.map((categoryData) => {
                     return new Category(categoryData.category);
                 });
@@ -149,10 +162,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                     isPublished: gameData.game.isPublished,
                     isDeleted: gameData.game.isDeleted,
                     createdAt: gameData.game.createdAt,
-                    categories: categories
+                    createdBy: gameData.game.createdBy,
+                    categories: categories,
                 };
             });
-
             setGames(hotGames);
         } catch (e: any) {
             setGames([]);
@@ -168,7 +181,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <GameContext.Provider value={{ setEditingGame, getGameById, createGame, updateGame, getUserGames, getHotGamesForHome, userGames, games, editingGame }}>
+        <GameContext.Provider value={{ setEditingGame, getGameById, createGame, deleteGameByID, updateGame, getUserGames, getHotGamesForHome, userGames, games, editingGame }}>
             {children}
         </GameContext.Provider>
     )

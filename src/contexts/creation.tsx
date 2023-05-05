@@ -31,6 +31,7 @@ type CreationContextType = {
   addButton: (pageId: number) => Promise<ButtonModel>
   deleteButtonByID: (id: number) => void
   loading: boolean
+  setLoading: (load: boolean) => void
   handleDeleteButton: () => void
   handleDeletePage: () => void
   handleSelectChange: (selected: string) => void
@@ -123,11 +124,11 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
 
   async function updatePage(page: PageModel) {
     try {
-      setLoading(true)
+      // setLoading(true)
       await patchPage(page.id, page.title, page.description, page.color, "", indexSelected, page.isLastPage)
-      setLoading(false)
+      // setLoading(false)
     } catch (error) {
-      setLoading(false)
+      // setLoading(false)
       console.error(error)
     }
   }
@@ -350,6 +351,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
       addButton,
       deleteButtonByID,
       loading,
+      setLoading,
       handleDeleteButton,
       handleDeletePage,
       handleSelectChange,

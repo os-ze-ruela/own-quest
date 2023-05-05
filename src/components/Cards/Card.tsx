@@ -1,6 +1,7 @@
 import React from 'react';
 import Category from '../../models/Category';
-import { Button, ButtonWrapper, CardContentWrapper, CardImage, CardTitle, CardWrapperCard, CategoryLabel, CategoryLabelWrapper, ImageSpace } from '../../styles/HomeLogged';
+import { PlayButtonWrapper } from '../../styles/Explorer';
+import { Button, CardContentWrapper, CardImage, CardTitle, CardWrapperCard, CategoryLabel, CategoryLabelWrapper, ImageSpace } from '../../styles/HomeLogged';
 
 type CardProps = {
   imageSrc: string;
@@ -30,9 +31,9 @@ const Card: React.FC<CardProps> = ({ imageSrc, title, description, categories })
             </CategoryLabel>
           ))}
         </CategoryLabelWrapper>
-        <ButtonWrapper className='button-wrapper'>
+        <PlayButtonWrapper className='button-wrapper'>
           <Button>Jogar</Button>
-        </ButtonWrapper>
+        </PlayButtonWrapper>
       </CardContentWrapper>
     </CardWrapperCard>
   );

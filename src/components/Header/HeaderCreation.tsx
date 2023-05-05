@@ -100,13 +100,44 @@ const WrapItems = styled.div`
  
 const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick, isSaved }) => {
 
-  const { loading } = useContext(CreationContext)
+  const { loading , setLoading} = useContext(CreationContext)
   const { editingGame, updateGame, setEditingGame,  } = useContext(GameContext)
   const [titleTemp, setTitleTemp] = useState('');
+  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+  const { pages, setPages } = useContext(CreationContext)
+  const { deleteGameByID } = useContext(GameContext)
+
+
+
+  const debounceSaveChanges = () => {
+    setLoading(true)
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    const idTimer = setTimeout(() => {
+      saveChanges();
+    }, 1000);
+    setTimerId(idTimer);
+  };
+  
+  const saveChanges = () => {
+    setLoading(false);
+    updateGame(editingGame!);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+    };
+  }, [timerId]);
+  
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitleTemp(event.target.value);
   };
+
   
   useEffect(() => {
     if (editingGame) {
@@ -114,22 +145,33 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
     }
   }, [editingGame]);
 
+  // Debounce no titulo causando erros
   useEffect(() => {
     console.log(editingGame)
     if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0)) {
-      console.log("Entrou")
       const newEditingGame = {...editingGame, title: titleTemp};
       setEditingGame(newEditingGame);
       updateGame(newEditingGame);
+      // debounceSaveChanges()
     }
   }, [titleTemp])
+
+  //Tratamento para historia criada vazia, sem paginas e sem titulo
+  const handleBack = () => {
+    if (editingGame) {
+      if(pages.length === 0 && editingGame.title === "Nova história"){
+        console.log("apagando jogo")
+        deleteGameByID(editingGame.id)
+      }
+    }
+  };
 
 
   return (
     
     <HeaderContainer>
       <WrapItems>
-        <BackButton href={HOME}>
+        <BackButton href={HOME} onClick={handleBack}>
           <MdArrowBack color="#fff" size={24} />
         </BackButton>
         <HeaderText>Voltar</HeaderText>
@@ -151,7 +193,7 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
             onChange={handleChange}
           >
           </StorieTitle>
-        <CreateButton href={PLAYGAME + '/' + id} onClick={onCreateClick}>Testar</CreateButton>
+        <CreateButton href={PLAYGAME + '/' + id + '?test=true'} onClick={onCreateClick}>Testar</CreateButton>
       </WrapItems>
     </HeaderContainer>
   );

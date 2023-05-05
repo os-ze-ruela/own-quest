@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { HiPlus } from 'react-icons/hi';
 import { MdOutlineAddCircleOutline } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
@@ -7,11 +7,14 @@ import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated
 import { AuthContext } from '../../contexts/auth';
 import { CreationContext } from '../../contexts/creation';
 import { GameContext } from '../../contexts/game';
-import { ActualPage, AddButton, AddPage, Body, ButtonContainer, CreationBody, CreationStyle, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu } from '../../styles/Creation';
+import { ActualPage, AddButton, AddPage, Body, ButtonContainer, CreationBody, CreationStyle, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu, PopupContainer } from '../../styles/Creation';
 import ButtonActionBar from './components/ButtonActionBar';
 import NoPagePlaceholder from './components/NoPagePlaceholder';
 import PageActionBar from './components/PageActionBar';
 import Popup from '../../components/Popup/Popup';
+import Sidebar from '../../components/Sidebar/Sidebar';
+
+
 
 
 const Creation = () => {
@@ -36,9 +39,52 @@ const Creation = () => {
   const { destinyPage, setDestinyPage} = useContext(CreationContext)
   const { handleButton } = useContext(CreationContext)
   const { getGameById } = useContext(GameContext)
-
   const { id } = useParams()
+  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+  const {loading, setLoading} = useContext(CreationContext)
+
+
+  const debounceSaveChanges = () => {
+    setLoading(true)
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    const idTimer = setTimeout(() => {
+      saveChanges();
+    }, 500);
+    setTimerId(idTimer);
+  };
   
+  const saveChanges = () => {
+    setLoading(false);
+    updatePage(pages[indexSelected])
+  };
+
+  const debounceSaveChangesButton = () => {
+    setLoading(true)
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    const idTimer = setTimeout(() => {
+      saveChangesButton();
+    }, 500);
+    setTimerId(idTimer);
+  };
+  
+  const saveChangesButton = () => {
+    setLoading(false);
+    updateButton(pages[indexSelected].buttons[indexButton])
+    console.log("atualizou botao")
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+    };
+  }, [timerId]);
+
   
   useEffect( () =>  {
     getPagesFromGameID(id!)
@@ -48,7 +94,13 @@ const Creation = () => {
   
   return (
     <CreationBody>
-      <Popup message="Após selecionar um botão, clique duas vezes na página para voltar a edita-lá" />
+      <PopupContainer top={'200px'} left={'20px'}>
+        <Popup message="🚨 Após selecionar um botão, clique duas vezes na página para voltar a edita-lá" />
+        <Popup message="🚨 Após selecionar a página destino do botão, você pode usar o atalho F4 para ir até ela" />
+      </PopupContainer>
+      <PopupContainer top={'700px'} left={'1200px'}>
+        <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" />
+      </PopupContainer>
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} />
       <CreationStyle>
@@ -79,7 +131,8 @@ const Creation = () => {
                     let pagesTemp = [...pages];
                     pagesTemp[indexSelected].title = event.target.value;
                     setPages(pagesTemp);
-                    updatePage(pages[indexSelected])
+                    // updatePage(pages[indexSelected])
+                    debounceSaveChanges()
                   }}
                 />
                 <PageDescription
@@ -91,7 +144,8 @@ const Creation = () => {
                     let pagesTemp = [...pages];
                     pagesTemp[indexSelected].description = event.target.value;
                     setPages(pagesTemp);
-                    updatePage(pages[indexSelected])
+                    // updatePage(pages[indexSelected])
+                    debounceSaveChanges()
                   }}
                 />
                 <ButtonContainer>
@@ -107,7 +161,14 @@ const Creation = () => {
                       }}
                       onChange={(event) => {
                         handleTextChange(indexSelected, index, event.target.value);
-                        updateButton(button)
+                        // updateButton(button)
+                        debounceSaveChangesButton()
+                      }}
+                      onKeyDown={(event) => {
+                        if (event.key === "F4" && button.nextPageId !== -1) {
+                          setActionBarSelected(true)
+                          setIndexSelected(findPageIndex(pages, button.nextPageId))
+                        }
                       }}
                     />
                   ))}
@@ -124,6 +185,7 @@ const Creation = () => {
               <PageListContainer>
                 {pages.map((page, index) => (
                   <MiniPage
+                    isLastPage = {page.isLastPage}
                     isSelected={index === indexSelected}
                     background={page.color}
                     key={index}
@@ -142,6 +204,7 @@ const Creation = () => {
               </PageListContainer>
             </PagesMenu>
           </PageBody>
+          <Sidebar/>
         </Body>
       </CreationStyle>
     </CreationBody >

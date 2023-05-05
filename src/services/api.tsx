@@ -129,8 +129,6 @@ export const getButton = async (id: number) => {
     return await api.delete(`/button/${id}`)
 }
 
-// --- Category ---
-
 // --- Verification ---
 
 export const sendEmail = async() =>{
@@ -140,3 +138,9 @@ export const sendEmail = async() =>{
 export const verifyEmail = async (token: string) =>{
     return await api.post(`/user/verify-email/${token}`)
 }
+
+export const deleteGame = async (id: number) => {
+    return await api.delete(`/game/${id}`)
+}
+
+// --- Category ---
