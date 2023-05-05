@@ -265,8 +265,11 @@ export const MiniPage = styled.button.attrs((props: {isLastPage: boolean, isSele
 
 `;
 
-export const PopupContainer = styled.div`
-  width: 300px;
-
-
+export const PopupContainer = styled.div.attrs((props: {top: string, left: string}) => props)`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: fixed;
+  top: ${props => props.top};
+  left: ${props => props.left};
 `;

@@ -3,7 +3,7 @@ import ColorPicker from "../../../components/ButtonWithColorPicker/ButtonWithCol
 import CheckBoxButton from "../../../components/CheckBoxButton/CheckBoxButton";
 import { ActionsBar, CheckBoxText, DeleteButton } from "../../../styles/Creation";
 import { CreationContext } from "../../../contexts/creation";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 
 
 function PageActionBar() {
@@ -14,6 +14,33 @@ function PageActionBar() {
     const {handleCheckboxClick} = useContext(CreationContext)
     const {updatePage} = useContext(CreationContext)
     const {handleDeletePage} = useContext(CreationContext)
+
+    const {loading, setLoading} = useContext(CreationContext)
+    const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+
+    const debounceSaveChanges = () => {
+      setLoading(true)
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+      const idTimer = setTimeout(() => {
+        saveChanges();
+      }, 1000);
+      setTimerId(idTimer);
+    };
+    
+    const saveChanges = () => {
+      setLoading(false);
+      updatePage(pages[indexSelected])
+    };
+  
+    useEffect(() => {
+      return () => {
+        if (timerId) {
+          clearTimeout(timerId);
+        }
+      };
+    }, [timerId]);
     
 
     return <ActionsBar>
@@ -23,7 +50,8 @@ function PageActionBar() {
           let pagesTemp = [...pages];
           pagesTemp[indexSelected].color = color;
           setPages(pagesTemp);
-          updatePage(pagesTemp[indexSelected])
+          // updatePage(pagesTemp[indexSelected])
+          debounceSaveChanges()
         } } />
       <CheckBoxText>Última página?</CheckBoxText>
       <CheckBoxButton checked={pages[indexSelected].isLastPage} onClick={handleCheckboxClick}></CheckBoxButton>

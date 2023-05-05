@@ -1,10 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect} from 'react';
 import { BsCloudArrowDown, BsCloudCheck } from 'react-icons/bs';
 import { MdArrowBack } from 'react-icons/md';
 import styled from 'styled-components';
 import { CreationContext } from '../../contexts/creation';
 import { GameContext } from '../../contexts/game';
-import { PLAYGAME } from '../../core/app-urls';
+import { GAME, PLAYGAME } from '../../core/app-urls';
+import { useParams } from 'react-router-dom';
 
 interface HeaderProps {
     onBackClick: () => void;
@@ -20,7 +21,7 @@ const HeaderContainer = styled.div`
   padding: 0px 10px;
 `;
 
-const BackButton = styled.button`
+const BackButton = styled.a`
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -92,13 +93,13 @@ const WrapItems = styled.div`
 const HeaderTestingGame: React.FC<HeaderProps> = ({ onBackClick }) => {
 
   const { loading } = useContext(CreationContext)
-
+  const { id } = useParams()
 
   return (
     
     <HeaderContainer>
       <WrapItems>
-        <BackButton onClick={onBackClick}>
+        <BackButton href={GAME+"/"+id}>
           <MdArrowBack color="#fff" size={20} />
         </BackButton>
         <HeaderText>Voltar</HeaderText>

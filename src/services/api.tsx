@@ -129,4 +129,9 @@ export const getButton = async (id: number) => {
     return await api.delete(`/button/${id}`)
 }
 
+
+export const deleteGame = async (id: number) => {
+    return await api.delete(`/game/${id}`)
+}
+
 // --- Category ---

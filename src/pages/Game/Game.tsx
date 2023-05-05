@@ -5,6 +5,8 @@ import { ActualPage, Body, ButtonGame, ButtonContainer, GameBody, GameStyle, Pag
 import HeaderTestingGame from '../../components/Header/HeaderTestingGame';
 import { useNavigate  } from 'react-router-dom';
 import { GAME } from '../../core/app-urls';
+import { Snackbar, Alert } from '@mui/material';
+
 
 
 const Game = () => {
@@ -14,7 +16,14 @@ const Game = () => {
     const { pages, setPages } = useContext(CreationContext)
     const { id } = useParams()
     const navigate = useNavigate();
+    const [alert, setAlert] = useState(false)
     
+    const searchParams = new URLSearchParams(window.location.search);
+
+    //Para diferenciar o teste do jogar
+    const test = searchParams.get("test");
+
+
     useEffect( () =>  {
         getPagesFromGameID(id!)
       }, [])  
@@ -28,10 +37,17 @@ const Game = () => {
         setButtonIndex(index) 
       };
       
+    const handleCloseAlert = () => {
+        setAlert(false)
+      };
+      
 
     //BUG TO FIX - quando um botão é deselecionado o index ainda é mantidado e caso o botão Continuar seja pressionado será redirecionado
     const handleClickButton = () => {
-      if(pages[indexPage].isLastPage === true){
+      if(pages[indexPage].buttons[buttonIndex].nextPageId === -1){
+        setAlert(true)
+      }
+      else if(pages[indexPage].isLastPage === true){
         navigate(GAME+"/"+id);
       }
       else{
@@ -44,6 +60,11 @@ const Game = () => {
       
   return (
     <GameBody>
+      <Snackbar open={alert} autoHideDuration={4000} onClose={handleCloseAlert}>
+          <Alert onClose={handleCloseAlert} severity="warning" sx={{ backgroundColor:'#ffc341', color: 'black', width: '100%'}}>
+            Botão não possui uma página de destino
+          </Alert>
+      </Snackbar>
         <HeaderTestingGame onBackClick={handleBackClick}/>
       <GameStyle>
         <Body>
@@ -54,12 +75,14 @@ const Game = () => {
               ) : (
                 <Page background={pages[indexPage].color}>
                 <PageTitle
+                  readOnly
                   type="text"
                   name="PageTitle"
                   autoComplete="off"
                   value={pages[indexPage].title}
                 />
                 <PageDescription
+                  readOnly
                   name="PageDescription"
                   autoComplete="off"
                   value={pages[indexPage].description}
