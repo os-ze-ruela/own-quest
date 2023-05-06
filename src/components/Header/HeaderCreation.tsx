@@ -1,16 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BsCloudArrowDown, BsCloudCheck } from 'react-icons/bs';
+import { FcSettings } from 'react-icons/fc';
+import { RiSettings5Fill } from 'react-icons/ri';
 import { MdArrowBack } from 'react-icons/md';
 import styled from 'styled-components';
 import { CreationContext } from '../../contexts/creation';
 import { GameContext } from '../../contexts/game';
-import { HOME, PLAYGAME } from '../../core/app-urls';
+import { GAME, HOME, PLAYGAME, SETTINGS } from '../../core/app-urls';
 
 interface HeaderProps {
     id: number;
     onBackClick: () => void;
     onCreateClick: () => void;
     isSaved: boolean;
+    set: boolean;
   }
   
 
@@ -21,6 +24,15 @@ const HeaderContainer = styled.div`
   align-items: center;
   background: linear-gradient(90deg, #568EA3 0.03%, #6FFFE9 100.03%);
   padding: 0px 10px;
+`;
+
+const HeaderContainer2 = styled.div`
+  display: flex;
+  height: 8%;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #568EA3 0.03%, #6FFFE9 100.03%);
+  padding: 14px 10px;
 `;
 
 const BackButton = styled.a`
@@ -96,9 +108,13 @@ const WrapItems = styled.div`
       gap: 1rem;
   }
 `
+const SettingIcon = styled.a`
+  color: white;
+  font-size: 28px;
+`
 
  
-const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick, isSaved }) => {
+const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick, isSaved, set }) => {
 
   const { loading , setLoading} = useContext(CreationContext)
   const { editingGame, updateGame, setEditingGame,  } = useContext(GameContext)
@@ -106,8 +122,6 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
   const { pages, setPages } = useContext(CreationContext)
   const { deleteGameByID } = useContext(GameContext)
-
-
 
   const debounceSaveChanges = () => {
     setLoading(true)
@@ -168,34 +182,58 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
 
 
   return (
-    
-    <HeaderContainer>
-      <WrapItems>
-        <BackButton href={HOME} onClick={handleBack}>
-          <MdArrowBack color="#fff" size={24} />
-        </BackButton>
-        <HeaderText>Voltar</HeaderText>
-        <SavedIcon isSaved={isSaved}>
-          {loading ? (
+    <>
+    {!set ?
+      <HeaderContainer>
+        <WrapItems>
+          <BackButton href={HOME} onClick={handleBack}>
+            <MdArrowBack color="#fff" size={24} />
+          </BackButton>
+          <HeaderText>Voltar</HeaderText>
+          <SavedIcon isSaved={isSaved}>
+            {loading ? (
               <BsCloudArrowDown size={30} color="#fff" />
-            ):(
-              <BsCloudCheck size={30} color="#fff" />
-          )}
-        </SavedIcon>
-      </WrapItems>
-      <WrapItems>
-        <StorieTitle       
-            type="text"
-            name="StorieTitle"
-            autoComplete="off"
-            value={titleTemp!}
-            placeholder="Minha primeira história"
-            onChange={handleChange}
-          >
-          </StorieTitle>
-        <CreateButton href={PLAYGAME + '/' + id + '?test=true'} onClick={onCreateClick}>Testar</CreateButton>
-      </WrapItems>
-    </HeaderContainer>
+              ):(
+                <BsCloudCheck size={30} color="#fff" />
+                )}
+          </SavedIcon>
+        </WrapItems>
+        <WrapItems>
+          <StorieTitle       
+              type="text"
+              name="StorieTitle"
+              autoComplete="off"
+              value={titleTemp!}
+              placeholder="Minha primeira história"
+              onChange={handleChange}
+              >
+            </StorieTitle>
+          <SettingIcon href={SETTINGS + '/' + id}><RiSettings5Fill/></SettingIcon>
+          <CreateButton href={PLAYGAME + '/' + id + '?test=true'} onClick={onCreateClick}>Testar</CreateButton>
+        </WrapItems>
+      </HeaderContainer>
+      :
+      <HeaderContainer2>
+        <WrapItems>
+          <BackButton href={GAME + '/' + id} onClick={handleBack}>
+            <MdArrowBack color="#fff" size={24} />
+          </BackButton>
+          <HeaderText>Voltar</HeaderText>
+        </WrapItems>
+        <WrapItems>
+          <StorieTitle       
+              type="text"
+              name="StorieTitle"
+              autoComplete="off"
+              value={titleTemp!}
+              placeholder="Minha primeira história"
+              onChange={handleChange}
+              >
+            </StorieTitle>
+        </WrapItems>
+      </HeaderContainer2>
+      }
+    </>
   );
 };
 

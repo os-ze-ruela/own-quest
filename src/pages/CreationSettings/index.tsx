@@ -2,15 +2,16 @@ import { Link, useParams } from "react-router-dom";
 import HeaderCreation from "../../components/Header/HeaderCreation";
 import { useContext, useEffect, useState } from "react";
 import { CreationContext } from "../../contexts/creation";
-import { DeleteButton, DescriptionInput, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
+import { Body, DeleteButton, DescriptionInput, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
 import { GameContext } from "../../contexts/game";
 import { GAME, HOME } from "../../core/app-urls";
+import { AuthContext } from "../../contexts/auth";
+import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
 
 export default function CreationSettings () {
-
-    
     
     const { id } = useParams()
+    const { user} = useContext(AuthContext);
     const { handleBackClick } = useContext(CreationContext)
     const { handleCreateClick, getPagesFromGameID } = useContext(CreationContext)
     const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID  } = useContext(GameContext)
@@ -61,7 +62,8 @@ export default function CreationSettings () {
 
     return(
     <>
-        <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} />
+        {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
+        <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={true}/>
         <SettingsContainer>
             <Title>Configurações da história</Title>
             <Separator/>
@@ -74,7 +76,7 @@ export default function CreationSettings () {
                 value={titleTemp!}
                 placeholder="Minha primeira história"
                 onChange={handleChange}
-            />
+                />
             <Separator/>
 
             <Titles>Descrição</Titles>
@@ -85,7 +87,7 @@ export default function CreationSettings () {
                 value={descTemp!}
                 placeholder="Essa é uma nova história criada no Own QUest."
                 onChange={handleChange2}
-            />
+                />
             <Separator/>
 
             <Titles>Caregorias adicionadas:</Titles>

@@ -102,7 +102,7 @@ const Creation = () => {
         <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" />
       </PopupContainer>
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
-      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} />
+      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={false}/>
       <CreationStyle>
         <Body>
           <PageBody>
