@@ -119,7 +119,7 @@ export const patchGame = async (id: number, title: string, description: string, 
 export const postGame = async () => {
     return await api.post(`/game`, {
         "title": 'Nova história',
-        "description": 'Essa é uma nova história criado no Own QUest.',
+        "description": 'Essa é uma nova história criada no Own QUest.',
         "image": null,
         "categories": []
     })
