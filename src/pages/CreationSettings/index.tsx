@@ -6,10 +6,15 @@ import { AuthContext } from "../../contexts/auth";
 import { CreationContext } from "../../contexts/creation";
 import { GameContext } from "../../contexts/game";
 import { GAME, HOME } from "../../core/app-urls";
-import { DeleteButton, DescriptionInput, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
-import { CategoryLabel, CategoryLabelWrapper } from "../../styles/HomeLogged";
+import { CategorySettingsLabel, CategorySettingsLabelWrapper, DeleteButton, DescriptionInput, ImagePreview, ImageUploaderContainer, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
 
 export default function CreationSettings() {
+
+
+
+    interface ImageUploaderProps {
+        onImageUploaded: (imageUrl: string) => void;
+    }
 
     const { id } = useParams()
     const { user } = useContext(AuthContext);
@@ -61,6 +66,40 @@ export default function CreationSettings() {
         }
     }
 
+
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+    const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!event.target.files || !event.target.files[0]) {
+            return;
+        }
+
+        const selectedFile = event.target.files[0];
+        setSelectedImage(selectedFile);
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            setPreviewUrl(reader.result as string);
+        };
+        reader.readAsDataURL(selectedFile);
+    };
+
+    const handleImageUpload = async () => {
+        if (!selectedImage) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("image", selectedImage);
+        try {
+            // const response = await axios.post("/api/upload-image", formData);
+            // onImageUploaded(response.data.imageUrl);
+        } catch (error) {
+            console.error("Error uploading image:", error);
+        }
+    };
+
     return (
         <>
             {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
@@ -68,7 +107,12 @@ export default function CreationSettings() {
             <SettingsContainer>
                 <Title>Configurações da história</Title>
                 <Separator />
-
+                <ImageUploaderContainer>
+                    <input type="file" onChange={handleImageSelect} />
+                    {previewUrl && <ImagePreview src={previewUrl} />}
+                    {/* <button onClick={handleImageUpload}>Upload Image</button> */}
+                </ImageUploaderContainer>
+                <Separator />
                 <Titles>Título</Titles>
                 <TitleInput
                     type="text"
@@ -90,16 +134,27 @@ export default function CreationSettings() {
                     onChange={handleChange2}
                 />
                 <Separator />
-
                 <Titles>Caregorias adicionadas:</Titles>
                 {/* <h2>Em processo</h2> */}
-                <CategoryLabelWrapper className='category-label-wrapper'>
+                <CategorySettingsLabelWrapper className='category-label-wrapper'>
                     {editingGame?.categories.map((category) => (
-                        <CategoryLabel key={category.id} color={category.color}>
+                        <CategorySettingsLabel key={category.id} color={category.color}>
                             {category.title}
-                        </CategoryLabel>
+                            <button>x</button>
+                        </CategorySettingsLabel>
                     ))}
-                </CategoryLabelWrapper>
+                </CategorySettingsLabelWrapper>
+                <Separator />
+                <Titles>Caregorias disponíveis:</Titles>
+                {/* <h2>Em processo</h2> */}
+                <CategorySettingsLabelWrapper className='category-label-wrapper'>
+                    {editingGame?.categories.map((category) => (
+                        <CategorySettingsLabel key={category.id} color={category.color}>
+                            {category.title}
+                            <button>x</button>
+                        </CategorySettingsLabel>
+                    ))}
+                </CategorySettingsLabelWrapper>
                 <Separator />
                 <Titles>Excluir história</Titles>
                 <WrapTextButton>
@@ -112,4 +167,8 @@ export default function CreationSettings() {
             </SettingsContainer>
         </>
     );
+}
+
+function onImageUploaded(imageUrl: any) {
+    throw new Error("Function not implemented.");
 }

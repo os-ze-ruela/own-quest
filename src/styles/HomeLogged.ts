@@ -86,7 +86,7 @@ export const ListMyGamesCardContainer = styled.div.attrs((props: { translateX: s
     width: 100%;
     gap: 2rem;
     padding: 0px 1rem;
-    transition: all 2s ease-in-out;
+    transition: all 1s ease-in-out;
     transform: translateX(${(props) => (props.translateX)});
 `;
 
