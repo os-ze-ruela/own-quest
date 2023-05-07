@@ -6,17 +6,89 @@ type CategoryLabelProps = {
 
 export const LoggedStyle = styled.div`
   background-color: #282C3E;
+  overflow: hidden;
   width: 100%;
-  padding: 12px 24px;
   -moz-box-sizing: border-box; 
   -webkit-box-sizing: border-box; 
   box-sizing: border-box; 
-
   
   @media screen and (max-width: 1024px) {
     padding: 4px 12px;
   }
 `
+
+export const MyGamesPaginationContainer = styled.div.attrs((props: { direction: string, }) => props)`
+    height: 100%;
+    width: 80px;
+    position: absolute;
+    right: ${(props) => (props.direction === 'right' ? '0px' : '0' )};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    size: 100px;
+    transition: all 0.2s ease-in-out;
+    opacity: 0;
+    border-radius: 10px 0px 0px 20px;  
+
+    &:hover {
+        background-color: rgba(0,0,0,0.5);
+        box-shadow: 0px 0px 50px 30px rgba(0,0,0,0.3);
+    }
+
+    button {
+      text-decoration: none;
+      border-style: none;
+      background-color: transparent;
+    }
+
+   .nextIcon {
+        transition: all 0.3s ease-in-out;
+        filter: drop-shadow(0px 0px 40px 30px rgba(0,0,0,0.3));
+        opacity: 0.3;
+        width: 35px;
+        height: 35px;
+
+        &:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+    }
+`
+
+export const MyGameListContainer = styled.div`
+    position: relative;
+    width: 100%;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box;
+
+    button {
+      background-color: transparent;
+      text-decoration: none;
+      border-style: none;
+    }
+    
+    &:hover {
+        ${MyGamesPaginationContainer} {
+            opacity: 1;
+        }
+    } 
+`
+
+export const ListMyGamesCardContainer = styled.div.attrs((props: { translateX: string, }) => props)`
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 2rem;
+    padding: 0px 1rem;
+    transition: all 2s ease-in-out;
+    transform: translateX(${(props) => (props.translateX)});
+`;
 
 export const Title = styled.div`
     font-weight: bold;
@@ -42,6 +114,7 @@ export const PageWrapper = styled.div`
   gap: 2rem;
   /* max-width: 1100px; */
   margin: 12px auto;
+  
 `;
 
 export const CardWrapper = styled.div`
@@ -62,7 +135,7 @@ export const CardWrapperCard = styled.div`
   min-width: 400px;
   /* max-width: 500px; */
   transition: all 0.2s ease-in-out;
-  height: 180px;
+  height: 150px;
   
   &:hover {
     transform: translateY(-4px);
@@ -118,7 +191,7 @@ export const CardContentWrapper = styled.div`
 
  p { 
   font-family: 'FiraCode-Light';
-  font-size: 0.9rem;
+  font-size: 12px;
  }
  
 `;
@@ -126,7 +199,7 @@ export const CardContentWrapper = styled.div`
 export const CardTitle = styled.h3`
   color: white;
   margin: 0;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 600;
   margin-top: 12px;
 `;
@@ -143,7 +216,7 @@ export const CategoryLabelWrapper = styled.div`
 `;
 
 export const CategoryLabel = styled.span<CategoryLabelProps>`
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 500;
   /* background-color: ${(props) => props.color}; */
   background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
@@ -170,7 +243,7 @@ export const Button = styled.a`
   border-radius: 4px;
   padding: 8px 16px;
   border: none;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
@@ -272,8 +345,8 @@ export const CardUserGameWrapper = styled.div`
   background-color: #202331;
   border-radius: 15px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  width: 23%;
-  min-width: 250px;
+  width: 35%;
+  min-width: 300px;
   transition: all 0.2s ease-in-out;
   height: 350px;
 

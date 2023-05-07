@@ -33,6 +33,8 @@ export const TitleInput = styled.input`
     border-radius: 0.7em;
     border: none;
     margin-bottom: 0.7em;
+    padding-top: 12px;
+    padding-left: 8px;
     padding-bottom: 1.5em;
     font-family: FiraCode-light;
     font-weight: 400;
@@ -50,7 +52,9 @@ export const DescriptionInput = styled.input`
     border-radius: 0.7em;
     border: none;
     margin-bottom: 0.7em;
-    padding-bottom: 4.5em;
+    padding-top: 12px;
+    padding-left: 8px;
+    padding-bottom: 3em;
     font-family: FiraCode-light;
     font-weight: 400;
     font-size: 16px;
@@ -64,6 +68,7 @@ export const WrapTextButton = styled.div`
     flex-direction: row;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 `
 export const TitlesInfo = styled.p`
     color: white;

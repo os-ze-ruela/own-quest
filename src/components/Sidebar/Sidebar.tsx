@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
+import { CreationContext } from "../../contexts/creation";
 
 const SidebarContainer = styled.div<{ isCollapsed: boolean }>`
   position: fixed;
@@ -56,7 +57,8 @@ const SubMenuItem = styled.li`
 `;
 
 const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const { pages } = useContext(CreationContext)
 
   const handleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -68,7 +70,29 @@ const Sidebar = () => {
         {isCollapsed ? "◀" : "▶"}
       </Button>
       <Menu>
-        <MenuItem>
+        {
+          pages.map((page, index) => (
+            <MenuItem>
+              📄Page {index + 1}
+              <SubMenu>
+                {
+                  page.buttons.map((button, index) => (
+                    <>
+                      🔘Button {index + 1}
+                      <SubMenu>
+                        <SubMenuItem>
+                          ➡️Page {button.nextPageId}
+                        </SubMenuItem>
+                      </SubMenu>
+                    </>
+                  ))
+                }
+              </SubMenu>
+            </MenuItem>
+          )
+          )
+        }
+        {/* <MenuItem>
         📄Page 1
         <SubMenu>
             <SubMenuItem>
@@ -108,7 +132,7 @@ const Sidebar = () => {
           <SubMenu>
             <SubMenuItem>🔘Button 1</SubMenuItem>
           </SubMenu>
-        </MenuItem>
+        </MenuItem> */}
       </Menu>
     </SidebarContainer>
   );

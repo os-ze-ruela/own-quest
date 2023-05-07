@@ -45,6 +45,7 @@ export const SearchInput = styled.input`
     border: none;
     outline: none;
     font-family: 'FiraCode-Regular';
+    box-shadow: drop-shadow(0px 2px 5px rgba(0,0,0,0.2));
 
     input:-webkit-autofill {
         -webkit-text-fill-color: blue !important;
@@ -71,35 +72,45 @@ export const TitleListGames = styled.h3`
     margin-left: 2rem;
 `
 
-export const PaginationContainer = styled.div`
-    height: 100%;
-    width: 60px;
-    position: absolute;
-    right: 0;
-    /* top: 50px; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    size: 100px;
-    transition: all 0.2s ease-in-out;
-    opacity: 0;
+export const PaginationContainer = styled.div.attrs((props: { direction: string, }) => props)`
+  height: 100%;
+  width: 80px;
+  position: absolute;
+  right: ${(props) => (props.direction === 'right' ? '0px' : '0' )};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  size: 100px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+  border-radius: 10px 0px 0px 20px;  
 
-   .nextIcon {
-        transition: all 0.3s ease-in-out;
-        filter: drop-shadow(0px 0px 50px 30px rgba(0,0,0,0.3));
-        opacity: 0.3;
-        width: 35px;
-        height: 35px;
-        fill: green;
+  &:hover {
+      background-color: rgba(0,0,0,0.5);
+      box-shadow: 0px 0px 50px 30px rgba(0,0,0,0.3);
+  }
 
-        &:hover {
-            cursor: pointer;
-            opacity: 0.8;
-        }
+  button {
+      text-decoration: none;
+      border-style: none;
+      background-color: transparent;
+  }
+
+.nextIcon {
+    transition: all 0.3s ease-in-out;
+    filter: drop-shadow(0px 0px 40px 30px rgba(0,0,0,0.3));
+    opacity: 0.3;
+    width: 35px;
+    height: 35px;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.8;
     }
+}
 `
 
-export const ListGamesCardContainer = styled.div`
+export const ListGamesCardContainer = styled.div.attrs((props: { translateX: string, }) => props)`
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -110,6 +121,9 @@ export const ListGamesCardContainer = styled.div`
     -moz-box-sizing: border-box; 
     -webkit-box-sizing: border-box; 
     box-sizing: border-box;
+    
+    transition: all 2s ease-in-out;
+    transform: translateX(${(props) => (props.translateX)});
 
 
     &:hover {

@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import nextIcon from '../../assets/img/next-icon.svg';
 import Card from '../../components/Cards/Card';
-import { LoadingCard } from '../../components/Cards/CardHomeShimmer';
+import { CardHomeShimmer } from '../../components/Cards/CardHomeShimmer';
 import CardUserGame from '../../components/Cards/CardUserGame';
 import EmptyCard from '../../components/Cards/EmptyCard';
 import HeaderLogged from '../../components/Header/HeaderLogged';
@@ -10,7 +11,7 @@ import { AuthContext } from '../../contexts/auth';
 import { GameContext } from '../../contexts/game';
 import AppError from '../../core/app-error';
 import { GAME } from '../../core/app-urls';
-import { LoggedStyle, PageUserGameWrapper, PageWrapper, Title } from '../../styles/HomeLogged';
+import { ListMyGamesCardContainer, LoggedStyle, MyGameListContainer, MyGamesPaginationContainer, PageWrapper, Title } from '../../styles/HomeLogged';
 
 const HomeLogged = () => {
   const { user, refresh, logout } = useContext(AuthContext)
@@ -49,19 +50,66 @@ const HomeLogged = () => {
   const { createGame } = useContext(GameContext)
   const navigate = useNavigate()
 
+  const [sliderOffset, setSliderOffset] = useState(0);
+
 
   return (
     <>
       <HeaderLogged nickname={user!.nickname} photo={user!.photo} />
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <LoggedStyle>
+        <Title>Minhas histórias</Title>
+        <MyGameListContainer>
+          <MyGamesPaginationContainer direction='left'>
+            <button onClick={() => {
+              setSliderOffset(sliderOffset - 1);
+            }}>
+              <img src={nextIcon} alt="next games" className='nextIcon' />
+            </button>
+          </MyGamesPaginationContainer>
+          <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
+            {userGames.length === 0 ? (
+              <EmptyCard onClick={async () => {
+                try {
+                  const id = await createGame();
+                  navigate(GAME + '/' + id)
+                } catch (e) {
+                  const error = await e as AppError;
+                  alert(error)
+                }
+              }} />
+            ) : (
+              <>
+                {userGames.map((game, index) => (
+                  <CardUserGame
+                    key={index}
+                    id={game.id}
+                    title={game.title}
+                    imageSrc={`https://picsum.photos/300/200?random=1`}
+                    isPublished={game.isPublished}
+                    description={game.description}
+                    categories={game.categories}
+                  />
+                ))}
+              </>
+            )}
+          </ListMyGamesCardContainer>
+          <MyGamesPaginationContainer direction='right'>
+            <button onClick={() => {
+              setSliderOffset(sliderOffset + 1);
+            }}>
+              <img src={nextIcon} alt="next games" className='nextIcon' />
+            </button>
+          </MyGamesPaginationContainer>
+        </MyGameListContainer>
         <Title>Histórias mais bem avaliadas</Title>
         <PageWrapper>
           {isLoading ? (
             <>
-              <LoadingCard />
-              <LoadingCard />
-              <LoadingCard />
+              <CardHomeShimmer />
+              <CardHomeShimmer />
+              <CardHomeShimmer />
+              <CardHomeShimmer />
             </>
           ) :
             games.map((game, index) => (
@@ -74,35 +122,7 @@ const HomeLogged = () => {
               />
             ))}
         </PageWrapper>
-        <Title>Minhas histórias</Title>
-        <PageUserGameWrapper>
-          {userGames.length === 0 ? (
-            <EmptyCard onClick={async () => {
-              try {
-                const id = await createGame();
-                navigate(GAME + '/' + id)
-              } catch (e) {
-                const error = await e as AppError;
-                alert(error)
-              }
-            }} />
-          ) : (
-            <>
-              {userGames.map((game, index) => (
-                <CardUserGame
-                  key={index}
-                  id={game.id}
-                  title={game.title}
-                  imageSrc={`https://picsum.photos/300/200?random=${randomInt()}`}
-                  isPublished={game.isPublished}
-                  description={game.description}
-                  categories={game.categories}
-                />
-              ))}
-            </>
-          )}
-        </PageUserGameWrapper>
-      </LoggedStyle>
+      </LoggedStyle >
     </>
   );
 };
