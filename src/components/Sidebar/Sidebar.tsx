@@ -29,8 +29,29 @@ const Button = styled.button`
 
 const Menu = styled.ul`
   /* margin-top: 80px; */
+  height: 100%;
   padding-left: 20px;
   list-style: none;
+  overflow: scroll;
+
+
+    scrollbar-width: thin;
+    scrollbar-color: #568EA3 #000;
+  
+
+  /* estilo da barra de rolagem para o Google Chrome */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #000;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #568EA3;
+    border-radius: 10px;
+  }
 `;
 
 const MenuItem = styled.li`
@@ -58,7 +79,7 @@ const SubMenuItem = styled.li`
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const { pages } = useContext(CreationContext)
+  const { pages, findPageIndex, setIndexSelected } = useContext(CreationContext)
 
   const handleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -72,17 +93,25 @@ const Sidebar = () => {
       <Menu>
         {
           pages.map((page, index) => (
-            <MenuItem>
-              📄Page {index + 1}
+            <MenuItem onClick={() => {
+              setIndexSelected(index);
+            }} >
+              📄 {page.title}
               <SubMenu>
                 {
                   page.buttons.map((button, index) => (
                     <>
-                      🔘Button {index + 1}
+                      🔘 {button.title} <br />
                       <SubMenu>
-                        <SubMenuItem>
-                          ➡️Page {button.nextPageId}
-                        </SubMenuItem>
+                        {findPageIndex(pages, button.nextPageId) > -1 ? (
+                          <SubMenuItem onClick={() => {
+                            setIndexSelected(findPageIndex(pages, button.nextPageId));
+                          }}>
+                            ➡️Page {findPageIndex(pages, button.nextPageId) + 1}
+                          </SubMenuItem>
+                        ) : (
+                          <></>
+                        )}
                       </SubMenu>
                     </>
                   ))
@@ -98,8 +127,8 @@ const Sidebar = () => {
             <SubMenuItem>
                 🔘Button 1
                 <SubMenu>
-                <SubMenuItem>➡️Page 2</SubMenuItem>
-              </SubMenu>
+                  <SubMenuItem>➡️Page 2</SubMenuItem>
+                </SubMenu>
             </SubMenuItem>
             <SubMenuItem>
                 🔘Button 2

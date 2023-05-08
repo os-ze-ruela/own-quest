@@ -4,21 +4,35 @@ import HeaderCreation from "../../components/Header/HeaderCreation";
 import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
 import { AuthContext } from "../../contexts/auth";
 import { CreationContext } from "../../contexts/creation";
+import { AddButton, Body, CategoriesLabel, DeleteButton, DescriptionInput, ListCategories, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
 import { GameContext } from "../../contexts/game";
 import { GAME, HOME } from "../../core/app-urls";
-import { DeleteButton, DescriptionInput, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
-import { CategoryLabel, CategoryLabelWrapper } from "../../styles/HomeLogged";
+import { AuthContext } from "../../contexts/auth";
+import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
+import { CategoryLabel } from "../../styles/HomeLogged";
+import AppError from '../../core/app-error';
+import { GameContext } from "../../contexts/game";
+import { GAME, HOME } from "../../core/app-urls";
+import { CategorySettingsLabel, CategorySettingsLabelWrapper, DeleteButton, DescriptionInput, ImagePreview, ImageUploaderContainer, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
 
 export default function CreationSettings() {
 
+
+
+    interface ImageUploaderProps {
+        onImageUploaded: (imageUrl: string) => void;
+    }
+
     const { id } = useParams()
-    const { user } = useContext(AuthContext);
+    const { user, refresh, logout } = useContext(AuthContext);
     const { handleBackClick } = useContext(CreationContext)
     const { handleCreateClick, getPagesFromGameID } = useContext(CreationContext)
-    const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID } = useContext(GameContext)
-    const [titleTemp, setTitleTemp] = useState('');
-    const [descTemp, setDescTemp] = useState('');
-
+    const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID, games, getHotGamesForHome } = useContext(GameContext)
+    const [ titleTemp, setTitleTemp ] = useState('');
+    const [ descTemp, setDescTemp ] = useState('');
+    const [ categTemp, setCategTemp ] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+                                               
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitleTemp(event.target.value);
     };
@@ -29,8 +43,9 @@ export default function CreationSettings() {
 
     useEffect(() => {
         if (editingGame) {
-            setTitleTemp(editingGame.title);
-            setDescTemp(editingGame.description)
+          setTitleTemp(editingGame.title);
+          setDescTemp(editingGame.description);
+          // setCategTemp(...categTemp, editingGame.categories);
         }
     }, [editingGame]);
 
@@ -61,22 +76,44 @@ export default function CreationSettings() {
         }
     }
 
-    return (
-        <>
-            {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
-            <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={true} />
-            <SettingsContainer>
-                <Title>Configurações da história</Title>
-                <Separator />
+    const fetchGames = async () => {
+        try {
+          await Promise.all([getHotGamesForHome()]);
+          setIsLoading(false)
+        } catch (e) {
+          setIsLoading(false)
+          const error = await e as AppError
+          if (error.statusCode === 401) {
+            try {
+              await refresh()
+              await fetchGames()
+            } catch (e) {
+              logout()
+            }
+          }
+        }
+      };
+      
+    useEffect(() => {
+        fetchGames()
+      }, [])
+    
+    return(
+    <>
+        {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
+        <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={true}/>
+        <SettingsContainer>
+            <Title>Configurações da história</Title>
+            <Separator/>
 
-                <Titles>Título</Titles>
-                <TitleInput
-                    type="text"
-                    name="StoryTitle"
-                    autoComplete="off"
-                    value={titleTemp!}
-                    placeholder="Minha primeira história"
-                    onChange={handleChange}
+            <Titles>Título</Titles>
+            <TitleInput
+                type="text"
+                name="StoryTitle"
+                autoComplete="off"
+                value={titleTemp!}
+                placeholder="Minha primeira história"
+                onChange={handleChange}
                 />
                 <Separator />
 
@@ -89,27 +126,33 @@ export default function CreationSettings() {
                     placeholder="Essa é uma nova história criada no Own Quest."
                     onChange={handleChange2}
                 />
-                <Separator />
+            <Separator/>
 
-                <Titles>Caregorias adicionadas:</Titles>
-                {/* <h2>Em processo</h2> */}
-                <CategoryLabelWrapper className='category-label-wrapper'>
-                    {editingGame?.categories.map((category) => (
-                        <CategoryLabel key={category.id} color={category.color}>
+            <Titles>Caregorias adicionadas:</Titles>
+                {games.map((game, index)=> (
+                    game.categories.map((category)=> (
+                        <ListCategories key={category.id}>
+                            <CategoriesLabel color={category.color}>
                             {category.title}
-                        </CategoryLabel>
+                            </CategoriesLabel>
+                        </ListCategories>   
+                    ))
                     ))}
-                </CategoryLabelWrapper>
-                <Separator />
-                <Titles>Excluir história</Titles>
-                <WrapTextButton>
-                    <TitlesInfo>Ao excluir a sua história, você não poderá mais acessar nem editar essa história novamente.</TitlesInfo>
-                    <DeleteButton href={HOME} onClick={handleDelete}>Excluir</DeleteButton>
-                </WrapTextButton>
-                <Link to={GAME + '/' + id}>
-                    <SaveButton>Salvar</SaveButton>
-                </Link>
-            </SettingsContainer>
-        </>
+                    <AddButton>+</AddButton>
+            <Separator/>
+            <Titles>Excluir história</Titles>
+            <WrapTextButton>
+                <TitlesInfo>Ao excluir a sua história, você não poderá mais acessar nem editar essa história novamente.</TitlesInfo>
+                <DeleteButton href={HOME} onClick={handleDelete}>Excluir</DeleteButton>
+            </WrapTextButton>
+            <Link to={GAME + '/' + id}>
+                <SaveButton>Salvar</SaveButton>
+            </Link>
+        </SettingsContainer>
+    </>
     );
+}
+
+function onImageUploaded(imageUrl: any) {
+    throw new Error("Function not implemented.");
 }

@@ -21,14 +21,15 @@ export const MyGamesPaginationContainer = styled.div.attrs((props: { direction: 
     height: 100%;
     width: 80px;
     position: absolute;
-    right: ${(props) => (props.direction === 'right' ? '0px' : '0' )};
+    /* left: ${(props) => (props.direction === 'left' ? '0px' : 'none' )}; */
     display: flex;
     justify-content: center;
     align-items: center;
     size: 100px;
     transition: all 0.2s ease-in-out;
     opacity: 0;
-    border-radius: 10px 0px 0px 20px;  
+    right: ${(props) => (props.direction === 'right' ? '0px' : '94vw' )};
+    border-radius: ${(props) => (props.direction === 'left' ? '0px 20px 20px 0px' : '20px 0px 0px 20px' )};  
 
     &:hover {
         background-color: rgba(0,0,0,0.5);
@@ -47,6 +48,7 @@ export const MyGamesPaginationContainer = styled.div.attrs((props: { direction: 
         opacity: 0.3;
         width: 35px;
         height: 35px;
+        transform: ${(props) => (props.direction === 'right' ? '0' : 'rotate(180deg)')};
 
         &:hover {
             cursor: pointer;
@@ -86,7 +88,7 @@ export const ListMyGamesCardContainer = styled.div.attrs((props: { translateX: s
     width: 100%;
     gap: 2rem;
     padding: 0px 1rem;
-    transition: all 2s ease-in-out;
+    transition: all 1s ease-in-out;
     transform: translateX(${(props) => (props.translateX)});
 `;
 

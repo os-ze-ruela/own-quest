@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+type CategoryLabelProps = {
+    color: string;
+  };
+
 export const Body = styled.div`
     height: 100%;
 `
@@ -9,6 +13,7 @@ export const SettingsContainer = styled.div`
     width: 68%;
     flex-direction: column;
     padding-left: 2%;
+    margin-bottom: 2rem;
 `
 export const Title = styled.h1`
     color: white;
@@ -43,7 +48,7 @@ export const TitleInput = styled.input`
     ::placeholder{
         color: white;
     }
-` 
+`
 export const DescriptionInput = styled.input`
     background-color: #30354B;
     color: white;
@@ -62,8 +67,34 @@ export const DescriptionInput = styled.input`
     ::placeholder{
         color: white;
     }
+    
 ` 
+export const ListCategories = styled.div`
+    flex-direction: row;
+    display: inline-block;
+    margin-right: 15px;
 
+`
+export const CategoriesLabel = styled.span<CategoryLabelProps>`
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 45%;
+  /* background-color: ${(props) => props.color}; */
+  background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
+  color: #ffffff;
+  padding: 4px 8px;
+`
+export const AddButton = styled.button`
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 45%;
+  /* background-color: blue; */
+  background: linear-gradient(to right, #ff00ff, #00ffff);
+  color: #ffffff;
+  padding: 4px 14px;
+  cursor: pointer;
+`
 export const WrapTextButton = styled.div`
     flex-direction: row;
     display: flex;
@@ -108,3 +139,41 @@ export const SaveButton = styled.button`
     font-size: 14px;
     padding: 0.5em;
 `
+export const CategorySettingsLabelWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  opacity: 1;
+  transition: all 0.2s ease-in-out;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+`;
+
+export const CategorySettingsLabel = styled.span<CategoryLabelProps>`
+  font-size: 14px;
+  font-weight: 500;
+  background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
+  color: #ffffff;
+  padding: 4px 8px;
+`;
+
+export const ImageUploaderContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    input {
+        text-decoration: none;
+        border-style: none;
+        font-size: 12px;
+        border-radius: 5px;
+        background-color: #568EA3;
+    }
+  `;
+
+export const ImagePreview = styled.img`
+    max-width: 300px;
+    max-height: 300px;
+    margin-top: 1rem;
+  `;

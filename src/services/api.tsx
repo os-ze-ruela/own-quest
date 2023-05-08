@@ -144,3 +144,7 @@ export const deleteGame = async (id: number) => {
 }
 
 // --- Category ---
+
+export const fetchCategories = async () => {
+    return await api.get(`/category`)
+}

@@ -71,6 +71,7 @@ const Explorer = () => {
           ) : games.map((game, index) => (
             <CardMostViewGame
               key={index}
+              id={game.id}
               title={game.title}
               imageSrc={`https://picsum.photos/300/200?random=5}`}
               description={game.description}
@@ -78,6 +79,18 @@ const Explorer = () => {
               createdByNickname={game.createdBy!.nickname}
             />
           ))}
+          {sliderOffset < 1 ? (
+            <></>
+          ) : (
+            <PaginationContainer direction='left'>
+              <button onClick={() => {
+                setSliderOffset(sliderOffset - 1);
+                console.log(sliderOffset)
+              }}>
+                <img src={nextIcon} alt="next games" className='nextIcon' />
+              </button>
+            </PaginationContainer>
+          )}
           <PaginationContainer direction='right'>
             <button onClick={() => {
               setSliderOffset(sliderOffset + 1);
