@@ -45,6 +45,7 @@ export const SearchInput = styled.input`
     border: none;
     outline: none;
     font-family: 'FiraCode-Regular';
+    box-shadow: drop-shadow(0px 2px 5px rgba(0,0,0,0.2));
 
     input:-webkit-autofill {
         -webkit-text-fill-color: blue !important;
@@ -71,26 +72,38 @@ export const TitleListGames = styled.h3`
     margin-left: 2rem;
 `
 
-export const PaginationContainer = styled.div`
+export const PaginationContainer = styled.div.attrs((props: { direction: string, }) => props)`
     height: 100%;
-    width: 60px;
+    width: 80px;
     position: absolute;
-    right: 0;
-    /* top: 50px; */
+    /* left: ${(props) => (props.direction === 'left' ? '0px' : 'none' )}; */
     display: flex;
     justify-content: center;
     align-items: center;
     size: 100px;
     transition: all 0.2s ease-in-out;
     opacity: 0;
+    right: ${(props) => (props.direction === 'right' ? '0px' : '94vw' )};
+    border-radius: ${(props) => (props.direction === 'left' ? '0px 20px 20px 0px' : '20px 0px 0px 20px' )};  
+
+    &:hover {
+        background-color: rgba(0,0,0,0.5);
+        box-shadow: 0px 0px 50px 30px rgba(0,0,0,0.3);
+    }
+
+    button {
+      text-decoration: none;
+      border-style: none;
+      background-color: transparent;
+    }
 
    .nextIcon {
         transition: all 0.3s ease-in-out;
-        filter: drop-shadow(0px 0px 50px 30px rgba(0,0,0,0.3));
+        filter: drop-shadow(0px 0px 40px 30px rgba(0,0,0,0.3));
         opacity: 0.3;
         width: 35px;
         height: 35px;
-        fill: green;
+        transform: ${(props) => (props.direction === 'right' ? '0' : 'rotate(180deg)')};
 
         &:hover {
             cursor: pointer;
@@ -99,7 +112,7 @@ export const PaginationContainer = styled.div`
     }
 `
 
-export const ListGamesCardContainer = styled.div`
+export const ListGamesCardContainer = styled.div.attrs((props: { translateX: string, }) => props)`
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -110,6 +123,9 @@ export const ListGamesCardContainer = styled.div`
     -moz-box-sizing: border-box; 
     -webkit-box-sizing: border-box; 
     box-sizing: border-box;
+    
+    transition: all 2s ease-in-out;
+    transform: translateX(${(props) => (props.translateX)});
 
 
     &:hover {
@@ -121,7 +137,7 @@ export const ListGamesCardContainer = styled.div`
 
 //! CARD MOST LIKED GAMES
 
-export const CardMostViewGameWrapper = styled.div`
+export const CardMostViewGameWrapper = styled.a`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -134,6 +150,7 @@ export const CardMostViewGameWrapper = styled.div`
   min-width: 250px;
   transition: all 0.2s ease-in-out;
   height: 400px;
+  text-decoration: none;
 
   p {
     max-lines: 2;
@@ -143,6 +160,7 @@ export const CardMostViewGameWrapper = styled.div`
     transform: translateY(-4px);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     background-color: #323440;
+    cursor: pointer;
 
     .button-wrapper {
       transition: all 200ms 0.2s ease-in-out;
@@ -207,12 +225,13 @@ export const CreatedByLabel = styled.p`
     margin: 0;
 `
 
-export const CreatedByName = styled.p`
+export const CreatedByName = styled.a`
     color: #FFFFFF;
     opacity: 0.75;
     margin: 0px;
     margin-top: 4px;
     transition: all 200ms 0.2s ease-in-out;
+    text-decoration: none;
 
     &:hover {
      opacity: 1;

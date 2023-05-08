@@ -1,7 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { BsSearch } from "react-icons/bs";
 import nextIcon from '../../assets/img/next-icon.svg';
+import { CardExplorerHotShimmer } from '../../components/Cards/CardExplorerHotShimmer';
 import CardHighlightGame from '../../components/Cards/CardHighlightGame';
+import { CardHighlightGameShimmer } from '../../components/Cards/CardHighlightGameShimmer';
 import CardMostViewGame from '../../components/Cards/CardMostViewGame';
 import Header from '../../components/Header/Header';
 import HeaderLogged from '../../components/Header/HeaderLogged';
@@ -10,7 +12,7 @@ import { AuthContext } from '../../contexts/auth';
 import { GameContext } from '../../contexts/game';
 import AppError from '../../core/app-error';
 import { LOGIN } from '../../core/app-urls';
-import { ExplorerMain, FiltersContainer, GameListContainer, ListGamesCardContainer, LoadingShimmer, PaginationContainer, SearchContainer, SearchInput, TitleListGames } from "../../styles/Explorer";
+import { ExplorerMain, FiltersContainer, GameListContainer, ListGamesCardContainer, PaginationContainer, SearchContainer, SearchInput, TitleListGames } from "../../styles/Explorer";
 
 
 const Explorer = () => {
@@ -18,6 +20,7 @@ const Explorer = () => {
   const { authenticated, user, refresh, logout } = useContext(AuthContext)
   const { games, getHotGamesForHome } = useContext(GameContext)
   const [isLoading, setIsLoading] = useState(true);
+  const [sliderOffset, setSliderOffset] = useState(0);
 
   const fetchGames = async () => {
     try {
@@ -41,6 +44,7 @@ const Explorer = () => {
     fetchGames()
   }, [])
 
+
   return (
     <ExplorerMain>
       {authenticated ?
@@ -57,9 +61,17 @@ const Explorer = () => {
       <GameListContainer>
         <TitleListGames>Histórias mais Jogadas</TitleListGames>
         <ListGamesCardContainer>
-          {games.map((game, index) => (
+          {isLoading ? (
+          <>
+            <CardExplorerHotShimmer />
+            <CardExplorerHotShimmer />
+            <CardExplorerHotShimmer />
+            <CardExplorerHotShimmer />
+          </>
+          ) : games.map((game, index) => (
             <CardMostViewGame
               key={index}
+              id={game.id}
               title={game.title}
               imageSrc={`https://picsum.photos/300/200?random=5}`}
               description={game.description}
@@ -67,15 +79,31 @@ const Explorer = () => {
               createdByNickname={game.createdBy!.nickname}
             />
           ))}
-          <PaginationContainer>
-            <img src={nextIcon} alt="next games" className='nextIcon' />
+          {sliderOffset < 1 ? (
+            <></>
+          ) : (
+            <PaginationContainer direction='left'>
+              <button onClick={() => {
+                setSliderOffset(sliderOffset - 1);
+                console.log(sliderOffset)
+              }}>
+                <img src={nextIcon} alt="next games" className='nextIcon' />
+              </button>
+            </PaginationContainer>
+          )}
+          <PaginationContainer direction='right'>
+            <button onClick={() => {
+              setSliderOffset(sliderOffset + 1);
+            }}>
+              <img src={nextIcon} alt="next games" className='nextIcon' />
+            </button>
           </PaginationContainer>
         </ListGamesCardContainer>
       </GameListContainer>
       <GameListContainer>
         <TitleListGames>Histórias em Destaque</TitleListGames>
         {isLoading ? (<>
-         <LoadingShimmer style={{marginLeft: '2rem'}}/>
+          <CardHighlightGameShimmer/>
         </>) : (<>
           <CardHighlightGame
             key={0}

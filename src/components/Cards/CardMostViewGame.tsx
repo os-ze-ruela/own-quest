@@ -1,9 +1,11 @@
     import React from 'react';
+import { CREATOR, GAME_DESCRIPTION } from '../../core/app-urls';
 import Category from '../../models/Category';
 import { CardMostViewGameContentWrapper, CardMostViewGameCreatedBy, CardMostViewGameImage, CardMostViewGameImageSpace, CardMostViewGameTitle, CardMostViewGameWrapper, CreatedByLabel, CreatedByName, PlayButtonWrapper } from '../../styles/Explorer';
 import { Button, CategoryLabel, CategoryLabelWrapper } from '../../styles/HomeLogged';
 
     type CardMostViewGameProps = {
+        id: number;
         imageSrc: string;
         title: string;
         description: string;
@@ -11,10 +13,10 @@ import { Button, CategoryLabel, CategoryLabelWrapper } from '../../styles/HomeLo
         createdByNickname: string;
     };
 
-    const CardMostViewGame: React.FC<CardMostViewGameProps> = ({ imageSrc, title, description, categories, createdByNickname }) => {
+    const CardMostViewGame: React.FC<CardMostViewGameProps> = ({ id, imageSrc, title, description, categories, createdByNickname }) => {
 
         return (
-            <CardMostViewGameWrapper >
+            <CardMostViewGameWrapper href={GAME_DESCRIPTION + '/' + id}>
                 <CardMostViewGameImageSpace>
                     <CardMostViewGameImage src={imageSrc} alt={title} />
                 </CardMostViewGameImageSpace>
@@ -30,7 +32,7 @@ import { Button, CategoryLabel, CategoryLabelWrapper } from '../../styles/HomeLo
                     </CategoryLabelWrapper>
                     <CardMostViewGameCreatedBy className='created-by-label-wrapper'>
                         <CreatedByLabel>Criado Por</CreatedByLabel>
-                        <CreatedByName>@{createdByNickname}</CreatedByName>
+                        <CreatedByName href={CREATOR + '/' + createdByNickname} >@{createdByNickname}</CreatedByName>
                     </CardMostViewGameCreatedBy>
                 </CardMostViewGameContentWrapper>
                 <PlayButtonWrapper className='button-wrapper'>

@@ -1,6 +1,8 @@
+import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import HeaderCreation from "../../components/Header/HeaderCreation";
-import { useContext, useEffect, useState } from "react";
+import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
+import { AuthContext } from "../../contexts/auth";
 import { CreationContext } from "../../contexts/creation";
 import { AddButton, Body, CategoriesLabel, DeleteButton, DescriptionInput, ListCategories, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
 import { GameContext } from "../../contexts/game";
@@ -9,9 +11,18 @@ import { AuthContext } from "../../contexts/auth";
 import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
 import { CategoryLabel } from "../../styles/HomeLogged";
 import AppError from '../../core/app-error';
+import { GameContext } from "../../contexts/game";
+import { GAME, HOME } from "../../core/app-urls";
+import { CategorySettingsLabel, CategorySettingsLabelWrapper, DeleteButton, DescriptionInput, ImagePreview, ImageUploaderContainer, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
 
-export default function CreationSettings () {
-    
+export default function CreationSettings() {
+
+
+
+    interface ImageUploaderProps {
+        onImageUploaded: (imageUrl: string) => void;
+    }
+
     const { id } = useParams()
     const { user, refresh, logout } = useContext(AuthContext);
     const { handleBackClick } = useContext(CreationContext)
@@ -21,7 +32,7 @@ export default function CreationSettings () {
     const [ descTemp, setDescTemp ] = useState('');
     const [ categTemp, setCategTemp ] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    
+                                               
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitleTemp(event.target.value);
     };
@@ -40,26 +51,26 @@ export default function CreationSettings () {
 
     useEffect(() => {
         if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0)) {
-          const newEditingGame = {...editingGame, title: titleTemp};
-          setEditingGame(newEditingGame);
-          updateGame(newEditingGame);
+            const newEditingGame = { ...editingGame, title: titleTemp };
+            setEditingGame(newEditingGame);
+            updateGame(newEditingGame);
         }
     }, [titleTemp])
 
     useEffect(() => {
         if (editingGame && descTemp !== editingGame.description && (descTemp.length > 0)) {
-          const newEditingGame = {...editingGame, description: descTemp};
-          setEditingGame(newEditingGame);
-          updateGame(newEditingGame);
+            const newEditingGame = { ...editingGame, description: descTemp };
+            setEditingGame(newEditingGame);
+            updateGame(newEditingGame);
         }
     }, [descTemp])
 
-    useEffect( () =>  {
+    useEffect(() => {
         getPagesFromGameID(id!)
         getGameById(id!)
-    }, []) 
+    }, [])
 
-    const handleDelete = () =>{
+    const handleDelete = () => {
         if (editingGame) {
             deleteGameByID(editingGame.id);
         }
@@ -104,16 +115,16 @@ export default function CreationSettings () {
                 placeholder="Minha primeira história"
                 onChange={handleChange}
                 />
-            <Separator/>
+                <Separator />
 
-            <Titles>Descrição</Titles>
-            <DescriptionInput
-                type="text"
-                name="StoryDescription"
-                autoComplete="off"
-                value={descTemp!}
-                placeholder="Essa é uma nova história criada no Own QUest."
-                onChange={handleChange2}
+                <Titles>Descrição</Titles>
+                <DescriptionInput
+                    type="text"
+                    name="StoryDescription"
+                    autoComplete="off"
+                    value={descTemp!}
+                    placeholder="Essa é uma nova história criada no Own QUest."
+                    onChange={handleChange2}
                 />
             <Separator/>
 
@@ -140,4 +151,8 @@ export default function CreationSettings () {
         </SettingsContainer>
     </>
     );
+}
+
+function onImageUploaded(imageUrl: any) {
+    throw new Error("Function not implemented.");
 }

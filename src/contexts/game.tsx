@@ -42,11 +42,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
     async function deleteGameByID(id: number) {
         try {
-          await deleteGame(id)
+            await deleteGame(id)
         } catch (error) {
-          console.error(error)
+            console.error(error)
         }
-      }
+    }
 
     async function updateGame(game: Game): Promise<void> {
         try {
@@ -66,12 +66,17 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             const response = await fetchGameById(id);
             const idGame = Number(id);
             const { title, description, image, isEditing, isPublished, isDeleted, createdAt, favorites, categories } = response.data.game;
+
+            const categorieGame = categories.map((category: { category: any }) => {
+                return new Category({ title: category.category.title, id: category.category.id, color: category.category.color, plus18: category.category.plus18 });
+            });
+
             setEditingGame(new Game({
                 id: idGame,
                 title: title,
                 description: description,
                 createdAt: createdAt,
-                categories: categories,
+                categories: categorieGame,
                 favorites: favorites,
                 image: image,
                 isEditing: isEditing,

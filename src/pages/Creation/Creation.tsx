@@ -3,6 +3,8 @@ import { HiPlus } from 'react-icons/hi';
 import { MdOutlineAddCircleOutline } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import HeaderCreation from '../../components/Header/HeaderCreation';
+import Popup from '../../components/Popup/Popup';
+import Sidebar from '../../components/Sidebar/Sidebar';
 import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated';
 import { AuthContext } from '../../contexts/auth';
 import { CreationContext } from '../../contexts/creation';
@@ -11,8 +13,6 @@ import { ActualPage, AddButton, AddPage, Body, ButtonContainer, CreationBody, Cr
 import ButtonActionBar from './components/ButtonActionBar';
 import NoPagePlaceholder from './components/NoPagePlaceholder';
 import PageActionBar from './components/PageActionBar';
-import Popup from '../../components/Popup/Popup';
-import Sidebar from '../../components/Sidebar/Sidebar';
 
 
 

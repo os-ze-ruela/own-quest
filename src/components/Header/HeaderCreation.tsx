@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BsCloudArrowDown, BsCloudCheck } from 'react-icons/bs';
-import { FcSettings } from 'react-icons/fc';
-import { RiSettings5Fill } from 'react-icons/ri';
 import { MdArrowBack } from 'react-icons/md';
+import { RiSettings5Fill } from 'react-icons/ri';
 import styled from 'styled-components';
 import { CreationContext } from '../../contexts/creation';
 import { GameContext } from '../../contexts/game';
@@ -208,7 +207,7 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
               onChange={handleChange}
               >
             </StorieTitle>
-          <SettingIcon href={SETTINGS + '/' + id}><RiSettings5Fill/></SettingIcon>
+          <SettingIcon href={GAME + '/' + id + SETTINGS}><RiSettings5Fill/></SettingIcon>
           <CreateButton href={PLAYGAME + '/' + id + '?test=true'} onClick={onCreateClick}>Testar</CreateButton>
         </WrapItems>
       </HeaderContainer>
