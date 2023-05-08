@@ -2,21 +2,25 @@ import { Link, useParams } from "react-router-dom";
 import HeaderCreation from "../../components/Header/HeaderCreation";
 import { useContext, useEffect, useState } from "react";
 import { CreationContext } from "../../contexts/creation";
-import { Body, DeleteButton, DescriptionInput, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
+import { AddButton, Body, CategoriesLabel, DeleteButton, DescriptionInput, ListCategories, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
 import { GameContext } from "../../contexts/game";
 import { GAME, HOME } from "../../core/app-urls";
 import { AuthContext } from "../../contexts/auth";
 import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
+import { CategoryLabel } from "../../styles/HomeLogged";
+import AppError from '../../core/app-error';
 
 export default function CreationSettings () {
     
     const { id } = useParams()
-    const { user} = useContext(AuthContext);
+    const { user, refresh, logout } = useContext(AuthContext);
     const { handleBackClick } = useContext(CreationContext)
     const { handleCreateClick, getPagesFromGameID } = useContext(CreationContext)
-    const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID  } = useContext(GameContext)
+    const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID, games, getHotGamesForHome } = useContext(GameContext)
     const [ titleTemp, setTitleTemp ] = useState('');
     const [ descTemp, setDescTemp ] = useState('');
+    const [ categTemp, setCategTemp ] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitleTemp(event.target.value);
@@ -29,7 +33,8 @@ export default function CreationSettings () {
     useEffect(() => {
         if (editingGame) {
           setTitleTemp(editingGame.title);
-          setDescTemp(editingGame.description)
+          setDescTemp(editingGame.description);
+          // setCategTemp(...categTemp, editingGame.categories);
         }
     }, [editingGame]);
 
@@ -60,6 +65,28 @@ export default function CreationSettings () {
         }
     }
 
+    const fetchGames = async () => {
+        try {
+          await Promise.all([getHotGamesForHome()]);
+          setIsLoading(false)
+        } catch (e) {
+          setIsLoading(false)
+          const error = await e as AppError
+          if (error.statusCode === 401) {
+            try {
+              await refresh()
+              await fetchGames()
+            } catch (e) {
+              logout()
+            }
+          }
+        }
+      };
+      
+    useEffect(() => {
+        fetchGames()
+      }, [])
+    
     return(
     <>
         {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
@@ -91,7 +118,16 @@ export default function CreationSettings () {
             <Separator/>
 
             <Titles>Caregorias adicionadas:</Titles>
-            <h2>Em processo</h2>
+                {games.map((game, index)=> (
+                    game.categories.map((category)=> (
+                        <ListCategories key={category.id}>
+                            <CategoriesLabel color={category.color}>
+                            {category.title}
+                            </CategoriesLabel>
+                        </ListCategories>   
+                    ))
+                    ))}
+                    <AddButton>+</AddButton>
             <Separator/>
             <Titles>Excluir história</Titles>
             <WrapTextButton>
