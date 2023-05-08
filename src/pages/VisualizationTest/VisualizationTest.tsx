@@ -1,16 +1,15 @@
-import { useState } from 'react';
-import { chat } from './apiChatGPT';
+import { useState, useContext } from 'react';
+import { OpenAIContext } from '../../contexts/openai';
+
 
 function Chatbot() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
-  const [randomStorie, setRandomStorie] = useState();
+  const {chat} = useContext(OpenAIContext)
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const response = await chat(input);
-    setRandomStorie(JSON.parse(response))
-    console.log(randomStorie)
     setOutput(response);
   }
 
