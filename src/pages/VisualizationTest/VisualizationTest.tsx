@@ -5,12 +5,17 @@ import { OpenAIContext } from '../../contexts/openai';
 function Chatbot() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
-  const {chat} = useContext(OpenAIContext)
+  const { chat } = useContext(OpenAIContext)
+  const { createRandomGame } = useContext(OpenAIContext)
+  const {improveDescription} = useContext(OpenAIContext)
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const response = await chat(input);
-    setOutput(response);
+    const parseJSON = JSON.parse(response);
+    console.log(parseJSON)
+    setOutput(parseJSON);
+    createRandomGame(parseJSON)
   }
 
 

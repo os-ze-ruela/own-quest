@@ -21,6 +21,7 @@ import Explorer from '../pages/Explorer';
 import Profile from '../pages/Profile';
 import VisualizationTest from '../pages/VisualizationTest/VisualizationTest';
 import MyGames from '../pages/MyGames';
+import { OpenAIProvider } from '../contexts/openai';
 
 function AppRoutes() {
     function Private({ children }: { children: ReactNode }) {
@@ -55,6 +56,7 @@ function AppRoutes() {
             <GameProvider>
                 <AuthProvider>
                     <CreationProvider>
+                        <OpenAIProvider>
                         <Routes>
                             <Route path={LANDING_PAGE} element={<Home />} > </Route>
                             <Route path={LOGIN} element={<NotLogged><Login /></NotLogged>} > </Route>
@@ -72,6 +74,7 @@ function AppRoutes() {
                             <Route path={TEST} element={<VisualizationTest />} > </Route>
                             <Route path={GAME + '/:id' + SETTINGS} element={<Private><CreationSettings /></Private>} > </Route>
                         </Routes>
+                        </OpenAIProvider>
                     </CreationProvider>
                 </AuthProvider>
             </GameProvider>
