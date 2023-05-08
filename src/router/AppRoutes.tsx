@@ -16,12 +16,14 @@ import { AuthContext, AuthProvider } from '../contexts/auth';
 import { CategoryProvider } from '../contexts/category';
 import { CreationProvider } from '../contexts/creation';
 import { GameProvider } from '../contexts/game';
-import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, EXPLORER, GAME, GAME_DESCRIPTION, HOME, LANDING_PAGE, LOGIN, NEW_PASSWORD, PLAYGAME, PROFILE, RECOVER_PASSWORD, REGISTER, SETTINGS, TEST } from '../core/app-urls';
+import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, EXPLORER, GAME, GAME_DESCRIPTION, HOME, LANDING_PAGE, LOGIN, NEW_PASSWORD, PLAYGAME, PLAYGAME, PROFILE, RECOVER_PASSWORD, REGISTER, SETTINGS, TEST } from '../core/app-urls';
 import CreationSettings from '../pages/CreationSettings';
 import Explorer from '../pages/Explorer';
 import { GameInfos } from '../pages/GameInfos';
 import Profile from '../pages/Profile';
 import VisualizationTest from '../pages/VisualizationTest/VisualizationTest';
+import MyGames from '../pages/MyGames';
+import { OpenAIProvider } from '../contexts/openai';
 
 function AppRoutes() {
     function Private({ children }: { children: ReactNode }) {
@@ -57,6 +59,7 @@ function AppRoutes() {
                 <AuthProvider>
                     <CreationProvider>
                         <CategoryProvider>
+                          <OpenAIProvider>
                             <Routes>
                                 <Route path={LANDING_PAGE} element={<Home />} > </Route>
                                 <Route path={LOGIN} element={<NotLogged><Login /></NotLogged>} > </Route>
@@ -74,6 +77,7 @@ function AppRoutes() {
                                 <Route path={TEST} element={<VisualizationTest />} > </Route>
                                 <Route path={GAME + '/:id' + SETTINGS} element={<Private><CreationSettings /></Private>} > </Route>
                             </Routes>
+                          </OpenAIProvider>
                         </CategoryProvider>
                     </CreationProvider>
                 </AuthProvider>
