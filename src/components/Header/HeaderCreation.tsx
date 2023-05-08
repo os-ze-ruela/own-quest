@@ -110,6 +110,10 @@ const WrapItems = styled.div`
 const SettingIcon = styled.a`
   color: white;
   font-size: 28px;
+  .hovered {
+    transform: scale(1.2) rotate(35deg);
+    transition: transform 0.3s ease-in-out;
+  }
 `
 
  
@@ -179,6 +183,12 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
     }
   };
 
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const handleHover = () => {
+    setIsHovered(!isHovered);
+  }
+
 
   return (
     <>
@@ -207,7 +217,9 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
               onChange={handleChange}
               >
             </StorieTitle>
-          <SettingIcon href={GAME + '/' + id + SETTINGS}><RiSettings5Fill/></SettingIcon>
+            <SettingIcon href={GAME + '/' + id + SETTINGS} onMouseEnter={handleHover} onMouseLeave={handleHover}>
+              <RiSettings5Fill className={isHovered ? 'hovered' : ''} />
+            </SettingIcon>
           <CreateButton href={PLAYGAME + '/' + id + '?test=true'} onClick={onCreateClick}>Testar</CreateButton>
         </WrapItems>
       </HeaderContainer>

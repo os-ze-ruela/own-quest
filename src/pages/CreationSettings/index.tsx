@@ -86,7 +86,7 @@ export default function CreationSettings() {
                     name="StoryDescription"
                     autoComplete="off"
                     value={descTemp!}
-                    placeholder="Essa é uma nova história criada no Own QUest."
+                    placeholder="Essa é uma nova história criada no Own Quest."
                     onChange={handleChange2}
                 />
                 <Separator />
