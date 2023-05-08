@@ -60,13 +60,6 @@ const HomeLogged = () => {
       <LoggedStyle>
         <Title>Minhas histórias</Title>
         <MyGameListContainer>
-          <MyGamesPaginationContainer direction='left'>
-            <button onClick={() => {
-              setSliderOffset(sliderOffset - 1);
-            }}>
-              <img src={nextIcon} alt="next games" className='nextIcon' />
-            </button>
-          </MyGamesPaginationContainer>
           <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
             {userGames.length === 0 ? (
               <EmptyCard onClick={async () => {
@@ -94,6 +87,18 @@ const HomeLogged = () => {
               </>
             )}
           </ListMyGamesCardContainer>
+          {sliderOffset < 1 ? (
+            <></>
+          ) : (
+            <MyGamesPaginationContainer direction='left'>
+              <button onClick={() => {
+                setSliderOffset(sliderOffset - 1);
+                console.log(sliderOffset)
+              }}>
+                <img src={nextIcon} alt="next games" className='nextIcon' />
+              </button>
+            </MyGamesPaginationContainer>
+          )}
           <MyGamesPaginationContainer direction='right'>
             <button onClick={() => {
               setSliderOffset(sliderOffset + 1);

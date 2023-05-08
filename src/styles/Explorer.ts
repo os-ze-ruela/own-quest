@@ -73,41 +73,43 @@ export const TitleListGames = styled.h3`
 `
 
 export const PaginationContainer = styled.div.attrs((props: { direction: string, }) => props)`
-  height: 100%;
-  width: 80px;
-  position: absolute;
-  right: ${(props) => (props.direction === 'right' ? '0px' : '0' )};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  size: 100px;
-  transition: all 0.2s ease-in-out;
-  opacity: 0;
-  border-radius: 10px 0px 0px 20px;  
+    height: 100%;
+    width: 80px;
+    position: absolute;
+    /* left: ${(props) => (props.direction === 'left' ? '0px' : 'none' )}; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    size: 100px;
+    transition: all 0.2s ease-in-out;
+    opacity: 0;
+    right: ${(props) => (props.direction === 'right' ? '0px' : '94vw' )};
+    border-radius: ${(props) => (props.direction === 'left' ? '0px 20px 20px 0px' : '20px 0px 0px 20px' )};  
 
-  &:hover {
-      background-color: rgba(0,0,0,0.5);
-      box-shadow: 0px 0px 50px 30px rgba(0,0,0,0.3);
-  }
+    &:hover {
+        background-color: rgba(0,0,0,0.5);
+        box-shadow: 0px 0px 50px 30px rgba(0,0,0,0.3);
+    }
 
-  button {
+    button {
       text-decoration: none;
       border-style: none;
       background-color: transparent;
-  }
-
-.nextIcon {
-    transition: all 0.3s ease-in-out;
-    filter: drop-shadow(0px 0px 40px 30px rgba(0,0,0,0.3));
-    opacity: 0.3;
-    width: 35px;
-    height: 35px;
-
-    &:hover {
-        cursor: pointer;
-        opacity: 0.8;
     }
-}
+
+   .nextIcon {
+        transition: all 0.3s ease-in-out;
+        filter: drop-shadow(0px 0px 40px 30px rgba(0,0,0,0.3));
+        opacity: 0.3;
+        width: 35px;
+        height: 35px;
+        transform: ${(props) => (props.direction === 'right' ? '0' : 'rotate(180deg)')};
+
+        &:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+    }
 `
 
 export const ListGamesCardContainer = styled.div.attrs((props: { translateX: string, }) => props)`
@@ -135,7 +137,7 @@ export const ListGamesCardContainer = styled.div.attrs((props: { translateX: str
 
 //! CARD MOST LIKED GAMES
 
-export const CardMostViewGameWrapper = styled.div`
+export const CardMostViewGameWrapper = styled.a`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -148,6 +150,7 @@ export const CardMostViewGameWrapper = styled.div`
   min-width: 250px;
   transition: all 0.2s ease-in-out;
   height: 400px;
+  text-decoration: none;
 
   p {
     max-lines: 2;
@@ -157,6 +160,7 @@ export const CardMostViewGameWrapper = styled.div`
     transform: translateY(-4px);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     background-color: #323440;
+    cursor: pointer;
 
     .button-wrapper {
       transition: all 200ms 0.2s ease-in-out;
@@ -221,12 +225,13 @@ export const CreatedByLabel = styled.p`
     margin: 0;
 `
 
-export const CreatedByName = styled.p`
+export const CreatedByName = styled.a`
     color: #FFFFFF;
     opacity: 0.75;
     margin: 0px;
     margin-top: 4px;
     transition: all 200ms 0.2s ease-in-out;
+    text-decoration: none;
 
     &:hover {
      opacity: 1;
