@@ -31,7 +31,7 @@ function Login() {
 
   const [showError, setShowError] = useState(false)
   const [messageError, setMessageError] = useState('')
-
+  
   return (
     <>
       <Header page='Registrar' redirect={REGISTER} />
@@ -54,7 +54,7 @@ function Login() {
               name="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-            />
+              />
             <Label htmlFor="password">Senha</Label>
             <InputButtonDiv>
               <Input
@@ -62,19 +62,21 @@ function Login() {
                 type={isRevealPassword ? "text" : "password"}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-              />
+                />
               <HideButton
                 title={isRevealPassword ? "Hide password" : "Show password"}
                 src={isRevealPassword ? hidePasswordImg : showPasswordImg}
                 onClick={() => setIsRevealPassword(prevState => !prevState)}
-              />
+                />
             </InputButtonDiv>
           </LoginInputs>
           { showError &&
             <MessageError>{messageError}</MessageError>}
           
           <LoginRecoverItemsDiv>
+
             <ButtonLogin onClick={async () => await SubmitLogin()}>Entrar</ButtonLogin>
+            
             <RecoverText>
               Esqueceu sua senha? <br />
               <RecoverLink href={RECOVER_PASSWORD}>Recupere aqui</RecoverLink>
@@ -84,6 +86,7 @@ function Login() {
       </LoginStyle>
       <AskRegisterBar />
       <Footer />
+            
     </>
   )
 }

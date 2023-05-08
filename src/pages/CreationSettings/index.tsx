@@ -4,6 +4,13 @@ import HeaderCreation from "../../components/Header/HeaderCreation";
 import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
 import { AuthContext } from "../../contexts/auth";
 import { CreationContext } from "../../contexts/creation";
+import { AddButton, Body, CategoriesLabel, DeleteButton, DescriptionInput, ListCategories, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
+import { GameContext } from "../../contexts/game";
+import { GAME, HOME } from "../../core/app-urls";
+import { AuthContext } from "../../contexts/auth";
+import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
+import { CategoryLabel } from "../../styles/HomeLogged";
+import AppError from '../../core/app-error';
 import { GameContext } from "../../contexts/game";
 import { GAME, HOME } from "../../core/app-urls";
 import { CategorySettingsLabel, CategorySettingsLabelWrapper, DeleteButton, DescriptionInput, ImagePreview, ImageUploaderContainer, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
@@ -17,13 +24,15 @@ export default function CreationSettings() {
     }
 
     const { id } = useParams()
-    const { user } = useContext(AuthContext);
+    const { user, refresh, logout } = useContext(AuthContext);
     const { handleBackClick } = useContext(CreationContext)
     const { handleCreateClick, getPagesFromGameID } = useContext(CreationContext)
-    const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID } = useContext(GameContext)
-    const [titleTemp, setTitleTemp] = useState('');
-    const [descTemp, setDescTemp] = useState('');
-
+    const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID, games, getHotGamesForHome } = useContext(GameContext)
+    const [ titleTemp, setTitleTemp ] = useState('');
+    const [ descTemp, setDescTemp ] = useState('');
+    const [ categTemp, setCategTemp ] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+                                               
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitleTemp(event.target.value);
     };
@@ -34,8 +43,9 @@ export default function CreationSettings() {
 
     useEffect(() => {
         if (editingGame) {
-            setTitleTemp(editingGame.title);
-            setDescTemp(editingGame.description)
+          setTitleTemp(editingGame.title);
+          setDescTemp(editingGame.description);
+          // setCategTemp(...categTemp, editingGame.categories);
         }
     }, [editingGame]);
 
@@ -66,61 +76,44 @@ export default function CreationSettings() {
         }
     }
 
-
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-    const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (!event.target.files || !event.target.files[0]) {
-            return;
-        }
-
-        const selectedFile = event.target.files[0];
-        setSelectedImage(selectedFile);
-
-        const reader = new FileReader();
-        reader.onload = () => {
-            setPreviewUrl(reader.result as string);
-        };
-        reader.readAsDataURL(selectedFile);
-    };
-
-    const handleImageUpload = async () => {
-        if (!selectedImage) {
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append("image", selectedImage);
+    const fetchGames = async () => {
         try {
-            // const response = await axios.post("/api/upload-image", formData);
-            // onImageUploaded(response.data.imageUrl);
-        } catch (error) {
-            console.error("Error uploading image:", error);
+          await Promise.all([getHotGamesForHome()]);
+          setIsLoading(false)
+        } catch (e) {
+          setIsLoading(false)
+          const error = await e as AppError
+          if (error.statusCode === 401) {
+            try {
+              await refresh()
+              await fetchGames()
+            } catch (e) {
+              logout()
+            }
+          }
         }
-    };
+      };
+      
+    useEffect(() => {
+        fetchGames()
+      }, [])
+    
+    return(
+    <>
+        {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
+        <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={true}/>
+        <SettingsContainer>
+            <Title>Configurações da história</Title>
+            <Separator/>
 
-    return (
-        <>
-            {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
-            <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={true} />
-            <SettingsContainer>
-                <Title>Configurações da história</Title>
-                <Separator />
-                <ImageUploaderContainer>
-                    <input type="file" onChange={handleImageSelect} />
-                    {previewUrl && <ImagePreview src={previewUrl} />}
-                    {/* <button onClick={handleImageUpload}>Upload Image</button> */}
-                </ImageUploaderContainer>
-                <Separator />
-                <Titles>Título</Titles>
-                <TitleInput
-                    type="text"
-                    name="StoryTitle"
-                    autoComplete="off"
-                    value={titleTemp!}
-                    placeholder="Minha primeira história"
-                    onChange={handleChange}
+            <Titles>Título</Titles>
+            <TitleInput
+                type="text"
+                name="StoryTitle"
+                autoComplete="off"
+                value={titleTemp!}
+                placeholder="Minha primeira história"
+                onChange={handleChange}
                 />
                 <Separator />
 
@@ -133,39 +126,30 @@ export default function CreationSettings() {
                     placeholder="Essa é uma nova história criada no Own QUest."
                     onChange={handleChange2}
                 />
-                <Separator />
-                <Titles>Caregorias adicionadas:</Titles>
-                {/* <h2>Em processo</h2> */}
-                <CategorySettingsLabelWrapper className='category-label-wrapper'>
-                    {editingGame?.categories.map((category) => (
-                        <CategorySettingsLabel key={category.id} color={category.color}>
+            <Separator/>
+
+            <Titles>Caregorias adicionadas:</Titles>
+                {games.map((game, index)=> (
+                    game.categories.map((category)=> (
+                        <ListCategories key={category.id}>
+                            <CategoriesLabel color={category.color}>
                             {category.title}
-                            <button>x</button>
-                        </CategorySettingsLabel>
+                            </CategoriesLabel>
+                        </ListCategories>   
+                    ))
                     ))}
-                </CategorySettingsLabelWrapper>
-                <Separator />
-                <Titles>Caregorias disponíveis:</Titles>
-                {/* <h2>Em processo</h2> */}
-                <CategorySettingsLabelWrapper className='category-label-wrapper'>
-                    {editingGame?.categories.map((category) => (
-                        <CategorySettingsLabel key={category.id} color={category.color}>
-                            {category.title}
-                            <button>x</button>
-                        </CategorySettingsLabel>
-                    ))}
-                </CategorySettingsLabelWrapper>
-                <Separator />
-                <Titles>Excluir história</Titles>
-                <WrapTextButton>
-                    <TitlesInfo>Ao excluir a sua história, você não poderá mais acessar nem editar essa história novamente.</TitlesInfo>
-                    <DeleteButton href={HOME} onClick={handleDelete}>Excluir</DeleteButton>
-                </WrapTextButton>
-                <Link to={GAME + '/' + id}>
-                    <SaveButton>Salvar</SaveButton>
-                </Link>
-            </SettingsContainer>
-        </>
+                    <AddButton>+</AddButton>
+            <Separator/>
+            <Titles>Excluir história</Titles>
+            <WrapTextButton>
+                <TitlesInfo>Ao excluir a sua história, você não poderá mais acessar nem editar essa história novamente.</TitlesInfo>
+                <DeleteButton href={HOME} onClick={handleDelete}>Excluir</DeleteButton>
+            </WrapTextButton>
+            <Link to={GAME + '/' + id}>
+                <SaveButton>Salvar</SaveButton>
+            </Link>
+        </SettingsContainer>
+    </>
     );
 }
 
