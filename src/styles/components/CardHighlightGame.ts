@@ -10,7 +10,7 @@ export const CardHighlightGameWrapper = styled.div`
     align-items: center;
     border-radius: 15px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    width: 90%;
+    width: 95%;
     min-width: 250px;
     transition: all 0.2s ease-in-out;
     height: 400px;
@@ -46,13 +46,13 @@ export const CardHighlightGameImage = styled.img`
 
 export const CardHighlightGameContentWrapper = styled.div`
   height: 100%;
-  width: 90%;
+  width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   flex-direction: column;
   color: white;
-  margin: 0px 1rem;
+  margin-left: 3rem;
   text-align: start;
   font-family: 'FiraCode-Regular';
 

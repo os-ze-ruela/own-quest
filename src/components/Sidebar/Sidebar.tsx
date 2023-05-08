@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
+import { CreationContext } from "../../contexts/creation";
 
 const SidebarContainer = styled.div<{ isCollapsed: boolean }>`
   position: fixed;
@@ -28,8 +29,29 @@ const Button = styled.button`
 
 const Menu = styled.ul`
   /* margin-top: 80px; */
+  height: 100%;
   padding-left: 20px;
   list-style: none;
+  overflow: scroll;
+
+
+    scrollbar-width: thin;
+    scrollbar-color: #568EA3 #000;
+  
+
+  /* estilo da barra de rolagem para o Google Chrome */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #000;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #568EA3;
+    border-radius: 10px;
+  }
 `;
 
 const MenuItem = styled.li`
@@ -56,7 +78,8 @@ const SubMenuItem = styled.li`
 `;
 
 const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const { pages, findPageIndex, setIndexSelected } = useContext(CreationContext)
 
   const handleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -68,14 +91,44 @@ const Sidebar = () => {
         {isCollapsed ? "◀" : "▶"}
       </Button>
       <Menu>
-        <MenuItem>
+        {
+          pages.map((page, index) => (
+            <MenuItem onClick={() => {
+              setIndexSelected(index);
+            }} >
+              📄 {page.title}
+              <SubMenu>
+                {
+                  page.buttons.map((button, index) => (
+                    <>
+                      🔘 {button.title} <br />
+                      <SubMenu>
+                        {findPageIndex(pages, button.nextPageId) > -1 ? (
+                          <SubMenuItem onClick={() => {
+                            setIndexSelected(findPageIndex(pages, button.nextPageId));
+                          }}>
+                            ➡️Page {findPageIndex(pages, button.nextPageId) + 1}
+                          </SubMenuItem>
+                        ) : (
+                          <></>
+                        )}
+                      </SubMenu>
+                    </>
+                  ))
+                }
+              </SubMenu>
+            </MenuItem>
+          )
+          )
+        }
+        {/* <MenuItem>
         📄Page 1
         <SubMenu>
             <SubMenuItem>
                 🔘Button 1
                 <SubMenu>
-                <SubMenuItem>➡️Page 2</SubMenuItem>
-              </SubMenu>
+                  <SubMenuItem>➡️Page 2</SubMenuItem>
+                </SubMenu>
             </SubMenuItem>
             <SubMenuItem>
                 🔘Button 2
@@ -108,7 +161,7 @@ const Sidebar = () => {
           <SubMenu>
             <SubMenuItem>🔘Button 1</SubMenuItem>
           </SubMenu>
-        </MenuItem>
+        </MenuItem> */}
       </Menu>
     </SidebarContainer>
   );
