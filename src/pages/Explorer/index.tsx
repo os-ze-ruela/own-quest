@@ -25,7 +25,9 @@ const Explorer = () => {
   const fetchGames = async () => {
     try {
       await Promise.all([getHotGamesForHome()]);
-      setIsLoading(false)
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 500);
     } catch (e) {
       setIsLoading(false)
       const error = await e as AppError
@@ -62,12 +64,12 @@ const Explorer = () => {
         <TitleListGames>Histórias mais Jogadas</TitleListGames>
         <ListGamesCardContainer>
           {isLoading ? (
-          <>
-            <CardExplorerHotShimmer />
-            <CardExplorerHotShimmer />
-            <CardExplorerHotShimmer />
-            <CardExplorerHotShimmer />
-          </>
+            <>
+              <CardExplorerHotShimmer />
+              <CardExplorerHotShimmer />
+              <CardExplorerHotShimmer />
+              <CardExplorerHotShimmer />
+            </>
           ) : games.map((game, index) => (
             <CardMostViewGame
               key={index}
@@ -103,7 +105,7 @@ const Explorer = () => {
       <GameListContainer>
         <TitleListGames>Histórias em Destaque</TitleListGames>
         {isLoading ? (<>
-          <CardHighlightGameShimmer/>
+          <CardHighlightGameShimmer />
         </>) : (<>
           <CardHighlightGame
             key={0}

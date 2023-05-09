@@ -65,7 +65,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             //   setLoading(true)
             const response = await fetchGameById(id);
             const idGame = Number(id);
-            const { title, description, image, isEditing, isPublished, isDeleted, createdAt, favorites, categories } = response.data.game;
+            const { title, description, image, isEditing, isPublished, isDeleted, isFavorited, createdAt, createdBy, favorites, categories } = response.data.game;
 
             const categorieGame = categories.map((category: { category: any }) => {
                 return new Category({ title: category.category.title, id: category.category.id, color: category.category.color, plus18: category.category.plus18 });
@@ -78,10 +78,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 createdAt: createdAt,
                 categories: categorieGame,
                 favorites: favorites,
+                isFavorited: isFavorited,
                 image: image,
                 isEditing: isEditing,
                 isPublished: isPublished,
                 isDeleted: isDeleted,
+                createdBy: createdBy
             }))
             //   setLoading(false)
         } catch (error) {

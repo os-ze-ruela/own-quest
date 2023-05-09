@@ -10,6 +10,7 @@ interface IGame {
     isEditing: boolean;
     isPublished: boolean;
     isDeleted: boolean;
+    isFavorited: boolean;
     createdAt: Date;
     categories: Category[];
     createdBy?: CreatedBy | null;
@@ -24,6 +25,7 @@ class Game {
     isEditing: boolean = false;
     isPublished: boolean = false;
     isDeleted: boolean = false;
+    isFavorited: boolean = false;
     createdAt: Date;
     categories: Category[];
     createdBy: CreatedBy | null;
@@ -37,10 +39,10 @@ class Game {
         this.isEditing = constructor.isEditing;
         this.isPublished = constructor.isPublished;
         this.isDeleted = constructor.isDeleted;
+        this.isFavorited = constructor.isFavorited;
         this.createdAt = constructor.createdAt;
         this.createdBy = constructor.createdBy ?? null;
         this.categories =   constructor.categories.length > 0 ? constructor.categories.map((category) => {
-            console.log(category)
             return new Category(category)
         }): [];
     }

@@ -148,3 +148,13 @@ export const deleteGame = async (id: number) => {
 export const fetchCategories = async () => {
     return await api.get(`/category`)
 }
+
+// ----- User ----
+
+export const postLikeGame = async (gameId: string) => {
+    return await api.post(`/user/favorite/${gameId}`)
+}
+
+export const postUnLikeGame = async (gameId: string) => {
+    return await api.delete(`/user/unfavorite/${gameId}`)
+}
