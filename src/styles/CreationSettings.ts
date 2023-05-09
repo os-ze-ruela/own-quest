@@ -23,6 +23,7 @@ export const Title = styled.h1`
 `
 export const Separator = styled.hr`
     border-bottom: 1px solid #ccc;
+    opacity: 30%;
 `
 export const Titles = styled.p`
     color: white;
@@ -49,11 +50,13 @@ export const TitleInput = styled.input`
         color: white;
     }
 `
-export const DescriptionInput = styled.input`
+export const DescriptionInput = styled.textarea`
     background-color: #30354B;
+    text-align: justify;
+    white-space: pre-line;
     color: white;
-    width: 100%;
-    height: 7%;
+    width: 100%; 
+    height: 150px;
     border-radius: 0.7em;
     border: none;
     margin-bottom: 0.7em;
@@ -63,7 +66,7 @@ export const DescriptionInput = styled.input`
     font-family: FiraCode-light;
     font-weight: 400;
     font-size: 16px;
-    text-align: start;
+    resize: none;
     ::placeholder{
         color: white;
     }
@@ -75,10 +78,53 @@ export const ListCategories = styled.div`
     margin-right: 15px;
 
 `
+
+export const GptIcon = styled.img`
+  width: 20px;
+  height: 20px;
+`;
+
+export const RandomDescriptionButton = styled.button`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-self: left;
+    align-items: center;
+    padding: 5px 1rem;
+    margin-bottom: 0.5em;
+    gap: 2rem;
+    border-style: none;
+    cursor: pointer;
+
+    width: 100%;
+    max-width: 300px;
+    height: 35px;
+
+    background: #75CD73;
+    border-radius: 4px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+    color: #FFFFFF;
+    font-size: 10pt;
+    transition: all 0.3s ease-in-out 0.2s;
+    font-family: FiraCode-Regular;
+    font-weight: 300;
+    text-decoration: none;
+   
+    &:hover {
+        transform: scale(1.05);
+        cursor: pointer;
+    }
+`
+
+
 export const CategoriesLabel = styled.span<CategoryLabelProps>`
   font-size: 12px;
   font-weight: 500;
-  border-radius: 45%;
+  border-radius: 10px;
   /* background-color: ${(props) => props.color}; */
   background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
   color: #ffffff;
@@ -88,9 +134,9 @@ export const AddButton = styled.button`
   border: none;
   font-size: 14px;
   font-weight: 500;
-  border-radius: 45%;
-  /* background-color: blue; */
-  background: linear-gradient(to right, #ff00ff, #00ffff);
+  border-radius: 10px;
+  background-color: #30354B;
+  /* background: linear-gradient(to right, #ff00ff, #00ffff); */
   color: #ffffff;
   padding: 4px 14px;
   cursor: pointer;
@@ -128,7 +174,7 @@ export const DeleteButton = styled.a`
 export const SaveButton = styled.button`
     background-color: #568EA3;
     width: 10%;
-    height: 20%;
+    height: 5%;
     color: white;
     border-radius: 4px;
     border: none;

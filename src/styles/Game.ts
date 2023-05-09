@@ -127,6 +127,8 @@ export const ButtonContainer = styled.div`
 
 export const ButtonGame = styled.input.attrs((props: {isSelected: boolean, background: string}) => props)`
   margin-right: 10px;
+  /* min-width: 30%; */
+  width: auto;
   color: white; 
   background-color: ${props => props.background};
   font-family: FiraCode-Light;

@@ -31,7 +31,7 @@ const HeaderContainer2 = styled.div`
   justify-content: space-between;
   align-items: center;
   background: linear-gradient(90deg, #568EA3 0.03%, #6FFFE9 100.03%);
-  padding: 14px 10px;
+  padding: 0px 10px;
 `;
 
 const BackButton = styled.a`
@@ -68,6 +68,7 @@ const HeaderText = styled.p`
 
 const StorieTitle = styled.input`
   font-size: 20px;
+  width: 500px;
   margin: 0;
   color:white;
   font-family: FiraCode-Light;
@@ -230,6 +231,13 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
             <MdArrowBack color="#fff" size={24} />
           </BackButton>
           <HeaderText>Voltar</HeaderText>
+          <SavedIcon isSaved={isSaved}>
+            {loading ? (
+              <BsCloudArrowDown size={30} color="#fff" />
+              ):(
+                <BsCloudCheck size={30} color="#fff" />
+                )}
+          </SavedIcon>
         </WrapItems>
         <WrapItems>
           <StorieTitle       

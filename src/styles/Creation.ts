@@ -206,6 +206,7 @@ export const AddButton = styled.button.attrs((props: {canAdd: boolean}) => props
 
 export const EditableButton = styled.input.attrs((props: {isSelected: boolean, background: string}) => props)`
   margin-right: 10px;
+  width: 30%;
   color: white;
   background-color: ${props => props.background};
   font-family: FiraCode-Light;
