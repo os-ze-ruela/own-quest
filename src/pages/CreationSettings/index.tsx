@@ -4,16 +4,15 @@ import HeaderCreation from "../../components/Header/HeaderCreation";
 import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
 import { AuthContext } from "../../contexts/auth";
 import { CreationContext } from "../../contexts/creation";
-import { AddButton, Body, CategoriesLabel, DeleteButton, DescriptionInput, ListCategories, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
+import { AddButton, Body, CategoriesLabel, GptIcon, ListCategories, RandomDescriptionButton } from "../../styles/CreationSettings";
 import { GameContext } from "../../contexts/game";
 import { GAME, HOME } from "../../core/app-urls";
-import { AuthContext } from "../../contexts/auth";
-import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
 import { CategoryLabel } from "../../styles/HomeLogged";
 import AppError from '../../core/app-error';
-import { GameContext } from "../../contexts/game";
-import { GAME, HOME } from "../../core/app-urls";
+import GPT from "../../assets/img/gpt.svg";
 import { CategorySettingsLabel, CategorySettingsLabelWrapper, DeleteButton, DescriptionInput, ImagePreview, ImageUploaderContainer, SaveButton, Separator, SettingsContainer, Title, TitleInput, Titles, TitlesInfo, WrapTextButton } from "../../styles/CreationSettings";
+import { OpenAIContext } from "../../contexts/openai";
+import { CreationBody } from "../../styles/Creation";
 
 export default function CreationSettings() {
 
@@ -32,13 +31,46 @@ export default function CreationSettings() {
     const [ descTemp, setDescTemp ] = useState('');
     const [ categTemp, setCategTemp ] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-                                               
+    const { improveDescription } = useContext(OpenAIContext)
+    const {loading, setLoading} = useContext(CreationContext)
+    const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+              
+    const debounceSaveChanges = () => {
+        setLoading(true)
+        if (timerId) {
+          clearTimeout(timerId);
+        }
+        const idTimer = setTimeout(() => {
+          saveChanges();
+        }, 1000);
+        setTimerId(idTimer);
+      };
+      
+    const saveChanges = () => {
+        if (editingGame) {
+        setLoading(false)
+        updateGame(editingGame);
+        }
+      };
+    
+    useEffect(() => {
+        return () => {
+          if (timerId) {
+            clearTimeout(timerId);
+          }
+        };
+      }, [timerId]);
+
+    async function handleClickRandomDescription(){
+        if(editingGame){
+        const response =  await improveDescription(editingGame.description);
+        setDescTemp(response)
+        }
+    }
+
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitleTemp(event.target.value);
-    };
-
-    const handleChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDescTemp(event.target.value);
     };
 
     useEffect(() => {
@@ -54,6 +86,7 @@ export default function CreationSettings() {
             const newEditingGame = { ...editingGame, title: titleTemp };
             setEditingGame(newEditingGame);
             updateGame(newEditingGame);
+            // debounceSaveChanges();
         }
     }, [titleTemp])
 
@@ -62,6 +95,7 @@ export default function CreationSettings() {
             const newEditingGame = { ...editingGame, description: descTemp };
             setEditingGame(newEditingGame);
             updateGame(newEditingGame);
+            // debounceSaveChanges();
         }
     }, [descTemp])
 
@@ -99,7 +133,7 @@ export default function CreationSettings() {
       }, [])
     
     return(
-    <>
+    <CreationBody>
         {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
         <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={true}/>
         <SettingsContainer>
@@ -119,13 +153,13 @@ export default function CreationSettings() {
 
                 <Titles>Descrição</Titles>
                 <DescriptionInput
-                    type="text"
                     name="StoryDescription"
                     autoComplete="off"
                     value={descTemp!}
                     placeholder="Essa é uma nova história criada no Own Quest."
-                    onChange={handleChange2}
+                    onChange={(event) => {setDescTemp(event.target.value)}}
                 />
+                <RandomDescriptionButton onClick={handleClickRandomDescription}>Melhorar descrição com IA<GptIcon src={GPT} /></RandomDescriptionButton>
             <Separator/>
 
             <Titles>Caregorias adicionadas:</Titles>
@@ -149,7 +183,7 @@ export default function CreationSettings() {
                 <SaveButton>Salvar</SaveButton>
             </Link>
         </SettingsContainer>
-    </>
+    </CreationBody>
     );
 }
 

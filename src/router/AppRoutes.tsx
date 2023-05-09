@@ -18,7 +18,7 @@ import { CreationProvider } from '../contexts/creation';
 import { GameProvider } from '../contexts/game';
 import { OpenAIProvider } from '../contexts/openai';
 import { UserProvider } from '../contexts/user';
-import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, EXPLORER, GAME, GAME_DESCRIPTION, HOME, LANDING_PAGE, LOGIN, NEW_PASSWORD, PLAYGAME, PROFILE, RECOVER_PASSWORD, REGISTER, SETTINGS, TEST } from '../core/app-urls';
+import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, EXPLORER, GAME, GAME_DESCRIPTION, HOME, LANDING_PAGE, LOGIN, NEW_PASSWORD, MYGAMES, PLAYGAME, PROFILE, RECOVER_PASSWORD, REGISTER, SETTINGS, TEST } from '../core/app-urls';
 import CreationSettings from '../pages/CreationSettings';
 import Explorer from '../pages/Explorer';
 import { GameInfos } from '../pages/GameInfos';
@@ -73,6 +73,7 @@ function AppRoutes() {
                                         <Route path={GAME + '/:id'} element={<Private><Creation /></Private>} > </Route>
                                         <Route path={PLAYGAME + '/:id'} element={<Private><Game /></Private>} > </Route>
                                         <Route path={PROFILE} element={<Private><Profile /></Private>} > </Route>
+                                        <Route path={MYGAMES} element={<Private><MyGames/></Private>} > </Route>
                                         <Route path={EXPLORER} element={<Explorer />}></Route>
                                         <Route path={GAME_DESCRIPTION + '/:id'} element={<GameInfos />} > </Route>
                                         <Route path={TEST} element={<VisualizationTest />} > </Route>

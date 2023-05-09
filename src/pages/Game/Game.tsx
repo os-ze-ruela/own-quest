@@ -44,11 +44,14 @@ const Game = () => {
 
     //BUG TO FIX - quando um botão é deselecionado o index ainda é mantidado e caso o botão Continuar seja pressionado será redirecionado
     const handleClickButton = () => {
+
+      if(pages[indexPage].isLastPage === true){
+        console.log("fim da historia")
+        navigate(GAME+"/"+id);
+      }
+
       if(pages[indexPage].buttons[buttonIndex].nextPageId === -1){
         setAlert(true)
-      }
-      else if(pages[indexPage].isLastPage === true){
-        navigate(GAME+"/"+id);
       }
       else{
       const nextPageId = pages[indexPage].buttons[buttonIndex].nextPageId;

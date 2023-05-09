@@ -5,8 +5,8 @@ import { CreationContext } from "../../contexts/creation";
 const SidebarContainer = styled.div<{ isCollapsed: boolean }>`
   position: fixed;
   top: 0;
-  right: ${({ isCollapsed }) => (isCollapsed ? "-200px" : "0")};
-  width: 200px;
+  right: ${({ isCollapsed }) => (isCollapsed ? "-350px" : "0")};
+  width: 350px;
   height: 100%;
   color: white;
   background-color: #202331;
@@ -121,47 +121,6 @@ const Sidebar = () => {
           )
           )
         }
-        {/* <MenuItem>
-        📄Page 1
-        <SubMenu>
-            <SubMenuItem>
-                🔘Button 1
-                <SubMenu>
-                  <SubMenuItem>➡️Page 2</SubMenuItem>
-                </SubMenu>
-            </SubMenuItem>
-            <SubMenuItem>
-                🔘Button 2
-                <SubMenu>
-                <SubMenuItem>➡️Page 3</SubMenuItem>
-              </SubMenu>
-            </SubMenuItem>
-          </SubMenu>
-        </MenuItem>
-        <MenuItem>
-        📄Page 2
-          <SubMenu>
-            <SubMenuItem>🔘Button 1</SubMenuItem>
-            <SubMenuItem>
-                🔘Button 2
-                <SubMenu>
-                <SubMenuItem>➡️Page 1</SubMenuItem>
-              </SubMenu>
-            </SubMenuItem>
-            <SubMenuItem>
-                🔘Button 3
-              <SubMenu>
-                <SubMenuItem>➡️Page 3</SubMenuItem>
-              </SubMenu>
-            </SubMenuItem>
-          </SubMenu>
-        </MenuItem>
-        <MenuItem>
-        📄Page 3
-          <SubMenu>
-            <SubMenuItem>🔘Button 1</SubMenuItem>
-          </SubMenu>
-        </MenuItem> */}
       </Menu>
     </SidebarContainer>
   );
