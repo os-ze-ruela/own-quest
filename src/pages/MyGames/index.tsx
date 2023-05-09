@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import styled from 'styled-components';
 import nextIcon from '../../assets/img/next-icon.svg';
-import Card from '../../components/Cards/Card';
-import { CardHomeShimmer } from '../../components/Cards/CardHomeShimmer';
+import CardRandomGame from '../../components/Cards/CardRandomGame';
 import CardUserGame from '../../components/Cards/CardUserGame';
 import EmptyCard from '../../components/Cards/EmptyCard';
 import HeaderLogged from '../../components/Header/HeaderLogged';
@@ -11,11 +11,8 @@ import { AuthContext } from '../../contexts/auth';
 import { GameContext } from '../../contexts/game';
 import AppError from '../../core/app-error';
 import { GAME } from '../../core/app-urls';
-import { CardWrapper, ListMyGamesCardContainer, LoggedStyle, MyGameListContainer, MyGamesPaginationContainer, PageWrapper, Title } from '../../styles/HomeLogged';
-import CardRandomGame from '../../components/Cards/CardRandomGame';
 import { GameListContainer } from '../../styles/Explorer';
-import { ListGamesCardContainer } from '../../styles/Explorer';
-import styled from 'styled-components';
+import { ListMyGamesCardContainer, LoggedStyle, MyGameListContainer, MyGamesPaginationContainer, Title } from '../../styles/HomeLogged';
 
 const MyGames = () => {
   const { user, refresh, logout } = useContext(AuthContext)

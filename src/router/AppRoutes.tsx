@@ -18,10 +18,11 @@ import { CreationProvider } from '../contexts/creation';
 import { GameProvider } from '../contexts/game';
 import { OpenAIProvider } from '../contexts/openai';
 import { UserProvider } from '../contexts/user';
-import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, EXPLORER, GAME, GAME_DESCRIPTION, HOME, LANDING_PAGE, LOGIN, NEW_PASSWORD, MYGAMES, PLAYGAME, PROFILE, RECOVER_PASSWORD, REGISTER, SETTINGS, TEST } from '../core/app-urls';
+import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, EXPLORER, GAME, GAME_DESCRIPTION, HOME, LANDING_PAGE, LOGIN, MYGAMES, NEW_PASSWORD, PLAYGAME, PROFILE, RECOVER_PASSWORD, REGISTER, SETTINGS, TEST } from '../core/app-urls';
 import CreationSettings from '../pages/CreationSettings';
 import Explorer from '../pages/Explorer';
 import { GameInfos } from '../pages/GameInfos';
+import MyGames from '../pages/MyGames';
 import Profile from '../pages/Profile';
 import VisualizationTest from '../pages/VisualizationTest/VisualizationTest';
 
