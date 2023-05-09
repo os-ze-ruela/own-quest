@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 type CategoryLabelProps = {
     color: string;
-};
+  };
 
 export const Body = styled.div`
     height: 100%;
@@ -67,6 +67,33 @@ export const DescriptionInput = styled.input`
     ::placeholder{
         color: white;
     }
+    
+` 
+export const ListCategories = styled.div`
+    flex-direction: row;
+    display: inline-block;
+    margin-right: 15px;
+
+`
+export const CategoriesLabel = styled.span<CategoryLabelProps>`
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 45%;
+  /* background-color: ${(props) => props.color}; */
+  background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
+  color: #ffffff;
+  padding: 4px 8px;
+`
+export const AddButton = styled.button`
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 45%;
+  /* background-color: blue; */
+  background: linear-gradient(to right, #ff00ff, #00ffff);
+  color: #ffffff;
+  padding: 4px 14px;
+  cursor: pointer;
 `
 export const WrapTextButton = styled.div`
     flex-direction: row;
