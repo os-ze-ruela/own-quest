@@ -199,8 +199,9 @@ export const CardMostViewGameContentWrapper = styled.div`
   .description { 
     font-family: 'FiraCode-Light';
     font-size: 0.9rem;
-    max-lines: 3;
-    line-break: auto;
+    max-height: 4em; /* Set the maximum height to 3 lines */
+    overflow: hidden; /* Hide any overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis at the end of the text */
   }
  
 `;

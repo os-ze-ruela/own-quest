@@ -1,9 +1,10 @@
 import React from 'react';
 import { GAME } from '../../core/app-urls';
 import Category from '../../models/Category';
-import { Button, ButtonWrapper, CardUserGameContentWrapper, CardUserGameImage, CardUserGameTitle, CardUserGameWrapper, CategoryLabel, CategoryLabelWrapper, UserGameImageSpace, UserGameState } from '../../styles/HomeLogged';
+import { Button, ButtonWrapper, CategoryLabel, CategoryLabelWrapper } from '../../styles/HomeLogged';
+import { CardMyGameContentWrapper, CardMyGameImage, CardMyGameTitle, CardMyGameWrapper, MyGameImageSpace, MyGameState } from '../../styles/MyGames';
 
-type CardUserGameProps = {
+type CardMyGameProps = {
     id: number;
     imageSrc: string;
     title: string;
@@ -12,18 +13,18 @@ type CardUserGameProps = {
     categories: Category[];
 };
 
-const CardUserGame: React.FC<CardUserGameProps> = ({ id, imageSrc, title, description, isPublished, categories }) => {
+const CardMyGame: React.FC<CardMyGameProps> = ({ id, imageSrc, title, description, isPublished, categories }) => {
 
     return (
-        <CardUserGameWrapper >
-            <UserGameState isPublished={isPublished ? 'true' : 'false'}>
+        <CardMyGameWrapper >
+            <MyGameState isPublished={isPublished ? 'true' : 'false'}>
                 <p>{isPublished ? 'Publicado' : 'Editando'}</p>
-            </UserGameState>
-            <UserGameImageSpace>
-                <CardUserGameImage src={imageSrc} alt={title} />
-            </UserGameImageSpace>
-            <CardUserGameContentWrapper>
-                <CardUserGameTitle>{title}</CardUserGameTitle>
+            </MyGameState>
+            <MyGameImageSpace>
+                <CardMyGameImage src={imageSrc} alt={title} />
+            </MyGameImageSpace>
+            <CardMyGameContentWrapper>
+                <CardMyGameTitle>{title}</CardMyGameTitle>
                 <p className='description'  title={description}>{description}</p>
                 <CategoryLabelWrapper className='category-label-wrapper'>
                     {categories.map((category) => (
@@ -35,10 +36,10 @@ const CardUserGame: React.FC<CardUserGameProps> = ({ id, imageSrc, title, descri
                 <ButtonWrapper className='button-wrapper'>
                     <Button href={GAME + '/' + id} >{isPublished ? 'Jogar' : 'Editar'}</Button>
                 </ButtonWrapper>
-            </CardUserGameContentWrapper>
-        </CardUserGameWrapper>
+            </CardMyGameContentWrapper>
+        </CardMyGameWrapper>
     );
 };
 
-export default CardUserGame;
+export default CardMyGame;
 

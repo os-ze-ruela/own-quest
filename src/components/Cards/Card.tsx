@@ -1,9 +1,11 @@
 import React from 'react';
+import { GAME_DESCRIPTION } from '../../core/app-urls';
 import Category from '../../models/Category';
 import { PlayButtonWrapper } from '../../styles/Explorer';
 import { Button, CardContentWrapper, CardImage, CardTitle, CardWrapperCard, CategoryLabel, CategoryLabelWrapper, ImageSpace } from '../../styles/HomeLogged';
 
 type CardProps = {
+  id: number;
   imageSrc: string;
   title: string;
   description: string;
@@ -14,10 +16,10 @@ type CardProps = {
 
 
 
-const Card: React.FC<CardProps> = ({ imageSrc, title, description, categories }) => {
+const Card: React.FC<CardProps> = ({ id, imageSrc, title, description, categories }) => {
 
   return (
-    <CardWrapperCard >
+    <CardWrapperCard href={GAME_DESCRIPTION + '/' + id}>
       <ImageSpace>
         <CardImage src={imageSrc} alt={title} />
       </ImageSpace>

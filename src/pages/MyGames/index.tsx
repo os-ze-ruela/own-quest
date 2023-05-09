@@ -1,9 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
-import nextIcon from '../../assets/img/next-icon.svg';
-import CardRandomGame from '../../components/Cards/CardRandomGame';
-import CardUserGame from '../../components/Cards/CardUserGame';
+import GPT from "../../assets/img/gpt.svg";
+import CardMyGame from '../../components/Cards/CardMyGame';
 import EmptyCard from '../../components/Cards/EmptyCard';
 import HeaderLogged from '../../components/Header/HeaderLogged';
 import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated';
@@ -11,8 +10,8 @@ import { AuthContext } from '../../contexts/auth';
 import { GameContext } from '../../contexts/game';
 import AppError from '../../core/app-error';
 import { GAME } from '../../core/app-urls';
-import { GameListContainer } from '../../styles/Explorer';
-import { ListMyGamesCardContainer, LoggedStyle, MyGameListContainer, MyGamesPaginationContainer, Title } from '../../styles/HomeLogged';
+import { GptIcon } from '../../styles/CreationSettings';
+import { ListMyGamesCardContainer, MyGameWrapContainer, MyGamesStyle, RandomDescriptionButton, TitleMyGame, TitleWrapper } from '../../styles/MyGames';
 
 const MyGames = () => {
   const { user, refresh, logout } = useContext(AuthContext)
@@ -53,8 +52,8 @@ const MyGames = () => {
 
   const [sliderOffset, setSliderOffset] = useState(0);
 
-  
-    const ListGamesContainer = styled.div`
+
+  const ListGamesContainer = styled.div`
     position: relative;
     display: flex;
     width: 100%;
@@ -67,8 +66,8 @@ const MyGames = () => {
     <>
       <HeaderLogged nickname={user!.nickname} photo={user!.photo} />
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
-      <LoggedStyle>
-        <Title>Crie uma nova história</Title>
+      <MyGamesStyle>
+        {/* <Title>Crie uma nova história</Title>
         <GameListContainer>
             <ListGamesContainer>
                 <EmptyCard onClick={async () => {
@@ -82,17 +81,15 @@ const MyGames = () => {
                 }} />
                 <CardRandomGame onClick={()=>{}}></CardRandomGame>
                 </ListGamesContainer>
-        </GameListContainer>
-        <Title>Minhas histórias</Title>
-        <MyGameListContainer>
-          <MyGamesPaginationContainer direction='left'>
-            <button onClick={() => {
-              setSliderOffset(sliderOffset - 1);
-            }}>
-              <img src={nextIcon} alt="next games" className='nextIcon' />
-            </button>
-          </MyGamesPaginationContainer>
-          <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
+        </GameListContainer> */}
+        <TitleWrapper>
+          <TitleMyGame>Minhas histórias</TitleMyGame>
+          <RandomDescriptionButton onClick={() => {}}>Gerar uma história aleatória<GptIcon src={GPT} /></RandomDescriptionButton>
+
+        </TitleWrapper>
+        <MyGameWrapContainer>
+
+          <ListMyGamesCardContainer  >
             {userGames.length === 0 ? (
               <EmptyCard onClick={async () => {
                 try {
@@ -106,7 +103,7 @@ const MyGames = () => {
             ) : (
               <>
                 {userGames.map((game, index) => (
-                  <CardUserGame
+                  <CardMyGame
                     key={index}
                     id={game.id}
                     title={game.title}
@@ -118,16 +115,9 @@ const MyGames = () => {
                 ))}
               </>
             )}
-          </ListMyGamesCardContainer>
-          <MyGamesPaginationContainer direction='right'>
-            <button onClick={() => {
-              setSliderOffset(sliderOffset + 1);
-            }}>
-              <img src={nextIcon} alt="next games" className='nextIcon' />
-            </button>
-          </MyGamesPaginationContainer>
-        </MyGameListContainer>
-      </LoggedStyle >
+          </ListMyGamesCardContainer>=
+        </MyGameWrapContainer>
+      </MyGamesStyle >
     </>
   );
 };

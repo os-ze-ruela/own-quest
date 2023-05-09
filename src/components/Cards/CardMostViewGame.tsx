@@ -22,7 +22,7 @@ import { Button, CategoryLabel, CategoryLabelWrapper } from '../../styles/HomeLo
                 </CardMostViewGameImageSpace>
                 <CardMostViewGameContentWrapper>
                     <CardMostViewGameTitle id={title} >{title}</CardMostViewGameTitle>
-                    <p className='description'>{description}</p>
+                    <p className='description' title={description}>{description}</p>
                     <CategoryLabelWrapper className='category-label-wrapper'>
                         {categories.map((category) => (
                             <CategoryLabel key={category.id} color={category.color}>

@@ -39,13 +39,13 @@ export const TitleInput = styled.input`
     border-radius: 0.7em;
     border: none;
     margin-bottom: 0.7em;
-    padding-top: 12px;
-    padding-left: 8px;
+    padding-left: 12px;
     padding-bottom: 1.5em;
     font-family: FiraCode-light;
     font-weight: 400;
     font-size: 16px;
     text-align: start;
+    outline: none;
     ::placeholder{
         color: white;
     }
@@ -62,27 +62,48 @@ export const DescriptionInput = styled.textarea`
     margin-bottom: 0.7em;
     padding-top: 12px;
     padding-left: 8px;
-    padding-bottom: 3em;
+    padding-bottom: 1em;
     font-family: FiraCode-light;
     font-weight: 400;
     font-size: 16px;
     resize: none;
+    outline: none;  
+    margin: 8px 0px;
+
     ::placeholder{
         color: white;
     }
     
+    
 ` 
+
+export const CategoryLabelEditingWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    opacity: 1;
+    transition: all 0.2s ease-in-out;
+    border-radius: 16px;
+    overflow: hidden;
+`
+
 export const ListCategories = styled.div`
     flex-direction: row;
     display: inline-block;
     margin-right: 15px;
-
 `
 
 export const GptIcon = styled.img`
   width: 20px;
   height: 20px;
 `;
+
+export const RandomDescriptionWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+`
 
 export const RandomDescriptionButton = styled.button`
     display: flex;
@@ -122,13 +143,12 @@ export const RandomDescriptionButton = styled.button`
 
 
 export const CategoriesLabel = styled.span<CategoryLabelProps>`
-  font-size: 12px;
-  font-weight: 500;
-  border-radius: 10px;
-  /* background-color: ${(props) => props.color}; */
-  background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
-  color: #ffffff;
-  padding: 4px 8px;
+   font-size: 10px;
+    font-weight: 500;
+    /* background-color: ${(props) => props.color}; */
+    background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
+    color: #ffffff;
+    padding: 4px 8px;
 `
 export const AddButton = styled.button`
   border: none;
@@ -184,6 +204,7 @@ export const SaveButton = styled.button`
     font-weight: 400;
     font-size: 14px;
     padding: 0.5em;
+    margin-bottom: 2rem;
 `
 export const CategorySettingsLabelWrapper = styled.div`
   display: flex;

@@ -128,6 +128,7 @@ const HomeLogged = () => {
             games.map((game, index) => (
               <Card
                 key={index}
+                id={game.id}
                 title={game.title}
                 imageSrc={`https://picsum.photos/300/200?random=${randomInt()}`}
                 description={game.description}

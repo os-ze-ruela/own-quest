@@ -124,7 +124,7 @@ export const CardWrapper = styled.div`
   margin-bottom: 20px;
 `;
 
-export const CardWrapperCard = styled.div`
+export const CardWrapperCard = styled.a`
   position: relative;
   display: flex;
   flex-direction: row;
@@ -138,6 +138,7 @@ export const CardWrapperCard = styled.div`
   /* max-width: 500px; */
   transition: all 0.2s ease-in-out;
   height: 150px;
+  text-decoration: none;
   
   &:hover {
     transform: translateY(-4px);
@@ -192,8 +193,11 @@ export const CardContentWrapper = styled.div`
   font-family: 'FiraCode-Regular';
 
  p { 
-  font-family: 'FiraCode-Light';
-  font-size: 12px;
+    font-family: 'FiraCode-Light';
+    font-size: 12px;
+    max-height: 4em; /* Set the maximum height to 3 lines */
+    overflow: hidden; /* Hide any overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis at the end of the text */
  }
  
 `;
@@ -411,8 +415,9 @@ export const CardUserGameContentWrapper = styled.div`
   .description { 
     font-family: 'FiraCode-Light';
     font-size: 0.9rem;
-    max-lines: 3;
-    line-break: auto;
+    max-height: 4em; /* Set the maximum height to 3 lines */
+    overflow: hidden; /* Hide any overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis at the end of the text */
   }
  
 `;
