@@ -347,7 +347,7 @@ export const CardUserGameWrapper = styled.div`
   background-color: #202331;
   border-radius: 15px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  width: 35%;
+  width: 25%;
   min-width: 300px;
   transition: all 0.2s ease-in-out;
   height: 350px;

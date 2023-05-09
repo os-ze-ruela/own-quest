@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import nextIcon from '../../assets/img/next-icon.svg';
 import Card from '../../components/Cards/Card';
 import { CardHomeShimmer } from '../../components/Cards/CardHomeShimmer';
+import { CardMyGamesHomeShimmer } from '../../components/Cards/CardMyGamesHomeShimmer';
 import CardUserGame from '../../components/Cards/CardUserGame';
 import EmptyCard from '../../components/Cards/EmptyCard';
 import HeaderLogged from '../../components/Header/HeaderLogged';
@@ -61,7 +62,14 @@ const HomeLogged = () => {
         <Title>Minhas histórias</Title>
         <MyGameListContainer>
           <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
-            {userGames.length === 0 ? (
+            {isLoading ? (
+              <>
+                <CardMyGamesHomeShimmer />
+                <CardMyGamesHomeShimmer />
+                <CardMyGamesHomeShimmer />
+                <CardMyGamesHomeShimmer />
+              </>
+            ) : userGames.length === 0 ? (
               <EmptyCard onClick={async () => {
                 try {
                   const id = await createGame();
