@@ -59,23 +59,20 @@ const MyGames = () => {
 
 
   const handleClickGenerateRandomStorie = async () => {
-    
+    console.log("Gerando random storie...")
     const randomGame = await generateRandomGame(3, "Aventura")
 
     let randomGameJSON = JSON.parse(randomGame)
 
-    console.log(categories)
-    console.log(randomGameJSON.categories)
-   
     const matchingCategory = categories.find(category => category.title === randomGameJSON.categories)
+    let categoryIds = []
+
     if (matchingCategory) {
-      console.log("ID encontrado = "+ matchingCategory.id)
-      randomGameJSON.categories = [matchingCategory.id]
+      categoryIds.push(matchingCategory.id)
+      randomGameJSON.categories = categoryIds
     }
 
-    console.log("ID da categoria = "+ randomGameJSON.categories)
-
-    // await createRandomGame(randomGameJSON)
+    await createRandomGame(randomGameJSON)
   }
 
 
