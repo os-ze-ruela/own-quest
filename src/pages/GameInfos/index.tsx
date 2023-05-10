@@ -64,8 +64,6 @@ export const GameInfos = () => {
                 return new Category({ title: category.category.title, id: category.category.id, color: category.category.color, plus18: category.category.plus18 });
             });
 
-            console.log(createdAt)
-
             setVisitingGame(new Game({
                 id: idGame,
                 title: title,
@@ -119,7 +117,7 @@ export const GameInfos = () => {
                         {loading ?
                             (<Skeleton variant="rounded" animation="wave" width='100%' height='200px' />)
                             :
-                            (<ImageGame src={`https://picsum.photos/300/200?random=1`} />)}
+                            (<ImageGame src={visitingGame?.image != null ? visitingGame?.image : `https://picsum.photos/300/200?random=5`} />)}
                     </GameImageWrapper>
                     <GamesInfosWrapper>
                         {loading ?

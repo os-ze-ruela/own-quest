@@ -1,11 +1,11 @@
-import React, { useContext, useEffect } from 'react'
-import Footer from '../../components/Footer/Footer'
-import Header from '../../components/Header/Header'
-import { SubTitle } from '../../styles/Login'
+import { useContext, useEffect } from 'react';
 import { FaUnlock } from "react-icons/fa";
-import { Bar, BarTitle, ButtonSend, Title, ValidateStyle } from '../../styles/Validated'
+import Footer from '../../components/Footer/Footer';
+import Header from '../../components/Header/Header';
 import { AuthContext } from '../../contexts/auth';
 import { HOME } from '../../core/app-urls';
+import { SubTitle } from '../../styles/Login';
+import { Bar, BarTitle, ButtonSend, Title, ValidateStyle } from '../../styles/Validated';
 
 
 
@@ -18,8 +18,6 @@ export default function Validated(){
 
         const token = searchParams.get("token");
         const access_token = searchParams.get("access_token");
-
-        console.log(token,access_token);
         
         validateEmail(access_token!, token!)
     }, [])

@@ -3,7 +3,7 @@ import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
 import Category from "../models/Category";
 import Game from "../models/Game";
-import { api, deleteGame, fetchGameById, getHotGames, getUserGamesByToken, patchGame, postGame } from "../services/api";
+import { api, deleteGame, fetchGameById, getHotGames, getUserGamesByToken, patchGame, postFullGame, postGame } from "../services/api";
 
 type GameContextType = {
 
@@ -17,6 +17,7 @@ type GameContextType = {
     userGames: Game[],
     games: Game[],
     editingGame: Game | null,
+    createFullGame : (game: Game) => Promise<number>
 }
 
 export const GameContext = createContext<GameContextType>({} as GameContextType)
@@ -40,6 +41,17 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    async function createFullGame(game: Game): Promise<number> {
+        try {
+            const response = await postFullGame(game.title, game.description, game.image, game.categories)
+            return response.data.game.id;
+        } catch (e) {
+            const error = await e as AxiosError
+            console.log(error)
+            throw new AppError(error.response!.status, error.message);
+        }
+    }
+
     async function deleteGameByID(id: number) {
         try {
             await deleteGame(id)
@@ -52,7 +64,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         try {
             //   setLoading(true)
             await patchGame(game.id, game.title, game.description, game.image, game.isEditing, game.isPublished, game.isDeleted);
-            console.log(game)
             //   setLoading(false)
         } catch (error) {
             //   setLoading(false)
@@ -148,8 +159,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
             const gamesData = response.data;
 
-            console.log(response.data)
-
             const hotGames = gamesData.map((gameData: {
                 game: {
                     createdBy: any; categories: any[]; id: any; title: any; description: any; image: any; favorites: any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any;
@@ -188,7 +197,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <GameContext.Provider value={{ setEditingGame, getGameById, createGame, deleteGameByID, updateGame, getUserGames, getHotGamesForHome, userGames, games, editingGame }}>
+        <GameContext.Provider value={{ setEditingGame, getGameById, createGame, deleteGameByID, updateGame, getUserGames, getHotGamesForHome, userGames, games, editingGame, createFullGame }}>
             {children}
         </GameContext.Provider>
     )

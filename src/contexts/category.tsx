@@ -28,8 +28,6 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
 
             const categoriesData = response.data;
 
-            console.log(categoriesData)
-
             const categoriesAll: Category[] = categoriesData.map((categoryJson: { category: { id: any; color: any; plus18: any; title: any; }; }) => {
                 return new Category({ id: categoryJson.category.id, color: categoryJson.category.color, plus18: categoryJson.category.plus18, title: categoryJson.category.title });
             });

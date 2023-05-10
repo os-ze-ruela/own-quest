@@ -93,14 +93,14 @@ const Sidebar = () => {
       <Menu>
         {
           pages.map((page, index) => (
-            <MenuItem onClick={() => {
+            <MenuItem key={index} onClick={() => {
               setIndexSelected(index);
             }} >
               📄 {page.title}
               <SubMenu>
                 {
                   page.buttons.map((button, index) => (
-                    <>
+                    <div key={index}>
                       🔘 {button.title} <br />
                       <SubMenu>
                         {findPageIndex(pages, button.nextPageId) > -1 ? (
@@ -113,7 +113,7 @@ const Sidebar = () => {
                           <></>
                         )}
                       </SubMenu>
-                    </>
+                    </div>
                   ))
                 }
               </SubMenu>
