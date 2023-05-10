@@ -1,13 +1,9 @@
-import { AxiosError } from "axios";
-import { ReactNode, createContext, useState, useContext } from "react";
-import { Page } from "../models/Page";
-import { Button } from "../models/Button";
 import axios from 'axios';
+import { ReactNode, createContext, useContext, useState } from "react";
 import { GameContext } from '../contexts/game';
-import { create } from "domain";
-import Game from "../models/Game";
-import { CreationContext } from "./creation";
-import { api, deleteButton, deletePage, getPagesByGameID, patchButton, patchPage, postButton, postPage } from "../services/api";
+import { Button } from "../models/Button";
+import { Page } from "../models/Page";
+import { postButton, postPage } from "../services/api";
 
 type OpenAIContextType = {
     pages: Page[],
@@ -149,9 +145,9 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
             const response = await axios.post(
             "https://api.openai.com/v1/images/generations",
             {
-                model: "image-alpha-001",
                 prompt: message,
                 num_images: 1,
+                size: "1024x1024",
             },
             {
                 headers: {
