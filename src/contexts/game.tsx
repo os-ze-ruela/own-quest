@@ -159,8 +159,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
             const gamesData = response.data;
 
-            console.log(response.data)
-
             const hotGames = gamesData.map((gameData: {
                 game: {
                     createdBy: any; categories: any[]; id: any; title: any; description: any; image: any; favorites: any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any;

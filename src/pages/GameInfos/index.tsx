@@ -64,8 +64,6 @@ export const GameInfos = () => {
                 return new Category({ title: category.category.title, id: category.category.id, color: category.category.color, plus18: category.category.plus18 });
             });
 
-            console.log(createdAt)
-
             setVisitingGame(new Game({
                 id: idGame,
                 title: title,

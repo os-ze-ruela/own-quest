@@ -14,6 +14,7 @@ type OpenAIContextType = {
     setPages: (pages: Page[]) => void,
     createRandomGame: (randomGame: any) => void,
     chat: (message: string) => Promise<string>,
+    dalleAPI: (message: string) => Promise<string>,
     improveDescription: (description: string) => Promise<string>, 
     generateRandomGame: (numPages: number, category: string) => Promise<string>
 }
@@ -144,10 +145,27 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
         console.log(pagesTemp)
     }
 
+        async function dalleAPI(message: string): Promise<string> {
+            const response = await axios.post(
+            "https://api.openai.com/v1/images/generations",
+            {
+                model: "image-alpha-001",
+                prompt: message,
+                num_images: 1,
+            },
+            {
+                headers: {
+                Authorization: `Bearer ${API_KEY}`,
+                "Content-Type": "application/json",
+                },
+            }
+            );
+            return response.data.data[0].url;
+        }
 
 
     return (
-        <OpenAIContext.Provider value={{pages, setPages, createRandomGame, chat, improveDescription, generateRandomGame}}>
+        <OpenAIContext.Provider value={{pages, setPages, createRandomGame, chat, dalleAPI, improveDescription, generateRandomGame}}>
             {children}
         </OpenAIContext.Provider>
     )
