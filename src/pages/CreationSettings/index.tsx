@@ -32,6 +32,7 @@ export default function CreationSettings() {
   const [descTemp, setDescTemp] = useState('');
   const [categTemp, setCategTemp] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingDescriptionAI, setLoadingDescriptionAI] = useState(false);
   const { improveDescription } = useContext(OpenAIContext)
   const { loading, setLoading } = useContext(CreationContext)
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
@@ -48,10 +49,10 @@ export default function CreationSettings() {
   };
 
   const saveChanges = () => {
-    if (editingGame) {
-      setLoading(false)
-      updateGame(editingGame);
-    }
+    console.log("salvando...")
+    setLoading(false)
+    updateGame(editingGame!);
+    
   };
 
   useEffect(() => {
@@ -64,10 +65,10 @@ export default function CreationSettings() {
 
   async function handleClickRandomDescription() {
     if (editingGame) {
-      setLoading(true)
+      setLoadingDescriptionAI(true)
       const response = await improveDescription(editingGame.description);
       setDescTemp(response)
-      setLoading(false)
+      setLoadingDescriptionAI(false)
     }
   }
 
@@ -80,27 +81,27 @@ export default function CreationSettings() {
     if (editingGame) {
       setTitleTemp(editingGame.title);
       setDescTemp(editingGame.description);
-      // setCategTemp(...categTemp, editingGame.categories);
     }
   }, [editingGame]);
 
   useEffect(() => {
-    if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0)) {
+    if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0) && (descTemp.length > 0)) {
       const newEditingGame = { ...editingGame, title: titleTemp };
       setEditingGame(newEditingGame);
-      updateGame(newEditingGame);
-      // debounceSaveChanges();
+      // updateGame(newEditingGame);
+      debounceSaveChanges();
     }
-  }, [titleTemp])
+  }, [titleTemp, descTemp])
 
   useEffect(() => {
     if (editingGame && descTemp !== editingGame.description && (descTemp.length > 0)) {
       const newEditingGame = { ...editingGame, description: descTemp };
       setEditingGame(newEditingGame);
-      updateGame(newEditingGame);
-      // debounceSaveChanges();
+      // updateGame(newEditingGame);
+      debounceSaveChanges();
     }
   }, [descTemp])
+
 
   const handleDelete = () => {
     if (editingGame) {
@@ -119,14 +120,6 @@ export default function CreationSettings() {
     } catch (e) {
       setIsLoading(false)
       const error = await e as AppError
-      // if (error.statusCode === 401) {
-      //   try {
-      //     await refresh()
-      //     await fetchGames()
-      //   } catch (e) {
-      //     logout()
-      //   }
-      // }
     }
   };
 
@@ -154,7 +147,7 @@ export default function CreationSettings() {
         <Separator />
 
         <Titles>Descrição</Titles>
-        {loading ? (<LinearProgress color="success" />) : (<></>)}
+        {loadingDescriptionAI ? (<LinearProgress color="success" />) : (<></>)}
         <DescriptionInput
           name="StoryDescription"
           autoComplete="off"

@@ -26,7 +26,7 @@ const Game = () => {
 
     useEffect( () =>  {
         getPagesFromGameID(id!)
-      }, [])  
+      }, []) 
 
 
     const handleBackClick = () => {
@@ -46,7 +46,6 @@ const Game = () => {
     const handleClickButton = () => {
 
       if(pages[indexPage].isLastPage === true){
-        console.log("fim da historia")
         navigate(GAME+"/"+id);
       }
 
@@ -96,6 +95,7 @@ const Game = () => {
                       readOnly
                       key={index}
                       value={button.title}
+                      textLength={button.title.length}
                       isSelected={index === buttonIndex}
                       background={button.color}
                       onClick={() => handleButton(index)}

@@ -204,9 +204,9 @@ export const AddButton = styled.button.attrs((props: {canAdd: boolean}) => props
   }
 `;
 
-export const EditableButton = styled.input.attrs((props: {isSelected: boolean, background: string}) => props)`
+export const EditableButton = styled.input.attrs((props: {isSelected: boolean, background: string, textLength:number}) => props)`
   margin-right: 10px;
-  width: 30%;
+  width: ${props => props.textLength ? `${(props.textLength + 2) * 8}px` : '20%'};
   color: white;
   background-color: ${props => props.background};
   font-family: FiraCode-Light;

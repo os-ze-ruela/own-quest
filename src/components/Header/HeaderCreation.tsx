@@ -165,7 +165,6 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
 
   // Debounce no titulo causando erros
   useEffect(() => {
-    console.log(editingGame)
     if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0)) {
       const newEditingGame = {...editingGame, title: titleTemp};
       setEditingGame(newEditingGame);
