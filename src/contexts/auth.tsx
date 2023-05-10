@@ -229,7 +229,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
 
-      navigate(HOME);
+      navigate(EMAIL_NOT_VALIDATED);
     } catch (e) {
       const error = (await e) as AxiosError;
       console.error(
@@ -237,12 +237,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         error
       );
       if (error.response?.status === 400) {
-        throw new AppError(400, "O e-mail informado já está sendo utilizado.");
-      } else if (error.response?.status === 403) {
+          // erro de validação genérico ou outro tipo de erro
+          throw new AppError(
+            400,
+            "Não foi possível realizar o cadastro. Por favor, verifique as informações fornecidas e tente novamente. Seu e-mail pode já ter sido utilizado, verifique se os campos de nome e nickname possuem pelo menos 4 caracteres. Verifique se sua senha está forte o suficiente, contendo pelo menos 4 caracteres, dentre eles pelo menos um caracter especial, uma letra maiúscula, uma letra minúscula e um número."
+          );
+        }
+      else if (error.response?.status === 403) {
         throw new AppError(
-          403,
-          "Não foi possível criar uma nova conta com as credenciais fornecidas."
-        );
+            403,
+            "Não foi possível realizar o cadastro. Por favor, verifique as informações fornecidas e tente novamente.");
       }
     }
   }
