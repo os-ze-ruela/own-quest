@@ -1,24 +1,26 @@
+import { Backdrop, CircularProgress } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import styled from 'styled-components';
 import GPT from "../../assets/img/gpt.svg";
 import CardMyGame from '../../components/Cards/CardMyGame';
+import { CardMyGameShimmer } from '../../components/Cards/CardMyGameShimmer';
 import EmptyCard from '../../components/Cards/EmptyCard';
 import HeaderLogged from '../../components/Header/HeaderLogged';
 import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated';
 import { AuthContext } from '../../contexts/auth';
+import { CategoryContext } from '../../contexts/category';
 import { GameContext } from '../../contexts/game';
+import { OpenAIContext } from '../../contexts/openai';
 import AppError from '../../core/app-error';
 import { GAME } from '../../core/app-urls';
 import { GptIcon } from '../../styles/CreationSettings';
 import { ListMyGamesCardContainer, MyGameWrapContainer, MyGamesStyle, RandomDescriptionButton, TitleMyGame, TitleWrapper } from '../../styles/MyGames';
-import { OpenAIContext } from '../../contexts/openai';
-import { CategoryContext } from '../../contexts/category';
 
 const MyGames = () => {
   const { user, refresh, logout } = useContext(AuthContext)
   const { userGames, games, getUserGames, getHotGamesForHome } = useContext(GameContext)
   const [isLoading, setIsLoading] = useState(true);
+  const [isCreatingGame, setLoadingCreatingGame] = useState(false);
   const { categories, getCategories } = useContext(CategoryContext)
 
   const fetchGames = async () => {
@@ -59,6 +61,7 @@ const MyGames = () => {
 
 
   const handleClickGenerateRandomStorie = async () => {
+    setLoadingCreatingGame(true);
     console.log("Gerando random storie...")
     const randomGame = await generateRandomGame(3, "Aventura")
 
@@ -72,7 +75,14 @@ const MyGames = () => {
       randomGameJSON.categories = categoryIds
     }
 
-    await createRandomGame(randomGameJSON)
+    try {
+      const gameId = await createRandomGame(randomGameJSON)
+      // await getUserGames();
+      setLoadingCreatingGame(false);
+      navigate(GAME + '/' + gameId)
+    } catch (error) {
+      setLoadingCreatingGame(false);
+    }
   }
 
 
@@ -80,6 +90,13 @@ const MyGames = () => {
 
   return (
     <>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isCreatingGame}
+        onClick={() => {}}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <HeaderLogged nickname={user!.nickname} photo={user!.photo} />
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <MyGamesStyle>
@@ -106,7 +123,18 @@ const MyGames = () => {
         <MyGameWrapContainer>
 
           <ListMyGamesCardContainer  >
-            {userGames.length === 0 ? (
+            {isLoading ? (
+              <>
+                <CardMyGameShimmer />
+                <CardMyGameShimmer />
+                <CardMyGameShimmer />
+                <CardMyGameShimmer />
+                <CardMyGameShimmer />
+                <CardMyGameShimmer />
+                <CardMyGameShimmer />
+                <CardMyGameShimmer />
+              </>
+            ) : userGames.length === 0 ? (
               <EmptyCard onClick={async () => {
                 try {
                   const id = await createGame();
@@ -117,19 +145,17 @@ const MyGames = () => {
                 }
               }} />
             ) : (
-              <>
-                {userGames.map((game, index) => (
-                  <CardMyGame
-                    key={index}
-                    id={game.id}
-                    title={game.title}
-                    imageSrc={game.image != null ? game.image :game.image && `https://picsum.photos/300/200?random=2`}
-                    isPublished={game.isPublished}
-                    description={game.description}
-                    categories={game.categories}
-                  />
-                ))}
-              </>
+              userGames.map((game, index) => (
+                <CardMyGame
+                  key={index}
+                  id={game.id}
+                  title={game.title}
+                  imageSrc={game.image != null ? game.image : game.image && `https://picsum.photos/300/200?random=2`}
+                  isPublished={game.isPublished}
+                  description={game.description}
+                  categories={game.categories}
+                />
+              ))
             )}
           </ListMyGamesCardContainer>=
         </MyGameWrapContainer>

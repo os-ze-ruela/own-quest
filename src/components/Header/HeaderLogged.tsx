@@ -4,7 +4,7 @@ import LOGO from "../../assets/img/ownquest-logo.png";
 import { AuthContext } from '../../contexts/auth';
 import { GameContext } from "../../contexts/game";
 import AppError from "../../core/app-error";
-import { GAME, HOME, LANDING_PAGE } from "../../core/app-urls";
+import { EXPLORER, GAME, HOME, LANDING_PAGE, MYGAMES } from "../../core/app-urls";
 import { ButtonStyle, HeaderActions, HeaderStyle, LinkStyle, LogoStyle, PerfilLink, UserImage, UserImagePlaceholder } from '../../styles/Header';
 
 interface HeaderProps {
@@ -24,8 +24,8 @@ function HeaderLogged(props: HeaderProps) {
                 <LogoStyle src={LOGO} alt="Logo" />
             </a>
             <HeaderActions>
-                <LinkStyle href="/explorer" >Explorar</LinkStyle>
-                <LinkStyle href="mygames">Meus Jogos</LinkStyle>
+                <LinkStyle href={EXPLORER} >Explorar</LinkStyle>
+                <LinkStyle href={MYGAMES}>Meus Jogos</LinkStyle>
                 <ButtonStyle onClick={async () => {
                     try {
                         const id = await createGame();

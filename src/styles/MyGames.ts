@@ -32,12 +32,27 @@ export const MyGameWrapContainer = styled.div`
 `
 export const ListMyGamesCardContainer = styled.div`
     position: relative;
-    display: flex;
-    flex-wrap: wrap;
+    /* display: flex; */
+    /* flex-wrap: wrap; */
     width: 100%;
-    gap: 2rem;
+    gap: 1rem;
     padding: 0px 1rem;
     transition: all 1s ease-in-out;
+
+    display: grid;
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box;
+
+    grid-template-columns: repeat(4, 1fr);
+    
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
 `;
 
 export const TitleMyGame = styled.div`
@@ -55,8 +70,6 @@ export const TitleMyGame = styled.div`
       padding-bottom: 12px;
     }
 `
-
-
 
 export const MyGameState = styled.span.attrs((props: { isPublished: string, }) => props)`
   position: absolute; 
@@ -86,10 +99,9 @@ export const CardMyGameWrapper = styled.div`
   background-color: #202331;
   border-radius: 15px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  width: 22.5%;
   min-width: 300px;
   transition: all 0.2s ease-in-out;
-  height: 350px;
+  height: 420px;
 
   &:hover {
     transform: translateY(-4px);

@@ -8,7 +8,7 @@ import { postButton, postPage } from "../services/api";
 type OpenAIContextType = {
     pages: Page[],
     setPages: (pages: Page[]) => void,
-    createRandomGame: (randomGame: any) => void,
+    createRandomGame: (randomGame: any) =>  Promise<number>,
     chat: (message: string) => Promise<string>,
     dalleAPI: (message: string) => Promise<string>,
     improveDescription: (description: string) => Promise<string>, 
@@ -103,7 +103,7 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
 
     const { createFullGame } = useContext(GameContext)
 
-    async function createRandomGame(randomGame: any) {
+    async function createRandomGame(randomGame: any): Promise<number> {
         console.log("JSON do game a ser gerado = ");
         console.log(randomGame);
       
@@ -164,6 +164,8 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
         }
       
         setPages(pagesTemp);
+
+        return newGameID;
       }
       
 
@@ -234,7 +236,7 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
             {
                 prompt: message,
                 num_images: 1,
-                size: "1024x1024",
+                size: "512x512",
             },
             {
                 headers: {
