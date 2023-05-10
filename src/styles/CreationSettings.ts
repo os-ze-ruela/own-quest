@@ -6,8 +6,7 @@ type CategoryLabelProps = {
 
 export const Body = styled.main`
     position: relative;
-    height: 100vh;
-`
+    height: 100vh;`
 
 export const ImageContainer = styled.div`
     height: auto;
@@ -16,8 +15,10 @@ export const ImageContainer = styled.div`
     margin-top: 24px;
     margin-left: 2rem;
     margin-bottom: 24px;
+    max-width: 500px;
     
     @media (max-width: 1200px) {
+        max-width: 350px;
         -moz-box-sizing: border-box; 
         -webkit-box-sizing: border-box; 
         box-sizing: border-box;
@@ -411,8 +412,8 @@ export const GenerateRandomImageButton = styled.button`
     }
 `
 export const ImagePlaceholder = styled.div`
-    height: 300px;
-    width: 90%;
+    height: 320px;
+    width: 100%;
     background-color: #D9D9D9;
     display: flex;
     flex-direction: column;
