@@ -1,4 +1,5 @@
 import axios from "axios";
+import Category from "../models/Category";
 
 export const api = axios.create({
     baseURL: 'https://deploy.ownquest.games',
@@ -122,6 +123,15 @@ export const postGame = async () => {
         "description": 'Essa é uma nova história criada no Own QUest.',
         "image": null,
         "categories": []
+    })
+}
+export const postFullGame = async (title: string, description: string, image: string, categories: Category[]) => {
+    console.log(title, description, image, categories)
+    return await api.post(`/game`, {
+        "title": title,
+        "description": description,
+        "image": image,
+        "categories": categories
     })
 }
 

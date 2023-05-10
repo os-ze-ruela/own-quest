@@ -12,15 +12,18 @@ import AppError from '../../core/app-error';
 import { GAME } from '../../core/app-urls';
 import { GptIcon } from '../../styles/CreationSettings';
 import { ListMyGamesCardContainer, MyGameWrapContainer, MyGamesStyle, RandomDescriptionButton, TitleMyGame, TitleWrapper } from '../../styles/MyGames';
+import { OpenAIContext } from '../../contexts/openai';
+import { CategoryContext } from '../../contexts/category';
 
 const MyGames = () => {
   const { user, refresh, logout } = useContext(AuthContext)
   const { userGames, games, getUserGames, getHotGamesForHome } = useContext(GameContext)
   const [isLoading, setIsLoading] = useState(true);
+  const { categories, getCategories } = useContext(CategoryContext)
 
   const fetchGames = async () => {
     try {
-      await Promise.all([getUserGames(), getHotGamesForHome()]);
+      await Promise.all([getUserGames(), getHotGamesForHome(), getCategories()]);
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
@@ -40,6 +43,7 @@ const MyGames = () => {
     fetchGames()
   }, [])
 
+
   const randomInt = (): number => {
     const min = 1;
     const max = 100;
@@ -48,18 +52,33 @@ const MyGames = () => {
   }
 
   const { createGame } = useContext(GameContext)
+  const { generateRandomGame, createRandomGame } = useContext(OpenAIContext)
   const navigate = useNavigate()
 
   const [sliderOffset, setSliderOffset] = useState(0);
 
 
-  const ListGamesContainer = styled.div`
-    position: relative;
-    display: flex;
-    width: 100%;
-    gap: 2rem;
-    padding: 0px 2rem;
-    `;
+  const handleClickGenerateRandomStorie = async () => {
+    
+    const randomGame = await generateRandomGame(3, "Aventura")
+
+    let randomGameJSON = JSON.parse(randomGame)
+
+    console.log(categories)
+    console.log(randomGameJSON.categories)
+   
+    const matchingCategory = categories.find(category => category.title === randomGameJSON.categories)
+    if (matchingCategory) {
+      console.log("ID encontrado = "+ matchingCategory.id)
+      randomGameJSON.categories = [matchingCategory.id]
+    }
+
+    console.log("ID da categoria = "+ randomGameJSON.categories)
+
+    // await createRandomGame(randomGameJSON)
+  }
+
+
 
 
   return (
@@ -84,7 +103,7 @@ const MyGames = () => {
         </GameListContainer> */}
         <TitleWrapper>
           <TitleMyGame>Minhas histórias</TitleMyGame>
-          <RandomDescriptionButton onClick={() => {}}>Gerar uma história aleatória<GptIcon src={GPT} /></RandomDescriptionButton>
+          <RandomDescriptionButton onClick={handleClickGenerateRandomStorie}>Gerar uma história aleatória<GptIcon src={GPT} /></RandomDescriptionButton>
 
         </TitleWrapper>
         <MyGameWrapContainer>

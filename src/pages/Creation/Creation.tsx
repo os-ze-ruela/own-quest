@@ -152,6 +152,7 @@ const Creation = () => {
                     <EditableButton
                       key={index}
                       value={button.title}
+                      textLength={button.title.length}
                       isSelected={index === indexButton}
                       placeholder={"Botão " + (index + 1).toString()}
                       background={button.color}

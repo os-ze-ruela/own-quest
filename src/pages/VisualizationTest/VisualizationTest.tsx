@@ -12,10 +12,10 @@ function Chatbot() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const response = await chat(input);
-    // const parseJSON = JSON.parse(response);
-    // console.log(parseJSON)
+    const parseJSON = JSON.parse(response);
+    console.log(parseJSON)
     setOutput(response);
-    // createRandomGame(parseJSON)
+    createRandomGame(parseJSON)
   }
 
 
