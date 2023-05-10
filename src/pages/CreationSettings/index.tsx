@@ -16,12 +16,6 @@ import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySetting
 
 export default function CreationSettings() {
 
-
-
-  // interface ImageUploaderProps {
-  //   onImageUploaded: (imageUrl: string) => void;
-  // }
-
   const { id } = useParams()
   const { user } = useContext(AuthContext);
   const { handleBackClick } = useContext(CreationContext)
@@ -33,7 +27,7 @@ export default function CreationSettings() {
   const [isLoading, setIsLoading] = useState(true);
   const [isErroImage, setErrorImage] = useState(false);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
-  const { improveDescription, dalleAPI } = useContext(OpenAIContext
+  const { improveDescription, dalleAPI } = useContext(OpenAIContext);
   const [loadingDescriptionAI, setLoadingDescriptionAI] = useState(false);
   const { loading, setLoading } = useContext(CreationContext)
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
@@ -67,12 +61,23 @@ export default function CreationSettings() {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
+  }
 
   const saveChanges = () => {
     setLoading(false)
     updateGame(editingGame!);
-};
+  };
 
+  const debounceSaveChanges = () => {
+    setLoading(true)
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    const idTimer = setTimeout(() => {
+      saveChanges();
+    }, 1000);
+    setTimerId(idTimer);
+  };
 
   useEffect(() => {
     return () => {
@@ -181,38 +186,35 @@ export default function CreationSettings() {
       <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={true} />
       <Title>Configurações da história</Title>
       <SettingsWrapper>
-      <SettingsContainer>
-        <Title>Configurações da história</Title>
-        <Separator />
+        <SettingsContainer>
+          <Titles>Título</Titles>
+          <TitleInput
+            type="text"
+            name="StoryTitle"
+            autoComplete="off"
+            value={titleTemp!}
+            placeholder="Minha primeira história"
+            onChange={handleChange}
+          />
+          <Separator />
 
-        <Titles>Título</Titles>
-        <TitleInput
-          type="text"
-          name="StoryTitle"
-          autoComplete="off"
-          value={titleTemp!}
-          placeholder="Minha primeira história"
-          onChange={handleChange}
-        />
-        <Separator />
-
-        <Titles>Descrição</Titles>
-        {loadingDescriptionAI ? (<LinearProgress color="success" />) : (<></>)}
-        <DescriptionInput
-          name="StoryDescription"
-          autoComplete="off"
-          value={descTemp!}
-          placeholder="Essa é uma nova história criada no Own Quest."
-          onChange={(event) => { setDescTemp(event.target.value) }}
-        />
-        <RandomDescriptionWrapper>
-          <RandomDescriptionButton onClick={handleClickRandomDescription}>Melhorar descrição com IA<GptIcon src={GPT} /></RandomDescriptionButton>
-        </RandomDescriptionWrapper>
-        <Separator />
-        <Titles>Caregorias adicionadas:</Titles>
+          <Titles>Descrição</Titles>
+          {loadingDescriptionAI ? (<LinearProgress color="success" />) : (<></>)}
+          <DescriptionInput
+            name="StoryDescription"
+            autoComplete="off"
+            value={descTemp!}
+            placeholder="Essa é uma nova história criada no Own Quest."
+            onChange={(event) => { setDescTemp(event.target.value) }}
+          />
+          <RandomDescriptionWrapper>
+            <RandomDescriptionButton onClick={handleClickRandomDescription}>Melhorar descrição com IA<GptIcon src={GPT} /></RandomDescriptionButton>
+          </RandomDescriptionWrapper>
+          <Separator />
+          <Titles>Caregorias adicionadas:</Titles>
           <CategoryLabelEditingWrapper className='category-label-wrapper'>
             {categories.map((category, index) => (
-              <CategorySettingsLabel key={index} color={category.color}>
+              <CategorySettingsLabel key={index} color={category.color}>{category.title}</CategorySettingsLabel>))}
           </CategoryLabelEditingWrapper>
           <Separator />
           <Titles>Excluir história</Titles>
@@ -220,9 +222,6 @@ export default function CreationSettings() {
             <TitlesInfo>Ao excluir a sua história, você não poderá mais acessar nem editar essa história novamente.</TitlesInfo>
             <DeleteButton href={HOME} onClick={handleDelete}>Excluir</DeleteButton>
           </WrapTextButton>
-          {/* <Link to={GAME + '/' + id}>
-            <SaveButton>Salvar</SaveButton>
-          </Link> */}
         </SettingsContainer>
         <ImageContainer>
           <ActionsImageWrapper>
@@ -253,7 +252,3 @@ export default function CreationSettings() {
     </Body >
   );
 }
-
-// function onImageUploaded(imageUrl: any) {
-//   throw new Error("Function not implemented.");
-// }
