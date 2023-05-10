@@ -11,7 +11,7 @@ import { GameContext } from "../../contexts/game";
 import { OpenAIContext } from "../../contexts/openai";
 import AppError from '../../core/app-error';
 import { HOME } from "../../core/app-urls";
-import { uploadImage, uploadRandomImage } from "../../services/api";
+import { api, uploadImage, uploadRandomImage } from "../../services/api";
 import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySettingsLabel, DeleteButton, DescriptionInput, FileInput, GenerateRandomImageButton, GptIcon, ImageContainer, ImageGameContainer, ImagePlaceholder, RandomDescriptionButton, RandomDescriptionWrapper, Separator, SettingsContainer, SettingsWrapper, Title, TitleInput, Titles, TitlesInfo, UploadImageButton, WrapTextButton } from "../../styles/CreationSettings";
 
 export default function CreationSettings() {
@@ -158,6 +158,11 @@ export default function CreationSettings() {
   const fetchAllRequests = async () => {
     try {
       setIsLoading(true)
+      
+      const tokensJSON = localStorage.getItem('token')
+      const tokens = JSON.parse(tokensJSON!)
+      api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
+
       await Promise.all([
         getGameById(id!),
         getCategories()
