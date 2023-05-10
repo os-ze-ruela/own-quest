@@ -107,7 +107,7 @@ const MyGames = () => {
                     key={index}
                     id={game.id}
                     title={game.title}
-                    imageSrc={`https://picsum.photos/300/200?random=1`}
+                    imageSrc={game.image != null ? game.image :game.image && `https://picsum.photos/300/200?random=2`}
                     isPublished={game.isPublished}
                     description={game.description}
                     categories={game.categories}

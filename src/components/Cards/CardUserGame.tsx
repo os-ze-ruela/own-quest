@@ -22,7 +22,7 @@ const CardUserGame: React.FC<CardUserGameProps> = ({ id, imageSrc, title, descri
             <UserGameImageSpace>
                 <CardUserGameImage src={imageSrc} alt={title} />
             </UserGameImageSpace>
-            <CardUserGameContentWrapper>
+            <CardUserGameContentWrapper title={description}>
                 <CardUserGameTitle>{title}</CardUserGameTitle>
                 <p className='description'  title={description}>{description}</p>
                 <CategoryLabelWrapper className='category-label-wrapper'>

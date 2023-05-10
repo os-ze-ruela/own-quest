@@ -10,7 +10,7 @@ export const createSession = async (email: string, password: string) => {
 }
 
 export const signupUser = async (name: string, nickname: string, email: string, password: string, birthDate: string) => {
-    return await api.post('/auth/signup', {name, nickname, email, password, birthDate})
+    return await api.post('/auth/signup', { name, nickname, email, password, birthDate })
 }
 
 export const refreshToken = async () => {
@@ -131,11 +131,11 @@ export const getButton = async (id: number) => {
 
 // --- Verification ---
 
-export const sendEmail = async() =>{
+export const sendEmail = async () => {
     return await api.post('/user/send-verification-email')
 }
 
-export const verifyEmail = async (token: string) =>{
+export const verifyEmail = async (token: string) => {
     return await api.post(`/user/verify-email/${token}`)
 }
 
@@ -157,4 +157,16 @@ export const postLikeGame = async (gameId: string) => {
 
 export const postUnLikeGame = async (gameId: string) => {
     return await api.delete(`/user/unfavorite/${gameId}`)
+}
+
+// ----- IMAGE UPLOAD -----
+
+export const uploadImage = async (imageData: FormData) => {
+    return await api.post(`/game/upload-game-image`, imageData)
+}
+
+export const uploadRandomImage = async (randomImageUrl: string) => {
+    return await api.post(`/game/upload-random-image`, {
+        "randomImageUrl": randomImageUrl
+    })
 }

@@ -1,14 +1,14 @@
-import { AxiosError } from "axios";
-import { ReactNode, createContext, useState } from "react";
-import { Page } from "../models/Page";
-import { Button } from "../models/Button";
 import axios from 'axios';
+import { ReactNode, createContext, useState } from "react";
+import { Button } from "../models/Button";
+import { Page } from "../models/Page";
 
 type OpenAIContextType = {
     pages: Page[],
     setPages: (pages: Page[]) => void,
     createRandomGame: (randomGame: any) => void,
     chat: (message: string) => Promise<string>,
+    dalleAPI: (message: string) => Promise<string>,
     improveDescription: (description: string) => Promise<string>, 
 }
 
@@ -77,10 +77,27 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
         console.log(pagesTemp)
     }
 
+        async function dalleAPI(message: string): Promise<string> {
+            const response = await axios.post(
+            "https://api.openai.com/v1/images/generations",
+            {
+                model: "image-alpha-001",
+                prompt: message,
+                num_images: 1,
+            },
+            {
+                headers: {
+                Authorization: `Bearer ${API_KEY}`,
+                "Content-Type": "application/json",
+                },
+            }
+            );
+            return response.data.data[0].url;
+        }
 
 
     return (
-        <OpenAIContext.Provider value={{pages, setPages, createRandomGame, chat, improveDescription}}>
+        <OpenAIContext.Provider value={{pages, setPages, createRandomGame, chat, dalleAPI, improveDescription}}>
             {children}
         </OpenAIContext.Provider>
     )

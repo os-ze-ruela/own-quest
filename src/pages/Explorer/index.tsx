@@ -75,7 +75,7 @@ const Explorer = () => {
               key={index}
               id={game.id}
               title={game.title}
-              imageSrc={`https://picsum.photos/300/200?random=5}`}
+              imageSrc={game.image != null ? game.image : `https://picsum.photos/300/200?random=4`}
               description={game.description}
               categories={game.categories}
               createdByNickname={game.createdBy!.nickname}
@@ -87,7 +87,6 @@ const Explorer = () => {
             <PaginationContainer direction='left'>
               <button onClick={() => {
                 setSliderOffset(sliderOffset - 1);
-                console.log(sliderOffset)
               }}>
                 <img src={nextIcon} alt="next games" className='nextIcon' />
               </button>
@@ -110,7 +109,7 @@ const Explorer = () => {
           <CardHighlightGame
             key={0}
             title={games[0].title}
-            imageSrc={`https://picsum.photos/300/200?random=5}`}
+            imageSrc={games[0].image && `https://picsum.photos/300/200?random=3`}
             description={games[0].description}
             categories={games[0].categories}
             createdByNickname={games[0].createdBy!.nickname}

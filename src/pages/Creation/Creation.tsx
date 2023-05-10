@@ -74,7 +74,6 @@ const Creation = () => {
   const saveChangesButton = () => {
     setLoading(false);
     updateButton(pages[indexSelected].buttons[indexButton])
-    console.log("atualizou botao")
   };
 
   useEffect(() => {

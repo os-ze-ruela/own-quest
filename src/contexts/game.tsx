@@ -52,7 +52,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         try {
             //   setLoading(true)
             await patchGame(game.id, game.title, game.description, game.image, game.isEditing, game.isPublished, game.isDeleted);
-            console.log(game)
             //   setLoading(false)
         } catch (error) {
             //   setLoading(false)
@@ -147,8 +146,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             const response = await getHotGames()
 
             const gamesData = response.data;
-
-            console.log(response.data)
 
             const hotGames = gamesData.map((gameData: {
                 game: {

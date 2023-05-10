@@ -86,7 +86,7 @@ const HomeLogged = () => {
                     key={index}
                     id={game.id}
                     title={game.title}
-                    imageSrc={`https://picsum.photos/300/200?random=1`}
+                    imageSrc={game.image != null ? game.image : `https://picsum.photos/300/200?random=1`}
                     isPublished={game.isPublished}
                     description={game.description}
                     categories={game.categories}
@@ -101,7 +101,6 @@ const HomeLogged = () => {
             <MyGamesPaginationContainer direction='left'>
               <button onClick={() => {
                 setSliderOffset(sliderOffset - 1);
-                console.log(sliderOffset)
               }}>
                 <img src={nextIcon} alt="next games" className='nextIcon' />
               </button>
@@ -130,7 +129,7 @@ const HomeLogged = () => {
                 key={index}
                 id={game.id}
                 title={game.title}
-                imageSrc={`https://picsum.photos/300/200?random=${randomInt()}`}
+                imageSrc={game.image != null ? game.image : `https://picsum.photos/300/200?random=${randomInt()}`}
                 description={game.description}
                 categories={game.categories}
               />
