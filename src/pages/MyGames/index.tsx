@@ -1,7 +1,8 @@
-import { Backdrop, CircularProgress } from '@mui/material';
+import { Backdrop, Box, CircularProgress, CircularProgressProps, Typography, styled } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import GPT from "../../assets/img/gpt.svg";
+import ASTROTALKING from "../../assets/img/astronauta-conversando 1.svg";
 import CardMyGame from '../../components/Cards/CardMyGame';
 import { CardMyGameShimmer } from '../../components/Cards/CardMyGameShimmer';
 import EmptyCard from '../../components/Cards/EmptyCard';
@@ -13,15 +14,29 @@ import { GameContext } from '../../contexts/game';
 import { OpenAIContext } from '../../contexts/openai';
 import AppError from '../../core/app-error';
 import { GAME } from '../../core/app-urls';
-import { GptIcon } from '../../styles/CreationSettings';
+import { AstronautLoading, BackdropWrapper, GptIcon, LoadingText } from '../../styles/CreationSettings';
 import { ListMyGamesCardContainer, MyGameWrapContainer, MyGamesStyle, RandomDescriptionButton, TitleMyGame, TitleWrapper } from '../../styles/MyGames';
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import { BsXLg } from 'react-icons/bs';
+import DialogRandomGame from '../../components/Dialog/DialogRandomGame';
+
+
 
 const MyGames = () => {
   const { user, refresh, logout } = useContext(AuthContext)
   const { userGames, games, getUserGames, getHotGamesForHome } = useContext(GameContext)
   const [isLoading, setIsLoading] = useState(true);
-  const [isCreatingGame, setLoadingCreatingGame] = useState(false);
+  const [isCreatingGame, setCreatingGame] = useState(false);
+  const [isLoadingGame, setIsLoadingGame] = useState(false);
   const { categories, getCategories } = useContext(CategoryContext)
+  const [progress, setProgress] = useState(0);
+  const { createGame } = useContext(GameContext)
+  const { generateRandomGame, createRandomGame } = useContext(OpenAIContext)
+  const navigate = useNavigate()
+  const [progressText, setProgressText] = useState('');
+  const [numPageSelected, setNumPageSelected] = useState(3)
+  const [categorySelected, setCategorySelected] = useState('Aventura')
+
 
   const fetchGames = async () => {
     try {
@@ -46,24 +61,15 @@ const MyGames = () => {
   }, [])
 
 
-  const randomInt = (): number => {
-    const min = 1;
-    const max = 100;
-    const rand = min + Math.random() * (max - min);
-    return rand;
-  }
-
-  const { createGame } = useContext(GameContext)
-  const { generateRandomGame, createRandomGame } = useContext(OpenAIContext)
-  const navigate = useNavigate()
-
-  const [sliderOffset, setSliderOffset] = useState(0);
-
-
   const handleClickGenerateRandomStorie = async () => {
-    setLoadingCreatingGame(true);
-    console.log("Gerando random storie...")
-    const randomGame = await generateRandomGame(3, "Aventura")
+    setCreatingGame(true);
+  }
+  
+  
+  const handleGenerateRandomStorie = async () => {
+    setCreatingGame(false);
+    setIsLoadingGame(true);
+    const randomGame = await generateRandomGame(numPageSelected, categorySelected)
 
     let randomGameJSON = JSON.parse(randomGame)
 
@@ -78,43 +84,102 @@ const MyGames = () => {
     try {
       const gameId = await createRandomGame(randomGameJSON)
       // await getUserGames();
-      setLoadingCreatingGame(false);
+      setIsLoadingGame(false);
       navigate(GAME + '/' + gameId)
     } catch (error) {
-      setLoadingCreatingGame(false);
+      setIsLoadingGame(false);
     }
   }
 
+  
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+  
+    if (isLoadingGame) {
+      const totalTime = 12000; //12s de loading
+      const updateInterval = 100;
+      const increment = 100 / (totalTime / updateInterval);
+  
+      timer = setInterval(() => {
+        setProgress(prevProgress => {
+          if (prevProgress >= 100) {
+            clearInterval(timer);
+            return 100;
+          }
+          return prevProgress + increment;
+        });
+  
+        setProgressText(getProgressText(progress)); // Mova esta linha aqui
+      }, updateInterval);
+    }
+  
+    return () => {
+      clearInterval(timer);
+    };
+  }, [isLoadingGame, progress]); 
 
 
+  const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    height: 10,
+    borderRadius: 5,
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      borderRadius: 5,
+      backgroundColor: theme.palette.mode === 'light' ? '#75CD73' : '#ffffff',
+    },
+  }));
+
+  const getProgressText = (progress: number) => {
+
+    console.log("progresso = ", progress)
+    // Defina os textos correspondentes ao progresso
+    if (progress < 25) {
+      return 'Escrevendo roteiro...';
+    } else if (progress < 50) {
+      return 'Montando as páginas...';
+    } else if (progress < 75) {
+      return 'Definindo caminhos...';
+    } else if (progress < 90) {
+      return 'Finalizando história...';
+    } else {
+      return 'História Pronta';
+    }
+  };
+
+  const handleCategoryChange = (categorySelected: string) => {
+    setCategorySelected(categorySelected);
+  };
+
+  const handleNumPagesChange = (numberSelected: string) => {
+    setNumPageSelected(Number(numberSelected));
+  };
 
   return (
     <>
+    <BackdropWrapper>
       <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={isCreatingGame}
-        onClick={() => {}}
+        sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoadingGame}
       >
-        <CircularProgress color="inherit" />
+        <AstronautLoading src={ASTROTALKING}/>
+        <Box sx={{ 
+          width: '20%',
+          position: 'absolute',
+          top: '65%',
+          zIndex: -1,
+          }}>
+        <BorderLinearProgress variant="determinate" value={progress} />
+        <LoadingText>{progressText}</LoadingText>
+        </Box>
+
       </Backdrop>
+      </BackdropWrapper>
       <HeaderLogged nickname={user!.nickname} photo={user!.photo} />
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <MyGamesStyle>
-        {/* <Title>Crie uma nova história</Title>
-        <GameListContainer>
-            <ListGamesContainer>
-                <EmptyCard onClick={async () => {
-                        try {
-                        const id = await createGame();
-                        navigate(GAME + '/' + id)
-                        } catch (e) {
-                        const error = await e as AppError;
-                        alert(error)
-                        }
-                }} />
-                <CardRandomGame onClick={()=>{}}></CardRandomGame>
-                </ListGamesContainer>
-        </GameListContainer> */}
         <TitleWrapper>
           <TitleMyGame>Minhas histórias</TitleMyGame>
           <RandomDescriptionButton onClick={handleClickGenerateRandomStorie}>Gerar uma história aleatória<GptIcon src={GPT} /></RandomDescriptionButton>
@@ -159,6 +224,12 @@ const MyGames = () => {
             )}
           </ListMyGamesCardContainer>=
         </MyGameWrapContainer>
+        <Backdrop
+        sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isCreatingGame}
+        >
+        <DialogRandomGame handleGenerateRandomStorie={handleGenerateRandomStorie} onClose={()=>{}} handleCategoryChange={handleCategoryChange} handleNumPagesChange={handleNumPagesChange}></DialogRandomGame>
+        </Backdrop>
       </MyGamesStyle >
     </>
   );
