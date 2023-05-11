@@ -4,6 +4,7 @@ import { GameContext } from '../contexts/game';
 import { Button } from "../models/Button";
 import { Page } from "../models/Page";
 import { postButton, postPage } from "../services/api";
+import { CreationContext } from './creation';
 
 type OpenAIContextType = {
     pages: Page[],
@@ -29,7 +30,7 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
             {
                 "model": "gpt-3.5-turbo",
                 "messages": [{"role": "user", "content": `${message}`}],
-                "temperature": 0.7
+                "temperature": 1.0
             },
             {
             headers: {
@@ -56,7 +57,7 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
                                 histórias seguem um padrão de criação. A história possui uma ou mais categorias
                                 (Aventura, ação, terror, suspense, e outras.), possui um título e uma descrição. Cada história é dividida em páginas. Cada página possui: um título, uma descrição, um conjunto de botões
                                 e um indicação se é uma página de final da história (pode haver uma ou mais páginas de
-                                final de história). Cada botão possui um título e cada botão redireciona para outra página da
+                                final de história). Caso o seja uma página final "is_last_page"=true, todas as páginas que não são finais devem ter ao menos um botão, cada botão possui um título e cada botão redireciona para outra página da
                                 história (pode ser uma página já visitada ou não).
                                 Fornecendo a categoria da história e o número de páginas da história, gostaria que gerasse
                                 uma história baseada nos parâmetros "Categoria da História" e "Número de páginas da história", crie um título, descrição e as páginas seguindo o seguinte formato JSON:
@@ -103,6 +104,7 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
 
     const { createFullGame } = useContext(GameContext)
 
+
     async function createRandomGame(randomGame: any): Promise<number> {
         console.log("JSON do game a ser gerado = ");
         console.log(randomGame);
@@ -114,6 +116,11 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
         await Promise.all(
           randomGame.pages.map(async (page: any, index: any) => {
             const pageTemp = page;
+            //tratamento is last page
+            console.log(page.isLastPage)
+            console.log(Boolean(page.isLastPage))
+
+
             const response = await postPage({
               title: page.title,
               description: page.description,
@@ -128,9 +135,6 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
           })
         );
       
-        console.log("Pages Temp = ");
-        console.log(pagesTemp);
-        console.log("Pages Temp tamanho = ", pagesTemp.length);
       
         // iterar sobre pagesTemp para fazer o post dos botoes
         for (let i = 0; i < pagesTemp.length; i++) {
@@ -138,24 +142,28 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
           const buttonsTemp: Button[] = [];
       
           const pageId = page.id;
-          console.log("Id da page que vai receber botao = ", pageId);
-      
+          console.log("Lista de botoes")
+          console.log(page.buttons)
+
           if (page.buttons.length > 0) {
             for (let j = 0; j < page.buttons.length; j++) {
               const button = page.buttons[j];
+              console.log("Botao "+button.title)
+              console.log("Botao vai para "+button.nextPageId)
               const buttonTemp = button;
-              console.log("Botao = ");
-              console.log(buttonTemp);
-      
+                
+              const destinationId = pagesTemp[button.nextPageId-1].id
+              console.log("Destinantion id = ", destinationId)
+              buttonTemp.nextPageId = destinationId
+
               const response = await postButton(
                 pageId,
-                button.title,
-                button.color,
-                button.icon,
-                button.nextPageId
+                buttonTemp.title,
+                buttonTemp.color,
+                buttonTemp.icon,
+                buttonTemp.nextPageId
               );
       
-              console.log("response button = " + response);
               buttonsTemp.push(buttonTemp);
             }
           }
@@ -169,66 +177,6 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
       }
       
 
-    // async function createRandomGame(randomGame: any) {
-    //     console.log("JSON do game a ser gerado = ")
-    //     console.log(randomGame)
-
-    //     // cria um novo jogo
-    //     const newGameID = await createFullGame(randomGame)
-      
-    //     const pagesTemp: Page[] = [];
-    //     randomGame.pages.map( async (page: any, index: any) => {
-    //         const pageTemp = page;
-    //         const response = await postPage({
-    //             title: page.title,
-    //             description: page.description,
-    //             icon: page.icon,
-    //             color: page.color,
-    //             number_page: Number(index),
-    //             is_last_page: Boolean(page.isLastPage),
-    //             game_id: newGameID
-    //         })
-    //         pageTemp.id = response.data.id;
-    //         pagesTemp.push(pageTemp)
-    //     })
-
-    //     console.log("Pages Temp = ")
-    //     console.log(pagesTemp)
-    //     console.log("Pages Temp tamanho = ", pagesTemp.length)
-
-    //     //iterar sobre pagesTemp para fazer o post dos botoes
-    //     for (let i = 0; i < pagesTemp.length; i++) {
-    //         const page = pagesTemp[i];
-    //         const buttonsTemp: Button[] = [];
-          
-    //         const pageId = page.id;
-    //         console.log("Id da page que vai receber botao = ", pageId);
-          
-    //         if (page.buttons.length > 0) {
-    //           for (let j = 0; j < page.buttons.length; j++) {
-    //             const button = page.buttons[j];
-    //             const buttonTemp = button;
-    //             console.log("Botao = ");
-    //             console.log(buttonTemp);
-          
-    //             const response = await postButton(
-    //               pageId,
-    //               button.title,
-    //               button.color,
-    //               button.icon,
-    //               button.nextPageId
-    //             );
-          
-    //             console.log("response button = " + response);
-    //             buttonsTemp.push(buttonTemp);
-    //           }
-    //         }
-          
-    //         pagesTemp[i].buttons = buttonsTemp;
-    //     }
-          
-    //     setPages(pagesTemp)
-    // }
 
     async function dalleAPI(message: string): Promise<string> {
             const response = await axios.post(

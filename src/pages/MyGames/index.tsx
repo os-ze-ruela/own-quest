@@ -85,7 +85,7 @@ const MyGames = () => {
       const gameId = await createRandomGame(randomGameJSON)
       // await getUserGames();
       setIsLoadingGame(false);
-      navigate(GAME + '/' + gameId)
+      // navigate(GAME + '/' + gameId)
     } catch (error) {
       setIsLoadingGame(false);
     }
@@ -133,8 +133,6 @@ const MyGames = () => {
   }));
 
   const getProgressText = (progress: number) => {
-
-    console.log("progresso = ", progress)
     // Defina os textos correspondentes ao progresso
     if (progress < 25) {
       return 'Escrevendo roteiro...';
