@@ -16,7 +16,7 @@ import { ListMyGamesCardContainer, LoggedStyle, MyGameListContainer, MyGamesPagi
 
 const HomeLogged = () => {
   const { user, refresh, logout } = useContext(AuthContext)
-  const { userGames, games, getUserGames, getHotGamesForHome } = useContext(GameContext)
+  const { userGames, hotGames, getUserGames, getHotGamesForHome } = useContext(GameContext)
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchGames = async () => {
@@ -124,7 +124,7 @@ const HomeLogged = () => {
               <CardHomeShimmer />
             </>
           ) :
-            games.map((game, index) => (
+          hotGames.map((game, index) => (
               <Card
                 key={index}
                 id={game.id}

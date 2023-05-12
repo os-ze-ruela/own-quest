@@ -23,8 +23,12 @@ export const getUserGamesByToken = async () => {
     return await api.get('/user/games')
 }
 
-export const getHotGames = async () => {
-    return await api.get('/game/hot')
+export const getHotGames = async (page: number) => {
+    return await api.get(`/game/hot/${page}`)
+}
+
+export const fetchHighlightGame = async () => {
+    return await api.get(`/game/highlight`)
 }
 
 
