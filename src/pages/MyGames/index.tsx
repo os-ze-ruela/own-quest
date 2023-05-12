@@ -155,6 +155,10 @@ const MyGames = () => {
     setNumPageSelected(Number(numberSelected));
   };
 
+  const onCloseDialog = () => {
+    setCreatingGame(false)
+  };
+
   return (
     <>
     <BackdropWrapper>
@@ -226,7 +230,7 @@ const MyGames = () => {
         sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isCreatingGame}
         >
-        <DialogRandomGame handleGenerateRandomStorie={handleGenerateRandomStorie} onClose={()=>{}} handleCategoryChange={handleCategoryChange} handleNumPagesChange={handleNumPagesChange}></DialogRandomGame>
+        <DialogRandomGame handleGenerateRandomStorie={handleGenerateRandomStorie} onClose={onCloseDialog} handleCategoryChange={handleCategoryChange} handleNumPagesChange={handleNumPagesChange}></DialogRandomGame>
         </Backdrop>
       </MyGamesStyle >
     </>
