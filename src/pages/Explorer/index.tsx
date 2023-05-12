@@ -12,13 +12,13 @@ import { AuthContext } from '../../contexts/auth';
 import { GameContext } from '../../contexts/game';
 import AppError from '../../core/app-error';
 import { LOGIN } from '../../core/app-urls';
-import { ExplorerMain, FiltersContainer, GameListContainer, ListGamesCardContainer, PaginationContainer, SearchContainer, SearchInput, TitleListGames } from "../../styles/Explorer";
+import { ExplorerMain, FiltersContainer, GameListContainer, HorizontalListWrapper, ListGamesCardContainer, PaginationContainer, SearchContainer, SearchInput, TitleListGames } from "../../styles/Explorer";
 
 
 const Explorer = () => {
 
   const { authenticated, user, refresh, logout } = useContext(AuthContext)
-  const { games, getHotGamesForHome } = useContext(GameContext)
+  const { hotGames, getHotGamesForHome, setPagesOfHotGames, pagesOfHotGames } = useContext(GameContext)
   const [isLoading, setIsLoading] = useState(true);
   const [sliderOffset, setSliderOffset] = useState(0);
 
@@ -60,27 +60,31 @@ const Explorer = () => {
           <SearchInput type='text' id='search' name='search' placeholder='Procurar Jogos' />
         </SearchContainer>
       </FiltersContainer>
-      <GameListContainer>
+      <HorizontalListWrapper>
         <TitleListGames>Histórias mais Jogadas</TitleListGames>
-        <ListGamesCardContainer>
-          {isLoading ? (
-            <>
-              <CardExplorerHotShimmer />
-              <CardExplorerHotShimmer />
-              <CardExplorerHotShimmer />
-              <CardExplorerHotShimmer />
-            </>
-          ) : games.map((game, index) => (
-            <CardMostViewGame
-              key={index}
-              id={game.id}
-              title={game.title}
-              imageSrc={game.image != null ? game.image : `https://picsum.photos/300/200?random=4`}
-              description={game.description}
-              categories={game.categories}
-              createdByNickname={game.createdBy!.nickname}
-            />
-          ))}
+        <GameListContainer>
+          <ListGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
+            {isLoading ? (
+              <>
+                <CardExplorerHotShimmer />
+                <CardExplorerHotShimmer />
+                <CardExplorerHotShimmer />
+                <CardExplorerHotShimmer />
+              </>
+            ) : (
+              hotGames.map((game, index) => (
+                <CardMostViewGame
+                  key={index}
+                  id={game.id}
+                  title={game.title}
+                  imageSrc={game.image != null ? game.image : `https://picsum.photos/300/200?random=4`}
+                  description={game.description}
+                  categories={game.categories}
+                  createdByNickname={game.createdBy!.nickname}
+                />
+              ))
+            )}
+          </ListGamesCardContainer>
           {sliderOffset < 1 ? (
             <></>
           ) : (
@@ -93,14 +97,18 @@ const Explorer = () => {
             </PaginationContainer>
           )}
           <PaginationContainer direction='right'>
-            <button onClick={() => {
+            <button onClick={async () => {
+              // setPagesOfHotGames(pagesOfHotGames + 1)
+              if (sliderOffset + 1 >= pagesOfHotGames - 1) {
+                await getHotGamesForHome()
+              }
               setSliderOffset(sliderOffset + 1);
             }}>
               <img src={nextIcon} alt="next games" className='nextIcon' />
             </button>
           </PaginationContainer>
-        </ListGamesCardContainer>
-      </GameListContainer>
+        </GameListContainer>
+      </HorizontalListWrapper>
       <GameListContainer>
         <TitleListGames>Histórias em Destaque</TitleListGames>
         {isLoading ? (<>
@@ -108,11 +116,11 @@ const Explorer = () => {
         </>) : (<>
           <CardHighlightGame
             key={0}
-            title={games[0].title}
-            imageSrc={games[0].image && `https://picsum.photos/300/200?random=3`}
-            description={games[0].description}
-            categories={games[0].categories}
-            createdByNickname={games[0].createdBy!.nickname}
+            title={hotGames[0].title}
+            imageSrc={hotGames[0].image && `https://picsum.photos/300/200?random=3`}
+            description={hotGames[0].description}
+            categories={hotGames[0].categories}
+            createdByNickname={hotGames[0].createdBy!.nickname}
           />
         </>)}
       </GameListContainer>

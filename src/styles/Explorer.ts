@@ -36,6 +36,19 @@ export const SearchContainer = styled.div`
     }
 `
 
+export const HorizontalListWrapper = styled.div`
+  background-color: #282C3E;
+  overflow: hidden;
+  width: 100%;
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box; 
+  box-sizing: border-box; 
+  
+  @media screen and (max-width: 1024px) {
+    padding: 4px 12px;
+  }
+`
+
 export const SearchInput = styled.input`
     margin-left: 1.2rem;
     width: 100%;
@@ -52,26 +65,6 @@ export const SearchInput = styled.input`
     }
 
 `
-
-export const GameListContainer = styled.div`
-    position: relative;
-    width: 100%;
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    height: 500px;
-`
-
-export const TitleListGames = styled.h3`
-    color: white;
-    font-size: 2.0rem;
-    font-family: FiraCode-Bold;
-    font-weight: 700;
-    margin: 0;
-    margin-left: 2rem;
-`
-
 export const PaginationContainer = styled.div.attrs((props: { direction: string, }) => props)`
     height: 100%;
     width: 80px;
@@ -112,6 +105,46 @@ export const PaginationContainer = styled.div.attrs((props: { direction: string,
     }
 `
 
+export const GameListContainer = styled.div`
+    position: relative;
+    width: 100%;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box;
+
+    button {
+      background-color: transparent;
+      text-decoration: none;
+      border-style: none;
+    }
+    
+    &:hover {
+        ${PaginationContainer} {
+            opacity: 1;
+        }
+    } 
+`
+
+export const TitleListGames = styled.div`
+    font-weight: bold;
+    color: white;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5em;
+    font-size: 2.0rem;
+    margin-left: 0.5em;
+    font-family: FiraCode-Bold;
+    font-weight: 700;
+
+    @media screen and (max-width: 1024px) {
+      font-size: 1.5rem;
+      padding-bottom: 12px;
+    }
+`
+
 export const ListGamesCardContainer = styled.div.attrs((props: { translateX: string, }) => props)`
     position: relative;
     display: flex;
@@ -124,7 +157,7 @@ export const ListGamesCardContainer = styled.div.attrs((props: { translateX: str
     -webkit-box-sizing: border-box; 
     box-sizing: border-box;
     
-    transition: all 2s ease-in-out;
+    transition: all 1s ease-in-out;
     transform: translateX(${(props) => (props.translateX)});
 
 
@@ -146,8 +179,8 @@ export const CardMostViewGameWrapper = styled.a`
   background-color: #202331;
   border-radius: 15px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  width: 23%;
-  min-width: 250px;
+  width: 23vw;
+  min-width: 300px;
   transition: all 0.2s ease-in-out;
   height: 400px;
   text-decoration: none;

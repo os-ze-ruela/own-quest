@@ -14,10 +14,12 @@ type GameContextType = {
     updateGame: (game: Game) => Promise<void>,
     getUserGames: () => Promise<void>,
     getHotGamesForHome: () => Promise<void>,
+    setPagesOfHotGames: (page: number) => void,
+    pagesOfHotGames: number,
     userGames: Game[],
-    games: Game[],
+    hotGames: Game[],
     editingGame: Game | null,
-    createFullGame : (game: Game) => Promise<number>
+    createFullGame: (game: Game) => Promise<number>
 }
 
 export const GameContext = createContext<GameContextType>({} as GameContextType)
@@ -26,8 +28,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
     // const navigate = useNavigate()
     const [userGames, setUserGames] = useState<Game[]>([])
-    const [games, setGames] = useState<Game[]>([])
+    const [hotGames, setHotGames] = useState<Game[]>([])
     const [editingGame, setEditingGame] = useState<Game | null>(null)
+    const [pagesOfHotGames, setPagesOfHotGames] = useState(1);
     // const [loading, setLoading] =useState(true)
 
     async function createGame(): Promise<number> {
@@ -155,11 +158,13 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             const tokens = JSON.parse(tokensJSON!)
             api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
 
-            const response = await getHotGames()
+             setPagesOfHotGames(pagesOfHotGames + 1)
+
+            const response = await getHotGames(pagesOfHotGames)
 
             const gamesData = response.data;
 
-            const hotGames = gamesData.map((gameData: {
+            const newHotGames = gamesData.map((gameData: {
                 game: {
                     createdBy: any; categories: any[]; id: any; title: any; description: any; image: any; favorites: any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any;
                 };
@@ -182,9 +187,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                     categories: categories,
                 };
             });
-            setGames(hotGames);
+        
+            const hotGamesTemp = [...hotGames, ...newHotGames]
+
+            setHotGames(hotGamesTemp);
         } catch (e: any) {
-            setGames([]);
+            setHotGames([]);
 
             const error = await e as AxiosError
             console.error(`Erro (${error.response?.status}) ao buscar jogos:`, error);
@@ -197,7 +205,21 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <GameContext.Provider value={{ setEditingGame, getGameById, createGame, deleteGameByID, updateGame, getUserGames, getHotGamesForHome, userGames, games, editingGame, createFullGame }}>
+        <GameContext.Provider value={{
+            setEditingGame,
+            getGameById,
+            createGame,
+            deleteGameByID,
+            updateGame,
+            getUserGames,
+            setPagesOfHotGames,
+            getHotGamesForHome,
+            createFullGame,
+            userGames,
+            hotGames,
+            editingGame,
+            pagesOfHotGames,
+        }}>
             {children}
         </GameContext.Provider>
     )
