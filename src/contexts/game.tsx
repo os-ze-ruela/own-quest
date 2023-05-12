@@ -3,7 +3,7 @@ import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
 import Category from "../models/Category";
 import Game from "../models/Game";
-import { api, deleteGame, fetchGameById, getHotGames, getUserGamesByToken, patchGame, postFullGame, postGame } from "../services/api";
+import { api, deleteGame, fetchGameById, fetchHighlightGame, getHotGames, getUserGamesByToken, patchGame, postFullGame, postGame } from "../services/api";
 
 type GameContextType = {
 
@@ -13,12 +13,14 @@ type GameContextType = {
     deleteGameByID: (id: number) => void,
     updateGame: (game: Game) => Promise<void>,
     getUserGames: () => Promise<void>,
+    getHighlightGame: () => Promise<void>,
     getHotGamesForHome: () => Promise<void>,
     setPagesOfHotGames: (page: number) => void,
     pagesOfHotGames: number,
     userGames: Game[],
     hotGames: Game[],
     editingGame: Game | null,
+    highlightGame: Game | null,
     createFullGame: (game: Game) => Promise<number>
 }
 
@@ -30,6 +32,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     const [userGames, setUserGames] = useState<Game[]>([])
     const [hotGames, setHotGames] = useState<Game[]>([])
     const [editingGame, setEditingGame] = useState<Game | null>(null)
+    const [highlightGame, setHighlightGame] = useState<Game | null>(null)
     const [pagesOfHotGames, setPagesOfHotGames] = useState(1);
     // const [loading, setLoading] =useState(true)
 
@@ -99,6 +102,45 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 isDeleted: isDeleted,
                 createdBy: createdBy
             }))
+            //   setLoading(false)
+        } catch (error) {
+            //   setLoading(false)
+            console.error(error)
+            throw error
+        }
+    }
+
+    async function getHighlightGame(): Promise<void> {
+        try {
+            //   setLoading(true)
+            const response = await fetchHighlightGame();
+            
+            const { id, title, description, image, isEditing, isPublished, isDeleted, isFavorited, createdAt, createdBy, favorites, categories } = response.data.game;
+
+            const categorieGame = categories.map((category: { category: any }) => {
+                return new Category({ title: category.category.title, id: category.category.id, color: category.category.color, plus18: category.category.plus18 });
+            });
+            
+            const game = new Game({
+                id: id,
+                title: title,
+                description: description,
+                createdAt: createdAt,
+                categories: categorieGame,
+                favorites: favorites,
+                isFavorited: isFavorited,
+                image: image,
+                isEditing: isEditing,
+                isPublished: isPublished,
+                isDeleted: isDeleted,
+                createdBy: createdBy
+            })
+
+            console.log(game)
+            
+            setHighlightGame(game)
+            
+            console.log(editingGame)
             //   setLoading(false)
         } catch (error) {
             //   setLoading(false)
@@ -215,10 +257,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             setPagesOfHotGames,
             getHotGamesForHome,
             createFullGame,
+            getHighlightGame,
             userGames,
             hotGames,
             editingGame,
             pagesOfHotGames,
+            highlightGame
         }}>
             {children}
         </GameContext.Provider>

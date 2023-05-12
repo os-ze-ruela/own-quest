@@ -13,7 +13,7 @@ export const CardHighlightGameWrapper = styled.div`
     width: 95%;
     min-width: 250px;
     transition: all 0.2s ease-in-out;
-    height: 400px;
+    height: 420px;
     background-color: #202331;
     margin-left: 2rem;
 

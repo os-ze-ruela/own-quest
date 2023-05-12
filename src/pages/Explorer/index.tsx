@@ -18,16 +18,16 @@ import { ExplorerMain, FiltersContainer, GameListContainer, HorizontalListWrappe
 const Explorer = () => {
 
   const { authenticated, user, refresh, logout } = useContext(AuthContext)
-  const { hotGames, getHotGamesForHome, setPagesOfHotGames, pagesOfHotGames } = useContext(GameContext)
+  const { hotGames, highlightGame, getHotGamesForHome, setPagesOfHotGames, getHighlightGame, pagesOfHotGames } = useContext(GameContext)
   const [isLoading, setIsLoading] = useState(true);
   const [sliderOffset, setSliderOffset] = useState(0);
 
   const fetchGames = async () => {
     try {
-      await Promise.all([getHotGamesForHome()]);
+      await Promise.all([getHotGamesForHome(), getHighlightGame()]);
       setTimeout(() => {
         setIsLoading(false)
-      }, 500);
+      }, 1000);
     } catch (e) {
       setIsLoading(false)
       const error = await e as AppError
@@ -111,18 +111,20 @@ const Explorer = () => {
       </HorizontalListWrapper>
       <GameListContainer>
         <TitleListGames>Histórias em Destaque</TitleListGames>
-        {isLoading ? (<>
-          <CardHighlightGameShimmer />
-        </>) : (<>
+        {isLoading ? (
+          <>
+            <CardHighlightGameShimmer />
+          </>
+        ) : (
           <CardHighlightGame
             key={0}
-            title={hotGames[0].title}
-            imageSrc={hotGames[0].image && `https://picsum.photos/300/200?random=3`}
-            description={hotGames[0].description}
-            categories={hotGames[0].categories}
-            createdByNickname={hotGames[0].createdBy!.nickname}
+            title={highlightGame!.title}
+            imageSrc={highlightGame!.image && `https://picsum.photos/300/200?random=3`}
+            description={highlightGame!.description}
+            categories={highlightGame!.categories}
+            createdByNickname={highlightGame!.createdBy!.nickname}
           />
-        </>)}
+        )}
       </GameListContainer>
     </ExplorerMain>
   );

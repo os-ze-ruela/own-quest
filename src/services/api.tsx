@@ -24,8 +24,11 @@ export const getUserGamesByToken = async () => {
 }
 
 export const getHotGames = async (page: number) => {
-    console.log(`/game/hot/${page}`)
     return await api.get(`/game/hot/${page}`)
+}
+
+export const fetchHighlightGame = async () => {
+    return await api.get(`/game/highlight`)
 }
 
 

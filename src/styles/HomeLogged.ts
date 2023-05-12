@@ -137,7 +137,7 @@ export const CardWrapperCard = styled.a`
   min-width: 400px;
   /* max-width: 500px; */
   transition: all 0.2s ease-in-out;
-  height: 150px;
+  height: 180px;
   text-decoration: none;
   
   &:hover {

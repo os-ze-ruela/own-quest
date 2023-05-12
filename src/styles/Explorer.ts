@@ -40,13 +40,10 @@ export const HorizontalListWrapper = styled.div`
   background-color: #282C3E;
   overflow: hidden;
   width: 100%;
+  margin-top: 1rem;
   -moz-box-sizing: border-box; 
   -webkit-box-sizing: border-box; 
   box-sizing: border-box; 
-  
-  @media screen and (max-width: 1024px) {
-    padding: 4px 12px;
-  }
 `
 
 export const SearchInput = styled.input`
@@ -103,6 +100,10 @@ export const PaginationContainer = styled.div.attrs((props: { direction: string,
             opacity: 0.8;
         }
     }
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
 `
 
 export const GameListContainer = styled.div`
@@ -126,7 +127,11 @@ export const GameListContainer = styled.div`
         ${PaginationContainer} {
             opacity: 1;
         }
-    } 
+    }
+
+    @media screen and (max-width: 768px) {
+      overflow: scroll;
+    }
 `
 
 export const TitleListGames = styled.div`
