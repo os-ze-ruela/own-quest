@@ -4,6 +4,17 @@ type CategoryLabelProps = {
     color: string;
 };
 
+export const AstronautLoading = styled.img`
+  width: 300px;
+  height: 300px;
+`;
+
+export const BackdropWrapper = styled.div`
+    flex-direction: row;
+`;
+
+
+
 export const Body = styled.main`
     position: relative;
     height: 100vh;`
@@ -80,6 +91,11 @@ export const Title = styled.h1`
 export const Separator = styled.hr`
     border-bottom: 1px solid #ccc;
     opacity: 30%;
+`
+export const LoadingText = styled.span`
+    color: white;
+    font-family: FiraCode-light;
+    font-size: 18px;
 `
 export const Titles = styled.p`
     color: white;
