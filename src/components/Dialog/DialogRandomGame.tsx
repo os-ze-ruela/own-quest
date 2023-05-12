@@ -5,7 +5,11 @@ import { CategoryContext } from '../../contexts/category';
 import AppError from '../../core/app-error';
 import { api } from '../../services/api';
 import SelectBoxComponent from '../SelectBoxComponent/SelectBoxComponent';
-import { IoMdClose } from "react-icons/io";
+import { IoMdClose, IoIosOptions } from "react-icons/io";
+import { BsFillChatSquareTextFill } from "react-icons/bs";
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+
 
 type DialogRandomGameProps = {
     onClose: () => void;
@@ -89,10 +93,46 @@ const CloseButton = styled.button`
     }
 `;
 
+export const DescriptionInput = styled.textarea`
+    background-color: #30354B;
+    text-align: justify;
+    white-space: pre-line;
+    color: white;
+    width: 100%; 
+    height: 200px;
+    border-radius: 0.7em;
+    border: none;
+    margin-bottom: 0.7em;
+    padding-top: 12px;
+    padding-left: 8px;
+    padding-bottom: 1em;
+    padding-right: 12px;
+    font-family: FiraCode-light;
+    font-weight: 400;
+    font-size: 15px;
+    resize: none;
+    outline: none;  
+    margin: 8px 0px;
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box;
+    font-family: 'FiraCode-Light';
+
+    ::placeholder{
+        color: #ffffff94;
+        
+    }
+    
+    
+`
+
+
 const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRandomStorie, onClose, handleCategoryChange, handleNumPagesChange}) => {
   const [category, setCategory] = useState('');
+  const [description, setDescription] = useState('');
   const [numPages, setNumPages] = useState(3);
   const { categories, getCategories } = useContext(CategoryContext)
+  const [selected, setSelected] = useState(false);
     
 
 
@@ -101,6 +141,7 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
     console.log('Categoria:', category);
     console.log('Número de Páginas:', numPages);
   };
+
 
   const fetchAllRequests = async () => {
     try {
@@ -122,16 +163,58 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
 
 
 
+
+  
+
+
+  const [alignment, setAlignment] = React.useState<string | null>('left');
+
+  const handleAlignment = (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: string | null,
+  ) => {
+    setAlignment(newAlignment);
+  };
   return (
+
     <DialogContainer>
       <CloseButton onClick={onClose}><IoMdClose size={40}/></CloseButton>
       <h3>Gerar Jogo Aleatório</h3>
-      <h5>Defina os parâmetros do jogo a ser gerado:</h5>
+        <ToggleButtonGroup
+        value={alignment}
+        exclusive
+        onChange={handleAlignment}
+        aria-label="text alignment"
+      >
+        <ToggleButton onClick={()=>setSelected(!selected)} value="left" aria-label="left aligned">
+          <IoIosOptions size={20} color="white" />
+        </ToggleButton>
+        <ToggleButton onClick={()=>setSelected(!selected)} value="center" aria-label="centered">
+          <BsFillChatSquareTextFill size={20} color="white"/>
+        </ToggleButton>
+      </ToggleButtonGroup>
       <SelectWrapper>
-      <span></span>
+      {selected ? (
+      <>
+      <DescriptionInput
+        name="StoryDescription"
+        autoComplete="off"
+        value={description}
+        placeholder="Descreva brevemente a história que deseja gerar"
+        onChange={(event) => {setDescription(event.target.value)}}
+      />
+      
+      </>) : 
+      (
+      <>
+      <h5>Escolha uma categoria para história:</h5>
       <SelectBoxComponent defaultValue="Categoria" pageList={categories.map((category, index) => `${category.title}`)} onChange={handleCategoryChange} />
-      <span></span>
-      <SelectBoxComponent defaultValue="Página" pageList={['3','4','5','6']} onChange={handleNumPagesChange} />
+      </>
+      )
+    }
+      
+      <h5>Selecione o número de páginas da história:</h5>
+      <SelectBoxComponent defaultValue="Páginas" pageList={['3','4','5','6']} onChange={handleNumPagesChange} />
       <Button onClick={handleGenerateRandomStorie}>Gerar</Button>
       </SelectWrapper>
     </DialogContainer>
