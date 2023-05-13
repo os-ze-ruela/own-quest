@@ -10,7 +10,6 @@ import HeaderLogged from '../../components/Header/HeaderLogged';
 import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated';
 import { AuthContext } from '../../contexts/auth';
 import { GameContext } from '../../contexts/game';
-import AppError from '../../core/app-error';
 import { LOGIN } from '../../core/app-urls';
 import { ExplorerMain, FiltersContainer, GameListContainer, HorizontalListWrapper, ListGamesCardContainer, PaginationContainer, SearchContainer, SearchInput, TitleListGames } from "../../styles/Explorer";
 
@@ -30,15 +29,6 @@ const Explorer = () => {
       }, 1000);
     } catch (e) {
       setIsLoading(false)
-      const error = await e as AppError
-      if (error.statusCode === 401) {
-        try {
-          await refresh()
-          await fetchGames()
-        } catch (e) {
-          logout()
-        }
-      }
     }
   };
 
