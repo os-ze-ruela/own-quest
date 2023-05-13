@@ -167,8 +167,8 @@ Número de páginas da história:  ${numPages}
           randomGame.pages.map(async (page: any, index: any) => {
             const pageTemp = page;
             //tratamento is last page
-            console.log(page.isLastPage)
-            console.log(Boolean(page.isLastPage))
+            console.log(page.is_last_page)
+            console.log(Boolean(page.is_last_page))
 
 
             const response = await postPage({
@@ -177,7 +177,7 @@ Número de páginas da história:  ${numPages}
               icon: page.icon,
               color: page.color,
               number_page: Number(index),
-              is_last_page: Boolean(page.isLastPage),
+              is_last_page: Boolean(page.is_last_page),
               game_id: newGameID,
             });
             pageTemp.id = response.data.id;
