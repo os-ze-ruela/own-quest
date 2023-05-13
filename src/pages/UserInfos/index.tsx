@@ -25,11 +25,10 @@ export const UserInfos = () => {
     const { authenticated, user, refresh, logout } = useContext(AuthContext)
     const [visitingUser, setVisitingUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
-    const [loadingGames, setLoadingGames] = useState(true)
+    // const [loadingGames, setLoadingGames] = useState(true)
     const [followed, setFollowed] = useState(false);
     const navigate = useNavigate()
-    const { games, getHotGamesForHome } = useContext(GameContext)
-    const [sliderOffset, setSliderOffset] = useState(0);
+    // const { hotGames, getHotGamesForHome } = useContext(GameContext)
 
     const handleClick = async () => {
         if (!followed) {
@@ -49,25 +48,25 @@ export const UserInfos = () => {
         }
     };
 
-    const fetchGames = async () => {
-        try {
-          await Promise.all([getHotGamesForHome()]);
-          setTimeout(() => {
-            setLoadingGames(false)
-          }, 500);
-        } catch (e) {
-          setLoadingGames(false)
-          const error = await e as AppError
-          if (error.statusCode === 401) {
-            try {
-              await refresh()
-              await fetchGames()
-            } catch (e) {
-              logout()
-            }
-          }
-        }
-    };
+    // const fetchGames = async () => {
+    //     try {
+    //       await Promise.all([getHotGamesForHome()]);
+    //       setTimeout(() => {
+    //         setLoadingGames(false)
+    //       }, 500);
+    //     } catch (e) {
+    //       setLoadingGames(false)
+    //       const error = await e as AppError
+    //       if (error.statusCode === 401) {
+    //         try {
+    //           await refresh()
+    //           await fetchGames()
+    //         } catch (e) {
+    //           logout()
+    //         }
+    //       }
+    //     }
+    // };
 
     async function getUserByNickname(nickname: string): Promise<void> {
         try {
@@ -126,7 +125,7 @@ export const UserInfos = () => {
 
     useEffect(() => {
         getUserByNickname(nickname!)
-        fetchGames()
+        // fetchGames()
     }, [])
 
     return (
@@ -212,14 +211,15 @@ export const UserInfos = () => {
                             </FollowButton>
                         </UserActionsWrapper>)}
                 </UserInfosWrapper>
-                {loadingGames ?
+                </UserInfosMain>
+                {/* {loadingGames ?
                     (<Skeleton variant="rounded" animation="wave" width='40%' height='40px' style={{ marginTop: '12px' }} />)
                     :
                     (<UserInfosWrapper>
                         <h2>Histórias de @{visitingUser?.nickname}</h2>
-                    </UserInfosWrapper>)}
+                    </UserInfosWrapper>)} 
                 </UserInfosMain>
-                <GameListContainer>
+                {/* <GameListContainer>
                     <ListGamesCardContainer>
                     {loadingGames ? (
                         <>
@@ -228,19 +228,19 @@ export const UserInfos = () => {
                         <CardExplorerHotShimmer />
                         <CardExplorerHotShimmer />
                         </>
-                    ) : games.map((game, index) => (
+                    ) : hotGames.map((game, index) => (
                         <CardMostViewGame
                         key={index}
                         id={game.id}
                         title={game.title}
-                        imageSrc={`https://picsum.photos/300/200?random=5}`}
+                        imageSrc={game.image != null ? game.image : `https://picsum.photos/300/200?random=4`}
                         description={game.description}
                         categories={game.categories}
                         createdByNickname={game.createdBy!.nickname}
                         />
                     ))}
                     </ListGamesCardContainer>
-                </GameListContainer>
+                </GameListContainer> */}
         </>
     );
 }

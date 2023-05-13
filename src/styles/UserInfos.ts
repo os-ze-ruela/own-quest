@@ -200,6 +200,16 @@ export const GameListContainer = styled.div`
     flex-direction: column;
     gap: 1rem;
     height: 500px;
+
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box;
+
+    button {
+        background-color: transparent;
+        text-decoration: none;
+        border-style: none;
+      }
 `
 
 export const ListGamesCardContainer = styled.div.attrs((props: { translateX: string, }) => props)`
@@ -207,7 +217,7 @@ export const ListGamesCardContainer = styled.div.attrs((props: { translateX: str
     display: flex;
     justify-content: space-between;
     width: 100%;
-    gap: 2rem;
+    gap: 0rem;
     padding: 0px 2rem;
     flex-wrap: wrap;
 
@@ -215,7 +225,7 @@ export const ListGamesCardContainer = styled.div.attrs((props: { translateX: str
     -webkit-box-sizing: border-box; 
     box-sizing: border-box;
     
-    transition: all 2s ease-in-out;
+    transition: all 1s ease-in-out;
     transform: translateX(${(props) => (props.translateX)});
 
     @media screen and (max-width: 1024px) {
