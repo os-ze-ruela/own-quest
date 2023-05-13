@@ -74,6 +74,10 @@ export const Label = styled.label`
     color: #FFFFFF99;
     font-family: FiraCode-Light;
     font-weight: 300;
+
+    @media screen and (max-width: 1024px) {
+        margin-left: 0;
+    }
 `
 
 export const InputButtonDiv = styled.div`
@@ -118,6 +122,7 @@ export const Input = styled.input`
 
     @media screen and (max-width: 1024px) {
         width: 100%;
+        margin-left: 0;
     }
 
 `
@@ -211,7 +216,7 @@ export const MessageError = styled.div`
     align-items: center;
     padding: 0.8em 1.5em;
 
-    width: 70%;
+    width: 700px;
     position: relative;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
@@ -223,5 +228,6 @@ export const MessageError = styled.div`
 
     @media screen and (max-width: 1024px) {
         width: 80%;
+        margin-left: 0;
     }
 `

@@ -112,7 +112,7 @@ function Register() {
             onClick={() => setIsRevealConfirmPassword(prevState => !prevState)}
           />
           </InputButtonDiv>
-        </RegisterInputs>
+          </RegisterInputs>
           { showError &&
               <MessageError>{messageError}</MessageError>}
           <ButtonRegister onClick={async () => await SubmitRegister()}>Criar Conta</ButtonRegister>

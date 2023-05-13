@@ -69,7 +69,7 @@ function AppRoutes() {
                                         <Route path={REGISTER} element={<NotLogged><Register /></NotLogged>} > </Route>
                                         <Route path={RECOVER_PASSWORD} element={<Recover />} > </Route>
                                         <Route path={NEW_PASSWORD} element={<NewPword />} > </Route>
-                                        <Route path={EMAIL_NOT_VALIDATED} element={<NotValidated />} > </Route>
+                                        <Route path={EMAIL_NOT_VALIDATED} element={<Private><NotValidated /></Private>} > </Route>
                                         <Route path={EMAIL_VALIDATED} element={<Validated />} > </Route>
                                         <Route path={HOME} element={<Private><HomeLogged /></Private>} > </Route>
                                         <Route path={GAME + '/:id'} element={<Private><Creation /></Private>} > </Route>
