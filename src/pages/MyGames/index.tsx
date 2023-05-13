@@ -31,12 +31,13 @@ const MyGames = () => {
   const { categories, getCategories } = useContext(CategoryContext)
   const [progress, setProgress] = useState(0);
   const { createGame } = useContext(GameContext)
-  const { generateRandomGame, createRandomGame } = useContext(OpenAIContext)
+  const { generateRandomGame, generateRandomGameByDescription, createRandomGame } = useContext(OpenAIContext)
   const navigate = useNavigate()
   const [progressText, setProgressText] = useState('');
   const [numPageSelected, setNumPageSelected] = useState(3)
   const [categorySelected, setCategorySelected] = useState('Aventura')
-
+  const [description, setDescription] = useState('')
+  const [selectedOption, setSelectedOption] = useState(false)
 
   const fetchGames = async () => {
     try {
@@ -69,9 +70,20 @@ const MyGames = () => {
   const handleGenerateRandomStorie = async () => {
     setCreatingGame(false);
     setIsLoadingGame(true);
-    const randomGame = await generateRandomGame(numPageSelected, categorySelected)
+
+     let randomGame = "" 
+
+    if(selectedOption){
+      console.log("Gerando historia pela descricao")
+      randomGame = await generateRandomGameByDescription(numPageSelected, categorySelected, description)
+    }
+    else{
+      console.log("Gerando historia parametros")
+      randomGame = await generateRandomGame(numPageSelected, categorySelected)
+    }
 
     let randomGameJSON = JSON.parse(randomGame)
+ 
 
     const matchingCategory = categories.find(category => category.title === randomGameJSON.categories)
     let categoryIds = []
@@ -82,7 +94,7 @@ const MyGames = () => {
     }
 
     try {
-      const gameId = await createRandomGame(randomGameJSON)
+        const gameId = await createRandomGame(randomGameJSON)
       // await getUserGames();
       setIsLoadingGame(false);
       // navigate(GAME + '/' + gameId)
@@ -155,13 +167,17 @@ const MyGames = () => {
     setNumPageSelected(Number(numberSelected));
   };
 
+  const onCloseDialog = () => {
+    setCreatingGame(false)
+  };
+
   return (
     <>
-    <BackdropWrapper>
       <Backdrop
         sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoadingGame}
-      >
+        >
+        <BackdropWrapper>
         <AstronautLoading src={ASTROTALKING}/>
         <Box sx={{ 
           width: '20%',
@@ -172,9 +188,9 @@ const MyGames = () => {
         <BorderLinearProgress variant="determinate" value={progress} />
         <LoadingText>{progressText}</LoadingText>
         </Box>
+      </BackdropWrapper>
 
       </Backdrop>
-      </BackdropWrapper>
       <HeaderLogged nickname={user!.nickname} photo={user!.photo} />
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <MyGamesStyle>
@@ -226,7 +242,16 @@ const MyGames = () => {
         sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isCreatingGame}
         >
-        <DialogRandomGame handleGenerateRandomStorie={handleGenerateRandomStorie} onClose={()=>{}} handleCategoryChange={handleCategoryChange} handleNumPagesChange={handleNumPagesChange}></DialogRandomGame>
+        <DialogRandomGame
+          handleGenerateRandomStorie={handleGenerateRandomStorie}
+          onClose={onCloseDialog}
+          handleCategoryChange={handleCategoryChange}
+          handleNumPagesChange={handleNumPagesChange}
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+          description={description}
+          setDescription={setDescription}
+        />
         </Backdrop>
       </MyGamesStyle >
     </>

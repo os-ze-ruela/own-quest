@@ -7,10 +7,13 @@ type CategoryLabelProps = {
 export const AstronautLoading = styled.img`
   width: 300px;
   height: 300px;
+  margin-bottom: 50px;
 `;
 
 export const BackdropWrapper = styled.div`
     flex-direction: row;
+    justify-content: space-between;
+    gap: 2rem;
 `;
 
 

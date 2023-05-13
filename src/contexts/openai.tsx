@@ -14,6 +14,7 @@ type OpenAIContextType = {
     dalleAPI: (message: string) => Promise<string>,
     improveDescription: (description: string) => Promise<string>, 
     generateRandomGame: (numPages: number, category: string) => Promise<string>
+    generateRandomGameByDescription: (numPages: number, category: string, description: string) => Promise<string>
 }
 
 export const OpenAIContext = createContext<OpenAIContextType>({} as OpenAIContextType)
@@ -95,6 +96,55 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
                                 Categoria da História: ${category}
                                 Número de páginas da história:  ${numPages}  
                                 `;
+
+
+        const response = await chat(defaultPrompt);
+
+        return response
+    }
+
+    async function generateRandomGameByDescription(numPages: number, category: string, description: string): Promise<string>{
+        console.log("generateRandomGameByDescription...")
+        console.log(description)
+        const defaultPrompt = 
+        `
+Eu tenho uma plataforma de criação de histórias e desejo criar histórias aleatórias. Todas histórias seguem um padrão de criação. A história possui uma ou mais categorias (Aventura, ação, terror, suspense, e outras.), possui um título e uma descrição. Cada história é dividida em páginas. Cada página possui: um título, uma descrição, um conjunto de botões e um indicação se é uma página de final da história (pode haver uma ou mais páginas de final de história). Caso o seja uma página final "is_last_page"=true, todas as páginas que não são finais devem ter ao menos um botão, cada botão possui um título e cada botão redireciona para outra página da história (pode ser uma página já visitada ou não). 
+Fornecendo uma breve descrição da história, a categoria da história e o número de páginas da história como parâmetros, gostaria que gerasse uma história baseada nos parâmetros, crie um título, descrição e as páginas seguindo o seguinte formato JSON:
+
+                                {
+                                "title": "",
+                                "description": "",
+                                "image": "",
+                                "categories": "",
+                                “pages”: [
+                                    {
+                                    "id": 1
+                                        "title": "",
+                                        "description": "",
+                                        "color": "#568EA3",
+                                        "number_page": 0,
+                                        "is_last_page": false,
+                                        "icon": "",
+                                        "buttons": [
+                                            {
+                                                "id": 1
+                                                "title": "",
+                                                "nextPageId": 1,
+                                                "icon": "",
+                                                "color": "#202331"
+                                            }
+                                        ]
+                                    }
+                                ]
+                                }
+                                --------------------------------
+                                Retorne apenas o JSON
+
+Parâmetros:
+Descrição da História: ${description}
+Categoria da História: ${category}
+Número de páginas da história:  ${numPages}
+        `;
 
 
         const response = await chat(defaultPrompt);
@@ -198,7 +248,7 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
 
 
     return (
-        <OpenAIContext.Provider value={{pages, setPages, createRandomGame, chat, dalleAPI, improveDescription, generateRandomGame}}>
+        <OpenAIContext.Provider value={{pages, setPages, createRandomGame, chat, dalleAPI, improveDescription, generateRandomGame, generateRandomGameByDescription}}>
             {children}
         </OpenAIContext.Provider>
     )
