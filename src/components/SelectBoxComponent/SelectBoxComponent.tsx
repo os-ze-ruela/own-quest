@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { CreationContext } from "../../contexts/creation";
 
 interface SelectBoxProps {
+  defaultValue: string
   pageList: string[];
   onChange: (selected: string) => void;
 }
@@ -34,6 +35,7 @@ const Option = styled.option`
 
 
 const SelectBoxComponent: React.FC<SelectBoxProps> = ({
+  defaultValue,
   pageList,
   onChange,
 }) => {
@@ -57,7 +59,7 @@ const SelectBoxComponent: React.FC<SelectBoxProps> = ({
               )
               :
               (
-              <Option selected>Ir para página</Option>
+              <Option selected>{defaultValue}</Option>
               ) 
             }
             {/* <Option>Ir para página</Option> */}

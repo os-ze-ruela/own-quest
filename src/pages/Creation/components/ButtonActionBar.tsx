@@ -30,7 +30,7 @@ function ButtonActionBar() {
         updateButton(pages[indexSelected].buttons[indexButton])
 
       }} />
-    <SelectBoxComponent pageList={pages.map((page, index) => `Página ${index + 1}`)} onChange={handleSelectChange} />
+    <SelectBoxComponent defaultValue="Ir para página" pageList={pages.map((page, index) => `Página ${index + 1}`)} onChange={handleSelectChange} />
     <DeleteButton onClick={() => {
       handleDeleteButton();
       

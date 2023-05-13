@@ -63,29 +63,6 @@ export default function CreationSettings() {
     }
   }
 
-  const saveChanges = () => {
-    setLoading(false)
-    updateGame(editingGame!);
-  };
-
-  const debounceSaveChanges = () => {
-    setLoading(true)
-    if (timerId) {
-      clearTimeout(timerId);
-    }
-    const idTimer = setTimeout(() => {
-      saveChanges();
-    }, 1000);
-    setTimerId(idTimer);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (timerId) {
-        clearTimeout(timerId);
-      }
-    };
-  }, [timerId]);
 
   async function handleClickRandomDescription() {
     if (editingGame) {
@@ -123,31 +100,6 @@ export default function CreationSettings() {
     setTitleTemp(event.target.value);
   };
 
-  useEffect(() => {
-    if (editingGame) {
-      setTitleTemp(editingGame.title);
-      setDescTemp(editingGame.description);
-    }
-  }, [editingGame]);
-
-  useEffect(() => {
-    if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0) && (descTemp.length > 0)) {
-      const newEditingGame = { ...editingGame, title: titleTemp };
-      setEditingGame(newEditingGame);
-      // updateGame(newEditingGame);
-      debounceSaveChanges();
-    }
-  }, [titleTemp, descTemp])
-
-  useEffect(() => {
-    if (editingGame && descTemp !== editingGame.description && (descTemp.length > 0)) {
-      const newEditingGame = { ...editingGame, description: descTemp };
-      setEditingGame(newEditingGame);
-      // updateGame(newEditingGame);
-      debounceSaveChanges();
-    }
-  }, [descTemp])
-
 
   const handleDelete = () => {
     if (editingGame) {
@@ -177,6 +129,83 @@ export default function CreationSettings() {
   useEffect(() => {
     fetchAllRequests()
   }, [])
+
+  
+  // ----- DEBOUNCE -----
+
+
+  const debounceSaveChangesTitle = () => {
+    setLoading(true);
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    const idTimer = setTimeout(() => {
+      saveChangesTitle(titleTemp); // Passa o valor atual do estado como argumento
+    }, 500);
+    setTimerId(idTimer);
+  };
+  
+  const debounceSaveChangesDescription= () => {
+    setLoading(true);
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    const idTimer = setTimeout(() => {
+      saveChangesDescription(descTemp); // Passa o valor atual do estado como argumento
+    }, 500);
+    setTimerId(idTimer);
+  };
+  
+
+  const saveChangesTitle = (title: string) => {
+    if (editingGame) {
+      setLoading(false);
+      const newEditingGame = { ...editingGame, title };
+      updateGame(newEditingGame);
+    }
+  };
+  
+  const saveChangesDescription = (description: string) => {
+    if (editingGame) {
+      setLoading(false);
+      const newEditingGame = { ...editingGame, description };
+      updateGame(newEditingGame);
+    }
+  };
+  
+
+  useEffect(() => {
+    return () => {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+    };
+  }, [timerId]);
+
+  useEffect(() => {
+    if (editingGame) {
+      setTitleTemp(editingGame.title);
+      setDescTemp(editingGame.description);
+    }
+  }, [editingGame]);
+
+
+  useEffect(() => {
+    if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0) ) {
+      const newEditingGame = { ...editingGame};
+      newEditingGame.title = titleTemp
+      setEditingGame(newEditingGame);
+      debounceSaveChangesTitle();
+    }
+  }, [titleTemp, editingGame]); // Include editingGame as a dependency
+  
+  useEffect(() => {
+    if (editingGame && descTemp !== editingGame.description && (descTemp.length > 0)) {
+      const newEditingGame = { ...editingGame, description: descTemp };
+      setEditingGame(newEditingGame);
+      debounceSaveChangesDescription();
+    }
+  }, [descTemp, editingGame]); // Include editingGame as a dependency
 
   return (
     <Body>
