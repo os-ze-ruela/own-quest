@@ -15,8 +15,11 @@ type DialogRandomGameProps = {
     onClose: () => void;
     handleGenerateRandomStorie: () => void;
     handleCategoryChange: (categorySelected: string) => void;
-    handleNumPagesChange: (number: string) => void
-    
+    handleNumPagesChange: (number: string) => void;
+    selectedOption: boolean;
+    setSelectedOption: (option: boolean) => void;
+    description: string;
+    setDescription: (category: string) => void;
   };
 
 const DialogContainer = styled.div`
@@ -127,12 +130,12 @@ export const DescriptionInput = styled.textarea`
 `
 
 
-const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRandomStorie, onClose, handleCategoryChange, handleNumPagesChange}) => {
+const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRandomStorie, onClose, handleCategoryChange, handleNumPagesChange, selectedOption, setSelectedOption, description, setDescription}) => {
   const [category, setCategory] = useState('');
-  const [description, setDescription] = useState('');
+  // const [description, setDescription] = useState('');
   const [numPages, setNumPages] = useState(3);
   const { categories, getCategories } = useContext(CategoryContext)
-  const [selected, setSelected] = useState(false);
+  // const [selected, setSelected] = useState(false);
     
 
 
@@ -163,10 +166,6 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
 
 
 
-
-  
-
-
   const [alignment, setAlignment] = React.useState<string | null>('left');
 
   const handleAlignment = (
@@ -186,15 +185,15 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
         onChange={handleAlignment}
         aria-label="text alignment"
       >
-        <ToggleButton onClick={()=>setSelected(!selected)} value="left" aria-label="left aligned">
+        <ToggleButton onClick={()=>setSelectedOption(false)} value="left" aria-label="left aligned">
           <IoIosOptions size={20} color="white" />
         </ToggleButton>
-        <ToggleButton onClick={()=>setSelected(!selected)} value="center" aria-label="centered">
+        <ToggleButton onClick={()=>setSelectedOption(true)} value="center" aria-label="centered">
           <BsFillChatSquareTextFill size={20} color="white"/>
         </ToggleButton>
       </ToggleButtonGroup>
       <SelectWrapper>
-      {selected ? (
+      {selectedOption ? (
       <>
       <DescriptionInput
         name="StoryDescription"
@@ -206,13 +205,14 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
       
       </>) : 
       (
+      <></>
+      )
+    }
+      
       <>
       <h5>Escolha uma categoria para história:</h5>
       <SelectBoxComponent defaultValue="Categoria" pageList={categories.map((category, index) => `${category.title}`)} onChange={handleCategoryChange} />
       </>
-      )
-    }
-      
       <h5>Selecione o número de páginas da história:</h5>
       <SelectBoxComponent defaultValue="Páginas" pageList={['3','4','5','6']} onChange={handleNumPagesChange} />
       <Button onClick={handleGenerateRandomStorie}>Gerar</Button>
