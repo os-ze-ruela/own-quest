@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppError from "../core/app-error";
@@ -10,6 +10,7 @@ import {
   signupUser,
   verifyEmail,
   sendEmail,
+  sendRecoverEmail,
 } from "../services/api";
 
 type AuthContextType = {
@@ -38,6 +39,7 @@ type AuthContextType = {
   logout: () => void;
   validateEmail: (access_token: string, token: string) => Promise<void>;
   sendValidateEmail: ()=> Promise<void>;
+  sendRecover: (email: string)=> Promise<void>;
 };
 
 interface User {
@@ -286,6 +288,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  // async function sendRecover(email: string): Promise<void> {
+  //   try {
+  //     const tokensJSON = localStorage.getItem('email')
+  //     const tokens = JSON.parse(tokensJSON!)
+  //     // api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
+
+  //     await sendRecoverEmail()
+  //   } catch(e) {
+  //     const error = (await e) as AxiosError;
+  //     console.log(error);
+  //   }
+  // }
+
+  async function sendRecover(email: string) {
+    try {
+      const tokensJSON = localStorage.getItem('token')
+      const tokens = JSON.parse(tokensJSON!)
+  
+      const headers = {
+        Authorization: `Bearer ${tokens}`,
+      };
+  
+      const payload = {
+        email: email,
+      };
+  
+      await api.post('/user/send-recover-password-email', payload, { headers });
+      console.log('Email enviado com sucesso!');
+    } catch (error) {
+      console.error('Erro ao enviar email:', error);
+      alert('Erro ao enviar email.');
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -299,7 +335,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         refresh,
         logout,
         validateEmail,
-        sendValidateEmail
+        sendValidateEmail,
+        sendRecover,
       }}
     >
       {children}

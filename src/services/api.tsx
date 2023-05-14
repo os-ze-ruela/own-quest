@@ -184,3 +184,9 @@ export const uploadRandomImage = async (randomImageUrl: string) => {
         "randomImageUrl": randomImageUrl
     })
 }
+
+// ------ RECOVER PASSWORD ----
+
+export const sendRecoverEmail = async () => {
+    return await api.post('/user/send-recover-password-email')
+}
