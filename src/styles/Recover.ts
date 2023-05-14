@@ -7,6 +7,10 @@ export const RecoverStyle = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    @media screen and (max-width: 1024px) {
+        padding: 0px 0px;
+    }
 `
 
 export const Title = styled.div`
@@ -19,6 +23,11 @@ export const Title = styled.div`
     margin-top: 1em;
     font-family: FiraCode-Bold;
     font-weight: 700;
+
+    @media screen and (max-width: 1024px) {
+        font-size: 2rem;
+        margin: 0;
+    }
 `
 export const SubTitle = styled.div`
     color: white;
@@ -26,6 +35,11 @@ export const SubTitle = styled.div`
     font-weight: 300;
     margin-left: 0.5em;
     opacity: 60%;
+
+    @media screen and (max-width: 1024px) {
+        margin-left: 0;
+        font-size: 2rem;
+    }
 `
 
 export const Label = styled.label`
@@ -48,6 +62,11 @@ export const Input = styled.input`
     border-radius: 0.7em;
     width: 700px;
     height: 25px;
+
+    @media screen and (max-width: 1024px) {
+        width: 70%;
+        justify-self: center;
+    }
 
 `
 
