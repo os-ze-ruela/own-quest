@@ -40,15 +40,44 @@ export const UserPhotoWrapper = styled.div`
     max-width: 300px;
     border-radius: 50%;
     overflow: hidden;
-    box-shadow: 0px 0px 8px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.25);
+    border: 2px solid #FFFFFF;
 `
 
-export const PhotoUser = styled.img` 
+export const UserPhoto = styled.img` 
     height: 100%;
     width: 100%;
-    border-radius: 50%;
-    border: 2px solid #FFFFFF;
     object-fit: contain;
+`
+
+export const UserPhotoPlaceholder = styled.div`
+    display: flex;
+    object-fit: contain;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 0;
+    padding-bottom: 50%;
+    padding-top: 50%;
+
+    background-color: #568EA3;
+
+    // Font
+
+    color: #FFFFFF;
+    font-size: 100pt;
+    transition: all 0.3s ease-in-out 0.2s;
+    font-family: FiraCode-Regular;
+    font-weight: 300;
+    text-decoration: none;
+
+    @media screen and (max-width: 1024px) {
+        font-size: 50pt;
+    }
 `
 
 export const UsersInfosWrapper = styled.div`

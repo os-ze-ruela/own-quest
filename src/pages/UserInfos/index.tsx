@@ -10,7 +10,7 @@ import { EXPLORER, LOGIN } from '../../core/app-urls';
 import User from '../../models/User';
 import Category from '../../models/Category';
 import { api, fetchGameById } from '../../services/api';
-import { CategoryInfoLabel, CategoryInfoWrapper, CategoryWrapper, DescriptionWrapper, DenounceButton, PhotoUser, UserActionsWrapper, UserInfosMain, UserInfosWrapper, UserNickname, UserPhotoWrapper, UsersInfosWrapper, FollowButton, DescriptionInfoWrapper, GameListContainer, ListGamesCardContainer } from '../../styles/UserInfos';
+import { CategoryInfoLabel, CategoryInfoWrapper, CategoryWrapper, DescriptionWrapper, DenounceButton, UserActionsWrapper, UserInfosMain, UserInfosWrapper, UserNickname, UserPhotoWrapper, UsersInfosWrapper, FollowButton, DescriptionInfoWrapper, GameListContainer, ListGamesCardContainer, UserPhoto, UserPhotoPlaceholder } from '../../styles/UserInfos';
 import { CardExplorerHotShimmer } from '../../components/Cards/CardExplorerHotShimmer';
 import CardMostViewGame from '../../components/Cards/CardMostViewGame';
 import AppError from '../../core/app-error';
@@ -21,9 +21,8 @@ export const UserInfos = () => {
 
     const { nickname } = useParams()
 
-    // const { followUser, unfollowUser, userInfo } = useContext(UserContext)
+    const { findUserByNickname, visitingUser } = useContext(UserContext)
     const { authenticated, user, refresh, logout } = useContext(AuthContext)
-    const [visitingUser, setVisitingUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
     // const [loadingGames, setLoadingGames] = useState(true)
     const [followed, setFollowed] = useState(false);
@@ -68,53 +67,16 @@ export const UserInfos = () => {
     //     }
     // };
 
-    async function getUserByNickname(nickname: string): Promise<void> {
+    async function getUserByNickname(userNickname: string): Promise<void> {
         try {
-
-            const tokensJSON = localStorage.getItem('token')
-            const tokens = JSON.parse(tokensJSON!)
-            api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
-
             setLoading(true)
-            // const response = await fetchUserByNickname(nickname);
-            // const { idUser, name, nickname, email, birthDate, photo, isFollowed, following, followers, categories } = response.data.user;
-
-            // const categoriesUser = categories.map((category: { category: any }) => {
-            //     return new Category({ title: category.category.title, id: category.category.id, color: category.category.color, plus18: category.category.plus18 });
-            // });
-
-            // setVisitingUser(new User({
-            //     id: idUser,
-            //     name: name,
-            //     nickname: nickname,
-            //     email: email,
-            //     birthDate: birthDate,
-            //     photo: photo,
-            //     isFollowed: isFollowed,
-            //     following: following,
-            //     followers: followed,
-            //     categories: categoriesUser,
-            // }))
-
-            setVisitingUser(new User({
-                id: 0,
-                name: 'Teste',
-                nickname: nickname,
-                email: 'Testeteste@hotmail.com',
-                birthDate: new Date(),
-                photo: '',
-                isFollowed: false,
-                following: 10,
-                followers: 5,
-                categories: [new Category({ title: 'Ação', id: 1, color: '#0F0F', plus18: false }), new Category({ title: 'Aventura', id: 2, color: '#F00F', plus18: false })],
-            }))
-
-            setFollowed(false)
-
+            const response = await findUserByNickname(userNickname);
 
             setTimeout(() => {
                 setLoading(false)
             }, 1000);
+
+            setFollowed(visitingUser?.isFollowing ?? false)
 
         } catch (error) {
             setLoading(false)
@@ -144,7 +106,16 @@ export const UserInfos = () => {
                         {loading ?
                             (<Skeleton variant="rounded" animation="wave" width='100%' height='300px' />)
                             :
-                            (<PhotoUser src={`https://picsum.photos/300/300?random=1`} />)}
+                            (
+                            visitingUser?.photo == null ? (
+                                <UserPhotoPlaceholder>
+                                    {visitingUser?.nickname[0].toUpperCase()}
+                                </UserPhotoPlaceholder>
+                            ) : (
+                                <UserPhoto src={visitingUser?.photo} alt="Perfil image" />
+                            ) 
+                            )
+                        }
                     </UserPhotoWrapper>
                     <UsersInfosWrapper>
                         {loading ?
@@ -189,11 +160,9 @@ export const UserInfos = () => {
                                 <CategoryWrapper>
                                     <h3>CATEGORIA PRINCIPAL</h3>
                                     <CategoryInfoWrapper className='category-label-wrapper'>
-                                        {visitingUser?.categories.map((category) => (
-                                            <CategoryInfoLabel key={category.id} color={category.color} href={`/explorer?tag=${category.title}`}>
-                                                {category.title}
-                                            </CategoryInfoLabel>
-                                        ))}
+                                        <CategoryInfoLabel key={visitingUser?.categories[0].id} color={visitingUser?.categories[0].color} href={`/explorer?tag=${visitingUser?.categories[0].title}`}>
+                                            {visitingUser?.categories[0].title}
+                                        </CategoryInfoLabel>
                                     </CategoryInfoWrapper>
                                 </CategoryWrapper>
                             )}

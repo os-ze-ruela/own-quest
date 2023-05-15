@@ -1,42 +1,48 @@
-import Category from "./Category";
+import UserCategory from "./UserCategory";
 
 interface IUser {
     id: number;
     name: string;
-    nickname: string;
     email: string;
+    nickname: string;
     birthDate: Date;
-    photo: string | null;
-    isFollowed: boolean;
-    following: number;
     followers: number;
-    categories: Category[];
+    following: number;
+    photo: string | null;
+    createdAt: Date;
+    isDeleted: boolean;
+    isFollowing: boolean;
+    categories: UserCategory[];
 }
 
 class User {
     id: number;
     name: string;
-    nickname: string;
     email: string;
+    nickname: string;
     birthDate: Date;
-    photo: string | null;
-    isFollowed: boolean = false;
-    following: number;
     followers: number;
-    categories: Category[];
+    following: number;
+    photo: string | null;
+    createdAt: Date;
+    isDeleted: boolean;
+    isFollowing: boolean = false;
+    categories: UserCategory[];
 
     constructor(constructor: IUser) {
         this.id = constructor.id;
         this.name = constructor.name;
-        this.nickname = constructor.nickname;
         this.email = constructor.email;
-        this.birthDate = constructor.birthDate
-        this.photo = constructor.photo!;
-        this.isFollowed = constructor.isFollowed;
-        this.following = constructor.following;
+        this.nickname = constructor.nickname;
+        this.birthDate = constructor.birthDate;
         this.followers = constructor.followers;
+        this.following = constructor.following;
+        this.photo = constructor.photo!;
+        this.createdAt = constructor.createdAt;
+        this.isDeleted = constructor.isDeleted;
+        this.isFollowing = constructor.isFollowing;
         this.categories =   constructor.categories.length > 0 ? constructor.categories.map((category) => {
-            return new Category(category)
+            return new UserCategory(category)
         }): [];
     }
 }
