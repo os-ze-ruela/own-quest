@@ -40,15 +40,44 @@ export const UserPhotoWrapper = styled.div`
     max-width: 300px;
     border-radius: 50%;
     overflow: hidden;
-    box-shadow: 0px 0px 8px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.25);
+    border: 2px solid #FFFFFF;
 `
 
-export const PhotoUser = styled.img` 
+export const UserPhoto = styled.img` 
     height: 100%;
     width: 100%;
-    border-radius: 50%;
-    border: 2px solid #FFFFFF;
     object-fit: contain;
+`
+
+export const UserPhotoPlaceholder = styled.div`
+    display: flex;
+    object-fit: contain;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 0;
+    padding-bottom: 50%;
+    padding-top: 50%;
+
+    background-color: #568EA3;
+
+    // Font
+
+    color: #FFFFFF;
+    font-size: 100pt;
+    transition: all 0.3s ease-in-out 0.2s;
+    font-family: FiraCode-Regular;
+    font-weight: 300;
+    text-decoration: none;
+
+    @media screen and (max-width: 1024px) {
+        font-size: 50pt;
+    }
 `
 
 export const UsersInfosWrapper = styled.div`
@@ -200,6 +229,16 @@ export const GameListContainer = styled.div`
     flex-direction: column;
     gap: 1rem;
     height: 500px;
+
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box;
+
+    button {
+        background-color: transparent;
+        text-decoration: none;
+        border-style: none;
+      }
 `
 
 export const ListGamesCardContainer = styled.div.attrs((props: { translateX: string, }) => props)`
@@ -207,7 +246,7 @@ export const ListGamesCardContainer = styled.div.attrs((props: { translateX: str
     display: flex;
     justify-content: space-between;
     width: 100%;
-    gap: 2rem;
+    gap: 0rem;
     padding: 0px 2rem;
     flex-wrap: wrap;
 
@@ -215,7 +254,7 @@ export const ListGamesCardContainer = styled.div.attrs((props: { translateX: str
     -webkit-box-sizing: border-box; 
     box-sizing: border-box;
     
-    transition: all 2s ease-in-out;
+    transition: all 1s ease-in-out;
     transform: translateX(${(props) => (props.translateX)});
 
     @media screen and (max-width: 1024px) {

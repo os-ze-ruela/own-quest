@@ -10,10 +10,12 @@ import showPasswordImg from "../../assets/img/hide.svg";
 import hidePasswordImg from "../../assets/img/show.svg";
 import AskRegisterBar from '../../components/Bar/AskRegisterBar';
 import { RECOVER_PASSWORD, REGISTER } from '../../core/app-urls';
+import { CircularProgress } from '@mui/material';
 
 function Login() {
 
   async function SubmitLogin() {
+    setLoading(true)
     setShowError(false)
     try {
       await login(email, password)
@@ -22,12 +24,14 @@ function Login() {
       setMessageError(error.message)
       setShowError(true)  
     }
+    setLoading(false)
   }
 
   const { login } = useContext(AuthContext)
   const [password, setPassword] = useState('');
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const [showError, setShowError] = useState(false)
   const [messageError, setMessageError] = useState('')
@@ -75,7 +79,9 @@ function Login() {
           
           <LoginRecoverItemsDiv>
 
-            <ButtonLogin onClick={async () => await SubmitLogin()}>Entrar</ButtonLogin>
+            <ButtonLogin onClick={async () => await SubmitLogin()} disabled={loading}>
+              {loading ? <CircularProgress size={20} color="inherit" /> : 'Entrar'}
+            </ButtonLogin>
             
             <RecoverText>
               Esqueceu sua senha? <br />

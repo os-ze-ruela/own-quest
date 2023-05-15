@@ -53,6 +53,11 @@ interface Token {
   refresh_token: string;
 }
 
+interface ErrorData {
+  statusCode: number;
+  message: string;
+}
+
 export const AuthContext = createContext<AuthContextType>(
   {} as AuthContextType
 );
@@ -106,23 +111,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         `Erro (${error.response?.status}) ao realizar login:`,
         error
       );
-      if (error.response?.status === 400) {
-        throw new AppError(
-          400,
-          "Não foi possível encontrar uma conta com as credenciais fornecidas. Por favor, confira seu e-mail e senha."
-        );
-      } else if (error.response?.status === 401) {
-        navigate(EMAIL_NOT_VALIDATED);
-        throw new AppError(
-          401,
-          "Usuário com o e-mail não verificado. Por favor, verifique o seu e-mail para realizar o login."
-        );
-      } else if (error.response?.status === 403) {
-        throw new AppError(
-          403,
-          "Não foi possível encontrar uma conta com as credenciais fornecidas. Por favor, confira seu e-mail."
-        );
+      if (error.response?.data) {
+        const { statusCode, message } = error.response.data as ErrorData;
+        if (statusCode && message) {
+          throw new AppError( statusCode, message)
+        }
       }
+      throw new AppError(
+        400,
+        "Erro ao realizar login, tente novamente mais tarde.",
+      );
     }
   }
 
@@ -236,18 +234,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         `Erro (${error.response?.status}) ao realizar cadastro:`,
         error
       );
-      if (error.response?.status === 400) {
-          // erro de validação genérico ou outro tipo de erro
-          throw new AppError(
-            400,
-            "Não foi possível realizar o cadastro. Por favor, verifique as informações fornecidas e tente novamente. Seu e-mail pode já ter sido utilizado, verifique se os campos de nome e nickname possuem pelo menos 4 caracteres. Verifique se sua senha está forte o suficiente, contendo pelo menos 4 caracteres, dentre eles pelo menos um caracter especial, uma letra maiúscula, uma letra minúscula e um número."
-          );
+      if (error.response?.data) {
+        const { statusCode, message } = error.response.data as ErrorData;
+        if (statusCode && message) {
+          throw new AppError( statusCode, message)
         }
-      else if (error.response?.status === 403) {
-        throw new AppError(
-            403,
-            "Não foi possível realizar o cadastro. Por favor, verifique as informações fornecidas e tente novamente.");
       }
+      throw new AppError(
+        400,
+        "Erro ao realizar cadastro, tente novamente mais tarde.",
+      );
+        
     }
   }
 

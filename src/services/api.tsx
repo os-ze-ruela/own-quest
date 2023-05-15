@@ -173,6 +173,18 @@ export const postUnLikeGame = async (gameId: string) => {
     return await api.delete(`/user/unfavorite/${gameId}`)
 }
 
+export const getUserByNickname = async (nickname: string) => {
+    return await api.get(`/user/find/${nickname}`)
+}
+
+export const postFollowUser = async (userId: string) => {
+    return await api.post(`/user/follow/${userId}`)
+}
+
+export const postUnfollowUser = async (userId: string) => {
+    return await api.delete(`/user/unfollow/${userId}`)
+}
+
 // ----- IMAGE UPLOAD -----
 
 export const uploadImage = async (imageData: FormData) => {

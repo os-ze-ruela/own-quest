@@ -10,11 +10,13 @@ import { LOGIN } from '../../core/app-urls';
 import { ButtonRegister, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginLink, LoginText, RegisterStyle, SubTitle, Title, MessageError, RegisterInputs } from '../../styles/Register';
 import { AuthContext } from '../../contexts/auth';
 import AppError from '../../core/app-error';
+import { CircularProgress } from '@mui/material';
 
 
 function Register() {
 
   async function SubmitRegister() {
+    setLoading(true)
     setShowError(false)
     try {
       await register(name, nickname, email, password, confirmPassword, new Date(birthDate).toISOString())
@@ -23,6 +25,7 @@ function Register() {
       setMessageError(error.message)
       setShowError(true) 
     }
+    setLoading(false)
   }
 
     const [nickname, setNickname] = useState('');
@@ -33,6 +36,7 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isRevealPassword, setIsRevealPassword] = useState(false);
     const [isRevealConfirmPassword, setIsRevealConfirmPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [showError, setShowError] = useState(false)
     const [messageError, setMessageError] = useState('')
@@ -112,10 +116,12 @@ function Register() {
             onClick={() => setIsRevealConfirmPassword(prevState => !prevState)}
           />
           </InputButtonDiv>
-        </RegisterInputs>
+          </RegisterInputs>
           { showError &&
               <MessageError>{messageError}</MessageError>}
-          <ButtonRegister onClick={async () => await SubmitRegister()}>Criar Conta</ButtonRegister>
+          <ButtonRegister onClick={async () => await SubmitRegister()}>
+            {loading ? <CircularProgress size={20} color="inherit" /> : 'Criar Conta'}
+          </ButtonRegister>
       </FieldsDiv>
              
     </RegisterStyle>
