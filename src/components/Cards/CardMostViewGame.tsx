@@ -3,6 +3,7 @@ import { CREATOR, GAME_DESCRIPTION } from '../../core/app-urls';
 import Category from '../../models/Category';
 import { CardMostViewGameContentWrapper, CardMostViewGameCreatedBy, CardMostViewGameImage, CardMostViewGameImageSpace, CardMostViewGameTitle, CardMostViewGameWrapper, CreatedByLabel, CreatedByName, PlayButtonWrapper } from '../../styles/Explorer';
 import { Button, CategoryLabel, CategoryLabelWrapper } from '../../styles/HomeLogged';
+import ImagePlaceholder from '../ImagePlaceholder/ImagePlaceholder';
 
     type CardMostViewGameProps = {
         id: number;
@@ -18,7 +19,12 @@ import { Button, CategoryLabel, CategoryLabelWrapper } from '../../styles/HomeLo
         return (
             <CardMostViewGameWrapper href={GAME_DESCRIPTION + '/' + id}>
                 <CardMostViewGameImageSpace>
-                    <CardMostViewGameImage src={imageSrc} alt={title} />
+                {imageSrc ? 
+                <CardMostViewGameImage src={imageSrc} alt={title} />
+
+                :
+                <ImagePlaceholder/>
+                }
                 </CardMostViewGameImageSpace>
                 <CardMostViewGameContentWrapper>
                     <CardMostViewGameTitle id={title} >{title}</CardMostViewGameTitle>

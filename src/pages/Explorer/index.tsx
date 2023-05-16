@@ -52,29 +52,25 @@ const Explorer = () => {
       </FiltersContainer>
       <HorizontalListWrapper>
         <TitleListGames>Histórias mais Jogadas</TitleListGames>
-        <GameListContainer>
-          <ListGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
-            {isLoading ? (
-              <>
-                <CardExplorerHotShimmer />
-                <CardExplorerHotShimmer />
-                <CardExplorerHotShimmer />
-                <CardExplorerHotShimmer />
-              </>
-            ) : (
-              hotGames.map((game, index) => (
-                <CardMostViewGame
-                  key={index}
-                  id={game.id}
-                  title={game.title}
-                  imageSrc={game.image != null ? game.image : `https://picsum.photos/300/200?random=4`}
-                  description={game.description}
-                  categories={game.categories}
-                  createdByNickname={game.createdBy!.nickname}
-                />
-              ))
-            )}
-          </ListGamesCardContainer>
+        <ListGamesCardContainer>
+          {isLoading ? (
+            <>
+              <CardExplorerHotShimmer />
+              <CardExplorerHotShimmer />
+              <CardExplorerHotShimmer />
+              <CardExplorerHotShimmer />
+            </>
+          ) : games.map((game, index) => (
+            <CardMostViewGame
+              key={index}
+              id={game.id}
+              title={game.title}
+              imageSrc={game.image}
+              description={game.description}
+              categories={game.categories}
+              createdByNickname={game.createdBy!.nickname}
+            />
+          ))}
           {sliderOffset < 1 ? (
             <></>
           ) : (
@@ -108,11 +104,11 @@ const Explorer = () => {
         ) : (
           <CardHighlightGame
             key={0}
-            title={highlightGame!.title}
-            imageSrc={highlightGame!.image && `https://picsum.photos/300/200?random=3`}
-            description={highlightGame!.description}
-            categories={highlightGame!.categories}
-            createdByNickname={highlightGame!.createdBy!.nickname}
+            title={games[0].title}
+            imageSrc={games[0].image}
+            description={games[0].description}
+            categories={games[0].categories}
+            createdByNickname={games[0].createdBy!.nickname}
           />
         )}
       </GameListContainer>

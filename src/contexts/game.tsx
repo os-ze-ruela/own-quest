@@ -77,19 +77,20 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-    async function getGameById(id: string): Promise<void> {
+    async function getGameById(idGame: string): Promise<void> {
         try {
+            console.log("Fazendo get do id "+idGame)
             //   setLoading(true)
-            const response = await fetchGameById(id);
-            const idGame = Number(id);
-            const { title, description, image, isEditing, isPublished, isDeleted, isFavorited, createdAt, createdBy, favorites, categories } = response.data.game;
-
+            const response = await fetchGameById(idGame);
+            // const idGame = Number(id);
+            const { id, title, description, image, isEditing, isPublished, isDeleted, isFavorited, createdAt, createdBy, favorites, categories } = response.data.game;
+            console.log(`id do game: ${id}`)
             const categorieGame = categories.map((category: { category: any }) => {
                 return new Category({ title: category.category.title, id: category.category.id, color: category.category.color, plus18: category.category.plus18 });
             });
 
             setEditingGame(new Game({
-                id: idGame,
+                id: id,
                 title: title,
                 description: description,
                 createdAt: createdAt,
@@ -102,6 +103,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 isDeleted: isDeleted,
                 createdBy: createdBy
             }))
+
+            console.log('EDITING GAME')
+            console.log(editingGame)
+
             //   setLoading(false)
         } catch (error) {
             //   setLoading(false)

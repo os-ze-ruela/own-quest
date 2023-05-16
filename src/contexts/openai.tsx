@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { ReactNode, createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useContext, useState, useEffect } from "react";
 import { GameContext } from '../contexts/game';
 import { Button } from "../models/Button";
 import { Page } from "../models/Page";
 import { postButton, postPage } from "../services/api";
 import { CreationContext } from './creation';
+import { api, uploadImage, uploadRandomImage } from "../services/api";
 
 type OpenAIContextType = {
     pages: Page[],
@@ -153,7 +154,13 @@ Número de páginas da história:  ${numPages}
     }
 
     const { createFullGame } = useContext(GameContext)
+    const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID } = useContext(GameContext)
 
+
+    useEffect(() => {
+        console.log(editingGame);
+      }, [editingGame]);
+      
 
     async function createRandomGame(randomGame: any): Promise<number> {
         console.log("JSON do game a ser gerado = ");
@@ -166,11 +173,6 @@ Número de páginas da história:  ${numPages}
         await Promise.all(
           randomGame.pages.map(async (page: any, index: any) => {
             const pageTemp = page;
-            //tratamento is last page
-            console.log(page.is_last_page)
-            console.log(Boolean(page.is_last_page))
-
-
             const response = await postPage({
               title: page.title,
               description: page.description,
@@ -192,18 +194,13 @@ Número de páginas da história:  ${numPages}
           const buttonsTemp: Button[] = [];
       
           const pageId = page.id;
-          console.log("Lista de botoes")
-          console.log(page.buttons)
 
           if (page.buttons.length > 0) {
             for (let j = 0; j < page.buttons.length; j++) {
               const button = page.buttons[j];
-              console.log("Botao "+button.title)
-              console.log("Botao vai para "+button.nextPageId)
               const buttonTemp = button;
                 
               const destinationId = pagesTemp[button.nextPageId-1].id
-              console.log("Destinantion id = ", destinationId)
               buttonTemp.nextPageId = destinationId
 
               const response = await postButton(
@@ -220,8 +217,28 @@ Número de páginas da história:  ${numPages}
       
           pagesTemp[i].buttons = buttonsTemp;
         }
-      
         setPages(pagesTemp);
+      
+        // console.log("ID do jogo gerado = ", newGameID)
+        // await getGameById(String(newGameID))
+        // console.log("Get Jogo gerado =")
+        // console.log(editingGame)
+        // console.log(editingGame!.id)
+        // console.log(editingGame!.title)
+        
+        // if(editingGame){
+        //     //melhorar descrição 
+        //     const betterDescription = await improveDescription(editingGame.description);
+            
+            
+        //     //gerar imagem
+        //     const dalleImageUrl = await dalleAPI(editingGame.description);
+        //     const response = await uploadRandomImage(dalleImageUrl)
+        //     const newEditingGame = { ...editingGame, description: betterDescription };
+        //     newEditingGame.image = response.data.imagePath;
+        //     setEditingGame(newEditingGame);
+        //     await updateGame(newEditingGame);
+        // }
 
         return newGameID;
       }
