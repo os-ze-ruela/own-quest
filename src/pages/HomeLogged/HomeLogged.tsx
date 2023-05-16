@@ -86,7 +86,7 @@ const HomeLogged = () => {
                     key={index}
                     id={game.id}
                     title={game.title}
-                    imageSrc={game.image != null ? game.image : `https://picsum.photos/300/200?random=1`}
+                    imageSrc={game.image}
                     isPublished={game.isPublished}
                     description={game.description}
                     categories={game.categories}
@@ -129,7 +129,7 @@ const HomeLogged = () => {
                 key={index}
                 id={game.id}
                 title={game.title}
-                imageSrc={game.image != null ? game.image : `https://picsum.photos/300/200?random=${randomInt()}`}
+                imageSrc={game.image}
                 description={game.description}
                 categories={game.categories}
               />

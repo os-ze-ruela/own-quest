@@ -3,6 +3,7 @@ import { GAME } from '../../core/app-urls';
 import Category from '../../models/Category';
 import { Button, ButtonWrapper, CategoryLabel, CategoryLabelWrapper } from '../../styles/HomeLogged';
 import { CardMyGameContentWrapper, CardMyGameImage, CardMyGameTitle, CardMyGameWrapper, MyGameImageSpace, MyGameState } from '../../styles/MyGames';
+import ImagePlaceholder from '../ImagePlaceholder/ImagePlaceholder';
 
 type CardMyGameProps = {
     id: number;
@@ -13,7 +14,7 @@ type CardMyGameProps = {
     categories: Category[];
 };
 
-const CardMyGame: React.FC<CardMyGameProps> = ({ id, imageSrc, title, description, isPublished, categories }) => {
+const CardMyGame: React.FC<CardMyGameProps> = ({ id, imageSrc, title, description, isPublished, categories}) => {
 
     return (
         <CardMyGameWrapper >
@@ -21,7 +22,11 @@ const CardMyGame: React.FC<CardMyGameProps> = ({ id, imageSrc, title, descriptio
                 <p>{isPublished ? 'Publicado' : 'Editando'}</p>
             </MyGameState>
             <MyGameImageSpace>
+                {imageSrc ? 
                 <CardMyGameImage src={imageSrc} alt={title} />
+                :
+                <ImagePlaceholder/>
+                }
             </MyGameImageSpace>
             <CardMyGameContentWrapper>
                 <CardMyGameTitle>{title}</CardMyGameTitle>

@@ -75,7 +75,7 @@ const Explorer = () => {
               key={index}
               id={game.id}
               title={game.title}
-              imageSrc={game.image != null ? game.image : `https://picsum.photos/300/200?random=4`}
+              imageSrc={game.image}
               description={game.description}
               categories={game.categories}
               createdByNickname={game.createdBy!.nickname}
@@ -109,7 +109,7 @@ const Explorer = () => {
           <CardHighlightGame
             key={0}
             title={games[0].title}
-            imageSrc={games[0].image && `https://picsum.photos/300/200?random=3`}
+            imageSrc={games[0].image}
             description={games[0].description}
             categories={games[0].categories}
             createdByNickname={games[0].createdBy!.nickname}

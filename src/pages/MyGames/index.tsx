@@ -109,7 +109,7 @@ const MyGames = () => {
     let timer: NodeJS.Timeout;
   
     if (isLoadingGame) {
-      const totalTime = 12000; //12s de loading
+      const totalTime = 20000; //12s de loading
       const updateInterval = 100;
       const increment = 100 / (totalTime / updateInterval);
   
@@ -122,7 +122,7 @@ const MyGames = () => {
           return prevProgress + increment;
         });
   
-        setProgressText(getProgressText(progress)); // Mova esta linha aqui
+        setProgressText(getProgressText(progress));
       }, updateInterval);
     }
   
@@ -229,7 +229,7 @@ const MyGames = () => {
                   key={index}
                   id={game.id}
                   title={game.title}
-                  imageSrc={game.image != null ? game.image : game.image && `https://picsum.photos/300/200?random=2`}
+                  imageSrc={game.image}
                   isPublished={game.isPublished}
                   description={game.description}
                   categories={game.categories}
