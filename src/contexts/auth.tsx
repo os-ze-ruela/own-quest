@@ -53,6 +53,11 @@ interface Token {
   refresh_token: string;
 }
 
+interface ErrorData {
+  statusCode: number;
+  message: string;
+}
+
 export const AuthContext = createContext<AuthContextType>(
   {} as AuthContextType
 );
@@ -106,23 +111,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         `Erro (${error.response?.status}) ao realizar login:`,
         error
       );
-      if (error.response?.status === 400) {
-        throw new AppError(
-          400,
-          "Não foi possível encontrar uma conta com as credenciais fornecidas. Por favor, confira seu e-mail e senha."
-        );
-      } else if (error.response?.status === 401) {
-        navigate(EMAIL_NOT_VALIDATED);
-        throw new AppError(
-          401,
-          "Usuário com o e-mail não verificado. Por favor, verifique o seu e-mail para realizar o login."
-        );
-      } else if (error.response?.status === 403) {
-        throw new AppError(
-          403,
-          "Não foi possível encontrar uma conta com as credenciais fornecidas. Por favor, confira seu e-mail."
-        );
+      if (error.response?.data) {
+        const { statusCode, message } = error.response.data as ErrorData;
+        if (statusCode && message) {
+          throw new AppError( statusCode, message)
+        }
       }
+      throw new AppError(
+        400,
+        "Erro ao realizar login, tente novamente mais tarde.",
+      );
     }
   }
 
@@ -229,21 +227,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
 
-      navigate(HOME);
+      navigate(EMAIL_NOT_VALIDATED);
     } catch (e) {
       const error = (await e) as AxiosError;
       console.error(
         `Erro (${error.response?.status}) ao realizar cadastro:`,
         error
       );
-      if (error.response?.status === 400) {
-        throw new AppError(400, "O e-mail informado já está sendo utilizado.");
-      } else if (error.response?.status === 403) {
-        throw new AppError(
-          403,
-          "Não foi possível criar uma nova conta com as credenciais fornecidas."
-        );
+      if (error.response?.data) {
+        const { statusCode, message } = error.response.data as ErrorData;
+        if (statusCode && message) {
+          throw new AppError( statusCode, message)
+        }
       }
+      throw new AppError(
+        400,
+        "Erro ao realizar cadastro, tente novamente mais tarde.",
+      );
+        
     }
   }
 

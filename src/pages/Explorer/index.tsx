@@ -10,35 +10,25 @@ import HeaderLogged from '../../components/Header/HeaderLogged';
 import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated';
 import { AuthContext } from '../../contexts/auth';
 import { GameContext } from '../../contexts/game';
-import AppError from '../../core/app-error';
 import { LOGIN } from '../../core/app-urls';
-import { ExplorerMain, FiltersContainer, GameListContainer, ListGamesCardContainer, PaginationContainer, SearchContainer, SearchInput, TitleListGames } from "../../styles/Explorer";
+import { ExplorerMain, FiltersContainer, GameListContainer, HorizontalListWrapper, ListGamesCardContainer, PaginationContainer, SearchContainer, SearchInput, TitleListGames } from "../../styles/Explorer";
 
 
 const Explorer = () => {
 
   const { authenticated, user, refresh, logout } = useContext(AuthContext)
-  const { games, getHotGamesForHome } = useContext(GameContext)
+  const { hotGames, highlightGame, getHotGamesForHome, setPagesOfHotGames, getHighlightGame, pagesOfHotGames } = useContext(GameContext)
   const [isLoading, setIsLoading] = useState(true);
   const [sliderOffset, setSliderOffset] = useState(0);
 
   const fetchGames = async () => {
     try {
-      await Promise.all([getHotGamesForHome()]);
+      await Promise.all([getHotGamesForHome(), getHighlightGame()]);
       setTimeout(() => {
         setIsLoading(false)
-      }, 500);
+      }, 1000);
     } catch (e) {
       setIsLoading(false)
-      const error = await e as AppError
-      if (error.statusCode === 401) {
-        try {
-          await refresh()
-          await fetchGames()
-        } catch (e) {
-          logout()
-        }
-      }
     }
   };
 
@@ -60,7 +50,7 @@ const Explorer = () => {
           <SearchInput type='text' id='search' name='search' placeholder='Procurar Jogos' />
         </SearchContainer>
       </FiltersContainer>
-      <GameListContainer>
+      <HorizontalListWrapper>
         <TitleListGames>Histórias mais Jogadas</TitleListGames>
         <ListGamesCardContainer>
           {isLoading ? (
@@ -93,19 +83,25 @@ const Explorer = () => {
             </PaginationContainer>
           )}
           <PaginationContainer direction='right'>
-            <button onClick={() => {
+            <button onClick={async () => {
+              // setPagesOfHotGames(pagesOfHotGames + 1)
+              if (sliderOffset + 1 >= pagesOfHotGames - 1) {
+                await getHotGamesForHome()
+              }
               setSliderOffset(sliderOffset + 1);
             }}>
               <img src={nextIcon} alt="next games" className='nextIcon' />
             </button>
           </PaginationContainer>
-        </ListGamesCardContainer>
-      </GameListContainer>
+        </GameListContainer>
+      </HorizontalListWrapper>
       <GameListContainer>
         <TitleListGames>Histórias em Destaque</TitleListGames>
-        {isLoading ? (<>
-          <CardHighlightGameShimmer />
-        </>) : (<>
+        {isLoading ? (
+          <>
+            <CardHighlightGameShimmer />
+          </>
+        ) : (
           <CardHighlightGame
             key={0}
             title={games[0].title}
@@ -114,7 +110,7 @@ const Explorer = () => {
             categories={games[0].categories}
             createdByNickname={games[0].createdBy!.nickname}
           />
-        </>)}
+        )}
       </GameListContainer>
     </ExplorerMain>
   );

@@ -10,9 +10,12 @@ export const EmailNotValidatedBody = styled.div`
   justify-content: center;
   color: #FFFFFF;
   font-family: 'FiraCode-Regular';
+  flex-direction: column;
 
   a {
     color: #FFFFFF;
     font-family: 'FiraCode-SemiBold';
+    cursor: pointer;
+    text-decoration: underline;
   }
 `

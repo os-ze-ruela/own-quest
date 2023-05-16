@@ -24,7 +24,7 @@ import DialogRandomGame from '../../components/Dialog/DialogRandomGame';
 
 const MyGames = () => {
   const { user, refresh, logout } = useContext(AuthContext)
-  const { userGames, games, getUserGames, getHotGamesForHome } = useContext(GameContext)
+  const { userGames, getUserGames, getHotGamesForHome } = useContext(GameContext)
   const [isLoading, setIsLoading] = useState(true);
   const [isCreatingGame, setCreatingGame] = useState(false);
   const [isLoadingGame, setIsLoadingGame] = useState(false);
