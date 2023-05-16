@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { CreationContext } from '../../contexts/creation';
 import { ActualPage, Body, ButtonGame, ButtonContainer, GameBody, GameStyle, Page, PageBody, PageDescription, PageTitle, NextButton } from '../../styles/Game';
@@ -32,9 +32,12 @@ const Game = () => {
     const handleBackClick = () => {
         
       };
-      
-    const handleButton = (index: number) => {
-        setButtonIndex(index) 
+
+      const handleButton = (index: number) => {
+        if (index === buttonIndex) {
+          return; // Impede a desseleção do botão
+        }
+        setButtonIndex(index);
       };
       
     const handleCloseAlert = () => {
@@ -44,22 +47,31 @@ const Game = () => {
 
     //BUG TO FIX - quando um botão é deselecionado o index ainda é mantidado e caso o botão Continuar seja pressionado será redirecionado
     const handleClickButton = () => {
-
-      if(pages[indexPage].isLastPage === true){
-        navigate(GAME+"/"+id);
+      if (buttonIndex === -1) {
+        return;
       }
-
-      if(pages[indexPage].buttons[buttonIndex].nextPageId === -1){
-        setAlert(true)
+  
+      if (pages[indexPage].isLastPage === true) {
+        navigate(GAME + "/" + id);
       }
-      else{
-      const nextPageId = pages[indexPage].buttons[buttonIndex].nextPageId;
-      const nextPageIndex = pages.findIndex((page) => page.id === nextPageId);
-      setIndexPage(nextPageIndex);
-      setButtonIndex(0);
+  
+      if (pages[indexPage].buttons[buttonIndex].nextPageId === -1) {
+        setAlert(true);
+      } else {
+        const nextPageId = pages[indexPage].buttons[buttonIndex].nextPageId;
+        const nextPageIndex = pages.findIndex((page) => page.id === nextPageId);
+        setIndexPage(nextPageIndex);
+        setButtonIndex(0);
       }
     };
-      
+    
+
+    useEffect(() => {
+      console.log("Button index = ", buttonIndex)
+    }, [buttonIndex])
+  
+
+
   return (
     <GameBody>
       <Snackbar open={alert} autoHideDuration={4000} onClose={handleCloseAlert}>
@@ -67,7 +79,10 @@ const Game = () => {
             Botão não possui uma página de destino
           </Alert>
       </Snackbar>
-        <HeaderTestingGame onBackClick={handleBackClick}/>
+      {pages.length < 1 ? (
+                <></>
+              ) : (
+        <HeaderTestingGame pageColor={pages[indexPage].color} onBackClick={handleBackClick}/>)}
       <GameStyle>
         <Body>
           <PageBody>
@@ -90,23 +105,23 @@ const Game = () => {
                   value={pages[indexPage].description}
                 />
                 <ButtonContainer>
-                  {pages[indexPage].buttons.map((button, index) => (
+                {pages[indexPage].buttons.map((button, index) => (
                     <ButtonGame
-                      readOnly
-                      key={index}
-                      value={button.title}
-                      textLength={button.title.length}
-                      isSelected={index === buttonIndex}
-                      background={button.color}
-                      onClick={() => handleButton(index)}
-                      
+                    readOnly
+                    key={index}
+                    value={button.title}
+                    textLength={button.title.length}
+                    isSelected={index === buttonIndex}
+                    background={button.color}
+                    onClick={() => handleButton(index)}
                     />
-                  ))}
+                    ))}
                 </ButtonContainer>
                 <NextButton
                     readOnly
                     value={pages[indexPage].isLastPage ? "Finalizar" : "Continuar"}
-                    onClick={handleClickButton}
+                    onClick={buttonIndex !== -1 ? handleClickButton : undefined}
+                    // onClick={handleClickButton}
                 />
               </Page>
               )}
