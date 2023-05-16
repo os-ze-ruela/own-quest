@@ -6,6 +6,7 @@ import { CardHomeShimmer } from '../../components/Cards/CardHomeShimmer';
 import { CardMyGamesHomeShimmer } from '../../components/Cards/CardMyGamesHomeShimmer';
 import CardUserGame from '../../components/Cards/CardUserGame';
 import EmptyCard from '../../components/Cards/EmptyCard';
+import Drawer from '../../components/Drawer/Drawer';
 import HeaderLogged from '../../components/Header/HeaderLogged';
 import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated';
 import { AuthContext } from '../../contexts/auth';
@@ -56,6 +57,7 @@ const HomeLogged = () => {
 
   return (
     <>
+      <Drawer />
       <HeaderLogged nickname={user!.nickname} photo={user!.photo} />
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <LoggedStyle>

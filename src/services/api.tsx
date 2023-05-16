@@ -31,6 +31,10 @@ export const fetchHighlightGame = async () => {
     return await api.get(`/game/highlight`)
 }
 
+export const findGamesByTitle = async (title: string) => {
+    return await api.get(`/game/find/${title}`)
+}
+
 
 // CREATION CONTEXT
 

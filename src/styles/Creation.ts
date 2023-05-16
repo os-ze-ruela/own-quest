@@ -86,22 +86,46 @@ export const Page = styled.div.attrs((props: {background: string}) => props)`
 `;
 
 export const PageListContainer = styled.div`
-  width: 100%;
+  /* width: 100%; */
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 12px;
   background-color: white;
+  padding: 0px 8px;
 `;
 
 export const PagesMenu = styled.div`
+  overflow: scroll;
+  overflow-y: hidden;
   display: flex;
   width: 100%;
-  height: 30%;
-  background-color: #D9D9D9;
-  align-items: center;
-  justify-content: space-between;
-  /* padding: 10px 0; */
+  height: 32%;
+  background-color: white;
+  
+  scrollbar-width: thin;
+  scrollbar-color: #568EA3 #000;
+  
+  &:hover {
+    scrollbar-color: #33819DBD #000; 
+  }
+  
+  /* estilo da barra de rolagem para o Google Chrome */
+  &::-webkit-scrollbar {
+    height: 12px; /* Change the width to your desired value */
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #FFFFFF;
+    height: 12px; /* Keep the same width as the scrollbar */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #568EA3;
+    border-radius: 4px;
+    height: 12px; /* Keep the same width as the scrollbar */
+  }
 `;
 
 export const SideBarButton = styled.div`
@@ -180,11 +204,13 @@ export const DeleteButton = styled.button`
 
 export const ButtonContainer = styled.div`
   width: 100%;
-  height: 200px;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  row-gap: 12px;
+  column-gap: 8px;
 `;
 
 export const AddButton = styled.button.attrs((props: {canAdd: boolean}) => props)`
@@ -210,7 +236,7 @@ export const EditableButton = styled.input.attrs((props: {isSelected: boolean, b
   color: white;
   background-color: ${props => props.background};
   font-family: FiraCode-Light;
-  padding: 10px 0;
+  padding: 10px 8px;
   text-align: center;
   border: 0;
   outline: none;
@@ -241,6 +267,10 @@ export const AddPage = styled.button`
   /* padding: 5px 5px 5px 5px; */
   align-items: center;
   justify-content: center;
+  
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const MiniPage = styled.button.attrs((props: {isLastPage: boolean, isSelected: boolean, background: string}) => props)`

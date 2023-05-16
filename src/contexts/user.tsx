@@ -1,21 +1,28 @@
 import { AxiosError } from "axios";
 import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
-import { api, getUserByNickname, postLikeGame, postUnLikeGame } from "../services/api";
-import UserCategory from "../models/UserCategory";
 import User from "../models/User";
+import UserCategory from "../models/UserCategory";
+import { api, getUserByNickname, postLikeGame, postUnLikeGame } from "../services/api";
 type UserContextType = {
     likeGame: (gameId: string) => Promise<void>
     unlikeGame: (gameId: string) => Promise<void>
     findUserByNickname: (nickname: string) => Promise<void>
-    visitingUser: User | null
+    visitingUser: User | null,
+    open: boolean,
+    setOpen: (open: boolean) => void
 }
 
 export const UserContext = createContext<UserContextType>({} as UserContextType)
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
 
+    const [open, setOpen] = useState(false);
     const [visitingUser, setVisitingUser] = useState<User | null>(null)
+
+    const toggleDrawer = () => {
+        setOpen(!open);
+    };
 
     async function likeGame(gameId: string): Promise<void> {
         try {
@@ -30,6 +37,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             }
         }
     };
+    
 
     async function unlikeGame(gameId: string): Promise<void> {
         try {
@@ -91,7 +99,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
 
     return (
-        <UserContext.Provider value={{ likeGame, unlikeGame, findUserByNickname, visitingUser }}>
+        <UserContext.Provider value={{ likeGame, unlikeGame, findUserByNickname, setOpen, visitingUser, open }}>
             {children}
         </UserContext.Provider>
     )

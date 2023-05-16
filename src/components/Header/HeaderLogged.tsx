@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import LOGO from "../../assets/img/ownquest-logo.png";
 import { AuthContext } from '../../contexts/auth';
 import { GameContext } from "../../contexts/game";
+import { UserContext } from '../../contexts/user';
 import AppError from "../../core/app-error";
-import { EXPLORER, GAME, HOME, LANDING_PAGE, MYGAMES } from "../../core/app-urls";
+import { EXPLORER, GAME, HOME, LANDING_PAGE, MYGAMES, PROFILE } from "../../core/app-urls";
 import { ButtonStyle, HeaderActions, HeaderStyle, LinkStyle, LogoStyle, PerfilLink, UserImage, UserImagePlaceholder } from '../../styles/Header';
 
 interface HeaderProps {
@@ -14,6 +15,7 @@ interface HeaderProps {
 
 function HeaderLogged(props: HeaderProps) {
 
+    const { setOpen } = useContext(UserContext)
     const { authenticated } = useContext(AuthContext)
     const { createGame } = useContext(GameContext)
     const navigate = useNavigate()
@@ -35,7 +37,14 @@ function HeaderLogged(props: HeaderProps) {
                         alert(error)
                     }
                 }}>Criar</ButtonStyle>
-                <PerfilLink href="/profile">
+                <PerfilLink onClick={() => {
+                    console.log(window.innerWidth)
+                    if (window.innerWidth < 728) {
+                        setOpen(true)
+                    } else {
+                        navigate(PROFILE)
+                    }
+                }}>
                     {props.photo == null ? (
                         <>
                             <UserImagePlaceholder>

@@ -114,18 +114,19 @@ export const UserImagePlaceholder = styled.div`
     border-radius: 50%;
 `
 
-export const PerfilLink = styled.a`
+export const PerfilLink = styled.button`
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 11px 1rem;
+    padding: 4px 1rem;
     gap: 1rem;
     cursor: pointer;
+    border: none;
 
     width: auto;
     max-width: 350px;
-    height: 50px;
+    height: auto;
 
     background: #202331;
     border-radius: 4px;
@@ -133,6 +134,7 @@ export const PerfilLink = styled.a`
     flex: none;
     order: 1;
     flex-grow: 0;
+    text-decoration: none;
 
     // Font
 
