@@ -52,7 +52,8 @@ const Explorer = () => {
       </FiltersContainer>
       <HorizontalListWrapper>
         <TitleListGames>Histórias mais Jogadas</TitleListGames>
-        <ListGamesCardContainer>
+        <GameListContainer>
+        <ListGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
           {isLoading ? (
             <>
               <CardExplorerHotShimmer />
@@ -60,7 +61,7 @@ const Explorer = () => {
               <CardExplorerHotShimmer />
               <CardExplorerHotShimmer />
             </>
-          ) : games.map((game, index) => (
+          ) : (hotGames.map((game, index) => (
             <CardMostViewGame
               key={index}
               id={game.id}
@@ -69,8 +70,9 @@ const Explorer = () => {
               description={game.description}
               categories={game.categories}
               createdByNickname={game.createdBy!.nickname}
-            />
+            />)
           ))}
+           </ListGamesCardContainer>
           {sliderOffset < 1 ? (
             <></>
           ) : (
@@ -104,11 +106,11 @@ const Explorer = () => {
         ) : (
           <CardHighlightGame
             key={0}
-            title={games[0].title}
-            imageSrc={games[0].image}
-            description={games[0].description}
-            categories={games[0].categories}
-            createdByNickname={games[0].createdBy!.nickname}
+            title={highlightGame!.title}
+            imageSrc={highlightGame!.image}
+            description={highlightGame!.description}
+            categories={highlightGame!.categories}
+            createdByNickname={highlightGame!.createdBy!.nickname}
           />
         )}
       </GameListContainer>
