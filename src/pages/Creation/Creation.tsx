@@ -9,7 +9,7 @@ import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated
 import { AuthContext } from '../../contexts/auth';
 import { CreationContext } from '../../contexts/creation';
 import { GameContext } from '../../contexts/game';
-import { ActualPage, AddButton, AddPage, Body, ButtonContainer, CreationBody, CreationStyle, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu, PopupContainer } from '../../styles/Creation';
+import { ActualPage, AddButton, AddPage, Body, ButtonContainer, CreationBody, CreationStyle, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageListScrollContainer, PageTitle, PagesMenu, PopupContainer } from '../../styles/Creation';
 import ButtonActionBar from './components/ButtonActionBar';
 import NoPagePlaceholder from './components/NoPagePlaceholder';
 import PageActionBar from './components/PageActionBar';
@@ -18,7 +18,7 @@ import PageActionBar from './components/PageActionBar';
 
 
 const Creation = () => {
-  
+
   const { user } = useContext(AuthContext)
   const { pages, setPages } = useContext(CreationContext)
   const { indexButton, setIndexButton } = useContext(CreationContext)
@@ -36,12 +36,12 @@ const Creation = () => {
   const { updatePage } = useContext(CreationContext)
   const { updateButton } = useContext(CreationContext)
   const { findPageIndex } = useContext(CreationContext)
-  const { destinyPage, setDestinyPage} = useContext(CreationContext)
+  const { destinyPage, setDestinyPage } = useContext(CreationContext)
   const { handleButton } = useContext(CreationContext)
   const { getGameById } = useContext(GameContext)
   const { id } = useParams()
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
-  const {loading, setLoading} = useContext(CreationContext)
+  const { loading, setLoading } = useContext(CreationContext)
 
 
   const debounceSaveChanges = () => {
@@ -54,7 +54,7 @@ const Creation = () => {
     }, 500);
     setTimerId(idTimer);
   };
-  
+
   const saveChanges = () => {
     setLoading(false);
     updatePage(pages[indexSelected])
@@ -70,7 +70,7 @@ const Creation = () => {
     }, 500);
     setTimerId(idTimer);
   };
-  
+
   const saveChangesButton = () => {
     setLoading(false);
     updateButton(pages[indexSelected].buttons[indexButton])
@@ -84,13 +84,13 @@ const Creation = () => {
     };
   }, [timerId]);
 
-  
-  useEffect( () =>  {
+
+  useEffect(() => {
     getPagesFromGameID(id!)
     getGameById(id!)
-  }, [])  
-  
-  
+  }, [])
+
+
   return (
     <CreationBody>
       <PopupContainer top={'200px'} left={'20px'}>
@@ -101,11 +101,11 @@ const Creation = () => {
         <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" />
       </PopupContainer>
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
-      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={false}/>
+      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={false} />
       <CreationStyle>
         <Body>
           <PageBody>
-            { pages.length > 0 ? actionBarSelected ?
+            {pages.length > 0 ? actionBarSelected ?
               (
                 <PageActionBar />
               )
@@ -156,7 +156,7 @@ const Creation = () => {
                       isSelected={index === indexButton}
                       placeholder={"Botão " + (index + 1).toString()}
                       background={button.color}
-                      onClick={()=>{
+                      onClick={() => {
                         handleButton(index, button)
                       }}
                       onChange={(event) => {
@@ -182,29 +182,29 @@ const Creation = () => {
 
             </ActualPage>
             <PagesMenu>
-              <PageListContainer>
-                {pages.map((page, index) => (
-                  <MiniPage
-                    isLastPage = {page.isLastPage}
-                    isSelected={index === indexSelected}
-                    background={page.color}
-                    key={index}
-                    value={index}
-                    onClick={() => {
-                      setActionBarSelected(true)
-                      setIndexSelected(index)
-                    }}
-                  >
-                    <span>{index + 1}</span>
-                  </MiniPage>
-                ))}
-                <AddPage onClick={() => { handleAddPageClick(id!) }}>
-                  <HiPlus size={25} color="#000" />
-                </AddPage>
-              </PageListContainer>
+                <PageListContainer>
+                  {pages.map((page, index) => (
+                    <MiniPage
+                      isLastPage={page.isLastPage}
+                      isSelected={index === indexSelected}
+                      background={page.color}
+                      key={index}
+                      value={index}
+                      onClick={() => {
+                        setActionBarSelected(true)
+                        setIndexSelected(index)
+                      }}
+                    >
+                      <span>{index + 1}</span>
+                    </MiniPage>
+                  ))}
+                  <AddPage onClick={() => { handleAddPageClick(id!) }}>
+                    <HiPlus size={25} color="#000" />
+                  </AddPage>
+                </PageListContainer>
             </PagesMenu>
           </PageBody>
-          <Sidebar/>
+          <Sidebar />
         </Body>
       </CreationStyle>
     </CreationBody >

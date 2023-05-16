@@ -106,11 +106,11 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
 
     async function generateRandomGameByDescription(numPages: number, category: string, description: string): Promise<string>{
         console.log("generateRandomGameByDescription...")
-        console.log(description)
+        console.log("Numero de paginas = ", numPages)
         const defaultPrompt = 
         `
-Eu tenho uma plataforma de criação de histórias e desejo criar histórias aleatórias. Todas histórias seguem um padrão de criação. A história possui uma ou mais categorias (Aventura, ação, terror, suspense, e outras.), possui um título e uma descrição. Cada história é dividida em páginas. Cada página possui: um título, uma descrição, um conjunto de botões e um indicação se é uma página de final da história (pode haver uma ou mais páginas de final de história). Caso o seja uma página final "is_last_page"=true, todas as páginas que não são finais devem ter ao menos um botão, cada botão possui um título e cada botão redireciona para outra página da história (pode ser uma página já visitada ou não). 
-Fornecendo uma breve descrição da história, a categoria da história e o número de páginas da história como parâmetros, gostaria que gerasse uma história baseada nos parâmetros, crie um título, descrição e as páginas seguindo o seguinte formato JSON:
+Eu tenho uma plataforma de criação de histórias e desejo criar histórias aleatórias. Todas histórias seguem um padrão de criação. A história possui uma ou mais categorias (Aventura, ação, terror, suspense, e outras.), possui um título e uma descrição. Cada história é dividida em páginas. Cada página possui: um título, uma descrição, dois ou mais botões, uma cor e um indicação se é uma página de final da história (pode haver uma ou mais páginas de final de história). Caso seja uma página final "is_last_page"=true, as páginas finais não possuem botões. Cada botão possui um título, uma cor, e cada botão redireciona para outra página da história (pode ser uma página já visitada ou não, porém um botão não pode redirecionar para a própria página). 
+Fornecendo uma breve descrição da história, a categoria da história e o número de páginas da história como parâmetros, gostaria que gerasse uma história baseada nos parâmetros, crie um título, descrição, as páginas e escolha as cores das páginas e botões, seguindo o seguinte formato JSON:
 
                                 {
                                 "title": "",
@@ -200,7 +200,7 @@ Número de páginas da história:  ${numPages}
               const button = page.buttons[j];
               const buttonTemp = button;
                 
-              const destinationId = pagesTemp[button.nextPageId-1].id
+              const destinationId = pagesTemp[button.nextPageId].id
               buttonTemp.nextPageId = destinationId
 
               const response = await postButton(

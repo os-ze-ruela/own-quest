@@ -73,14 +73,14 @@ const MyGames = () => {
 
      let randomGame = "" 
 
-    if(selectedOption){
-      console.log("Gerando historia pela descricao")
+    // if(selectedOption){
+    //   console.log("Gerando historia pela descricao")
       randomGame = await generateRandomGameByDescription(numPageSelected, categorySelected, description)
-    }
-    else{
-      console.log("Gerando historia parametros")
-      randomGame = await generateRandomGame(numPageSelected, categorySelected)
-    }
+    // }
+    // else{
+    //   console.log("Gerando historia parametros")
+    //   randomGame = await generateRandomGame(numPageSelected, categorySelected)
+    // }
 
     let randomGameJSON = JSON.parse(randomGame)
  
@@ -95,9 +95,8 @@ const MyGames = () => {
 
     try {
         const gameId = await createRandomGame(randomGameJSON)
-      // await getUserGames();
       setIsLoadingGame(false);
-      // navigate(GAME + '/' + gameId)
+      navigate(GAME + '/' + gameId)
     } catch (error) {
       setIsLoadingGame(false);
     }

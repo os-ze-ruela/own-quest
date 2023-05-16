@@ -179,7 +179,7 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
     <DialogContainer>
       <CloseButton onClick={onClose}><IoMdClose size={40}/></CloseButton>
       <h3>Gerar Jogo Aleatório</h3>
-        <ToggleButtonGroup
+        {/* <ToggleButtonGroup
         value={alignment}
         exclusive
         onChange={handleAlignment}
@@ -191,10 +191,10 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
         <ToggleButton onClick={()=>setSelectedOption(true)} value="center" aria-label="centered">
           <BsFillChatSquareTextFill size={20} color="white"/>
         </ToggleButton>
-      </ToggleButtonGroup>
-      <SelectWrapper>
+      </ToggleButtonGroup> */}
+      {/* <SelectWrapper>
       {selectedOption ? (
-      <>
+      <> */}
       <DescriptionInput
         name="StoryDescription"
         autoComplete="off"
@@ -203,20 +203,20 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
         onChange={(event) => {setDescription(event.target.value)}}
       />
       
-      </>) : 
+      {/* </>) : 
       (
       <></>
       )
     }
-      
+       */}
       <>
       <h5>Escolha uma categoria para história:</h5>
       <SelectBoxComponent defaultValue="Categoria" pageList={categories.map((category, index) => `${category.title}`)} onChange={handleCategoryChange} />
       </>
       <h5>Selecione o número de páginas da história:</h5>
-      <SelectBoxComponent defaultValue="Páginas" pageList={['3','4','5','6']} onChange={handleNumPagesChange} />
+      <SelectBoxComponent defaultValue="Páginas" pageList={['3','4','5','6', '7', '8', '9', '10']} onChange={handleNumPagesChange} />
       <Button onClick={handleGenerateRandomStorie}>Gerar</Button>
-      </SelectWrapper>
+      {/* </SelectWrapper> */}
     </DialogContainer>
   );
 };

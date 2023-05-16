@@ -6,9 +6,11 @@ export const GameBody= styled.div`
 `
 
 export const GameStyle = styled.div`
-  background-color: #282C3E;
+  /* background-color: #282C3E; */
+  background-color: transparent;
   width: 100%;
-  height: 92%;
+  /* height: 92%; */
+  height: calc(100% - 8%); /* Ajusta a altura para ocupar toda a tela abaixo do header */
   
   @media screen and (max-width: 1024px) {
       height: 92%;
@@ -32,7 +34,8 @@ export const ActualPage = styled.div`
   height: 1400px;
   display: flex;
   align-items: center;
-  background-color: #282C3E;
+  /* background-color: #282C3E; */
+  background-color: transparent;
 `;
 
 export const Page = styled.div.attrs((props: {background: string}) => props)`
@@ -40,14 +43,14 @@ export const Page = styled.div.attrs((props: {background: string}) => props)`
   align-items: center;
   justify-content: center;
   background-color: ${props => props.background};
-  width: 60%;
-  height: 90%;
-  max-width: 1024px;
-  max-height: 720px;
+  width: 100%;
+  height: 100%;
+  /* max-width: 1024px;
+  max-height: 720px; */
   margin: 0 auto;
   text-align: center;
   flex-direction: column;
-  border-radius: 5px;
+  /* border-radius: 5px; */
 
   @media screen and (max-width: 1024px) {
     width: 80%;
