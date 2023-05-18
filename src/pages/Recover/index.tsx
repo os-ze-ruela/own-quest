@@ -1,4 +1,4 @@
-import { SetStateAction, useState, useEffect, useContext } from "react";
+import { SetStateAction, useState, useContext } from "react";
 import AskRegisterBar from "../../components/Bar/AskRegisterBar";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
@@ -11,7 +11,6 @@ import {
   RecoverStyle,
   Title,
 } from "../../styles/Recover";
-import axios from "axios";
 import { AuthContext } from "../../contexts/auth";
 
 export default function Recover() {
@@ -22,9 +21,9 @@ export default function Recover() {
   async function sendEmail(email: string) {
     try {
       await sendRecover(email);
-      console.log(email)
+      console.log(email);
     } catch (e) {
-      alert("ERRO AO ENVIAR E-MAIL.");
+      //   alert("ERRO AO ENVIAR E-MAIL. VERIFIQUE SE JÁ POSSUI CADASTRO");
     }
   }
 
@@ -33,8 +32,6 @@ export default function Recover() {
   }) => {
     setEmailInfo(event.target.value);
   };
-
-  
 
   return (
     <>

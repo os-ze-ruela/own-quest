@@ -172,6 +172,11 @@ export const CategoryLabelEditingWrapper = styled.div`
     transition: all 0.2s ease-in-out;
     border-radius: 16px;
     overflow: hidden;
+
+    &:hover {
+        transform: scale(1.01);
+    }
+
 `
 
 export const ListCategories = styled.div`
@@ -320,6 +325,26 @@ export const CategorySettingsLabel = styled.span<CategoryLabelProps>`
   background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
   color: #ffffff;
   padding: 4px 8px;
+
+  cursor: pointer;
+
+  &:hover::after {
+        content: " +";
+    }
+`;
+
+export const CategorySettingsLabel2 = styled.span<CategoryLabelProps>`
+  font-size: 14px;
+  font-weight: 500;
+  background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
+  color: #ffffff;
+  padding: 4px 8px;
+
+  cursor: pointer;
+
+  &:hover::after {
+        content: " X";
+    }
 `;
 
 export const ImageUploaderContainer = styled.div`

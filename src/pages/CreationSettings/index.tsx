@@ -12,7 +12,8 @@ import { OpenAIContext } from "../../contexts/openai";
 import AppError from '../../core/app-error';
 import { HOME } from "../../core/app-urls";
 import { api, uploadImage, uploadRandomImage } from "../../services/api";
-import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySettingsLabel, DeleteButton, DescriptionInput, FileInput, GenerateRandomImageButton, GptIcon, ImageContainer, ImageGameContainer, ImagePlaceholder, RandomDescriptionButton, RandomDescriptionWrapper, Separator, SettingsContainer, SettingsWrapper, Title, TitleInput, Titles, TitlesInfo, UploadImageButton, WrapTextButton } from "../../styles/CreationSettings";
+import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySettingsLabel, CategorySettingsLabel2, DeleteButton, DescriptionInput, FileInput, GenerateRandomImageButton, GptIcon, ImageContainer, ImageGameContainer, ImagePlaceholder, RandomDescriptionButton, RandomDescriptionWrapper, Separator, SettingsContainer, SettingsWrapper, Title, TitleInput, Titles, TitlesInfo, UploadImageButton, WrapTextButton } from "../../styles/CreationSettings";
+import Game from "../Game/Game";
 
 export default function CreationSettings() {
 
@@ -21,7 +22,7 @@ export default function CreationSettings() {
   const { handleBackClick } = useContext(CreationContext)
   const { handleCreateClick } = useContext(CreationContext)
   const { categories, getCategories } = useContext(CategoryContext)
-  const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID } = useContext(GameContext)
+  const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID, userGames } = useContext(GameContext)
   const [titleTemp, setTitleTemp] = useState('');
   const [descTemp, setDescTemp] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -245,12 +246,23 @@ export default function CreationSettings() {
             <RandomDescriptionButton onClick={handleClickRandomDescription}>Melhorar descrição com IA<GptIcon src={GPT} /></RandomDescriptionButton>
           </RandomDescriptionWrapper>
           <Separator />
-          <Titles>Caregorias adicionadas:</Titles>
+          <Titles>Categorias disponíveis:</Titles>
           <CategoryLabelEditingWrapper className='category-label-wrapper'>
             {categories.map((category, index) => (
               <CategorySettingsLabel key={index} color={category.color}>{category.title}</CategorySettingsLabel>))}
           </CategoryLabelEditingWrapper>
           <Separator />
+
+          <Titles>Categorias adicionadas:</Titles>
+          <CategoryLabelEditingWrapper className='category-label-wrapper'>
+          {/* {userGames.map((game, index) => 
+            
+          )} */}
+          {categories.map((category, index) => (
+              <CategorySettingsLabel2 key={category.id} color={category.color}>{category.title}</CategorySettingsLabel2>))}
+          </CategoryLabelEditingWrapper>
+          <Separator />
+
           <Titles>Excluir história</Titles>
           <WrapTextButton>
             <TitlesInfo>Ao excluir a sua história, você não poderá mais acessar nem editar essa história novamente.</TitlesInfo>

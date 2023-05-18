@@ -2,14 +2,14 @@ import styled from "styled-components";
 
 export const RecoverStyle = styled.div`
     background-color: #282C3E;
-    height: 500px ;
+    height: 500px;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 
     @media screen and (max-width: 1024px) {
-        padding: 0px 0px;
+        padding: 0;
     }
 `
 
@@ -17,7 +17,7 @@ export const Title = styled.div`
     font-weight: bold;
     color: white;
     padding-top: 5rem;
-    padding-bottom: 0em;
+    padding-bottom: 0;
     font-size: 2.5rem;
     margin-left: 0.1em;
     margin-top: 1em;
@@ -27,8 +27,10 @@ export const Title = styled.div`
     @media screen and (max-width: 1024px) {
         font-size: 2rem;
         margin: 0;
+        padding-top: 2rem;
     }
 `
+
 export const SubTitle = styled.div`
     color: white;
     font-family: FiraCode-Regular;
@@ -48,7 +50,11 @@ export const Label = styled.label`
     font-family: FiraCode-Light;
     font-weight: 300;
     padding-top: 1.2em;
-    padding-right: 39rem;
+    padding-right: 640px;
+
+    @media screen and (max-width: 1024px) {
+        padding-right: 0;
+    }
 `
 
 export const Input = styled.input`
@@ -67,7 +73,6 @@ export const Input = styled.input`
         width: 70%;
         justify-self: center;
     }
-
 `
 
 export const ButtonRecover = styled.button`
@@ -85,4 +90,8 @@ export const ButtonRecover = styled.button`
     font-family: FiraCode-SemiBold;
     font-weight: 500;
     border-color: transparent;
+
+    @media screen and (max-width: 1024px) {
+        margin-top: 2em;
+    }
 `
