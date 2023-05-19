@@ -41,6 +41,7 @@ type AuthContextType = {
 };
 
 interface User {
+  id: number;
   photo: string;
   email_validated: boolean;
   email: string;

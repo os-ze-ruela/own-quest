@@ -78,7 +78,7 @@ function AppRoutes() {
                                         <Route path={MYGAMES} element={<Private><MyGames/></Private>} > </Route>
                                         <Route path={EXPLORER} element={<Explorer />}></Route>
                                         <Route path={GAME_DESCRIPTION + '/:id'} element={<GameInfos />} > </Route>
-                                        <Route path={USER_DESCRIPTION + '/:nickname'} element={<UserInfos />}></Route>
+                                        <Route path={USER_DESCRIPTION + '/:nickname'} element={<Private><UserInfos /></Private>}></Route>
                                         <Route path={TEST} element={<VisualizationTest />} > </Route>
                                         <Route path={GAME + '/:id' + SETTINGS} element={<Private><CreationSettings /></Private>} > </Route>
                                     </Routes>

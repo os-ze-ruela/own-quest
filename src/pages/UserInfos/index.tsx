@@ -5,14 +5,8 @@ import Header from '../../components/Header/Header';
 import HeaderLogged from '../../components/Header/HeaderLogged';
 import { AuthContext } from '../../contexts/auth';
 import { UserContext } from '../../contexts/user';
-import { GameContext } from '../../contexts/game';
-import { EXPLORER, LOGIN } from '../../core/app-urls';
-import User from '../../models/User';
-import Category from '../../models/Category';
-import { api, fetchGameById } from '../../services/api';
-import { CategoryInfoLabel, CategoryInfoWrapper, CategoryWrapper, DescriptionWrapper, DenounceButton, UserActionsWrapper, UserInfosMain, UserInfosWrapper, UserNickname, UserPhotoWrapper, UsersInfosWrapper, FollowButton, DescriptionInfoWrapper, GameListContainer, ListGamesCardContainer, UserPhoto, UserPhotoPlaceholder } from '../../styles/UserInfos';
-import { CardExplorerHotShimmer } from '../../components/Cards/CardExplorerHotShimmer';
-import CardMostViewGame from '../../components/Cards/CardMostViewGame';
+import { LOGIN } from '../../core/app-urls';
+import { CategoryInfoLabel, CategoryInfoWrapper, CategoryWrapper, DescriptionWrapper, DenounceButton, UserActionsWrapper, UserInfosMain, UserInfosWrapper, UserNickname, UserPhotoWrapper, UsersInfosWrapper, FollowButton, DescriptionInfoWrapper, UserPhoto, UserPhotoPlaceholder } from '../../styles/UserInfos';
 import AppError from '../../core/app-error';
 
 
@@ -21,26 +15,31 @@ export const UserInfos = () => {
 
     const { nickname } = useParams()
 
-    const { findUserByNickname, visitingUser } = useContext(UserContext)
-    const { authenticated, user, refresh, logout } = useContext(AuthContext)
+    const { findUserByNickname, visitingUser, setVisitingUser, followUser, unfollowUser } = useContext(UserContext)
+    const { authenticated, user } = useContext(AuthContext)
     const [loading, setLoading] = useState(true)
     // const [loadingGames, setLoadingGames] = useState(true)
-    const [followed, setFollowed] = useState(false);
-    const navigate = useNavigate()
+    const [following, setFollowing] = useState(false);
     // const { hotGames, getHotGamesForHome } = useContext(GameContext)
 
     const handleClick = async () => {
-        if (!followed) {
+        if (!following) {
             try {
-                // await followUser(nickname!)
-                setFollowed(true);
+                await followUser(user?.id!.toString() ?? '', visitingUser?.id!.toString() ?? '')
+                setFollowing(true);
+                const visitingUserTemp = visitingUser
+                visitingUserTemp!.followers += 1
+                setVisitingUser(visitingUserTemp)
             } catch (error) {
                 console.log(error)
             }
         } else {
             try {
-                // await unfollowUser(nickname!)
-                setFollowed(false);
+                await unfollowUser(user?.id!.toString() ?? '', visitingUser?.id!.toString() ?? '')
+                setFollowing(false);
+                const visitingUserTemp = visitingUser
+                visitingUserTemp!.followers -= 1
+                setVisitingUser(visitingUserTemp)
             } catch (error) {
                console.log(error)
             }
@@ -67,19 +66,13 @@ export const UserInfos = () => {
     //     }
     // };
 
-    async function getUserByNickname(userNickname: string): Promise<void> {
+    async function getUserByNickname(nickname: string): Promise<void> {
         try {
-            setLoading(true)
-            const response = await findUserByNickname(userNickname);
-
-            setTimeout(() => {
-                setLoading(false)
-            }, 1000);
-
-            setFollowed(visitingUser?.isFollowing ?? false)
+            // setLoading(true)
+            await findUserByNickname(nickname);
 
         } catch (error) {
-            setLoading(false)
+            // setLoading(false)
             console.error(error)
             // navigate(EXPLORER)
         }
@@ -89,6 +82,17 @@ export const UserInfos = () => {
         getUserByNickname(nickname!)
         // fetchGames()
     }, [])
+
+    useEffect(() => {
+        if (visitingUser !== null) {
+            setTimeout(() => {
+                setLoading(false)
+                setFollowing(visitingUser.isFollowing)
+            }, 1000);  
+        } else {
+            setLoading(true)
+        }
+    }, [visitingUser])
 
     return (
         <>
@@ -174,10 +178,12 @@ export const UserInfos = () => {
                         </UserActionsWrapper>)
                         : (<UserActionsWrapper>
                             <DenounceButton>Denunciar</DenounceButton>
-                            <FollowButton   className={followed ? 'followed' : ''}
-                                            onClick={handleClick}>
-                                            {followed ? 'Seguindo' : 'Seguir'}
+                            <FollowButton   className={following ? 'following' : ''}
+                                        onClick={handleClick}>
+                                        {following ? 'Seguindo' : 'Seguir'}
                             </FollowButton>
+           
+                            
                         </UserActionsWrapper>)}
                 </UserInfosWrapper>
                 </UserInfosMain>
