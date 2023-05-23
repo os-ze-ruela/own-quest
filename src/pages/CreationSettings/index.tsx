@@ -13,6 +13,8 @@ import AppError from '../../core/app-error';
 import { HOME } from "../../core/app-urls";
 import { api, uploadImage, uploadRandomImage } from "../../services/api";
 import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySettingsLabel, DeleteButton, DescriptionInput, FileInput, GenerateRandomImageButton, GptIcon, ImageContainer, ImageGameContainer, ImagePlaceholder, RandomDescriptionButton, RandomDescriptionWrapper, Separator, SettingsContainer, SettingsWrapper, Title, TitleInput, Titles, TitlesInfo, UploadImageButton, WrapTextButton } from "../../styles/CreationSettings";
+import Game from "../Game/Game";
+import Category from "../../models/Category";
 
 export default function CreationSettings() {
 
@@ -20,9 +22,8 @@ export default function CreationSettings() {
   const { user } = useContext(AuthContext);
   const { handleBackClick } = useContext(CreationContext)
   const { handleCreateClick } = useContext(CreationContext)
-  const { categories, getCategories } = useContext(CategoryContext)
-  const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID } = useContext(GameContext)
-  const [titleTemp, setTitleTemp] = useState('');
+  const { categories, allCategories, getCategories, getCategoriesByID } = useContext(CategoryContext)
+  const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID, addGameCategoryByID, deleteGameCategory } = useContext(GameContext)
   const [descTemp, setDescTemp] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isErroImage, setErrorImage] = useState(false);
@@ -31,6 +32,11 @@ export default function CreationSettings() {
   const [loadingDescriptionAI, setLoadingDescriptionAI] = useState(false);
   const { loading, setLoading } = useContext(CreationContext)
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+  const [titleTemp, setTitleTemp] = useState('');
+  
+
+  const [availableCategories, setAvailableCategories] = useState<Category[]>([]);
+  const [addedCategories, setAddedCategories] = useState<Category[]>([]);
 
   // IMAGE USE STATES
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -63,6 +69,27 @@ export default function CreationSettings() {
     }
   }
 
+  const handleCategories = async (content: string, categoryID: number) => {
+    if (content === "+") {
+      await addGameCategoryByID(Number(id), [categoryID]);
+  
+      const addedCategory = availableCategories.find(category => category.id === categoryID);
+      if (addedCategory) {
+        setAddedCategories(prevCategories => [...prevCategories, addedCategory]);
+        setAvailableCategories(prevCategories => prevCategories.filter(category => category.id !== categoryID));
+      }
+    } else if (content === "X") {
+      await deleteGameCategory(Number(id), categoryID);
+  
+      const removedCategory = addedCategories.find(category => category.id === categoryID);
+      if (removedCategory) {
+        setAddedCategories(prevCategories => prevCategories.filter(category => category.id !== categoryID));
+        setAvailableCategories(prevCategories => [...prevCategories, removedCategory]);
+      }
+    }
+  };
+  
+  
 
   async function handleClickRandomDescription() {
     if (editingGame) {
@@ -125,10 +152,28 @@ export default function CreationSettings() {
       const error = await e as AppError
     }
   };
-
+  
   useEffect(() => {
     fetchAllRequests()
   }, [])
+  
+  useEffect(() => {
+    if (editingGame) {
+      setAddedCategories(editingGame.categories);
+      setAvailableCategories(categories.filter(category1 => !addedCategories.some(category2 => category1.id === category2.id)));
+      // const filteredCategories =  availableCategories.filter(category1 => !addedCategories.some(category2 => category1.id === category2.id));
+      // setAvailableCategories(filteredCategories)
+      
+    }
+  }, [editingGame, categories]);
+  
+  
+  useEffect(() => {
+    console.log("Addeded Categories")
+    console.log(addedCategories)
+    console.log("Available Categories Filtered")
+    console.log(availableCategories)
+  }, [addedCategories, availableCategories])
 
   
   // ----- DEBOUNCE -----
@@ -245,12 +290,20 @@ export default function CreationSettings() {
             <RandomDescriptionButton onClick={handleClickRandomDescription}>Melhorar descrição com IA<GptIcon src={GPT} /></RandomDescriptionButton>
           </RandomDescriptionWrapper>
           <Separator />
-          <Titles>Caregorias adicionadas:</Titles>
+          <Titles>Categorias disponíveis:</Titles>
           <CategoryLabelEditingWrapper className='category-label-wrapper'>
-            {categories.map((category, index) => (
-              <CategorySettingsLabel key={index} color={category.color}>{category.title}</CategorySettingsLabel>))}
+            {availableCategories.map((category, index) => (
+              <CategorySettingsLabel key={index} color={category.color} content='+' onClick={()=>{handleCategories('+', category.id)}}>{category.title}</CategorySettingsLabel>))}
           </CategoryLabelEditingWrapper>
           <Separator />
+
+          <Titles>Categorias adicionadas:</Titles>
+          <CategoryLabelEditingWrapper className='category-label-wrapper'>
+            {addedCategories.map((category, index) => (
+              <CategorySettingsLabel key={category.id} color={category.color} content='X' onClick={()=>{handleCategories('X', category.id)}}>{category.title}</CategorySettingsLabel>))}
+          </CategoryLabelEditingWrapper>
+          <Separator />
+
           <Titles>Excluir história</Titles>
           <WrapTextButton>
             <TitlesInfo>Ao excluir a sua história, você não poderá mais acessar nem editar essa história novamente.</TitlesInfo>
