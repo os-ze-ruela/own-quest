@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+type CategoryLabelProps = {
+    color: string | undefined;
+}
+
 export const UserInfosMain = styled.main`
     width: 100%;
     display: flex;
@@ -49,7 +53,11 @@ export const UserPhoto = styled.img`
     width: 100%;
     object-fit: contain;
     box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.25);
-    border: 0.4vw solid #FFFFFF;
+    border: 8px solid #FFFFFF;
+
+    @media screen and (max-width: 768px) {
+        border: 4px solid #FFFFFF;
+    }
 `
 
 export const UserPhotoPlaceholder = styled.div`
@@ -58,7 +66,7 @@ export const UserPhotoPlaceholder = styled.div`
     align-items: center;
     justify-content: center;
     box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.25);
-    border: 0.4vw solid #FFFFFF;
+    border: 8px solid #FFFFFF;
 
     width: 100%;
     height: 0;
@@ -71,12 +79,17 @@ export const UserPhotoPlaceholder = styled.div`
     // Font
 
     color: #FFFFFF;
-    font-size: 12vw;
+    font-size: 100pt;
     transition: all 0.3s ease-in-out 0.2s;
     font-family: FiraCode-Regular;
     font-weight: 300;
     text-decoration: none;
 
+
+    @media screen and (max-width: 768px) {
+        font-size: 40pt;
+        border: 4px solid #FFFFFF;
+    }
 `
 
 export const UsersInfosWrapper = styled.div`
@@ -142,11 +155,10 @@ export const CategoryInfoWrapper = styled.div`
     align-items: center;
     gap: 4px;
     opacity: 1;
-    border-radius: 16px;
     overflow: hidden;
 `;
 
-export const CategoryInfoLabel = styled.a.attrs((props: { color: string, }) => props)`
+export const CategoryInfoLabel = styled.span<CategoryLabelProps>`
     font-size: 10px;
     font-weight: 500;
     /* background-color: ${(props) => props.color}; */
@@ -156,11 +168,7 @@ export const CategoryInfoLabel = styled.a.attrs((props: { color: string, }) => p
     font-family: FiraCode-Light; 
     transition: all 0.3s ease-in-out;
     text-decoration: none;
-
-    &:hover {
-        cursor: pointer;
-        background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + '44'});
-    }
+    border-radius: 16px;
 `;
 
 export const UserActionsWrapper = styled.div`

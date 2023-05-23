@@ -163,8 +163,8 @@ export const UserInfos = () => {
                             : visitingUser?.categories.length === 0 ? (<></>) : (
                                 <CategoryWrapper>
                                     <h3>CATEGORIA PRINCIPAL</h3>
-                                    <CategoryInfoWrapper className='category-label-wrapper'>
-                                        <CategoryInfoLabel key={visitingUser?.categories[0].id} color={visitingUser?.categories[0].color} href={`/explorer?tag=${visitingUser?.categories[0].title}`}>
+                                    <CategoryInfoWrapper>
+                                        <CategoryInfoLabel key={visitingUser?.categories[0].id} color={visitingUser?.categories[0].color}>
                                             {visitingUser?.categories[0].title}
                                         </CategoryInfoLabel>
                                     </CategoryInfoWrapper>
