@@ -53,10 +53,10 @@ export const UserPhoto = styled.img`
     width: 100%;
     object-fit: contain;
     box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.25);
-    border: 8px solid #FFFFFF;
+    border: 6px solid #FFFFFF;
 
     @media screen and (max-width: 768px) {
-        border: 4px solid #FFFFFF;
+        border: 3px solid #FFFFFF;
     }
 `
 
@@ -66,7 +66,7 @@ export const UserPhotoPlaceholder = styled.div`
     align-items: center;
     justify-content: center;
     box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.25);
-    border: 8px solid #FFFFFF;
+    border: 6px solid #FFFFFF;
 
     width: 100%;
     height: 0;
@@ -88,7 +88,7 @@ export const UserPhotoPlaceholder = styled.div`
 
     @media screen and (max-width: 768px) {
         font-size: 40pt;
-        border: 4px solid #FFFFFF;
+        border: 3px solid #FFFFFF;
     }
 `
 
