@@ -3,7 +3,7 @@ import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
 import Category from "../models/Category";
 import Game from "../models/Game";
-import { api, deleteGame, fetchGameById, fetchHighlightGame, getHotGames, getUserGamesByToken, patchGame, postFullGame, postGame } from "../services/api";
+import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchHighlightGame, getHotGames, getUserGamesByToken, patchGame, postFullGame, postGame, postGameCategoryByID } from "../services/api";
 
 type GameContextType = {
 
@@ -21,7 +21,9 @@ type GameContextType = {
     hotGames: Game[],
     editingGame: Game | null,
     highlightGame: Game | null,
-    createFullGame: (game: Game) => Promise<number>
+    createFullGame: (game: Game) => Promise<number>,
+    addGameCategoryByID: (id: number, categories: Number[]) => Promise<void>,
+    deleteGameCategory: (idGame: number, idCategory: number) => Promise<void>
 }
 
 export const GameContext = createContext<GameContextType>({} as GameContextType)
@@ -246,6 +248,29 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+
+
+
+    async function addGameCategoryByID(id: number, categories: Number[]): Promise<void>{
+        try {
+            await postGameCategoryByID(id, categories)
+        } catch (e) {
+            const error = await e as AxiosError
+            console.log(error)
+            throw new AppError(error.response!.status, error.message);
+        }
+    }
+
+    async function deleteGameCategory(idGame: number, idCategory:number): Promise<void> {
+        try {
+            await deleteGameCategoryByID(idGame, idCategory)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+
+
     return (
         <GameContext.Provider value={{
             setEditingGame,
@@ -262,7 +287,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             hotGames,
             editingGame,
             pagesOfHotGames,
-            highlightGame
+            highlightGame,
+            addGameCategoryByID,
+            deleteGameCategory
+
         }}>
             {children}
         </GameContext.Provider>

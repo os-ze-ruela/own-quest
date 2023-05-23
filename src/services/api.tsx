@@ -129,6 +129,17 @@ export const postGame = async () => {
         "categories": []
     })
 }
+
+export const postGameCategoryByID = async (id: number, categories: Number[]) => {
+    return await api.post(`/game/${id}/categories`, {
+        "categories": categories
+    })
+}
+
+export const deleteGameCategoryByID = async (idGame: number, idCategory: number) => {
+    return await api.delete(`/game/${idGame}/categories/${idCategory}`)
+}
+
 export const postFullGame = async (title: string, description: string, image: string, categories: Category[]) => {
     console.log(title, description, image, categories)
     return await api.post(`/game`, {
@@ -162,6 +173,10 @@ export const deleteGame = async (id: number) => {
 export const fetchCategories = async () => {
     return await api.get(`/category`)
 }
+export const fetchCategoriesById = async (id: number) => {
+    return await api.get(`/category/${id}`)
+}
+
 
 // ----- User ----
 

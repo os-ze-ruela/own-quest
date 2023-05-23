@@ -170,7 +170,7 @@ export const CategoryLabelEditingWrapper = styled.div`
     gap: 8px;
     opacity: 1;
     transition: all 0.2s ease-in-out;
-    border-radius: 16px;
+    /* border-radius: 16px; */
     overflow: hidden;
 
     &:hover {
@@ -319,33 +319,23 @@ export const CategorySettingsLabelWrapper = styled.div`
   margin-bottom: 1rem;
 `;
 
-export const CategorySettingsLabel = styled.span<CategoryLabelProps>`
+export const CategorySettingsLabel = styled.button.attrs((props: {content: string, color: string}) => props)`
   font-size: 14px;
   font-weight: 500;
   background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
   color: #ffffff;
   padding: 4px 8px;
+  outline: 0;
+  border: none;
+  border-radius: 6px;
 
   cursor: pointer;
 
   &:hover::after {
-        content: " +";
+        content: " ${(props) => props.content}"
     }
 `;
 
-export const CategorySettingsLabel2 = styled.span<CategoryLabelProps>`
-  font-size: 14px;
-  font-weight: 500;
-  background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
-  color: #ffffff;
-  padding: 4px 8px;
-
-  cursor: pointer;
-
-  &:hover::after {
-        content: " X";
-    }
-`;
 
 export const ImageUploaderContainer = styled.div`
     display: flex;
