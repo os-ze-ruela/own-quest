@@ -34,7 +34,7 @@
     <img src="https://github.com/os-ze-ruela/own-quest/blob/master/src/assets/img/ownquest-logo.png" alt="Logo" width="140" height="80">
   </a>
 
-  <h3 align="center">Own Quest Server</h3>
+  <h3 align="center">Own Quest</h3>
 
   <p align="center">
     Faça as suas histórias!

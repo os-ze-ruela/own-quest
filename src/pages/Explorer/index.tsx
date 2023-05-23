@@ -106,7 +106,7 @@ const Explorer = () => {
           ) : (
             <>
               <HorizontalListWrapper>
-                <TitleListGames>Histórias mais Jogadas</TitleListGames>
+                <TitleListGames>Histórias mais Curtidas</TitleListGames>
                 <GameListContainer>
                   <ListGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
                     {isLoading ? (
@@ -152,23 +152,27 @@ const Explorer = () => {
                   </PaginationContainer>
                 </GameListContainer>
               </HorizontalListWrapper>
-              <GameListContainer>
-                <TitleListGames>Histórias em Destaque</TitleListGames>
-                {isLoading ? (
-                  <>
-                    <CardHighlightGameShimmer />
-                  </>
-                ) : (
-                  <CardHighlightGame
-                    key={0}
-                    title={highlightGame!.title}
-                    imageSrc={highlightGame!.image}
-                    description={highlightGame!.description}
-                    categories={highlightGame!.categories}
-                    createdByNickname={highlightGame!.createdBy!.nickname}
-                  />
-                )}
-              </GameListContainer>
+              {
+                highlightGame != null ? (
+                  <GameListContainer>
+                    <TitleListGames>Histórias em Destaque</TitleListGames>
+                    {isLoading ? (
+                      <>
+                        <CardHighlightGameShimmer />
+                      </>
+                    ) : (
+                      <CardHighlightGame
+                        key={0}
+                        title={highlightGame!.title}
+                        imageSrc={highlightGame!.image}
+                        description={highlightGame!.description}
+                        categories={highlightGame!.categories}
+                        createdByNickname={highlightGame!.createdBy!.nickname}
+                      />
+                    )}
+                  </GameListContainer>
+                ) : (<></>)
+              }
             </>
           )
         }

@@ -37,7 +37,9 @@ type AuthContextType = {
   refresh: () => Promise<void>;
   logout: () => void;
   validateEmail: (access_token: string, token: string) => Promise<void>;
-  sendValidateEmail: ()=> Promise<void>;
+  sendValidateEmail: () => Promise<void>;
+  sendRecover: (email: string) => Promise<void>;
+  updatePassword: (id: number, pswd1: string, pswd2: string) => Promise<void>;
 };
 
 interface User {
@@ -249,26 +251,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  async function validateEmail(access_token: string, token: string): Promise<void>{
+  async function validateEmail(
+    access_token: string,
+    token: string
+  ): Promise<void> {
     try {
-        const recoveredToken = localStorage.getItem("token")
-        if (recoveredToken) {
-          const tokenJSON = JSON.parse(recoveredToken)
-          api.defaults.headers.Authorization = `Bearer ${tokenJSON.access_token}`;
-          await verifyEmail(token);
-          
-          const recoveredUser = localStorage.getItem("user");
-          if (recoveredUser) {
-            let validatedUser = JSON.parse(recoveredUser)
-            validatedUser.email_validated = true
-            setUser(validatedUser)
-            localStorage.setItem("user", JSON.stringify(validatedUser));
-          }              
-        } else {
-          api.defaults.headers.Authorization = `Bearer ${access_token}`;
-          await verifyEmail(token);
+      const recoveredToken = localStorage.getItem("token");
+      if (recoveredToken) {
+        const tokenJSON = JSON.parse(recoveredToken);
+        api.defaults.headers.Authorization = `Bearer ${tokenJSON.access_token}`;
+        await verifyEmail(token);
+
+        const recoveredUser = localStorage.getItem("user");
+        if (recoveredUser) {
+          let validatedUser = JSON.parse(recoveredUser);
+          validatedUser.email_validated = true;
+          setUser(validatedUser);
+          localStorage.setItem("user", JSON.stringify(validatedUser));
         }
-        // user!.email_validated=true;
+      } else {
+        api.defaults.headers.Authorization = `Bearer ${access_token}`;
+        await verifyEmail(token);
+      }
+      // user!.email_validated=true;
     } catch (e) {
       const error = (await e) as AxiosError;
       console.log(error);
@@ -277,14 +282,65 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   async function sendValidateEmail(): Promise<void> {
     try {
-      const tokensJSON = localStorage.getItem('token')
-      const tokens = JSON.parse(tokensJSON!)
-      api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
+      const tokensJSON = localStorage.getItem("token");
+      const tokens = JSON.parse(tokensJSON!);
+      api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
 
-      await sendEmail()
-    } catch(e) {
+      await sendEmail();
+    } catch (e) {
       const error = (await e) as AxiosError;
       console.log(error);
+    }
+  }
+
+  async function sendRecover(email: string) {
+    try {
+      const tokensJSON = localStorage.getItem("token");
+      const tokens = JSON.parse(tokensJSON!);
+
+      const headers = {
+        Authorization: `Bearer ${tokens}`,
+      };
+
+      const payload = {
+        email: email,
+      };
+
+      const response = await api.post(
+        "/user/send-recover-password-email",
+        payload,
+        { headers }
+      );
+      console.log("Email enviado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao enviar email:", error);
+      alert("ERRO AO ENVIAR E-MAIL! VERIFIQUE SE JÁ POSSUI CADASTRO");
+    }
+  }
+
+  async function updatePassword(id:number, pswd:string, pswd2:string) {
+    try {
+      const tokensJSON = localStorage.getItem("token");
+      const tokens = JSON.parse(tokensJSON!);
+
+      const headers = {
+        Authorization: `Bearer ${tokens}`,
+        "Content-Type": "application/json",
+      };
+
+      const payload = {
+        id: id,
+        pswd: pswd,
+        pswd2: pswd2,
+      };
+
+      const response = await api.patch("/user/update-password", payload, {
+        headers,
+      });
+      console.log("Senha alterada com sucesso!");
+    } catch (error) {
+      console.error("Erro ao alterar a senha:", error);
+      alert("ERRO AO ALTERAR A SENHA!");
     }
   }
 
@@ -301,7 +357,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         refresh,
         logout,
         validateEmail,
-        sendValidateEmail
+        sendValidateEmail,
+        sendRecover,
+        updatePassword
       }}
     >
       {children}
