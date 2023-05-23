@@ -1,5 +1,8 @@
-import { FaHeart } from 'react-icons/fa';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
+
+type CategoryLabelProps = {
+    color: string | undefined;
+}
 
 export const UserInfosMain = styled.main`
     width: 100%;
@@ -43,14 +46,18 @@ export const UserPhotoWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.25);
-    border: 2px solid #FFFFFF;
 `
 
 export const UserPhoto = styled.img` 
     height: 100%;
     width: 100%;
     object-fit: contain;
+    box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.25);
+    border: 6px solid #FFFFFF;
+
+    @media screen and (max-width: 768px) {
+        border: 3px solid #FFFFFF;
+    }
 `
 
 export const UserPhotoPlaceholder = styled.div`
@@ -58,11 +65,14 @@ export const UserPhotoPlaceholder = styled.div`
     object-fit: contain;
     align-items: center;
     justify-content: center;
+    box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.25);
+    border: 6px solid #FFFFFF;
 
     width: 100%;
     height: 0;
     padding-bottom: 50%;
     padding-top: 50%;
+    border-radius: 50%;
 
     background-color: #568EA3;
 
@@ -75,8 +85,10 @@ export const UserPhotoPlaceholder = styled.div`
     font-weight: 300;
     text-decoration: none;
 
-    @media screen and (max-width: 1024px) {
-        font-size: 50pt;
+
+    @media screen and (max-width: 768px) {
+        font-size: 40pt;
+        border: 3px solid #FFFFFF;
     }
 `
 
@@ -143,11 +155,10 @@ export const CategoryInfoWrapper = styled.div`
     align-items: center;
     gap: 4px;
     opacity: 1;
-    border-radius: 16px;
     overflow: hidden;
 `;
 
-export const CategoryInfoLabel = styled.a.attrs((props: { color: string, }) => props)`
+export const CategoryInfoLabel = styled.span<CategoryLabelProps>`
     font-size: 10px;
     font-weight: 500;
     /* background-color: ${(props) => props.color}; */
@@ -157,11 +168,7 @@ export const CategoryInfoLabel = styled.a.attrs((props: { color: string, }) => p
     font-family: FiraCode-Light; 
     transition: all 0.3s ease-in-out;
     text-decoration: none;
-
-    &:hover {
-        cursor: pointer;
-        background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + '44'});
-    }
+    border-radius: 16px;
 `;
 
 export const UserActionsWrapper = styled.div`
@@ -211,8 +218,12 @@ export const FollowButton = styled.button`
     transition: all 0.2s ease-in-out;
     font-family: FiraCode-Regular;
 
-    &.followed {
-        background-color: rgba(86, 142, 163, 0.6);
+    &.following {
+        background-color: rgba(80, 120, 120, 0.6);
+    }
+
+    &.blocked {
+        background-color: rgba(80, 80, 80, 0.5);
     }
 
     &:hover {

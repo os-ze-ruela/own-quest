@@ -3,12 +3,15 @@ import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
 import User from "../models/User";
 import UserCategory from "../models/UserCategory";
-import { api, getUserByNickname, postLikeGame, postUnLikeGame } from "../services/api";
+import { api, getUserByNickname, postLikeGame, postUnLikeGame, postFollowUser, postUnfollowUser } from "../services/api";
 type UserContextType = {
     likeGame: (gameId: string) => Promise<void>
     unlikeGame: (gameId: string) => Promise<void>
     findUserByNickname: (nickname: string) => Promise<void>
     visitingUser: User | null,
+    setVisitingUser: (visitingUser: User | null) => void
+    followUser: (followerId: string, followedId: string) => Promise<void>
+    unfollowUser: (followerId: string, followedId: string) => Promise<void>
     open: boolean,
     setOpen: (open: boolean) => void
 }
@@ -61,12 +64,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
 
             const response = await getUserByNickname(userNickname)
-            console.log('response.data', response.data)
             const { id, name, email, nickname,
                     birthDate, followers, following,
                     photo, createdAt, isDeleted,
                     isFollowing, categories } = response.data
-            console.log('categories', categories)
+
             const userCategories = categories.map((category: any) => {
                 const { id, title, color, timesUsed } = category
                 return new UserCategory({ id, title, color, timesUsed });
@@ -98,8 +100,37 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    async function followUser(followerId: string, followedId: string): Promise<void> {
+        try {
+            await postFollowUser(followerId, followedId)
+        } catch (e) {
+            const error = await e as AxiosError
+            console.error(`Erro (${error.response?.status}) ao seguir usuário ${followedId}`, error);
+            if (error.response?.status === 400) {
+                throw new AppError(400, 'Usuário não encontrado')
+            } else if (error.response?.status === 401) {
+                throw new AppError(error.response?.status, 'Credenciais Incorretas')
+            }
+        }
+    };
+    
+
+    async function unfollowUser(followerId: string, followedId: string): Promise<void> {
+        try {
+            await postUnfollowUser(followerId, followedId)
+        } catch (e) {
+            const error = await e as AxiosError
+            console.error(`Erro (${error.response?.status}) ao parar de seguir usuário ${followedId}`, error);
+            if (error.response?.status === 400) {
+                throw new AppError(400, 'Usuário não encontrado')
+            } else if (error.response?.status === 401) {
+                throw new AppError(error.response?.status, 'Credenciais Incorretas')
+            }
+        }
+    };
+
     return (
-        <UserContext.Provider value={{ likeGame, unlikeGame, findUserByNickname, setOpen, visitingUser, open }}>
+        <UserContext.Provider value={{ likeGame, unlikeGame, findUserByNickname, followUser, unfollowUser, setOpen, visitingUser, setVisitingUser, open }}>
             {children}
         </UserContext.Provider>
     )

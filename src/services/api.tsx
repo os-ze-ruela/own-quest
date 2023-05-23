@@ -196,12 +196,12 @@ export const getUserByNickname = async (nickname: string) => {
     return await api.get(`/user/find/${nickname}`)
 }
 
-export const postFollowUser = async (userId: string) => {
-    return await api.post(`/user/follow/${userId}`)
+export const postFollowUser = async (followerId: string, followedId: string) => {
+    return await api.post(`/user/${followerId}/follow/${followedId}`)
 }
 
-export const postUnfollowUser = async (userId: string) => {
-    return await api.delete(`/user/unfollow/${userId}`)
+export const postUnfollowUser = async (followerId: string, followedId: string) => {
+    return await api.delete(`/user/${followerId}/unfollow/${followedId}`)
 }
 
 // ----- IMAGE UPLOAD -----
