@@ -1,11 +1,14 @@
-import { Backdrop, Box, CircularProgress, CircularProgressProps, Typography, styled } from '@mui/material';
+import { Backdrop, Box, styled } from '@mui/material';
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import GPT from "../../assets/img/gpt.svg";
 import ASTROTALKING from "../../assets/img/astronauta-conversando 1.svg";
+import GPT from "../../assets/img/gpt.svg";
 import CardMyGame from '../../components/Cards/CardMyGame';
 import { CardMyGameShimmer } from '../../components/Cards/CardMyGameShimmer';
 import EmptyCard from '../../components/Cards/EmptyCard';
+import DialogRandomGame from '../../components/Dialog/DialogRandomGame';
+import Drawer from '../../components/Drawer/Drawer';
 import HeaderLogged from '../../components/Header/HeaderLogged';
 import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated';
 import { AuthContext } from '../../contexts/auth';
@@ -16,9 +19,6 @@ import AppError from '../../core/app-error';
 import { GAME } from '../../core/app-urls';
 import { AstronautLoading, BackdropWrapper, GptIcon, LoadingText } from '../../styles/CreationSettings';
 import { ListMyGamesCardContainer, MyGameWrapContainer, MyGamesStyle, RandomDescriptionButton, TitleMyGame, TitleWrapper } from '../../styles/MyGames';
-import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-import { BsXLg } from 'react-icons/bs';
-import DialogRandomGame from '../../components/Dialog/DialogRandomGame';
 
 
 
@@ -65,25 +65,25 @@ const MyGames = () => {
   const handleClickGenerateRandomStorie = async () => {
     setCreatingGame(true);
   }
-  
-  
+
+
   const handleGenerateRandomStorie = async () => {
     setCreatingGame(false);
     setIsLoadingGame(true);
 
-     let randomGame = "" 
+    let randomGame = ""
 
-    if(selectedOption){
+    if (selectedOption) {
       console.log("Gerando historia pela descricao")
       randomGame = await generateRandomGameByDescription(numPageSelected, categorySelected, description)
     }
-    else{
+    else {
       console.log("Gerando historia parametros")
       randomGame = await generateRandomGame(numPageSelected, categorySelected)
     }
 
     let randomGameJSON = JSON.parse(randomGame)
- 
+
 
     const matchingCategory = categories.find(category => category.title === randomGameJSON.categories)
     let categoryIds = []
@@ -94,25 +94,25 @@ const MyGames = () => {
     }
 
     try {
-        const gameId = await createRandomGame(randomGameJSON)
+      const gameId = await createRandomGame(randomGameJSON)
       // await getUserGames();
       setIsLoadingGame(false);
-      // navigate(GAME + '/' + gameId)
+      navigate(GAME + '/' + gameId)
     } catch (error) {
       setIsLoadingGame(false);
     }
   }
 
-  
+
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
-  
+
     if (isLoadingGame) {
-      const totalTime = 12000; //12s de loading
+      const totalTime = 20000; //12s de loading
       const updateInterval = 100;
       const increment = 100 / (totalTime / updateInterval);
-  
+
       timer = setInterval(() => {
         setProgress(prevProgress => {
           if (prevProgress >= 100) {
@@ -121,15 +121,15 @@ const MyGames = () => {
           }
           return prevProgress + increment;
         });
-  
-        setProgressText(getProgressText(progress)); // Mova esta linha aqui
+
+        setProgressText(getProgressText(progress));
       }, updateInterval);
     }
-  
+
     return () => {
       clearInterval(timer);
     };
-  }, [isLoadingGame, progress]); 
+  }, [isLoadingGame, progress]);
 
 
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
@@ -173,22 +173,23 @@ const MyGames = () => {
 
   return (
     <>
+      <Drawer />
       <Backdrop
         sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoadingGame}
-        >
+      >
         <BackdropWrapper>
-        <AstronautLoading src={ASTROTALKING}/>
-        <Box sx={{ 
-          width: '20%',
-          position: 'absolute',
-          top: '65%',
-          zIndex: -1,
+          <AstronautLoading src={ASTROTALKING} />
+          <Box sx={{
+            width: '20%',
+            position: 'absolute',
+            top: '65%',
+            zIndex: -1,
           }}>
-        <BorderLinearProgress variant="determinate" value={progress} />
-        <LoadingText>{progressText}</LoadingText>
-        </Box>
-      </BackdropWrapper>
+            <BorderLinearProgress variant="determinate" value={progress} />
+            <LoadingText>{progressText}</LoadingText>
+          </Box>
+        </BackdropWrapper>
 
       </Backdrop>
       <HeaderLogged nickname={user!.nickname} photo={user!.photo} />
@@ -229,7 +230,7 @@ const MyGames = () => {
                   key={index}
                   id={game.id}
                   title={game.title}
-                  imageSrc={game.image != null ? game.image : game.image && `https://picsum.photos/300/200?random=2`}
+                  imageSrc={game.image}
                   isPublished={game.isPublished}
                   description={game.description}
                   categories={game.categories}
@@ -239,19 +240,19 @@ const MyGames = () => {
           </ListMyGamesCardContainer>=
         </MyGameWrapContainer>
         <Backdrop
-        sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={isCreatingGame}
+          sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isCreatingGame}
         >
-        <DialogRandomGame
-          handleGenerateRandomStorie={handleGenerateRandomStorie}
-          onClose={onCloseDialog}
-          handleCategoryChange={handleCategoryChange}
-          handleNumPagesChange={handleNumPagesChange}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
-          description={description}
-          setDescription={setDescription}
-        />
+          <DialogRandomGame
+            handleGenerateRandomStorie={handleGenerateRandomStorie}
+            onClose={onCloseDialog}
+            handleCategoryChange={handleCategoryChange}
+            handleNumPagesChange={handleNumPagesChange}
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+            description={description}
+            setDescription={setDescription}
+          />
         </Backdrop>
       </MyGamesStyle >
     </>

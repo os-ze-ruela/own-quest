@@ -3,6 +3,7 @@ import { GAME_DESCRIPTION } from '../../core/app-urls';
 import Category from '../../models/Category';
 import { PlayButtonWrapper } from '../../styles/Explorer';
 import { Button, CardContentWrapper, CardImage, CardTitle, CardWrapperCard, CategoryLabel, CategoryLabelWrapper, ImageSpace } from '../../styles/HomeLogged';
+import ImagePlaceholder from '../ImagePlaceholder/ImagePlaceholder';
 
 type CardProps = {
   id: number;
@@ -21,7 +22,11 @@ const Card: React.FC<CardProps> = ({ id, imageSrc, title, description, categorie
   return (
     <CardWrapperCard href={GAME_DESCRIPTION + '/' + id}>
       <ImageSpace>
+        {imageSrc ? 
         <CardImage src={imageSrc} alt={title} />
+                :
+                <ImagePlaceholder/>
+                }
       </ImageSpace>
       <CardContentWrapper>
         <CardTitle>{title}</CardTitle>

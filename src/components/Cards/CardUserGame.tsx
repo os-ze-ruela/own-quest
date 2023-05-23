@@ -2,6 +2,7 @@ import React from 'react';
 import { GAME } from '../../core/app-urls';
 import Category from '../../models/Category';
 import { Button, ButtonWrapper, CardUserGameContentWrapper, CardUserGameImage, CardUserGameTitle, CardUserGameWrapper, CategoryLabel, CategoryLabelWrapper, UserGameImageSpace, UserGameState } from '../../styles/HomeLogged';
+import ImagePlaceholder from '../ImagePlaceholder/ImagePlaceholder';
 
 type CardUserGameProps = {
     id: number;
@@ -20,7 +21,11 @@ const CardUserGame: React.FC<CardUserGameProps> = ({ id, imageSrc, title, descri
                 <p>{isPublished ? 'Publicado' : 'Editando'}</p>
             </UserGameState>
             <UserGameImageSpace>
+                {imageSrc ? 
                 <CardUserGameImage src={imageSrc} alt={title} />
+                :
+                <ImagePlaceholder/>
+                }
             </UserGameImageSpace>
             <CardUserGameContentWrapper title={description}>
                 <CardUserGameTitle>{title}</CardUserGameTitle>

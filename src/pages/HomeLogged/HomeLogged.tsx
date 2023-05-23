@@ -6,6 +6,7 @@ import { CardHomeShimmer } from '../../components/Cards/CardHomeShimmer';
 import { CardMyGamesHomeShimmer } from '../../components/Cards/CardMyGamesHomeShimmer';
 import CardUserGame from '../../components/Cards/CardUserGame';
 import EmptyCard from '../../components/Cards/EmptyCard';
+import Drawer from '../../components/Drawer/Drawer';
 import HeaderLogged from '../../components/Header/HeaderLogged';
 import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated';
 import { AuthContext } from '../../contexts/auth';
@@ -41,13 +42,6 @@ const HomeLogged = () => {
     fetchGames()
   }, [])
 
-  const randomInt = (): number => {
-    const min = 1;
-    const max = 100;
-    const rand = min + Math.random() * (max - min);
-    return rand;
-  }
-
   const { createGame } = useContext(GameContext)
   const navigate = useNavigate()
 
@@ -56,6 +50,7 @@ const HomeLogged = () => {
 
   return (
     <>
+      <Drawer />
       <HeaderLogged nickname={user!.nickname} photo={user!.photo} />
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <LoggedStyle>
@@ -86,7 +81,7 @@ const HomeLogged = () => {
                     key={index}
                     id={game.id}
                     title={game.title}
-                    imageSrc={game.image != null ? game.image : `https://picsum.photos/300/200?random=1`}
+                    imageSrc={game.image}
                     isPublished={game.isPublished}
                     description={game.description}
                     categories={game.categories}
@@ -129,7 +124,7 @@ const HomeLogged = () => {
                 key={index}
                 id={game.id}
                 title={game.title}
-                imageSrc={game.image != null ? game.image : `https://picsum.photos/300/200?random=${randomInt()}`}
+                imageSrc={game.image}
                 description={game.description}
                 categories={game.categories}
               />

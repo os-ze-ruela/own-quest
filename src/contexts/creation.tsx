@@ -23,7 +23,7 @@ type CreationContextType = {
   setActionBarSelected: (value: boolean) => void,
   handleButtonActionBar: (index: number, actionBarSelected: boolean) => void
   handlePageActionBar: (index: number, actionBarSelected: boolean) => void
-  getPagesFromGameID: (id: string) => void
+  getPagesFromGameID: (id: string) => Promise<void>
   updatePage: (page: PageModel) => void
   updateButton: (button: ButtonModel) => void
   addPage: (gameId: number, numberPage: number) => void
@@ -91,7 +91,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  async function getPagesFromGameID(id: string) {
+  async function getPagesFromGameID(id: string): Promise<void> {
     try {
 
       const tokensJSON = localStorage.getItem('token')

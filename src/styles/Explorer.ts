@@ -34,6 +34,15 @@ export const SearchContainer = styled.div`
     .search-icon {
         color: #FFFFFF;
     }
+
+    
+    @media screen and (max-width: 1200px) {
+      width: 70%;
+    }
+
+    @media screen and (max-width: 768px) {
+      width: 90%;
+    }
 `
 
 export const HorizontalListWrapper = styled.div`
@@ -60,6 +69,7 @@ export const SearchInput = styled.input`
     input:-webkit-autofill {
         -webkit-text-fill-color: blue !important;
     }
+
 
 `
 export const PaginationContainer = styled.div.attrs((props: { direction: string, }) => props)`

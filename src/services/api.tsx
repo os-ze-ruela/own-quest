@@ -31,6 +31,10 @@ export const fetchHighlightGame = async () => {
     return await api.get(`/game/highlight`)
 }
 
+export const findGamesByTitle = async (title: string) => {
+    return await api.get(`/game/find/${title}`)
+}
+
 
 // CREATION CONTEXT
 
@@ -186,6 +190,18 @@ export const postLikeGame = async (gameId: string) => {
 
 export const postUnLikeGame = async (gameId: string) => {
     return await api.delete(`/user/unfavorite/${gameId}`)
+}
+
+export const getUserByNickname = async (nickname: string) => {
+    return await api.get(`/user/find/${nickname}`)
+}
+
+export const postFollowUser = async (userId: string) => {
+    return await api.post(`/user/follow/${userId}`)
+}
+
+export const postUnfollowUser = async (userId: string) => {
+    return await api.delete(`/user/unfollow/${userId}`)
 }
 
 // ----- IMAGE UPLOAD -----

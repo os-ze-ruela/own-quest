@@ -1,11 +1,11 @@
 import React from 'react';
-import { GAME } from '../../core/app-urls';
+import { GAME_DESCRIPTION } from '../../core/app-urls';
 import Category from '../../models/Category';
 import { Button, ButtonWrapper, CategoryLabel, CategoryLabelWrapper } from '../../styles/HomeLogged';
-import { CardMyGameContentWrapper, CardMyGameImage, CardMyGameTitle, CardMyGameWrapper, MyGameImageSpace, MyGameState } from '../../styles/MyGames';
+import { CardSearchGameContentWrapper, CardSearchGameImage, CardSearchGameTitle, CardSearchGameWrapper, SearchGameImageSpace } from '../../styles/SearchGamesComponent';
 import ImagePlaceholder from '../ImagePlaceholder/ImagePlaceholder';
 
-type CardMyGameProps = {
+type CardSearchGameProps = {
     id: number;
     imageSrc: string;
     title: string;
@@ -14,22 +14,18 @@ type CardMyGameProps = {
     categories: Category[];
 };
 
-const CardMyGame: React.FC<CardMyGameProps> = ({ id, imageSrc, title, description, isPublished, categories}) => {
-
+const CardSearchGame: React.FC<CardSearchGameProps> = ({ id, imageSrc, title, description, isPublished, categories}) => {
     return (
-        <CardMyGameWrapper >
-            <MyGameState isPublished={isPublished ? 'true' : 'false'}>
-                <p>{isPublished ? 'Publicado' : 'Editando'}</p>
-            </MyGameState>
-            <MyGameImageSpace>
+        <CardSearchGameWrapper href={GAME_DESCRIPTION + '/' + id} >
+            <SearchGameImageSpace>
                 {imageSrc ? 
-                <CardMyGameImage src={imageSrc} alt={title} />
+                <CardSearchGameImage src={imageSrc} alt={title} />
                 :
                 <ImagePlaceholder/>
                 }
-            </MyGameImageSpace>
-            <CardMyGameContentWrapper>
-                <CardMyGameTitle>{title}</CardMyGameTitle>
+            </SearchGameImageSpace>
+            <CardSearchGameContentWrapper>
+                <CardSearchGameTitle>{title}</CardSearchGameTitle>
                 <p className='description'  title={description}>{description}</p>
                 <CategoryLabelWrapper className='category-label-wrapper'>
                     {categories.map((category) => (
@@ -39,12 +35,12 @@ const CardMyGame: React.FC<CardMyGameProps> = ({ id, imageSrc, title, descriptio
                     ))}
                 </CategoryLabelWrapper>
                 <ButtonWrapper className='button-wrapper'>
-                    <Button href={GAME + '/' + id} >{isPublished ? 'Jogar' : 'Editar'}</Button>
+                    <Button href='' >{'Jogar'}</Button>
                 </ButtonWrapper>
-            </CardMyGameContentWrapper>
-        </CardMyGameWrapper>
+            </CardSearchGameContentWrapper>
+        </CardSearchGameWrapper>
     );
 };
 
-export default CardMyGame;
+export default CardSearchGame;
 

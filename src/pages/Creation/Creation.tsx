@@ -14,11 +14,8 @@ import ButtonActionBar from './components/ButtonActionBar';
 import NoPagePlaceholder from './components/NoPagePlaceholder';
 import PageActionBar from './components/PageActionBar';
 
-
-
-
 const Creation = () => {
-  
+
   const { user } = useContext(AuthContext)
   const { pages, setPages } = useContext(CreationContext)
   const { indexButton, setIndexButton } = useContext(CreationContext)
@@ -36,12 +33,12 @@ const Creation = () => {
   const { updatePage } = useContext(CreationContext)
   const { updateButton } = useContext(CreationContext)
   const { findPageIndex } = useContext(CreationContext)
-  const { destinyPage, setDestinyPage} = useContext(CreationContext)
+  const { destinyPage, setDestinyPage } = useContext(CreationContext)
   const { handleButton } = useContext(CreationContext)
-  const { getGameById } = useContext(GameContext)
+  const { getGameById, editingGame } = useContext(GameContext)
   const { id } = useParams()
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
-  const {loading, setLoading} = useContext(CreationContext)
+  const { loading, setLoading } = useContext(CreationContext)
 
 
   const debounceSaveChanges = () => {
@@ -54,7 +51,7 @@ const Creation = () => {
     }, 500);
     setTimerId(idTimer);
   };
-  
+
   const saveChanges = () => {
     setLoading(false);
     updatePage(pages[indexSelected])
@@ -70,7 +67,7 @@ const Creation = () => {
     }, 500);
     setTimerId(idTimer);
   };
-  
+
   const saveChangesButton = () => {
     setLoading(false);
     updateButton(pages[indexSelected].buttons[indexButton])
@@ -84,13 +81,28 @@ const Creation = () => {
     };
   }, [timerId]);
 
-  
-  useEffect( () =>  {
+
+  useEffect(() => {
     getPagesFromGameID(id!)
     getGameById(id!)
-  }, [])  
-  
-  
+  }, [])
+
+  useEffect(() => {
+    const setDocumentTitle = () => {
+      if (editingGame) {
+        document.title = editingGame.title;
+      }
+    };
+
+    setDocumentTitle(); // Chamada inicial para definir o título assim que o componente for montado
+
+    // Monitora as mudanças no estado editingGame
+    const editingGameUpdated = editingGame !== null && editingGame !== undefined;
+    if (editingGameUpdated) {
+      setDocumentTitle();
+    }
+  }, [editingGame]);
+
   return (
     <CreationBody>
       <PopupContainer top={'200px'} left={'20px'}>
@@ -101,11 +113,11 @@ const Creation = () => {
         <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" />
       </PopupContainer>
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
-      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={false}/>
+      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={false} />
       <CreationStyle>
         <Body>
           <PageBody>
-            { pages.length > 0 ? actionBarSelected ?
+            {pages.length > 0 ? actionBarSelected ?
               (
                 <PageActionBar />
               )
@@ -118,74 +130,75 @@ const Creation = () => {
             <ActualPage>
               {pages.length < 1 ? (
                 <NoPagePlaceholder />
-              ) : (<Page background={pages[indexSelected].color}
-                onDoubleClick={() => handlePageActionBar(indexButton, actionBarSelected)}   >
-                <PageTitle
-                  type="text"
-                  name="PageTitle"
-                  autoComplete="off"
-                  value={pages[indexSelected].title}
-                  placeholder="Exemplo de título"
-                  onChange={(event) => {
-                    let pagesTemp = [...pages];
-                    pagesTemp[indexSelected].title = event.target.value;
-                    setPages(pagesTemp);
-                    // updatePage(pages[indexSelected])
-                    debounceSaveChanges()
-                  }}
-                />
-                <PageDescription
-                  name="PageDescription"
-                  autoComplete="off"
-                  value={pages[indexSelected].description}
-                  placeholder="Esse é um exemplo de descrição"
-                  onChange={(event) => {
-                    let pagesTemp = [...pages];
-                    pagesTemp[indexSelected].description = event.target.value;
-                    setPages(pagesTemp);
-                    // updatePage(pages[indexSelected])
-                    debounceSaveChanges()
-                  }}
-                />
-                <ButtonContainer>
-                  {pages[indexSelected].buttons.map((button, index) => (
-                    <EditableButton
-                      key={index}
-                      value={button.title}
-                      textLength={button.title.length}
-                      isSelected={index === indexButton}
-                      placeholder={"Botão " + (index + 1).toString()}
-                      background={button.color}
-                      onClick={()=>{
-                        handleButton(index, button)
-                      }}
-                      onChange={(event) => {
-                        handleTextChange(indexSelected, index, event.target.value);
-                        // updateButton(button)
-                        debounceSaveChangesButton()
-                      }}
-                      onKeyDown={(event) => {
-                        if (event.key === "F4" && button.nextPageId !== -1) {
-                          setActionBarSelected(true)
-                          setIndexSelected(findPageIndex(pages, button.nextPageId))
-                        }
-                      }}
-                    />
-                  ))}
-                  <AddButton onClick={
-                    () => { handleAddButtonClick(indexSelected); }}
-                    canAdd={pages[indexSelected].buttons.length < 4} >
-                    <MdOutlineAddCircleOutline size={25} color="#fff" />
-                  </AddButton>
-                </ButtonContainer>
-              </Page>)}
+              ) : (
+                <Page background={pages[indexSelected].color}
+                  onDoubleClick={() => handlePageActionBar(indexButton, actionBarSelected)}   >
+                  <PageTitle
+                    type="text"
+                    name="PageTitle"
+                    autoComplete="off"
+                    value={pages[indexSelected].title}
+                    placeholder="Exemplo de título"
+                    onChange={(event) => {
+                      let pagesTemp = [...pages];
+                      pagesTemp[indexSelected].title = event.target.value;
+                      setPages(pagesTemp);
+                      // updatePage(pages[indexSelected])
+                      debounceSaveChanges()
+                    }}
+                  />
+                  <PageDescription
+                    name="PageDescription"
+                    autoComplete="off"
+                    value={pages[indexSelected].description}
+                    placeholder="Esse é um exemplo de descrição"
+                    onChange={(event) => {
+                      let pagesTemp = [...pages];
+                      pagesTemp[indexSelected].description = event.target.value;
+                      setPages(pagesTemp);
+                      // updatePage(pages[indexSelected])
+                      debounceSaveChanges()
+                    }}
+                  />
+                  <ButtonContainer>
+                    {pages[indexSelected].buttons.map((button, index) => (
+                      <EditableButton
+                        key={index}
+                        value={button.title}
+                        textLength={button.title.length}
+                        isSelected={index === indexButton}
+                        placeholder={"Botão " + (index + 1).toString()}
+                        background={button.color}
+                        onClick={() => {
+                          handleButton(index, button)
+                        }}
+                        onChange={(event) => {
+                          handleTextChange(indexSelected, index, event.target.value);
+                          // updateButton(button)
+                          debounceSaveChangesButton()
+                        }}
+                        onKeyDown={(event) => {
+                          if (event.key === "F4" && button.nextPageId !== -1) {
+                            setActionBarSelected(true)
+                            setIndexSelected(findPageIndex(pages, button.nextPageId))
+                          }
+                        }}
+                      />
+                    ))}
+                    <AddButton onClick={
+                      () => { handleAddButtonClick(indexSelected); }}
+                      canAdd={pages[indexSelected].buttons.length < 4} >
+                      <MdOutlineAddCircleOutline size={25} color="#fff" />
+                    </AddButton>
+                  </ButtonContainer>
+                </Page>)}
 
             </ActualPage>
             <PagesMenu>
               <PageListContainer>
                 {pages.map((page, index) => (
                   <MiniPage
-                    isLastPage = {page.isLastPage}
+                    isLastPage={page.isLastPage}
                     isSelected={index === indexSelected}
                     background={page.color}
                     key={index}
@@ -204,7 +217,7 @@ const Creation = () => {
               </PageListContainer>
             </PagesMenu>
           </PageBody>
-          <Sidebar/>
+          <Sidebar />
         </Body>
       </CreationStyle>
     </CreationBody >

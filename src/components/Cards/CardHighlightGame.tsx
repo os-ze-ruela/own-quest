@@ -2,6 +2,7 @@ import React from 'react';
 import Category from '../../models/Category';
 import { Button, CategoryLabel, CategoryLabelWrapper } from '../../styles/HomeLogged';
 import { CardHighlightGameContentWrapper, CardHighlightGameCreatedBy, CardHighlightGameImage, CardHighlightGameImageSpace, CardHighlightGameTitle, CardHighlightGameWrapper, CreatedByLabel, CreatedByName, PlayButtonWrapper } from '../../styles/components/CardHighlightGame';
+import ImagePlaceholder from '../ImagePlaceholder/ImagePlaceholder';
 
 type CardHighlightGameProps = {
     imageSrc: string;
@@ -16,7 +17,11 @@ const CardHighlightGame: React.FC<CardHighlightGameProps> = ({ imageSrc, title, 
     return (
         <CardHighlightGameWrapper >
             <CardHighlightGameImageSpace>
+                {imageSrc ? 
                 <CardHighlightGameImage src={imageSrc} alt={title} />
+                :
+                <ImagePlaceholder/>
+                }
             </CardHighlightGameImageSpace>
             <CardHighlightGameContentWrapper>
                 <CardHighlightGameTitle id={title} >{title}</CardHighlightGameTitle>

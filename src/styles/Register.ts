@@ -2,12 +2,23 @@ import styled from "styled-components";
 
 export const RegisterStyle = styled.div`
     background-color: #282C3E;
-    height: 850px ;
     width: 100%;
+    padding: 40px 0;
     
+    @media screen and (max-width: 1024px) {
+        padding: 0px 0px;
+    }
 `
 export const FieldsDiv = styled.div`
     padding-left: 40px;
+
+    @media screen and (max-width: 1024px) {
+        padding-left: 0px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 `
 
 export const Title = styled.div`
@@ -20,6 +31,12 @@ export const Title = styled.div`
     margin-left: 0.1em;
     font-family: FiraCode-Bold;
     font-weight: 700;
+
+    @media screen and (max-width: 1024px) {
+        font-size: 1.5rem;
+        margin: 0;
+        width: 100%;
+    }
 `
 
 export const SubTitle = styled.div`
@@ -37,6 +54,10 @@ export const LoginText = styled.p`
     font-family: FiraCode-Regular;
     font-weight: 500;
     margin-left: 0.5em;
+
+    @media screen and (max-width: 1024px) {
+        margin-left: 0;
+    }
 `
 export const LoginLink = styled.a`
     color: #4d92cb;
@@ -53,12 +74,16 @@ export const Label = styled.label`
     color: #FFFFFF99;
     font-family: FiraCode-Light;
     font-weight: 300;
+
+    @media screen and (max-width: 1024px) {
+        margin-left: 0;
+    }
 `
 
 export const InputButtonDiv = styled.div`
     position: relative;
-    width: 700px;
-    flex-direction: column;
+    width: 100%;
+    // flex-direction: column;
 `
 export const HideButton = styled.img`
     position: absolute;
@@ -67,6 +92,19 @@ export const HideButton = styled.img`
     transform: translateY(-50%);
     width:35px;
     height:35px;
+
+    @media screen and (max-width: 1024px) {
+        right: 0;
+        width: 25px;
+        height: 25px;
+    }
+`
+export const RegisterInputs = styled.div`
+    width: 700px;
+
+    @media screen and (max-width: 1024px) {
+        width: 80%;
+    }
 `
 
 export const Input = styled.input`
@@ -77,11 +115,15 @@ export const Input = styled.input`
     border: none;
     padding: 0.6em;
     border-radius: 0.7em;
-    width: 700px;
-    width: 100%
+    width: 100%;
     height: 25px;
     font-family: FiraCode-Regular;
     color: white;
+
+    @media screen and (max-width: 1024px) {
+        width: 100%;
+        margin-left: 0;
+    }
 
 `
 export const ImgAstro = styled.img`
@@ -104,6 +146,10 @@ export const ImgAstro = styled.img`
     margin-left: 1000px;
     margin-top: 250px;
     animation: float 3s ease-in-out infinite;
+
+    @media screen and (max-width: 1024px) {
+        display: none;
+    }
 `
 
 export const ButtonRegister = styled.button`
@@ -182,5 +228,6 @@ export const MessageError = styled.div`
 
     @media screen and (max-width: 1024px) {
         width: 80%;
+        margin-left: 0;
     }
 `

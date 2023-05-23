@@ -354,7 +354,7 @@ export const CardUserGameWrapper = styled.div`
   width: 25%;
   min-width: 300px;
   transition: all 0.2s ease-in-out;
-  height: 350px;
+  height: 380px;
 
   &:hover {
     transform: translateY(-4px);

@@ -4,6 +4,7 @@ import { BiArrowBack } from "react-icons/bi";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from '../../components/Header/Header';
 import HeaderLogged from '../../components/Header/HeaderLogged';
+import ImagePlaceholder from '../../components/ImagePlaceholder/ImagePlaceholder';
 import { AuthContext } from '../../contexts/auth';
 import { UserContext } from '../../contexts/user';
 import { EXPLORER, LOGIN } from '../../core/app-urls';
@@ -97,6 +98,22 @@ export const GameInfos = () => {
         getGameById(id!)
     }, [])
 
+    useEffect(() => {
+        const setDocumentTitle = () => {
+          if (visitingGame) {
+            document.title = visitingGame.title;
+          }
+        };
+    
+        setDocumentTitle(); // Chamada inicial para definir o título assim que o componente for montado
+    
+        // Monitora as mudanças no estado visitingGame
+        const visitingGameUpdated = visitingGame !== null && visitingGame !== undefined;
+        if (visitingGameUpdated) {
+          setDocumentTitle();
+        }
+      }, [visitingGame]);
+
     return (
         <>
             {authenticated ?
@@ -117,7 +134,9 @@ export const GameInfos = () => {
                         {loading ?
                             (<Skeleton variant="rounded" animation="wave" width='100%' height='200px' />)
                             :
-                            (<ImageGame src={visitingGame?.image != null ? visitingGame?.image : `https://picsum.photos/300/200?random=5`} />)}
+                            (visitingGame?.image != null ? <ImageGame src={visitingGame?.image} /> : (
+                                <ImagePlaceholder/>
+                            ))}
                     </GameImageWrapper>
                     <GamesInfosWrapper>
                         {loading ?

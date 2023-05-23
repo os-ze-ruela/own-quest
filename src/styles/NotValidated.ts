@@ -2,14 +2,14 @@ import styled from "styled-components";
 
 export const ValidateStyle = styled.div`
     background-color: #282C3E;
-    height: 500px ;
+    // height: 500px ;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 `
 
-export const Title = styled.div`
+export const Title = styled.h1`
     font-weight: bold;
     color: white;
     padding-top: 5rem;
@@ -19,13 +19,22 @@ export const Title = styled.div`
     margin-top: 1em;
     font-family: FiraCode-Bold;
     font-weight: 700;
+    margin-bottom: 0;
 `
-export const SubTitle = styled.div`
+export const SubTitle = styled.p`
     color: white;
     font-family: FiraCode-Regular;
     font-weight: 300;
     margin-left: 0.5em;
     opacity: 60%;
+    text-align: center;
+
+    a {
+        color: #FFFFFF;
+        font-family: 'FiraCode-SemiBold';
+        cursor: pointer;
+        text-decoration: underline;
+      }
 `
 
 export const Label = styled.label`
@@ -51,7 +60,7 @@ export const Input = styled.input`
 
 `
 
-export const ButtonSend = styled.button`
+export const ButtonSend = styled.a`
     background-color: #568EA3;
     color: #FFF;
     margin-top: 2.5em;
@@ -66,6 +75,7 @@ export const ButtonSend = styled.button`
     font-family: FiraCode-SemiBold;
     font-weight: 500;
     border-color: transparent;
+    margin-bottom: 4em;
 `
 export const Bar = styled.div`
     height: 170px ;
