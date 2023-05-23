@@ -4,7 +4,7 @@ import AppError from "../core/app-error";
 import Category from "../models/Category";
 import Game from "../models/Game";
 
-import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchHighlightGame, getHotGames, getUserGamesByToken, patchGame, postFullGame, postGame, postGameCategoryByID } from "../services/api";
+import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchHighlightGame, findGamesByTitle, getHotGames, getUserGamesByToken, patchGame, postFullGame, postGame, postGameCategoryByID } from "../services/api";
 
 
 type GameContextType = {
