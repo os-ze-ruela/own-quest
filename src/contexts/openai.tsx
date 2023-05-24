@@ -109,42 +109,65 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
         console.log("Numero de paginas = ", numPages)
         const defaultPrompt = 
         `
-Eu tenho uma plataforma de criação de histórias e desejo criar histórias aleatórias. Todas histórias seguem um padrão de criação. A história possui uma ou mais categorias (Aventura, ação, terror, suspense, e outras.), possui um título e uma descrição. Cada história é dividida em páginas. Cada página possui: um título, uma descrição, dois ou mais botões, uma cor e um indicação se é uma página de final da história (pode haver uma ou mais páginas de final de história). Caso seja uma página final "is_last_page"=true, as páginas finais não possuem botões. Cada botão possui um título, uma cor, e cada botão redireciona para outra página da história (pode ser uma página já visitada ou não, porém um botão não pode redirecionar para a própria página). 
-Fornecendo uma breve descrição da história, a categoria da história e o número de páginas da história como parâmetros, gostaria que gerasse uma história baseada nos parâmetros, crie um título, descrição, as páginas e escolha as cores das páginas e botões, seguindo o seguinte formato JSON:
+        Eu tenho uma plataforma de criação de histórias e desejo criar histórias aleatórias. Todas histórias seguem um padrão de criação. 
 
-                                {
-                                "title": "",
-                                "description": "",
-                                "image": "",
-                                "categories": "",
-                                “pages”: [
-                                    {
-                                    "id": 1
+        Regra 1: A história possui uma ou mais categorias (Aventura, ação, terror, suspense, e outras.), possui um título e uma descrição.
+        
+        Regra 2: Cada história é dividida em páginas. Cada página possui: um título, uma descrição, botões, uma cor e um indicação se é uma página de final da história 
+        
+        Regra 3: Pode haver uma ou mais páginas de final de história.
+        
+        Regra 4: Caso seja uma página final "is_last_page"='true'.
+        
+        Regra 5: Todas as páginas possuem necessariamente dois ou mais botões, menos as páginas finais, que não possuem botões
+        
+        Regra 6: Cada botão possui um título, uma cor, e cada botão redireciona para outra página da história (pode ser uma página já visitada ou não, porém um botão não pode redirecionar para a própria página). 
+        
+        Regra 7: As cores das páginas e dos botões podem variar de acordo com a história.
+        
+        Parâmetros para criação da história: 
+        Descrição da História: ${description}
+        Categoria da História: ${category}
+        Número de páginas da história:  ${numPages}
+        
+        Com base no conjunto de regras e parâmetros gere um nova história baseada na descrição e na categoria da história, seguindo o seguinte formato JSON:
+        
+                 {
                                         "title": "",
                                         "description": "",
-                                        "color": "#568EA3",
-                                        "number_page": 0,
-                                        "is_last_page": false,
-                                        "icon": "",
-                                        "buttons": [
+                                        "image": "",
+                                        "categories": "",
+                                        “pages”: [
                                             {
-                                                "id": 1
+                                            "id": 1
                                                 "title": "",
-                                                "nextPageId": 1,
+                                                "description": "",
+                                                "color": "#568EA3",
+                                                "number_page": 0,
+                                                "is_last_page": false,
                                                 "icon": "",
-                                                "color": "#202331"
+                                                "buttons": [
+                                                    {
+                                                        "id": 1
+                                                        "title": "",
+                                                        "nextPageId": 1,
+                                                        "icon": "",
+                                                        "color": "#202331"
+                                                    },
+                                                    {
+                                                        "id": 2
+                                                        "title": "",
+                                                        "nextPageId": 2,
+                                                        "icon": "",
+                                                        "color": "#202331"
+                                                    }
+                                                ]
                                             }
                                         ]
-                                    }
-                                ]
-                                }
-                                --------------------------------
-                                Retorne apenas o JSON
-
-Parâmetros:
-Descrição da História: ${description}
-Categoria da História: ${category}
-Número de páginas da história:  ${numPages}
+                                        }
+                         
+                         Retorne como resposta, apenas o JSON.
+        
         `;
 
 
@@ -162,7 +185,7 @@ Número de páginas da história:  ${numPages}
       }, [editingGame]);
       
 
-    async function createRandomGame(randomGame: any): Promise<number> {
+      async function createRandomGame(randomGame: any): Promise<number> {
         console.log("JSON do game a ser gerado = ");
         console.log(randomGame);
       
@@ -173,73 +196,73 @@ Número de páginas da história:  ${numPages}
         await Promise.all(
           randomGame.pages.map(async (page: any, index: any) => {
             const pageTemp = page;
-            const response = await postPage({
-              title: page.title,
-              description: page.description,
-              icon: page.icon,
-              color: page.color,
-              number_page: Number(index),
-              is_last_page: Boolean(page.is_last_page),
-              game_id: newGameID,
-            });
-            pageTemp.id = response.data.id;
-            pagesTemp.push(pageTemp);
+            console.log("Página que será gerada:")
+            console.log(pageTemp)
+            console.log("Cor da página que será gerada: ", pageTemp.color)
+            try {
+              const response = await postPage({
+                title: pageTemp.title,
+                description: pageTemp.description,
+                icon: pageTemp.icon,
+                color: pageTemp.color,
+                number_page: Number(index),
+                is_last_page: Boolean(pageTemp.is_last_page),
+                game_id: newGameID,
+              });
+              pageTemp.id = response.data.id;
+              pagesTemp.push(pageTemp);
+            } catch (error) {
+              console.error(error)
+            }
           })
         );
       
+        console.log("Páginas a ser criadas = ", pagesTemp.length)
       
-        // iterar sobre pagesTemp para fazer o post dos botoes
+        // Post buttons for each page
         for (let i = 0; i < pagesTemp.length; i++) {
           const page = pagesTemp[i];
           const buttonsTemp: Button[] = [];
       
           const pageId = page.id;
-
+          console.log("Quantidade de botões na página a ser criada = ", page.buttons.length);
           if (page.buttons.length > 0) {
             for (let j = 0; j < page.buttons.length; j++) {
               const button = page.buttons[j];
               const buttonTemp = button;
-                
-              const destinationId = pagesTemp[button.nextPageId].id
-              buttonTemp.nextPageId = destinationId
-
-              const response = await postButton(
-                pageId,
-                buttonTemp.title,
-                buttonTemp.color,
-                buttonTemp.icon,
-                buttonTemp.nextPageId
-              );
       
-              buttonsTemp.push(buttonTemp);
+              const destinationPage = pagesTemp.find(p => p.number_page === button.nextPageId);
+              if (destinationPage) {
+                const destinationId = destinationPage.id;
+                buttonTemp.nextPageId = destinationId;
+      
+                console.log("Botão que será adicionado:")
+                console.log(buttonTemp)
+      
+                try {
+                  const response = await postButton(
+                    pageId,
+                    buttonTemp.title,
+                    buttonTemp.color,
+                    buttonTemp.icon,
+                    buttonTemp.nextPageId
+                  );
+                  console.log("Resposta do botão criada: ", response)
+                  buttonsTemp.push(buttonTemp);
+                } catch (error) {
+                  console.error(error)
+                }
+              } else {
+                console.error("Destination page not found");
+              }
             }
           }
       
           pagesTemp[i].buttons = buttonsTemp;
         }
+      
         setPages(pagesTemp);
       
-        // console.log("ID do jogo gerado = ", newGameID)
-        // await getGameById(String(newGameID))
-        // console.log("Get Jogo gerado =")
-        // console.log(editingGame)
-        // console.log(editingGame!.id)
-        // console.log(editingGame!.title)
-        
-        // if(editingGame){
-        //     //melhorar descrição 
-        //     const betterDescription = await improveDescription(editingGame.description);
-            
-            
-        //     //gerar imagem
-        //     const dalleImageUrl = await dalleAPI(editingGame.description);
-        //     const response = await uploadRandomImage(dalleImageUrl)
-        //     const newEditingGame = { ...editingGame, description: betterDescription };
-        //     newEditingGame.image = response.data.imagePath;
-        //     setEditingGame(newEditingGame);
-        //     await updateGame(newEditingGame);
-        // }
-
         return newGameID;
       }
       
