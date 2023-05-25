@@ -221,3 +221,8 @@ export const uploadRandomImage = async (randomImageUrl: string) => {
 export const sendRecoverEmail = async () => {
     return await api.post('/user/send-recover-password-email')
 }
+
+// -------- PLAY GAMES -------
+export const getUserPlayGames = async (userId: string) => {
+    return await api.get(`/play-games/user/${userId}`)
+}

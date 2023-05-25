@@ -4,7 +4,8 @@ import AppError from "../core/app-error";
 import Category from "../models/Category";
 import Game from "../models/Game";
 
-import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchHighlightGame, findGamesByTitle, getHotGames, getUserGamesByToken, patchGame, postFullGame, postGame, postGameCategoryByID } from "../services/api";
+import PlayGames from "../models/PlayGame";
+import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchHighlightGame, findGamesByTitle, getHotGames, getUserGamesByToken, getUserPlayGames, patchGame, postFullGame, postGame, postGameCategoryByID } from "../services/api";
 
 
 type GameContextType = {
@@ -14,6 +15,7 @@ type GameContextType = {
     createGame: () => Promise<number>,
     deleteGameByID: (id: number) => void,
     updateGame: (game: Game) => Promise<void>,
+    getUserPlayingGames: () => Promise<void>,
     getUserGames: () => Promise<void>,
     getHighlightGame: () => Promise<void>,
     getHotGamesForHome: () => Promise<void>,
@@ -21,6 +23,7 @@ type GameContextType = {
     setPagesOfHotGames: (page: number) => void,
     pagesOfHotGames: number,
     userGames: Game[],
+    userPlayingGames: PlayGames[],
     hotGames: Game[],
     searchGames: Game[],
     editingGame: Game | null,
@@ -38,6 +41,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
     // const navigate = useNavigate()
     const [userGames, setUserGames] = useState<Game[]>([])
+    const [userPlayingGames, setUserPlayingGames] = useState<PlayGames[]>([])
     const [hotGames, setHotGames] = useState<Game[]>([])
     const [searchGames, setSearchGames] = useState<Game[]>([])
     const [editingGame, setEditingGame] = useState<Game | null>(null)
@@ -257,7 +261,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     };
 
 
-    async function addGameCategoryByID(id: number, categories: Number[]): Promise<void>{
+    async function addGameCategoryByID(id: number, categories: Number[]): Promise<void> {
         try {
             await postGameCategoryByID(id, categories)
         } catch (e) {
@@ -267,7 +271,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-    async function deleteGameCategory(idGame: number, idCategory:number): Promise<void> {
+    async function deleteGameCategory(idGame: number, idCategory: number): Promise<void> {
         try {
             await deleteGameCategoryByID(idGame, idCategory)
         } catch (error) {
@@ -323,6 +327,64 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    async function getUserPlayingGames(): Promise<void> {
+        try {
+
+            const userJSON = localStorage.getItem('user')
+            const { id } = JSON.parse(userJSON!)
+
+            console.log(`user id: ${id}`)
+
+            const response = await getUserPlayGames(id)
+
+            const playGamesData = response.data;
+
+            const playingGames = playGamesData.map((playGame: {
+                play_game_id: any;
+                is_ongoing: any;
+                not_possible_continue: any;
+                game_date_play: any;
+                game: {
+                    id: any; title: any; description: any; image: any; createdAt: any;
+                };
+            }) => {
+
+                return new PlayGames({
+                    play_game_id: playGame.play_game_id,
+                    is_ongoing: playGame.is_ongoing,
+                    game_date_play: playGame.game_date_play,
+                    not_possible_continue: playGame.not_possible_continue,
+                    game: new Game({
+                        categories: [],
+                        createdAt: playGame.game.createdAt,
+                        description: playGame.game.description,
+                        favorites: 0,
+                        id: playGame.game.id,
+                        image: playGame.game.image,
+                        title: playGame.game.title,
+                        createdBy: null,
+                        isEditing: false,
+                        isPublished: true,
+                        isDeleted: false,
+                        isFavorited: false,
+                    })
+                })
+            });
+
+            setUserPlayingGames(playingGames);
+        } catch (e: any) {
+            setUserPlayingGames([]);
+
+            const error = await e as AxiosError
+            console.error(`Erro (${error.response?.status}) ao buscar jogos jogandos:`, error);
+            if (error.response?.status === 400) {
+                throw new AppError(400, 'Usuário não encontrado')
+            } else if (error.response?.status === 401) {
+                throw new AppError(error.response?.status, 'Credenciais Incorretas')
+            }
+        }
+    };
+
 
 
 
@@ -339,7 +401,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             createFullGame,
             getHighlightGame,
             searchGamesByTitle,
+            getUserPlayingGames,
             userGames,
+            userPlayingGames,
             hotGames,
             searchGames,
             editingGame,
