@@ -56,30 +56,28 @@ const HomeLogged = () => {
       <LoggedStyle>
         <Title>Continuar Jogando</Title>
         <MyGameListContainer>
-          <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
-            {isLoading ? (
-              <>
-                <CardMyGamesHomeShimmer />
-                <CardMyGamesHomeShimmer />
-                <CardMyGamesHomeShimmer />
-                <CardMyGamesHomeShimmer />
-              </>
-            ) : (
-              <>
-                {userPlayingGames.map((playGame, index) => (
-                  <CardContinuePlayingGame
-                    key={index}
-                    idPlayingGame={playGame.play_game_id}
-                    initiatedPlay={playGame.game_date_play}
-                    idGame={playGame.game.id}
-                    title={playGame.game.title}
-                    image={playGame.game.image}
-                    description={playGame.game.description}
-                  />
-                ))}
-              </>
-            )}
-          </ListMyGamesCardContainer>
+          {isLoading ? (
+            <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
+              <CardMyGamesHomeShimmer />
+              <CardMyGamesHomeShimmer />
+              <CardMyGamesHomeShimmer />
+              <CardMyGamesHomeShimmer />
+            </ListMyGamesCardContainer>
+          ) : userPlayingGames.length > 0 ? (
+            <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
+              {userPlayingGames.map((playGame, index) => (
+                <CardContinuePlayingGame
+                  key={index}
+                  idPlayingGame={playGame.play_game_id}
+                  initiatedPlay={playGame.game_date_play}
+                  idGame={playGame.game.id}
+                  title={playGame.game.title}
+                  image={playGame.game.image}
+                  description={playGame.game.description}
+                />
+              ))}
+            </ListMyGamesCardContainer>
+          ) : (<></>)}
           <Title>Minhas histórias</Title>
           <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
             {isLoading ? (
