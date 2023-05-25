@@ -221,3 +221,36 @@ export const uploadRandomImage = async (randomImageUrl: string) => {
 export const sendRecoverEmail = async () => {
     return await api.post('/user/send-recover-password-email')
 }
+
+
+
+// ------ PLAY GAMES  ----
+
+
+export const fetchResumePlayedGames = async () => {
+    return await api.get(`/play-games`)
+}
+
+
+export const postPlayedGame = async (userId: number, gameId: number) => {
+    return await api.post(`/play-games`, {
+        "userId": userId,
+        "gameId": gameId
+    })
+}
+
+export const postSelectedButton = async (historicGameId: number, buttonId: number, buttonText: string, buttonNextPageId: number) => {
+    return await api.post(`/play-games/selected-button`, {
+        "historicGameId": historicGameId,
+        "buttonId": buttonId,
+        "buttonText": buttonText,
+        "buttonNextPageId": buttonNextPageId
+    })
+}
+
+export const postFinishAndPlay = async (userId: number, gameId: number) => {
+    return await api.post(`/play-games/finish-and-play`,{
+        "userId": userId,
+        "gameId": gameId
+    })
+}

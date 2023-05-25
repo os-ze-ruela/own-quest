@@ -1,4 +1,4 @@
-import { Skeleton } from '@mui/material';
+import { Backdrop, Modal, Skeleton } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { BiArrowBack } from "react-icons/bi";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,6 +12,9 @@ import Category from '../../models/Category';
 import Game from '../../models/Game';
 import { api, fetchGameById } from '../../services/api';
 import { BackButtonWrapper, CategoryGameInfoLabel, CategoryGameInfoWrapper, CategoryWrapper, CreatedByWrapper, DenounceButton, DescriptionWrapper, GameActionsWrapper, GameImageWrapper, GameInfosMain, GameInfosWrapper, GameTitle, GamesInfosWrapper, HeartIcon, ImageGame, LikeWrapper, PlayButton } from '../../styles/GameInfos';
+import { PlayGamesContext } from '../../contexts/play-games';
+import AppError from '../../core/app-error';
+import DialogResumeGame from '../../components/Dialog/DialogResumeGame';
 
 export const GameInfos = () => {
 
@@ -25,6 +28,11 @@ export const GameInfos = () => {
     const [liked, setLiked] = useState(false);
     const navigate = useNavigate()
 
+    const [showModal, setShowModal] = useState(false);
+
+
+    const { playGame } = useContext(PlayGamesContext)
+    
     const handleClick = async () => {
         if (!liked) {
             try {
@@ -48,6 +56,31 @@ export const GameInfos = () => {
             }
         }
     };
+
+    const handlePlayButton = async () => {
+     
+        try {
+            const response = await playGame(user!.id, Number(id!))
+            console.log("Resposta"); 
+            console.log(response)
+            
+        } catch (error) {
+            console.log(error)
+            if (error instanceof AppError && error.statusCode === 409) {
+                setShowModal(true);
+            }
+        }
+
+    };
+
+    const handleRestartGame = async () => {
+
+    }
+
+    const handleResumeGame = async () => {
+
+    }
+    
 
     async function getGameById(id: string): Promise<void> {
         try {
@@ -120,6 +153,14 @@ export const GameInfos = () => {
                 (<HeaderLogged nickname={user!.nickname} photo={user!.photo} />) :
                 (<Header page='Login' redirect={LOGIN} />)
             }
+            {showModal && (
+                <Backdrop
+                        sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                        open={true}
+                >
+                <DialogResumeGame onClose={()=>{}} handleRestartGame={()=>{}} handleResumeGame={()=>{}}/>
+                </Backdrop>
+            )}
             <GameInfosMain>
                 <BackButtonWrapper href={EXPLORER}>
                     <BiArrowBack />
@@ -192,7 +233,7 @@ export const GameInfos = () => {
                                 <p>{visitingGame?.favorites}</p>
                             </LikeWrapper>
                             <DenounceButton>Denunciar</DenounceButton>
-                            <PlayButton>Jogar</PlayButton>
+                            <PlayButton onClick={handlePlayButton}>Jogar</PlayButton>
                         </GameActionsWrapper>)}
                 </GameInfosWrapper>
             </GameInfosMain>
