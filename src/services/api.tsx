@@ -227,8 +227,8 @@ export const sendRecoverEmail = async () => {
 // ------ PLAY GAMES  ----
 
 
-export const fetchResumePlayedGames = async () => {
-    return await api.get(`/play-games`)
+export const fetchResumePlayedGames = async (userId: number, gameId: number) => {
+    return await api.get(`/play-games/resume-game/user/${userId}/game/${gameId}`)
 }
 
 
@@ -239,8 +239,9 @@ export const postPlayedGame = async (userId: number, gameId: number) => {
     })
 }
 
-export const postSelectedButton = async (historicGameId: number, buttonId: number, buttonText: string, buttonNextPageId: number) => {
-    return await api.post(`/play-games/selected-button`, {
+export const postSelectedButton = async (playGameId: number, historicGameId: number, buttonId: number, buttonText: string, buttonNextPageId: number) => {
+    return await api.post(`/play-games/select-button`, {
+        "playGameId": playGameId,
         "historicGameId": historicGameId,
         "buttonId": buttonId,
         "buttonText": buttonText,
@@ -248,9 +249,6 @@ export const postSelectedButton = async (historicGameId: number, buttonId: numbe
     })
 }
 
-export const postFinishAndPlay = async (userId: number, gameId: number) => {
-    return await api.post(`/play-games/finish-and-play`,{
-        "userId": userId,
-        "gameId": gameId
-    })
+export const postFinishPlayingGame = async (gameId: number) => {
+    return await api.post(`/play-games/finish-user-play/${gameId}`)
 }

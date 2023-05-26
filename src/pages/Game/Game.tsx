@@ -4,21 +4,24 @@ import { CreationContext } from '../../contexts/creation';
 import { ActualPage, Body, ButtonGame, ButtonContainer, GameBody, GameStyle, Page, PageBody, PageDescription, PageTitle, NextButton } from '../../styles/Game';
 import HeaderTestingGame from '../../components/Header/HeaderTestingGame';
 import { useNavigate  } from 'react-router-dom';
-import { GAME } from '../../core/app-urls';
+import { GAME, GAME_DESCRIPTION } from '../../core/app-urls';
 import { Snackbar, Alert } from '@mui/material';
+import { PlayGamesContext } from '../../contexts/play-games';
 
 
 
 const Game = () => {
-    const { getPagesFromGameID } = useContext(CreationContext)
-    const [ indexPage, setIndexPage ] = useState(0)
+    const searchParams = new URLSearchParams(window.location.search);
+    const { getPagesFromGameID, findPageIndex } = useContext(CreationContext)
+    const {currentPlayingPage, setCurrentPlayingPage, postSelectedButtonPlayingGame, historicGameId, setHistoricGameId, playGameId, finishPlayingGame} = useContext(PlayGamesContext)
+    console.log("Current Playing Page = ", currentPlayingPage)
     const [ buttonIndex, setButtonIndex ] = useState(0)
     const { pages, setPages } = useContext(CreationContext)
     const { id } = useParams()
+    const [ indexPage, setIndexPage ] = useState(0)
     const navigate = useNavigate();
     const [alert, setAlert] = useState(false)
     
-    const searchParams = new URLSearchParams(window.location.search);
 
     //Para diferenciar o teste do jogar
     const test = searchParams.get("test");
@@ -29,8 +32,25 @@ const Game = () => {
       }, []) 
 
 
+      useEffect(() => {
+        if (pages.length > 0) {
+          if(currentPlayingPage != 0){
+            setIndexPage(findPageIndex(pages, currentPlayingPage));
+          }
+          else{
+            setIndexPage(0)
+          }
+        }
+      }, [pages, currentPlayingPage]);
+      
+
     const handleBackClick = () => {
-        
+        if(test === 'true'){
+          navigate(GAME+"/"+id);
+        }
+        else{
+          navigate(GAME_DESCRIPTION+"/"+id);
+        }
       };
 
       const handleButton = (index: number) => {
@@ -46,13 +66,26 @@ const Game = () => {
       
 
     //BUG TO FIX - quando um botão é deselecionado o index ainda é mantidado e caso o botão Continuar seja pressionado será redirecionado
-    const handleClickButton = () => {
+    const handleClickButton = async () => {
       if (buttonIndex === -1) {
         return;
       }
   
       if (pages[indexPage].isLastPage === true) {
-        navigate(GAME + "/" + id);
+
+        if(test === 'false'){
+          try {
+            const response =  await finishPlayingGame(playGameId)
+            console.log(response)
+          } catch (error) {
+            console.log(error)
+          }
+          navigate(GAME_DESCRIPTION+"/"+id);
+        }
+        else{
+          navigate(GAME + "/" + id);
+        }
+
       }
   
       if (pages[indexPage].buttons[buttonIndex].nextPageId === -1) {
@@ -62,6 +95,23 @@ const Game = () => {
         const nextPageIndex = pages.findIndex((page) => page.id === nextPageId);
         setIndexPage(nextPageIndex);
         setButtonIndex(0);
+
+        if(test === 'false'){
+          try {
+            const response =  await postSelectedButtonPlayingGame(
+              playGameId,
+              historicGameId, 
+              pages[indexPage].buttons[buttonIndex].id,
+              pages[indexPage].buttons[buttonIndex].title,
+              pages[indexPage].buttons[buttonIndex].nextPageId
+              )
+            console.log(response)
+            setHistoricGameId(response.data.historic_id)
+          } catch (error) {
+            console.log(error)
+          }
+      }
+       
       }
     };
     

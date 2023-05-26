@@ -7,7 +7,7 @@ import HeaderLogged from '../../components/Header/HeaderLogged';
 import ImagePlaceholder from '../../components/ImagePlaceholder/ImagePlaceholder';
 import { AuthContext } from '../../contexts/auth';
 import { UserContext } from '../../contexts/user';
-import { EXPLORER, LOGIN } from '../../core/app-urls';
+import { EXPLORER, LOGIN, PLAYGAME } from '../../core/app-urls';
 import Category from '../../models/Category';
 import Game from '../../models/Game';
 import { api, fetchGameById } from '../../services/api';
@@ -21,6 +21,7 @@ export const GameInfos = () => {
 
     const { id } = useParams()
 
+    const { playGame, setCurrentPlayingPage, getResumePlayedGame, setHistoricGameId, setPlayGameId} = useContext(PlayGamesContext)
     const { likeGame, unlikeGame } = useContext(UserContext)
     const { authenticated, user } = useContext(AuthContext)
     const [visitingGame, setVisitingGame] = useState<Game | null>(null)
@@ -31,7 +32,6 @@ export const GameInfos = () => {
     const [showModal, setShowModal] = useState(false);
 
 
-    const { playGame } = useContext(PlayGamesContext)
     
     const handleClick = async () => {
         if (!liked) {
@@ -61,8 +61,7 @@ export const GameInfos = () => {
      
         try {
             const response = await playGame(user!.id, Number(id!))
-            console.log("Resposta"); 
-            console.log(response)
+            console.log(response.data.actual_page_id)
             
         } catch (error) {
             console.log(error)
@@ -70,15 +69,28 @@ export const GameInfos = () => {
                 setShowModal(true);
             }
         }
-
+        
     };
-
+    
     const handleRestartGame = async () => {
-
+        setCurrentPlayingPage(0)
+        navigate(PLAYGAME + '/' + id + '?test=false');
     }
-
+    
     const handleResumeGame = async () => {
-
+        
+        try {
+            const response = await getResumePlayedGame(user!.id, Number(id!))
+            console.log(response)
+            if(response.data.is_ongoing === true){
+                setPlayGameId(response.data.play_game_id)
+                setCurrentPlayingPage(response.data.historic_last_page.page_game_id)
+                setHistoricGameId(response.data.historic_last_page.id)
+                navigate(PLAYGAME + '/' + id + '?test=false');
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
     
 
@@ -158,7 +170,7 @@ export const GameInfos = () => {
                         sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                         open={true}
                 >
-                <DialogResumeGame onClose={()=>{}} handleRestartGame={()=>{}} handleResumeGame={()=>{}}/>
+                <DialogResumeGame onClose={()=>{}} handleRestartGame={handleRestartGame} handleResumeGame={handleResumeGame}/>
                 </Backdrop>
             )}
             <GameInfosMain>
