@@ -16,7 +16,7 @@ type CardUserGameProps = {
 const CardUserGame: React.FC<CardUserGameProps> = ({ id, imageSrc, title, description, isPublished, categories }) => {
 
     return (
-        <CardUserGameWrapper >
+        <CardUserGameWrapper href={GAME + '/' + id}>
             <UserGameState isPublished={isPublished ? 'true' : 'false'}>
                 <p>{isPublished ? 'Publicado' : 'Editando'}</p>
             </UserGameState>

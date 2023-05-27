@@ -1,7 +1,5 @@
-import { CircularProgress } from '@mui/material';
 import { SetStateAction, useContext, useEffect, useState } from 'react';
 import { BsSearch } from "react-icons/bs";
-import nextIcon from '../../assets/img/next-icon.svg';
 import { CardExplorerHotShimmer } from '../../components/Cards/CardExplorerHotShimmer';
 import CardHighlightGame from '../../components/Cards/CardHighlightGame';
 import { CardHighlightGameShimmer } from '../../components/Cards/CardHighlightGameShimmer';
@@ -14,14 +12,15 @@ import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated
 import { AuthContext } from '../../contexts/auth';
 import { GameContext } from '../../contexts/game';
 import { LOGIN } from '../../core/app-urls';
-import { ExplorerMain, FiltersContainer, GameListContainer, HorizontalListWrapper, ListGamesCardContainer, PaginationContainer, SearchContainer, SearchInput, TitleListGames } from "../../styles/Explorer";
+import { ExplorerMain, FiltersContainer, GameListContainer, HighlightGameContainer, HorizontalListWrapper, ListGamesCardContainer, LoadMoreContainer, LoadMoreGames, SearchContainer, SearchInput, TitleListGames } from "../../styles/Explorer";
 
 
 const Explorer = () => {
 
   const { authenticated, user, } = useContext(AuthContext)
-  const { hotGames, highlightGame, getHotGamesForHome, getHighlightGame, pagesOfHotGames, searchGamesByTitle } = useContext(GameContext)
+  const { hotGames, highlightGame, getHotGamesForHome, getHighlightGame, searchGamesByTitle } = useContext(GameContext)
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [sliderOffset, setSliderOffset] = useState(0);
   const [search, setSearch] = useState('');
 
@@ -48,7 +47,9 @@ const Explorer = () => {
     const delayDebounceFn = setTimeout(async () => {
       // Executar ações desejadas após o atraso de 500ms
       // Por exemplo, atualizar o estado com o valor do campo de busca
+      // setIsLoadingSearch(true)
       await searchGamesByTitle(search)
+      // setIsLoadingSearch(false)
     }, 500);
 
     const updateURL = () => {
@@ -96,39 +97,34 @@ const Explorer = () => {
               onChange={handleSearchChange} />
           </SearchContainer>
         </FiltersContainer>
-        {isLoading ? (
-          <div style={{ height: '200px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF' }}>
-            <CircularProgress />
-          </div>
-        ) :
-          search.length > 0 ? (
-            <SearchGamesComponent />
-          ) : (
-            <>
-              <HorizontalListWrapper>
-                <TitleListGames>Histórias mais Curtidas</TitleListGames>
-                <GameListContainer>
-                  <ListGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
-                    {isLoading ? (
-                      <>
-                        <CardExplorerHotShimmer />
-                        <CardExplorerHotShimmer />
-                        <CardExplorerHotShimmer />
-                        <CardExplorerHotShimmer />
-                      </>
-                    ) : (hotGames.map((game, index) => (
-                      <CardMostViewGame
-                        key={index}
-                        id={game.id}
-                        title={game.title}
-                        imageSrc={game.image}
-                        description={game.description}
-                        categories={game.categories}
-                        createdByNickname={game.createdBy!.nickname}
-                      />)
-                    ))}
-                  </ListGamesCardContainer>
-                  {sliderOffset < 1 ? (
+        {search.length > 0 ? (
+          <SearchGamesComponent />
+        ) : (
+          <>
+            <HorizontalListWrapper>
+              <TitleListGames>Histórias mais Curtidas</TitleListGames>
+              <GameListContainer>
+                <ListGamesCardContainer>
+                  {isLoading ? (
+                    <>
+                      <CardExplorerHotShimmer />
+                      <CardExplorerHotShimmer />
+                      <CardExplorerHotShimmer />
+                      <CardExplorerHotShimmer />
+                    </>
+                  ) : (hotGames.map((game, index) => (
+                    <CardMostViewGame
+                      key={index}
+                      id={game.id}
+                      title={game.title}
+                      imageSrc={game.image}
+                      description={game.description}
+                      categories={game.categories}
+                      createdByNickname={game.createdBy!.nickname}
+                    />)
+                  ))}
+                </ListGamesCardContainer>
+                {/* {sliderOffset < 1 ? (
                     <></>
                   ) : (
                     <PaginationContainer direction='left'>
@@ -149,32 +145,37 @@ const Explorer = () => {
                     }}>
                       <img src={nextIcon} alt="next games" className='nextIcon' />
                     </button>
-                  </PaginationContainer>
-                </GameListContainer>
-              </HorizontalListWrapper>
-              {
-                highlightGame != null ? (
-                  <GameListContainer>
-                    <TitleListGames>Histórias em Destaque</TitleListGames>
-                    {isLoading ? (
-                      <>
-                        <CardHighlightGameShimmer />
-                      </>
-                    ) : (
-                      <CardHighlightGame
-                        key={0}
-                        title={highlightGame!.title}
-                        imageSrc={highlightGame!.image}
-                        description={highlightGame!.description}
-                        categories={highlightGame!.categories}
-                        createdByNickname={highlightGame!.createdBy!.nickname}
-                      />
-                    )}
-                  </GameListContainer>
-                ) : (<></>)
-              }
-            </>
-          )
+                  </PaginationContainer> */}
+                <LoadMoreContainer>
+                  <LoadMoreGames onClick={async () => {
+                    await getHotGamesForHome();
+                  }}>Carregar mais jogos</LoadMoreGames>
+                </LoadMoreContainer>
+              </GameListContainer>
+            </HorizontalListWrapper>
+            {
+              highlightGame != null ? (
+                <HighlightGameContainer>
+                  <TitleListGames>Histórias em Destaque</TitleListGames>
+                  {isLoading ? (
+                    <>
+                      <CardHighlightGameShimmer />
+                    </>
+                  ) : (
+                    <CardHighlightGame
+                      key={0}
+                      title={highlightGame!.title}
+                      imageSrc={highlightGame!.image}
+                      description={highlightGame!.description}
+                      categories={highlightGame!.categories}
+                      createdByNickname={highlightGame!.createdBy!.nickname}
+                    />
+                  )}
+                </HighlightGameContainer>
+              ) : (<></>)
+            }
+          </>
+        )
         }
 
       </ExplorerMain>
