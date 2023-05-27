@@ -54,7 +54,6 @@ const HomeLogged = () => {
       <HeaderLogged nickname={user!.nickname} photo={user!.photo} />
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <LoggedStyle>
-        <Title>Continuar Jogando</Title>
         <MyGameListContainer>
           {isLoading ? (
             <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
@@ -64,19 +63,22 @@ const HomeLogged = () => {
               <CardMyGamesHomeShimmer />
             </ListMyGamesCardContainer>
           ) : userPlayingGames.length > 0 ? (
-            <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
-              {userPlayingGames.map((playGame, index) => (
-                <CardContinuePlayingGame
-                  key={index}
-                  idPlayingGame={playGame.play_game_id}
-                  initiatedPlay={playGame.game_date_play}
-                  idGame={playGame.game.id}
-                  title={playGame.game.title}
-                  image={playGame.game.image}
-                  description={playGame.game.description}
-                />
-              ))}
-            </ListMyGamesCardContainer>
+            <>
+              <Title>Continuar Jogando</Title>
+              <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
+                {userPlayingGames.map((playGame, index) => (
+                  <CardContinuePlayingGame
+                    key={index}
+                    idPlayingGame={playGame.play_game_id}
+                    initiatedPlay={playGame.game_date_play}
+                    idGame={playGame.game.id}
+                    title={playGame.game.title}
+                    image={playGame.game.image}
+                    description={playGame.game.description}
+                  />
+                ))}
+              </ListMyGamesCardContainer>
+            </>
           ) : (<></>)}
           <Title>Minhas histórias</Title>
           <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >

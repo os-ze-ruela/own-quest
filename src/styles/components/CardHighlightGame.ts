@@ -8,20 +8,21 @@ export const CardHighlightGameWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     border-radius: 15px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    width: 95%;
+    width: 100%;
     min-width: 250px;
     transition: all 0.2s ease-in-out;
-    height: 420px;
+    height: 550px;
     background-color: #202331;
-    margin-left: 2rem;
 
     -moz-box-sizing: border-box; 
     -webkit-box-sizing: border-box; 
     box-sizing: border-box;
 
-    p {
+    .description {
+        width: 80%;
         max-lines: 2;
     }
 
@@ -116,9 +117,9 @@ export const PlayButton = styled.a`
   background-color: #6C5B7B;
   color: #ffffff;
   border-radius: 4px;
-  padding: 8px 16px;
+  padding: 10px 20px;
   border: none;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   transition: all 0.2s ease-in-out;
   text-decoration: none;

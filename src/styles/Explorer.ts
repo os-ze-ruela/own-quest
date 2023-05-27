@@ -48,7 +48,7 @@ export const SearchContainer = styled.div`
 export const HorizontalListWrapper = styled.div`
   background-color: #282C3E;
   overflow: hidden;
-  width: 100%;
+  width: 98%;
   margin-top: 1rem;
   -moz-box-sizing: border-box; 
   -webkit-box-sizing: border-box; 
@@ -76,15 +76,15 @@ export const PaginationContainer = styled.div.attrs((props: { direction: string,
     height: 100%;
     width: 80px;
     position: absolute;
-    /* left: ${(props) => (props.direction === 'left' ? '0px' : 'none' )}; */
+    /* left: ${(props) => (props.direction === 'left' ? '0px' : 'none')}; */
     display: flex;
     justify-content: center;
     align-items: center;
     size: 100px;
     transition: all 0.2s ease-in-out;
     opacity: 0;
-    right: ${(props) => (props.direction === 'right' ? '0px' : '94vw' )};
-    border-radius: ${(props) => (props.direction === 'left' ? '0px 20px 20px 0px' : '20px 0px 0px 20px' )};  
+    right: ${(props) => (props.direction === 'right' ? '0px' : '94vw')};
+    border-radius: ${(props) => (props.direction === 'left' ? '0px 20px 20px 0px' : '20px 0px 0px 20px')};  
 
     &:hover {
         background-color: rgba(0,0,0,0.5);
@@ -144,6 +144,44 @@ export const GameListContainer = styled.div`
     }
 `
 
+export const LoadMoreContainer = styled.div`
+  width: 98%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+`
+
+export const LoadMoreGames = styled.button`
+  text-decoration: none;
+  align-self: flex-end;
+  color: #FFFFFF;
+  font-family: 'FiraCode-Bold';
+  font-size: 18px;
+  background-color: #0B132B;
+  height: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+`
+
+export const HighlightGameContainer = styled.div`
+    position: relative;
+    width: 95%;
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box;
+    margin-bottom: 3rem;
+
+    button {
+      background-color: transparent;
+      text-decoration: none;
+      border-style: none;
+    }
+
+    @media screen and (max-width: 768px) {
+      overflow: scroll;
+    }
+`
+
 export const TitleListGames = styled.div`
     font-weight: bold;
     color: white;
@@ -160,26 +198,28 @@ export const TitleListGames = styled.div`
     }
 `
 
-export const ListGamesCardContainer = styled.div.attrs((props: { translateX: string, }) => props)`
-    position: relative;
-    display: flex;
-    justify-content: space-between;
+export const ListGamesCardContainer = styled.div`
+     position: relative;
+    /* display: flex; */
+    /* flex-wrap: wrap; */
     width: 100%;
-    gap: 2rem;
-    padding: 0px 2rem;
+    gap: 1rem;
+    padding: 0px 1rem;
+    transition: all 1s ease-in-out;
 
+    display: grid;
     -moz-box-sizing: border-box; 
     -webkit-box-sizing: border-box; 
     box-sizing: border-box;
+
+    grid-template-columns: repeat(4, 1fr);
     
-    transition: all 1s ease-in-out;
-    transform: translateX(${(props) => (props.translateX)});
-
-
-    &:hover {
-        ${PaginationContainer} {
-            opacity: 1;
-        }
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(1, 1fr);
     }
 `;
 

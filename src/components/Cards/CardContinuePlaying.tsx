@@ -35,7 +35,7 @@ const CardContinuePlayingGame: React.FC<CardContinuePlayingProps> = ({ idPlaying
                     <ImagePlaceholder />
                 }
             </GamePlayingImageSpace>
-            <CardPlayingGameContentWrapper title={description}>
+            <CardPlayingGameContentWrapper>
                 <CardPlayGameTitle>{title}</CardPlayGameTitle>
                 <p className='description'>{`Iniciado em: ${formatDate(initiatedPlay.toString())}`}</p>
                 <ButtonPlayingWrapper className='button-wrapper'>
