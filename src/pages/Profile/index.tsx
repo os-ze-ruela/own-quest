@@ -7,31 +7,40 @@ import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated
 import { AuthContext } from '../../contexts/auth';
 import { UserImagePlaceholder } from '../../styles/Header';
 import {
-    BtnCancel, BtnOpt, EditButton, Email, LoginInfo, LoginTitle,
-    Name, NameEmail, ProfileIdent, ProfileInfo, ProfileOpt, ProfileStyle, Select, Separator, Text, Text2, Titles, TitlesInfo, UserImage, WrapTextButton, YourProfileTitle
+    BtnCancel, BtnOpt, ButtonHist, CardGame, CardInfos, CardStatusInfos, CardSubInfos, CardTitle, EditButton, Email, HistoricTitle, LoginInfo, LoginTitle,
+    Name, NameEmail, ProfileIdent, ProfileInfo, ProfileOpt, ProfileStyle, Select, Separator, Text, Text2, Titles, TitlesInfo, UserImage, WrapCardGame, WrapTextButton, YourProfileTitle
 } from "../../styles/Profile";
+import { AiOutlineHistory } from 'react-icons/ai';
+
 
 export default function Profile() {
+    const { user, logout } = useContext(AuthContext);
+    const [isSelected1, setIsSelected1] = useState(true);
+    const [isSelected2, setIsSelected2] = useState(false);
+    const [isSelected3, setIsSelected3] = useState(false);
+    const [activeButton, setActiveButton] = useState<number | null>(1);
 
-    const { user, logout } = useContext(AuthContext)
-
-    const [isSelected, setIsSelected] = useState(false);
-
-    const handleClick = () => {
-        if (!isSelected) {
-            setIsSelected(!isSelected);
+    const handleButtonClick = (buttonIndex: number) => {        
+        setActiveButton(buttonIndex);
+        if(buttonIndex === 1){
+            setIsSelected1(true);
+            setIsSelected2(false);
+            setIsSelected3(false);
+        }else if(buttonIndex === 2){
+            setIsSelected1(false);
+            setIsSelected2(true);
+            setIsSelected3(false);
+        }else{
+            setIsSelected1(false);
+            setIsSelected2(false);
+            setIsSelected3(true);
         }
-    }
+    };
 
     const handleLogoutClick = () => {
-        logout()
+        logout();
     }
 
-    const handleClick2 = () => {
-        if (isSelected) {
-            setIsSelected(!isSelected);
-        }
-    }
 
     return (
         <>
@@ -51,11 +60,18 @@ export default function Profile() {
                             <Email>{user!.email}</Email>
                         </NameEmail>
                     </ProfileIdent>
-                    <BtnOpt onClick={handleClick2}><BiUserCircle />Sua conta</BtnOpt>
-                    <BtnOpt onClick={handleClick}><MdOutlineLockPerson />Login e Segurança</BtnOpt>
+                    <BtnOpt onClick={() => handleButtonClick(1)} className={activeButton === 1 ? 'active' : ''}>
+                    <BiUserCircle />Sua conta
+                    </BtnOpt>
+                    <BtnOpt onClick={() => handleButtonClick(2)} className={activeButton === 2 ? 'active' : ''}>
+                    <MdOutlineLockPerson />Login e Segurança
+                    </BtnOpt>
+                    <BtnOpt onClick={() => handleButtonClick(3)} className={activeButton === 3 ? 'active' : ''}>
+                    <AiOutlineHistory />Histórico de jogos
+                    </BtnOpt>
                     <BtnOpt onClick={handleLogoutClick}><FiLogOut />Sair</BtnOpt>
                 </ProfileOpt>
-                {!isSelected ?
+                {isSelected1 && (
                     <ProfileInfo>
                         {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
                         <YourProfileTitle>Sua conta</YourProfileTitle>
@@ -73,8 +89,7 @@ export default function Profile() {
                         <WrapTextButton>
                             <Text>
                                 <Titles>Endereço de email</Titles>
-                                <TitlesInfo>{user!.email}</TitlesInfo>
-                            </Text>
+                                </Text>
                             <EditButton>Editar</EditButton>
                         </WrapTextButton>
                         <Separator />
@@ -93,8 +108,8 @@ export default function Profile() {
                             <option>Selecione uma opção</option>
                         </Select>
                     </ProfileInfo>
-
-                    :
+                )}
+                {isSelected2 && (
                     <LoginInfo>
                         <LoginTitle>Login e Segurança</LoginTitle>
                         <Separator />
@@ -109,17 +124,55 @@ export default function Profile() {
                         <Separator />
 
                         <Text2>
-                            <Titles>Escluir sua conta</Titles>
+                            <Titles>Excluir sua conta</Titles>
                             <TitlesInfo>Ao excluir sua conta, você não poderá mais acessar suas histórias criadas,
                                 nem mesmo sua conta.</TitlesInfo>
                         </Text2>
-                        <BtnCancel>Exlcuir conta</BtnCancel>
+                        <BtnCancel>Excluir conta</BtnCancel>
                     </LoginInfo>
-
-
-                }
+                )}
+                {isSelected3 && (
+                    <WrapCardGame>
+                        <HistoricTitle>Histórico de Jogos</HistoricTitle>
+                        <CardGame>
+                            <CardInfos>
+                                <CardTitle>Didi sendo preso</CardTitle>
+                                <CardSubInfos>Jogado em: 28/05/2023</CardSubInfos>
+                                <CardSubInfos>Autor: @palmyro</CardSubInfos>
+                                <CardStatusInfos status="Em andamento">Em andamento</CardStatusInfos>
+                            </CardInfos>
+                            <ButtonHist>Ver Histórico</ButtonHist>
+                        </CardGame>
+                        <CardGame>
+                            <CardInfos>
+                                <CardTitle>Homem De Ferro x Jojo Todynho</CardTitle>
+                                <CardSubInfos>Jogado em: 28/05/2023</CardSubInfos>
+                                <CardSubInfos>Autor: @palmyro</CardSubInfos>
+                                <CardStatusInfos status="Interrompido">Interrompido por nova versão</CardStatusInfos>
+                            </CardInfos>
+                            <ButtonHist>Ver Histórico</ButtonHist>
+                        </CardGame>
+                        <CardGame>
+                            <CardInfos>
+                                <CardTitle>Ana Quem? Ah, Escaiualquer</CardTitle>
+                                <CardSubInfos>Jogado em: 28/05/2023</CardSubInfos>
+                                <CardSubInfos>Autor: @palmyro</CardSubInfos>
+                                <CardStatusInfos status="Em andamento">Em andamento</CardStatusInfos>
+                            </CardInfos>
+                            <ButtonHist>Ver Histórico</ButtonHist>
+                        </CardGame>
+                        <CardGame>
+                            <CardInfos>
+                                <CardTitle>Louro José contra-ataca</CardTitle>
+                                <CardSubInfos>Jogado em: 28/05/2023</CardSubInfos>
+                                <CardSubInfos>Autor: @palmyro</CardSubInfos>
+                                <CardStatusInfos status="Finalizado">Finalizado</CardStatusInfos>
+                            </CardInfos>
+                            <ButtonHist>Ver Histórico</ButtonHist>
+                        </CardGame>
+                    </WrapCardGame>
+                )}
             </ProfileStyle>
         </>
-
-    )
+    );
 }
