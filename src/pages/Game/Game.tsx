@@ -15,18 +15,39 @@ const Game = () => {
     const { getPagesFromGameID, findPageIndex } = useContext(CreationContext)
     const {currentPlayingPage, setCurrentPlayingPage, postSelectedButtonPlayingGame, historicGameId, setHistoricGameId, playGameId, finishPlayingGame} = useContext(PlayGamesContext)
     console.log("Current Playing Page = ", currentPlayingPage)
-    const [ buttonIndex, setButtonIndex ] = useState(0)
+    const [ buttonIndex, setButtonIndex ] = useState(-1)
     const { pages, setPages } = useContext(CreationContext)
     const { id } = useParams()
     const [ indexPage, setIndexPage ] = useState(0)
     const navigate = useNavigate();
     const [alert, setAlert] = useState(false)
+    const [isSelect, setIsSelect] = useState(false)
     
 
     //Para diferenciar o teste do jogar
     const test = searchParams.get("test");
 
+    const buttonContainerRef = useRef<HTMLDivElement | null>(null);
 
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          buttonContainerRef.current &&
+          !buttonContainerRef.current.contains(event.target as Node)
+        ) {
+          console.log('clicou fora')
+          setButtonIndex(-1);
+          setIsSelect(false);
+        }
+      };
+    
+      document.addEventListener('click', handleClickOutside);
+    
+      return () => {
+        document.removeEventListener('click', handleClickOutside);
+      };
+    }, []);
+    
     useEffect( () =>  {
         getPagesFromGameID(id!)
       }, []) 
@@ -54,10 +75,8 @@ const Game = () => {
       };
 
       const handleButton = (index: number) => {
-        if (index === buttonIndex) {
-          return; // Impede a desseleção do botão
-        }
         setButtonIndex(index);
+        setIsSelect(true)
       };
       
     const handleCloseAlert = () => {
@@ -67,10 +86,7 @@ const Game = () => {
 
     //BUG TO FIX - quando um botão é deselecionado o index ainda é mantidado e caso o botão Continuar seja pressionado será redirecionado
     const handleClickButton = async () => {
-      if (buttonIndex === -1) {
-        return;
-      }
-  
+
       if (pages[indexPage].isLastPage === true) {
 
         if(test === 'false'){
@@ -154,14 +170,14 @@ const Game = () => {
                   autoComplete="off"
                   value={pages[indexPage].description}
                 />
-                <ButtonContainer>
+                <ButtonContainer ref={buttonContainerRef}>
                 {pages[indexPage].buttons.map((button, index) => (
                     <ButtonGame
                     readOnly
                     key={index}
                     value={button.title}
                     textLength={button.title.length}
-                    isSelected={index === buttonIndex}
+                    isSelected={isSelect}
                     background={button.color}
                     onClick={() => handleButton(index)}
                     />
@@ -169,9 +185,9 @@ const Game = () => {
                 </ButtonContainer>
                 <NextButton
                     readOnly
+                    isSelect={pages[indexPage].isLastPage ? true : isSelect}
                     value={pages[indexPage].isLastPage ? "Finalizar" : "Continuar"}
-                    onClick={buttonIndex !== -1 ? handleClickButton : undefined}
-                    // onClick={handleClickButton}
+                    onClick={handleClickButton}
                 />
               </Page>
               )}

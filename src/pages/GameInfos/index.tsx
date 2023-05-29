@@ -15,6 +15,10 @@ import { BackButtonWrapper, CategoryGameInfoLabel, CategoryGameInfoWrapper, Cate
 import { PlayGamesContext } from '../../contexts/play-games';
 import AppError from '../../core/app-error';
 import DialogResumeGame from '../../components/Dialog/DialogResumeGame';
+import { GameListContainer, HorizontalListWrapper, ListGamesCardContainer, TitleListGames } from '../../styles/Explorer';
+import { CardExplorerHotShimmer } from '../../components/Cards/CardExplorerHotShimmer';
+import CardMostViewGame from '../../components/Cards/CardMostViewGame';
+import { GameContext } from '../../contexts/game';
 
 export const GameInfos = () => {
 
@@ -27,7 +31,10 @@ export const GameInfos = () => {
     const [visitingGame, setVisitingGame] = useState<Game | null>(null)
     const [loading, setLoading] = useState(true)
     const [liked, setLiked] = useState(false);
+    const [categoryID, setCategoryID] = useState(-1);
     const navigate = useNavigate()
+    const { fetchGamesByCategory, gamesByCategory } = useContext(GameContext)
+
 
     const [showModal, setShowModal] = useState(false);
 
@@ -61,7 +68,6 @@ export const GameInfos = () => {
      
         try {
             const response = await playGame(user!.id, Number(id!))
-            console.log(response.data.actual_page_id)
             setCurrentPlayingPage(0)
             navigate(PLAYGAME + '/' + id + '?test=false');
             
@@ -107,10 +113,11 @@ export const GameInfos = () => {
             const response = await fetchGameById(id);
             const idGame = Number(id);
             const { title, description, image, isEditing, isPublished, isDeleted, isFavorited, createdAt, createdBy, favorites, categories } = response.data.game;
-
             const categorieGame = categories.map((category: { category: any }) => {
                 return new Category({ title: category.category.title, id: category.category.id, color: category.category.color, plus18: category.category.plus18 });
             });
+            console.log("Categoria principal = ", categorieGame[0].id)
+            setCategoryID(categorieGame[0].id)
 
             setVisitingGame(new Game({
                 id: idGame,
@@ -126,6 +133,8 @@ export const GameInfos = () => {
                 isDeleted: isDeleted,
                 createdBy: createdBy
             }))
+          
+            await fetchGamesByCategory(categorieGame[0].id);
 
             setLiked(isFavorited)
 
@@ -161,6 +170,10 @@ export const GameInfos = () => {
         }
       }, [visitingGame]);
 
+
+
+
+    
     return (
         <>
             {authenticated ?
@@ -250,6 +263,31 @@ export const GameInfos = () => {
                             <PlayButton onClick={handlePlayButton}>Jogar</PlayButton>
                         </GameActionsWrapper>)}
                 </GameInfosWrapper>
+                {/* <HorizontalListWrapper>
+                <TitleListGames>Histórias semelhantes para você jogar</TitleListGames>
+                <GameListContainer>
+                  <ListGamesCardContainer>
+                    {loading ? (
+                      <>
+                        <CardExplorerHotShimmer />
+                        <CardExplorerHotShimmer />
+                        <CardExplorerHotShimmer />
+                        <CardExplorerHotShimmer />
+                      </>
+                    ) : (gamesByCategory.map((game, index) => (
+                      <CardMostViewGame
+                        key={index}
+                        id={game.id}
+                        title={game.title}
+                        imageSrc={game.image}
+                        description={game.description}
+                        categories={game.categories}
+                        createdByNickname={game.createdBy!.nickname}
+                      />)
+                    ))}
+                  </ListGamesCardContainer>
+                </GameListContainer>
+              </HorizontalListWrapper> */}
             </GameInfosMain>
         </>
     );

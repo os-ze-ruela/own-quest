@@ -31,6 +31,10 @@ export const fetchHighlightGame = async () => {
     return await api.get(`/game/highlight`)
 }
 
+export const getGamesByCategory = async (id: number) => {
+    return await api.get(`/game/find/category/${id}`)
+}
+
 export const findGamesByTitle = async (title: string) => {
     return await api.get(`/game/find/${title}`)
 }

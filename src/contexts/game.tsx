@@ -4,7 +4,7 @@ import AppError from "../core/app-error";
 import Category from "../models/Category";
 import Game from "../models/Game";
 
-import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchHighlightGame, findGamesByTitle, getHotGames, getUserGamesByToken, patchGame, postFullGame, postGame, postGameCategoryByID } from "../services/api";
+import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchHighlightGame, findGamesByTitle, getGamesByCategory, getHotGames, getUserGamesByToken, patchGame, postFullGame, postGame, postGameCategoryByID } from "../services/api";
 
 
 type GameContextType = {
@@ -29,7 +29,8 @@ type GameContextType = {
     addGameCategoryByID: (id: number, categories: Number[]) => Promise<void>,
     deleteGameCategory: (idGame: number, idCategory: number) => Promise<void>
     loading: boolean,
-
+    fetchGamesByCategory: (id: number) => Promise<void>,
+    gamesByCategory: Game[],
 }
 
 export const GameContext = createContext<GameContextType>({} as GameContextType)
@@ -39,6 +40,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     // const navigate = useNavigate()
     const [userGames, setUserGames] = useState<Game[]>([])
     const [hotGames, setHotGames] = useState<Game[]>([])
+    const [gamesByCategory, setGamesByCategory] = useState<Game[]>([])
     const [searchGames, setSearchGames] = useState<Game[]>([])
     const [editingGame, setEditingGame] = useState<Game | null>(null)
     const [highlightGame, setHighlightGame] = useState<Game | null>(null)
@@ -324,6 +326,49 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     };
 
 
+    async function fetchGamesByCategory(id: number): Promise<void> {
+        try {
+            setLoading(true)
+            console.log('buscando categoria com id = ', id)
+            const response = await getGamesByCategory(id);
+            const gamesData: any = response.data;
+            console.log(gamesData)
+            const gamesTemp: any = gamesData.map((gameData: any) => {
+                const categories = gameData.categories.map((categoryData: any) => {
+                    return {
+                        id: categoryData.category.id,
+                        title: categoryData.category.title,
+                        color: categoryData.category.color,
+                        plus18: categoryData.category.plus18,
+                    };
+                });
+
+                return {
+                    id: gameData.id,
+                    title: gameData.title,
+                    description: gameData.description,
+                    image: gameData.image,
+                    favorites: gameData.favorites,
+                    isEditing: gameData.isEditing,
+                    isPublished: gameData.isPublished,
+                    isDeleted: gameData.isDeleted,
+                    createdAt: gameData.createdAt,
+                    createdBy: gameData.createdBy,
+                    categories: categories,
+                };
+            });
+
+            setGamesByCategory(gamesTemp);
+            setLoading(false)
+        } catch (e: any) {
+            setGamesByCategory([]);
+            setLoading(false)
+            const error = await e as AxiosError;
+            console.error(error);
+        }
+    };
+
+
 
 
     return (
@@ -347,7 +392,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             highlightGame,
             addGameCategoryByID,
             deleteGameCategory,
-            loading
+            loading,
+            fetchGamesByCategory,
+            gamesByCategory
 
         }}>
             {children}

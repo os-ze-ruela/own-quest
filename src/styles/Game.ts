@@ -150,7 +150,7 @@ export const ButtonGame = styled.input.attrs((props: {isSelected: boolean, backg
 
 `;
 
-export const NextButton = styled.input`
+export const NextButton = styled.input<{ isSelect: boolean }>`
   margin-right: 10px;
   color: white; 
   background-color: #282C3E;
@@ -160,9 +160,14 @@ export const NextButton = styled.input`
   border: 0;
   outline: none;
   border-radius: 5px;
-  cursor: pointer;
+  cursor: ${(props) => (props.isSelect ? 'pointer' : 'default')};
   box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3);
+  opacity: ${(props) => (props.isSelect ? '1' : '0.3')};
 
+  &:disabled {
+    cursor: default;
+    opacity: 0.3;
+  }
 `;
 
 
