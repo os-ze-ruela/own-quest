@@ -62,6 +62,8 @@ export const GameInfos = () => {
         try {
             const response = await playGame(user!.id, Number(id!))
             console.log(response.data.actual_page_id)
+            setCurrentPlayingPage(0)
+            navigate(PLAYGAME + '/' + id + '?test=false');
             
         } catch (error) {
             console.log(error)
