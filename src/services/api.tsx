@@ -227,7 +227,6 @@ export const sendRecoverEmail = async () => {
 }
 
 
-
 // ------ PLAY GAMES  ----
 
 
@@ -256,3 +255,8 @@ export const postSelectedButton = async (playGameId: number, historicGameId: num
 export const postFinishPlayingGame = async (gameId: number) => {
     return await api.post(`/play-games/finish-user-play/${gameId}`)
 }
+
+export const getUserPlayGames = async (userId: string) => {
+    return await api.get(`/play-games/user/${userId}`)
+}
+

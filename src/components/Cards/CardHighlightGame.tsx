@@ -25,7 +25,7 @@ const CardHighlightGame: React.FC<CardHighlightGameProps> = ({ imageSrc, title, 
             </CardHighlightGameImageSpace>
             <CardHighlightGameContentWrapper>
                 <CardHighlightGameTitle id={title} >{title}</CardHighlightGameTitle>
-                <p className='description'  title={description}>{description}</p>
+                <p className='description'>{description}</p>
                 <CategoryLabelWrapper className='category-label-wrapper'>
                     {categories.map((category) => (
                         <CategoryLabel key={category.id} color={category.color}>

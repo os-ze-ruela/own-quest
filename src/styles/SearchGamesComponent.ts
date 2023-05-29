@@ -153,6 +153,7 @@ export const TitleWrapper = styled.div`
 export const NoSearchedGames = styled.div`
     width: 100%;
     display: flex;
+    flex-direction: column;
     margin-top: 1rem;
     align-items: center;
     justify-content: center;

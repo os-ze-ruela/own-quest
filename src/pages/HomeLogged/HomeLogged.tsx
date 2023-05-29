@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import nextIcon from '../../assets/img/next-icon.svg';
 import Card from '../../components/Cards/Card';
+import CardContinuePlayingGame from '../../components/Cards/CardContinuePlaying';
 import { CardHomeShimmer } from '../../components/Cards/CardHomeShimmer';
 import { CardMyGamesHomeShimmer } from '../../components/Cards/CardMyGamesHomeShimmer';
 import CardUserGame from '../../components/Cards/CardUserGame';
@@ -13,16 +13,16 @@ import { AuthContext } from '../../contexts/auth';
 import { GameContext } from '../../contexts/game';
 import AppError from '../../core/app-error';
 import { GAME } from '../../core/app-urls';
-import { ListMyGamesCardContainer, LoggedStyle, MyGameListContainer, MyGamesPaginationContainer, PageWrapper, Title } from '../../styles/HomeLogged';
+import { ListMyGamesCardContainer, LoggedStyle, MyGameListContainer, PageWrapper, Title } from '../../styles/HomeLogged';
 
 const HomeLogged = () => {
   const { user, refresh, logout } = useContext(AuthContext)
-  const { userGames, hotGames, getUserGames, getHotGamesForHome } = useContext(GameContext)
+  const { userGames, hotGames, userPlayingGames, getUserPlayingGames, getUserGames, getHotGamesForHome } = useContext(GameContext)
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchGames = async () => {
     try {
-      await Promise.all([getUserGames(), getHotGamesForHome()]);
+      await Promise.all([getUserGames(), getHotGamesForHome(), getUserPlayingGames()]);
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
@@ -54,8 +54,33 @@ const HomeLogged = () => {
       <HeaderLogged nickname={user!.nickname} photo={user!.photo} />
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <LoggedStyle>
-        <Title>Minhas histórias</Title>
         <MyGameListContainer>
+          {isLoading ? (
+            <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
+              <CardMyGamesHomeShimmer />
+              <CardMyGamesHomeShimmer />
+              <CardMyGamesHomeShimmer />
+              <CardMyGamesHomeShimmer />
+            </ListMyGamesCardContainer>
+          ) : userPlayingGames.length > 0 ? (
+            <>
+              <Title>Continuar Jogando</Title>
+              <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
+                {userPlayingGames.map((playGame, index) => (
+                  <CardContinuePlayingGame
+                    key={index}
+                    idPlayingGame={playGame.play_game_id}
+                    initiatedPlay={playGame.game_date_play}
+                    idGame={playGame.game.id}
+                    title={playGame.game.title}
+                    image={playGame.game.image}
+                    description={playGame.game.description}
+                  />
+                ))}
+              </ListMyGamesCardContainer>
+            </>
+          ) : (<></>)}
+          <Title>Minhas histórias</Title>
           <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
             {isLoading ? (
               <>
@@ -90,7 +115,7 @@ const HomeLogged = () => {
               </>
             )}
           </ListMyGamesCardContainer>
-          {sliderOffset < 1 ? (
+          {/* {sliderOffset < 1 ? (
             <></>
           ) : (
             <MyGamesPaginationContainer direction='left'>
@@ -107,7 +132,7 @@ const HomeLogged = () => {
             }}>
               <img src={nextIcon} alt="next games" className='nextIcon' />
             </button>
-          </MyGamesPaginationContainer>
+          </MyGamesPaginationContainer> */}
         </MyGameListContainer>
         <Title>Histórias mais bem avaliadas</Title>
         <PageWrapper>
@@ -119,7 +144,7 @@ const HomeLogged = () => {
               <CardHomeShimmer />
             </>
           ) :
-          hotGames.map((game, index) => (
+            hotGames.map((game, index) => (
               <Card
                 key={index}
                 id={game.id}

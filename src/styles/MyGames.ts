@@ -184,6 +184,10 @@ export const TitleWrapper = styled.div`
     justify-content: space-between;
     gap: 1rem;
     align-items: center;
+
+    @media screen and (max-width: 1024px) {
+      width: 100%;
+    }
 `
 
 export const RandomDescriptionButton = styled.button`
@@ -222,4 +226,20 @@ export const RandomDescriptionButton = styled.button`
         background: #75CD73D6;
         cursor: pointer;
     }
+
+     @media screen and (max-width: 1024px) {
+      padding: 0px 10px;
+      width: 50%;
+      height: 45px;
+      margin-right: 0px;
+      font-size: 10px;
+      justify-content: space-between;
+      text-align: start;
+      gap: 0px;
+
+      img {
+        height: 20px;
+      }
+    }
+
 `

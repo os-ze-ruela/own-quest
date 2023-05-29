@@ -21,15 +21,15 @@ export const MyGamesPaginationContainer = styled.div.attrs((props: { direction: 
     height: 100%;
     width: 80px;
     position: absolute;
-    /* left: ${(props) => (props.direction === 'left' ? '0px' : 'none' )}; */
+    /* left: ${(props) => (props.direction === 'left' ? '0px' : 'none')}; */
     display: flex;
     justify-content: center;
     align-items: center;
     size: 100px;
     transition: all 0.2s ease-in-out;
     opacity: 0;
-    right: ${(props) => (props.direction === 'right' ? '0px' : '94vw' )};
-    border-radius: ${(props) => (props.direction === 'left' ? '0px 20px 20px 0px' : '20px 0px 0px 20px' )};  
+    right: ${(props) => (props.direction === 'right' ? '0px' : '94vw')};
+    border-radius: ${(props) => (props.direction === 'left' ? '0px 20px 20px 0px' : '20px 0px 0px 20px')};  
 
     &:hover {
         background-color: rgba(0,0,0,0.5);
@@ -81,23 +81,44 @@ export const MyGameListContainer = styled.div`
     } 
 `
 
-export const ListMyGamesCardContainer = styled.div.attrs((props: { translateX: string, }) => props)`
-    position: relative;
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-    gap: 2rem;
-    padding: 0px 1rem;
-    transition: all 1s ease-in-out;
-    transform: translateX(${(props) => (props.translateX)});
+export const ListMyGamesCardContainer = styled.div.attrs((props: { translateX: string }) => props)`
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  overflow: scroll;
+  width: 100%;
+  gap: 2rem;
+  padding: 12px 1rem;
+  transition: all 1s ease-in-out;
+  transform: translateX(${props => props.translateX});
+
+  /* Custom Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 4px; /* Width of the entire scrollbar */
+    background: transparent; /* Transparent background */
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent; /* Transparent track */
+    width: 4px; /* Width of the entire scrollbar */
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background-color: #568EA3; /* Color of the scroll thumb */
+    width: 4px; /* Width of the entire scrollbar */
+    border-radius: 10px; /* Rounded corners */
+  }
 `;
 
-export const Title = styled.div`
+
+export const Title = styled.h1`
     font-weight: bold;
     color: white;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5em;
+    padding-top: 12px;
     font-size: 2.0rem;
+    margin: 0px;
     margin-left: 0.5em;
     font-family: FiraCode-Bold;
     font-weight: 700;
@@ -342,7 +363,7 @@ export const UserGameState = styled.span.attrs((props: { isPublished: string, })
   opacity: 0;
 `;
 
-export const CardUserGameWrapper = styled.div`
+export const CardUserGameWrapper = styled.a`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -354,7 +375,8 @@ export const CardUserGameWrapper = styled.div`
   width: 25%;
   min-width: 300px;
   transition: all 0.2s ease-in-out;
-  height: 380px;
+  height: 450px;
+  text-decoration: none;
 
   &:hover {
     transform: translateY(-4px);
