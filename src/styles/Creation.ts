@@ -302,7 +302,7 @@ export const MiniPage = styled.button.attrs((props: {isLastPage: boolean, isSele
 
 export const PopupContainer = styled.div.attrs((props: {top: string, left: string}) => props)`
   display: flex;
-  
+  z-index: 50;
   flex-direction: column;
   gap: 2rem;
   position: fixed;

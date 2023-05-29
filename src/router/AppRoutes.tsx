@@ -15,6 +15,7 @@ import Validated from '../pages/Validated';
 import { AuthContext, AuthProvider } from '../contexts/auth';
 import { CategoryProvider } from '../contexts/category';
 import { CreationProvider } from '../contexts/creation';
+import { PlayGamesProvider } from '../contexts/play-games';
 import { GameProvider } from '../contexts/game';
 import { OpenAIProvider } from '../contexts/openai';
 import { UserProvider } from '../contexts/user';
@@ -58,35 +59,37 @@ function AppRoutes() {
     return (
         <Router>
             <GameProvider>
-                <AuthProvider>
-                    <CreationProvider>
-                        <CategoryProvider>
-                            <OpenAIProvider>
-                                <UserProvider>
-                                    <Routes>
-                                        <Route path={LANDING_PAGE} element={<Home />} > </Route>
-                                        <Route path={LOGIN} element={<NotLogged><Login /></NotLogged>} > </Route>
-                                        <Route path={REGISTER} element={<NotLogged><Register /></NotLogged>} > </Route>
-                                        <Route path={RECOVER_PASSWORD} element={<Recover />} > </Route>
-                                        <Route path={NEW_PASSWORD} element={<NewPword />} > </Route>
-                                        <Route path={EMAIL_NOT_VALIDATED} element={<NotValidated />} > </Route>
-                                        <Route path={EMAIL_VALIDATED} element={<Validated />} > </Route>
-                                        <Route path={HOME} element={<Private><HomeLogged /></Private>} > </Route>
-                                        <Route path={GAME + '/:id'} element={<Private><Creation /></Private>} > </Route>
-                                        <Route path={PLAYGAME + '/:id'} element={<Private><Game /></Private>} > </Route>
-                                        <Route path={PROFILE} element={<Private><Profile /></Private>} > </Route>
-                                        <Route path={MYGAMES} element={<Private><MyGames/></Private>} > </Route>
-                                        <Route path={EXPLORER} element={<Explorer />}></Route>
-                                        <Route path={GAME_DESCRIPTION + '/:id'} element={<GameInfos />} > </Route>
-                                        <Route path={USER_DESCRIPTION + '/:nickname'} element={<Private><UserInfos /></Private>}></Route>
-                                        <Route path={TEST} element={<VisualizationTest />} > </Route>
-                                        <Route path={GAME + '/:id' + SETTINGS} element={<Private><CreationSettings /></Private>} > </Route>
-                                    </Routes>
-                                </UserProvider>
-                            </OpenAIProvider>
-                        </CategoryProvider>
-                    </CreationProvider>
-                </AuthProvider>
+                <PlayGamesProvider>
+                    <AuthProvider>
+                        <CreationProvider>
+                            <CategoryProvider>
+                                <OpenAIProvider>
+                                    <UserProvider>
+                                        <Routes>
+                                            <Route path={LANDING_PAGE} element={<Home />} > </Route>
+                                            <Route path={LOGIN} element={<NotLogged><Login /></NotLogged>} > </Route>
+                                            <Route path={REGISTER} element={<NotLogged><Register /></NotLogged>} > </Route>
+                                            <Route path={RECOVER_PASSWORD} element={<Recover />} > </Route>
+                                            <Route path={NEW_PASSWORD} element={<NewPword />} > </Route>
+                                            <Route path={EMAIL_NOT_VALIDATED} element={<NotValidated />} > </Route>
+                                            <Route path={EMAIL_VALIDATED} element={<Validated />} > </Route>
+                                            <Route path={HOME} element={<Private><HomeLogged /></Private>} > </Route>
+                                            <Route path={GAME + '/:id'} element={<Private><Creation /></Private>} > </Route>
+                                            <Route path={PLAYGAME + '/:id'} element={<Private><Game /></Private>} > </Route>
+                                            <Route path={PROFILE} element={<Private><Profile /></Private>} > </Route>
+                                            <Route path={MYGAMES} element={<Private><MyGames/></Private>} > </Route>
+                                            <Route path={EXPLORER} element={<Explorer />}></Route>
+                                            <Route path={GAME_DESCRIPTION + '/:id'} element={<GameInfos />} > </Route>
+                                            <Route path={USER_DESCRIPTION + '/:nickname'} element={<Private><UserInfos /></Private>}></Route>
+                                            <Route path={TEST} element={<VisualizationTest />} > </Route>
+                                            <Route path={GAME + '/:id' + SETTINGS} element={<Private><CreationSettings /></Private>} > </Route>
+                                        </Routes>
+                                    </UserProvider>
+                                </OpenAIProvider>
+                            </CategoryProvider>
+                        </CreationProvider>
+                    </AuthProvider>
+                </PlayGamesProvider>
             </GameProvider>
         </Router >
     );

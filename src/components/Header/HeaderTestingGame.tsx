@@ -115,7 +115,7 @@ const HeaderTestingGame: React.FC<HeaderProps> = ({ onBackClick, pageColor }) =>
     
     <HeaderContainer background={pageColor}>
       <WrapItems>
-        <BackButton href={GAME+"/"+id}>
+        <BackButton onClick={onBackClick}>
           <MdArrowBack color="#fff" size={20} />
         </BackButton>
         <HeaderText>Voltar</HeaderText>
