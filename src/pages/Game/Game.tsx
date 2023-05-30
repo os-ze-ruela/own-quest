@@ -49,7 +49,7 @@ const Game = () => {
     }, []);
     
     useEffect( () =>  {
-        getPagesFromGameID(id!)
+        getPagesFromGameID(id!, true)
       }, []) 
 
 
@@ -84,7 +84,6 @@ const Game = () => {
       };
       
 
-    //BUG TO FIX - quando um botão é deselecionado o index ainda é mantidado e caso o botão Continuar seja pressionado será redirecionado
     const handleClickButton = async () => {
 
       if (pages[indexPage].isLastPage === true) {
