@@ -256,6 +256,13 @@ export const postFinishPlayingGame = async (gameId: number) => {
     return await api.post(`/play-games/finish-user-play/${gameId}`)
 }
 
+export const postFinishAndPlay = async (userId: number, gameId: number) => {
+    return await api.post(`/play-games/finish-and-play/`, {
+        "userId": userId,
+        "gameId": gameId
+    })
+}
+
 export const getUserPlayGames = async (userId: string) => {
     return await api.get(`/play-games/user/${userId}`)
 }

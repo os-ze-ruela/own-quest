@@ -14,7 +14,6 @@ const Game = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const { getPagesFromGameID, findPageIndex } = useContext(CreationContext)
     const {currentPlayingPage, setCurrentPlayingPage, postSelectedButtonPlayingGame, historicGameId, setHistoricGameId, playGameId, finishPlayingGame} = useContext(PlayGamesContext)
-    console.log("Current Playing Page = ", currentPlayingPage)
     const [ buttonIndex, setButtonIndex ] = useState(-1)
     const { pages, setPages } = useContext(CreationContext)
     const { id } = useParams()
@@ -35,7 +34,6 @@ const Game = () => {
           buttonContainerRef.current &&
           !buttonContainerRef.current.contains(event.target as Node)
         ) {
-          console.log('clicou fora')
           setButtonIndex(-1);
           setIsSelect(false);
         }
@@ -110,6 +108,9 @@ const Game = () => {
         const nextPageIndex = pages.findIndex((page) => page.id === nextPageId);
         setIndexPage(nextPageIndex);
         setButtonIndex(0);
+
+        console.log('PlayGame ID = ', playGameId)
+        console.log('HistoricGame ID = ', historicGameId)
 
         if(test === 'false'){
           try {

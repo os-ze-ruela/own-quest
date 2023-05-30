@@ -25,7 +25,7 @@ export const GameInfos = () => {
 
     const { id } = useParams()
 
-    const { playGame, setCurrentPlayingPage, getResumePlayedGame, setHistoricGameId, setPlayGameId} = useContext(PlayGamesContext)
+    const { playGame, setCurrentPlayingPage, getResumePlayedGame, setHistoricGameId, setPlayGameId, finishAndPlay} = useContext(PlayGamesContext)
     const { likeGame, unlikeGame } = useContext(UserContext)
     const { authenticated, user } = useContext(AuthContext)
     const [visitingGame, setVisitingGame] = useState<Game | null>(null)
@@ -68,7 +68,9 @@ export const GameInfos = () => {
      
         try {
             const response = await playGame(user!.id, Number(id!))
-            setCurrentPlayingPage(0)
+            setPlayGameId(response.data.play_game_id)
+            setHistoricGameId(response.data.historic_last_game_id)
+            setCurrentPlayingPage(response.data.actual_page_id)
             navigate(PLAYGAME + '/' + id + '?test=false');
             
         } catch (error) {
@@ -81,7 +83,17 @@ export const GameInfos = () => {
     };
     
     const handleRestartGame = async () => {
-        setCurrentPlayingPage(0)
+
+        try {
+            const response = await finishAndPlay(user!.id, Number(id!))
+            setPlayGameId(response.data.play_game_id)
+            setHistoricGameId(response.data.historic_last_game_id)
+            setCurrentPlayingPage(response.data.actual_page_id)
+            navigate(PLAYGAME + '/' + id + '?test=false');
+        } catch (error) {
+            console.log(error)
+        }
+
         navigate(PLAYGAME + '/' + id + '?test=false');
     }
     

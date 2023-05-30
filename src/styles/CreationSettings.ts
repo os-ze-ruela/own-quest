@@ -11,9 +11,12 @@ export const AstronautLoading = styled.img`
 `;
 
 export const BackdropWrapper = styled.div`
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
 `;
 
 
@@ -384,6 +387,40 @@ export const FileInput = styled.input`
 `;
 
 export const UploadImageButton = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    gap: 2rem;
+    border-style: none;
+    cursor: pointer;
+    height: 35px;
+
+    background-color: #568EA3;
+    border-radius: 4px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+    color: #FFFFFF;
+    font-size: 10pt;
+    transition: all 0.3s ease-in-out 0.2s;
+    font-family: FiraCode-Regular;
+    font-weight: 300;
+    text-decoration: none;
+   
+    &:hover {
+        cursor: pointer;
+    }
+ 
+    @media (max-width: 768px) {
+        width: 100%;
+        font-size: 12px;
+    }
+`
+
+export const PublishButton = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;

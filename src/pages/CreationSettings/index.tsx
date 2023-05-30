@@ -1,4 +1,4 @@
-import { Alert, CircularProgress, LinearProgress, Snackbar } from "@mui/material";
+import { Alert, CircularProgress, FormControlLabel, FormGroup, LinearProgress, Snackbar, Switch } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import GPT from "../../assets/img/gpt.svg";
@@ -12,7 +12,7 @@ import { OpenAIContext } from "../../contexts/openai";
 import AppError from '../../core/app-error';
 import { HOME } from "../../core/app-urls";
 import { api, uploadImage, uploadRandomImage } from "../../services/api";
-import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySettingsLabel, DeleteButton, DescriptionInput, FileInput, GenerateRandomImageButton, GptIcon, ImageContainer, ImageGameContainer, ImagePlaceholder, RandomDescriptionButton, RandomDescriptionWrapper, Separator, SettingsContainer, SettingsWrapper, Title, TitleInput, Titles, TitlesInfo, UploadImageButton, WrapTextButton } from "../../styles/CreationSettings";
+import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySettingsLabel, DeleteButton, DescriptionInput, FileInput, GenerateRandomImageButton, GptIcon, ImageContainer, ImageGameContainer, ImagePlaceholder, PublishButton, RandomDescriptionButton, RandomDescriptionWrapper, Separator, SettingsContainer, SettingsWrapper, Title, TitleInput, Titles, TitlesInfo, UploadImageButton, WrapTextButton } from "../../styles/CreationSettings";
 import Game from "../Game/Game";
 import Category from "../../models/Category";
 
@@ -66,6 +66,13 @@ export default function CreationSettings() {
   const handleClick = async () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
+    }
+  }
+
+  const handlePublishButton = async (isPublished: boolean) => {
+    if (editingGame) {
+      const newEditingGame = { ...editingGame, isPublished };
+      updateGame(newEditingGame);
     }
   }
 
@@ -308,6 +315,18 @@ export default function CreationSettings() {
           <WrapTextButton>
             <TitlesInfo>Ao excluir a sua história, você não poderá mais acessar nem editar essa história novamente.</TitlesInfo>
             <DeleteButton href={HOME} onClick={handleDelete}>Excluir</DeleteButton>
+          </WrapTextButton>
+          <Separator />
+
+          <Titles>Publicar história</Titles>
+          <WrapTextButton>
+          <TitlesInfo>Ao publicar a sua história, você torna ela disponível para ser jogada por todas pessoas da comunidade.</TitlesInfo>
+          <FormGroup>
+          <FormControlLabel sx={{ color: '#FFFF' }} control={<Switch  />} label="Publicada" />
+          </FormGroup>
+          {/* <PublishButton onClick={handlePublishButton}>
+                Publicar
+          </PublishButton> */}
           </WrapTextButton>
         </SettingsContainer>
         <ImageContainer>
