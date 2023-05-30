@@ -119,9 +119,9 @@ const Creation = () => {
 
   return (
     <CreationBody>
-      <CustomBackdrop
+      {/* <CustomBackdrop
         sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.95)', zIndex: (theme) => theme.zIndex.drawer + 1, width: '100%'}}
-        open={true}
+        open={editingGame!.isPublished}
       >
         <BackdropWrapper>
 
@@ -130,7 +130,7 @@ const Creation = () => {
    
         </BackdropWrapper>
 
-      </CustomBackdrop>
+      </CustomBackdrop> */}
       <PopupContainer top={'200px'} left={'20px'}>
         <Popup message="🚨 Após selecionar um botão, clique duas vezes na página para voltar a edita-lá" />
         <Popup message="🚨 Após selecionar a página destino do botão, você pode usar o atalho F4 para ir até ela" />
