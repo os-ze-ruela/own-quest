@@ -172,7 +172,9 @@ export const CategoryLabelEditingWrapper = styled.div`
     transition: all 0.2s ease-in-out;
     /* border-radius: 16px; */
     overflow: hidden;
-
+    width: 100%;
+    flex-wrap: wrap;
+    column-gap: 8px;
     &:hover {
         transform: scale(1.01);
     }
@@ -333,6 +335,13 @@ export const CategorySettingsLabel = styled.button.attrs((props: {content: strin
 
   &:hover::after {
         content: " ${(props) => props.content}"
+    }
+
+  @media (max-width: 767px) { /* Adicione a media query para telas menores, como dispositivos móveis */
+    &:after {
+    content: "${(props) => props.content}"; /* Exibe o conteúdo fixo em vez do hover */
+    padding: 2px 6px;
+    }
     }
 `;
 

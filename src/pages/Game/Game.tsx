@@ -4,40 +4,79 @@ import { CreationContext } from '../../contexts/creation';
 import { ActualPage, Body, ButtonGame, ButtonContainer, GameBody, GameStyle, Page, PageBody, PageDescription, PageTitle, NextButton } from '../../styles/Game';
 import HeaderTestingGame from '../../components/Header/HeaderTestingGame';
 import { useNavigate  } from 'react-router-dom';
-import { GAME } from '../../core/app-urls';
+import { GAME, GAME_DESCRIPTION } from '../../core/app-urls';
 import { Snackbar, Alert } from '@mui/material';
+import { PlayGamesContext } from '../../contexts/play-games';
 
 
 
 const Game = () => {
-    const { getPagesFromGameID } = useContext(CreationContext)
-    const [ indexPage, setIndexPage ] = useState(0)
-    const [ buttonIndex, setButtonIndex ] = useState(0)
+    const searchParams = new URLSearchParams(window.location.search);
+    const { getPagesFromGameID, findPageIndex } = useContext(CreationContext)
+    const {currentPlayingPage, setCurrentPlayingPage, postSelectedButtonPlayingGame, historicGameId, setHistoricGameId, playGameId, finishPlayingGame} = useContext(PlayGamesContext)
+    console.log("Current Playing Page = ", currentPlayingPage)
+    const [ buttonIndex, setButtonIndex ] = useState(-1)
     const { pages, setPages } = useContext(CreationContext)
     const { id } = useParams()
+    const [ indexPage, setIndexPage ] = useState(0)
     const navigate = useNavigate();
     const [alert, setAlert] = useState(false)
+    const [isSelect, setIsSelect] = useState(false)
     
-    const searchParams = new URLSearchParams(window.location.search);
 
     //Para diferenciar o teste do jogar
     const test = searchParams.get("test");
 
+    const buttonContainerRef = useRef<HTMLDivElement | null>(null);
 
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          buttonContainerRef.current &&
+          !buttonContainerRef.current.contains(event.target as Node)
+        ) {
+          console.log('clicou fora')
+          setButtonIndex(-1);
+          setIsSelect(false);
+        }
+      };
+    
+      document.addEventListener('click', handleClickOutside);
+    
+      return () => {
+        document.removeEventListener('click', handleClickOutside);
+      };
+    }, []);
+    
     useEffect( () =>  {
-        getPagesFromGameID(id!)
+        getPagesFromGameID(id!, true)
       }, []) 
 
 
+      useEffect(() => {
+        if (pages.length > 0) {
+          if(currentPlayingPage != 0){
+            setIndexPage(findPageIndex(pages, currentPlayingPage));
+          }
+          else{
+            setIndexPage(0)
+          }
+        }
+      }, [pages, currentPlayingPage]);
+      
+
     const handleBackClick = () => {
-        
+        if(test === 'true'){
+          navigate(GAME+"/"+id);
+        }
+        else{
+          navigate(GAME_DESCRIPTION+"/"+id);
+        }
       };
 
       const handleButton = (index: number) => {
-        if (index === buttonIndex) {
-          return; // Impede a desseleção do botão
-        }
         setButtonIndex(index);
+        setIsSelect(true)
       };
       
     const handleCloseAlert = () => {
@@ -45,14 +84,23 @@ const Game = () => {
       };
       
 
-    //BUG TO FIX - quando um botão é deselecionado o index ainda é mantidado e caso o botão Continuar seja pressionado será redirecionado
-    const handleClickButton = () => {
-      if (buttonIndex === -1) {
-        return;
-      }
-  
+    const handleClickButton = async () => {
+
       if (pages[indexPage].isLastPage === true) {
-        navigate(GAME + "/" + id);
+
+        if(test === 'false'){
+          try {
+            const response =  await finishPlayingGame(playGameId)
+            console.log(response)
+          } catch (error) {
+            console.log(error)
+          }
+          navigate(GAME_DESCRIPTION+"/"+id);
+        }
+        else{
+          navigate(GAME + "/" + id);
+        }
+
       }
   
       if (pages[indexPage].buttons[buttonIndex].nextPageId === -1) {
@@ -62,6 +110,23 @@ const Game = () => {
         const nextPageIndex = pages.findIndex((page) => page.id === nextPageId);
         setIndexPage(nextPageIndex);
         setButtonIndex(0);
+
+        if(test === 'false'){
+          try {
+            const response =  await postSelectedButtonPlayingGame(
+              playGameId,
+              historicGameId, 
+              pages[indexPage].buttons[buttonIndex].id,
+              pages[indexPage].buttons[buttonIndex].title,
+              pages[indexPage].buttons[buttonIndex].nextPageId
+              )
+            console.log(response)
+            setHistoricGameId(response.data.historic_id)
+          } catch (error) {
+            console.log(error)
+          }
+      }
+       
       }
     };
     
@@ -104,14 +169,14 @@ const Game = () => {
                   autoComplete="off"
                   value={pages[indexPage].description}
                 />
-                <ButtonContainer>
+                <ButtonContainer ref={buttonContainerRef}>
                 {pages[indexPage].buttons.map((button, index) => (
                     <ButtonGame
                     readOnly
                     key={index}
                     value={button.title}
                     textLength={button.title.length}
-                    isSelected={index === buttonIndex}
+                    isSelected={isSelect}
                     background={button.color}
                     onClick={() => handleButton(index)}
                     />
@@ -119,9 +184,9 @@ const Game = () => {
                 </ButtonContainer>
                 <NextButton
                     readOnly
+                    isSelect={pages[indexPage].isLastPage ? true : isSelect}
                     value={pages[indexPage].isLastPage ? "Finalizar" : "Continuar"}
-                    onClick={buttonIndex !== -1 ? handleClickButton : undefined}
-                    // onClick={handleClickButton}
+                    onClick={handleClickButton}
                 />
               </Page>
               )}

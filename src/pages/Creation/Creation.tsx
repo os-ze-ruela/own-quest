@@ -83,7 +83,7 @@ const Creation = () => {
 
 
   useEffect(() => {
-    getPagesFromGameID(id!)
+    getPagesFromGameID(id!, false)
     getGameById(id!)
   }, [])
 

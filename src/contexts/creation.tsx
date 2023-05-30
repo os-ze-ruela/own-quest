@@ -23,7 +23,7 @@ type CreationContextType = {
   setActionBarSelected: (value: boolean) => void,
   handleButtonActionBar: (index: number, actionBarSelected: boolean) => void
   handlePageActionBar: (index: number, actionBarSelected: boolean) => void
-  getPagesFromGameID: (id: string) => Promise<void>
+  getPagesFromGameID: (id: string, play: boolean) => Promise<void>
   updatePage: (page: PageModel) => void
   updateButton: (button: ButtonModel) => void
   addPage: (gameId: number, numberPage: number) => void
@@ -91,7 +91,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  async function getPagesFromGameID(id: string): Promise<void> {
+  async function getPagesFromGameID(id: string, play: boolean): Promise<void> {
     try {
 
       const tokensJSON = localStorage.getItem('token')
@@ -99,7 +99,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
 
       
-      const response = await getPagesByGameID(id)
+      const response = await getPagesByGameID(id, play)
       
       
       const data: PageResponse[] = await response.data;
