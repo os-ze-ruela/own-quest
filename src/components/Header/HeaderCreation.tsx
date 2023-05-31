@@ -13,6 +13,7 @@ interface HeaderProps {
     onCreateClick: () => void;
     isSaved: boolean;
     set: boolean;
+    isPublished: boolean;
   }
   
 
@@ -60,7 +61,7 @@ const HeaderText = styled.p`
   margin: 0;
   color:white;
   font-family: FiraCode-Light;
-
+  cursor: default;
   @media screen and (max-width: 1024px) {
     display: none;
   }
@@ -118,7 +119,8 @@ const SettingIcon = styled.a`
 `
 
  
-const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick, isSaved, set }) => {
+const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick, isSaved, set, isPublished }) => {
+
 
   const { loading , setLoading} = useContext(CreationContext)
   const { editingGame, updateGame, setEditingGame,  } = useContext(GameContext)
@@ -206,6 +208,7 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
                 <BsCloudCheck size={30} color="#fff" />
                 )}
           </SavedIcon>
+          <HeaderText>Status: {isPublished ? 'História Publicada' : 'História Não Publicada'}</HeaderText>
         </WrapItems>
         <WrapItems>
           <StorieTitle       

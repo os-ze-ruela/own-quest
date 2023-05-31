@@ -14,7 +14,7 @@ type GameContextType = {
     getGameById: (id: string) => Promise<void>,
     createGame: () => Promise<number>,
     deleteGameByID: (id: number) => void,
-    updateGame: (game: Game) => Promise<void>,
+    updateGame: (game: Game) => Promise<any>,
     getUserPlayingGames: () => Promise<void>,
     getUserGames: () => Promise<void>,
     getHighlightGame: () => Promise<void>,
@@ -34,6 +34,8 @@ type GameContextType = {
     loading: boolean,
     fetchGamesByCategory: (id: number) => Promise<void>,
     gamesByCategory: Game[],
+    published: boolean,
+    setPublished: (status: boolean) => void
 }
 
 export const GameContext = createContext<GameContextType>({} as GameContextType)
@@ -50,6 +52,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     const [highlightGame, setHighlightGame] = useState<Game | null>(null)
     const [pagesOfHotGames, setPagesOfHotGames] = useState(1);
     const [loading, setLoading] = useState(false)
+    const [published, setPublished] = useState(false);
 
     async function createGame(): Promise<number> {
         try {
@@ -81,10 +84,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-    async function updateGame(game: Game): Promise<void> {
+    async function updateGame(game: Game): Promise<any> {
         try {
             //   setLoading(true)
-            await patchGame(game.id, game.title, game.description, game.image, game.isEditing, game.isPublished, game.isDeleted);
+            const response = await patchGame(game.id, game.title, game.description, game.image, game.isEditing, game.isPublished, game.isDeleted);
+            return response
             //   setLoading(false)
         } catch (error) {
             //   setLoading(false)
@@ -102,6 +106,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 return new Category({ title: category.category.title, id: category.category.id, color: category.category.color, plus18: category.category.plus18 });
             });
 
+            setPublished(isPublished)
+
             setEditingGame(new Game({
                 id: id,
                 title: title,
@@ -117,8 +123,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 createdBy: createdBy
             }))
 
-            console.log('EDITING GAME')
-            console.log(editingGame)
+
 
             //   setLoading(false)
         } catch (error) {
@@ -458,7 +463,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             deleteGameCategory,
             loading,
             fetchGamesByCategory,
-            gamesByCategory
+            gamesByCategory,
+            published,
+            setPublished
 
         }}>
             {children}

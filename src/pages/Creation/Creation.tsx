@@ -16,7 +16,7 @@ import PageActionBar from './components/PageActionBar';
 import { Backdrop, Box } from '@mui/material';
 import { AstronautLoading, BackdropWrapper, LoadingText } from '../../styles/CreationSettings';
 import styled from 'styled-components';
-import ASTROTALKING from "../../assets/img/astronauta-conversando 1.svg";
+import ASTROPC from "../../assets/img/astronauta-pc.svg";
 
 const Creation = () => {
 
@@ -39,7 +39,7 @@ const Creation = () => {
   const { findPageIndex } = useContext(CreationContext)
   const { destinyPage, setDestinyPage } = useContext(CreationContext)
   const { handleButton } = useContext(CreationContext)
-  const { getGameById, editingGame } = useContext(GameContext)
+  const { getGameById, editingGame, published, setPublished } = useContext(GameContext)
   const { id } = useParams()
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
   const { loading, setLoading } = useContext(CreationContext)
@@ -95,11 +95,11 @@ const Creation = () => {
     const setDocumentTitle = () => {
       if (editingGame) {
         document.title = editingGame.title;
+        setPublished(editingGame.isPublished)
       }
     };
 
     setDocumentTitle(); // Chamada inicial para definir o título assim que o componente for montado
-
     // Monitora as mudanças no estado editingGame
     const editingGameUpdated = editingGame !== null && editingGame !== undefined;
     if (editingGameUpdated) {
@@ -119,18 +119,18 @@ const Creation = () => {
 
   return (
     <CreationBody>
-      {/* <CustomBackdrop
+      <CustomBackdrop
         sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.95)', zIndex: (theme) => theme.zIndex.drawer + 1, width: '100%'}}
-        open={editingGame!.isPublished}
+        open={published}
       >
         <BackdropWrapper>
 
-          <AstronautLoading src={ASTROTALKING} />
+          <AstronautLoading src={ASTROPC} />
           <LoadingText>Não é possivel editar um jogo publicado, para alterá-lo você deve acessar a página de configuração no ícone de engrenagem acima</LoadingText>
    
         </BackdropWrapper>
 
-      </CustomBackdrop> */}
+      </CustomBackdrop>
       <PopupContainer top={'200px'} left={'20px'}>
         <Popup message="🚨 Após selecionar um botão, clique duas vezes na página para voltar a edita-lá" />
         <Popup message="🚨 Após selecionar a página destino do botão, você pode usar o atalho F4 para ir até ela" />
@@ -139,7 +139,7 @@ const Creation = () => {
         <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" />
       </PopupContainer>
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
-      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={false} />
+      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={false} isPublished={published}/>
       <CreationStyle>
 
         <Body>
