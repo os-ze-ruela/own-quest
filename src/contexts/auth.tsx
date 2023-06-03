@@ -294,29 +294,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   async function sendRecover(email: string) {
-    try {
-      const tokensJSON = localStorage.getItem("token");
-      const tokens = JSON.parse(tokensJSON!);
+  try {
+    const tokensJSON = localStorage.getItem("token");
+    const tokens = JSON.parse(tokensJSON!);
 
-      const headers = {
-        Authorization: `Bearer ${tokens}`,
-      };
+    const headers = {
+      Authorization: `Bearer ${tokens}`,
+    };
 
-      const payload = {
-        email: email,
-      };
+    const payload = {
+      email: email,
+    };
 
-      const response = await api.post(
-        "/user/send-recover-password-email",
-        payload,
-        { headers }
-      );
-      console.log("Email enviado com sucesso!");
-    } catch (error) {
-      console.error("Erro ao enviar email:", error);
-      alert("ERRO AO ENVIAR E-MAIL! VERIFIQUE SE JÁ POSSUI CADASTRO");
-    }
+    const response = await api.post("/user/send-recover-password-email", payload, { headers });
+    console.log("Email enviado com sucesso!");
+  } catch (error) {
+    const e = (await error) as AxiosError;
+    throw e;
   }
+}
+
 
   async function updatePassword(id:number, pswd:string, pswd2:string) {
     try {

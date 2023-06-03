@@ -223,7 +223,7 @@ export const CardGame = styled.div`
 export const CardInfos = styled.div`
     flex-direction: column;
     height: fit-content;
-    /* justify-content: center; */
+    justify-content: space-around;
     align-items: flex-start;
     padding-left: 0.5em;
 `
@@ -233,12 +233,14 @@ export const CardTitle = styled.b`
     font-weight: 600;
     font-size: 25px;
     margin-top: 25px;
+    padding-top: 2rem;
+    position: relative;
 `
 export const CardSubInfos = styled.h1`
     font-family: FiraCode-light;
     font-weight: 300;
     color: white;
-    font-size: 10px;
+    font-size: 11px;
     padding-left: 0.5em;
 `
 interface CardStatusInfosProps {
