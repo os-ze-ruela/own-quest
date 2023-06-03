@@ -16,6 +16,7 @@ export const MyGamesStyle = styled.div`
 export const MyGameWrapContainer = styled.div`
     position: relative;
     width: 100%;
+    margin-top: 12px;
     margin-bottom: 24px;
     display: flex;
     flex-direction: column;
@@ -188,6 +189,13 @@ export const TitleWrapper = styled.div`
     @media screen and (max-width: 1024px) {
       width: 100%;
     }
+`
+
+export const FilterMyGames = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 `
 
 export const RandomDescriptionButton = styled.button`

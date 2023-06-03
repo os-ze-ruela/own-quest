@@ -1,7 +1,8 @@
-import { Alert, Backdrop, CircularProgress, FormControlLabel, FormGroup, LinearProgress, Snackbar, Switch } from "@mui/material";
+import { Alert, Backdrop, CircularProgress, LinearProgress, Snackbar } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import GPT from "../../assets/img/gpt.svg";
+import DialogUnpublishGame from "../../components/Dialog/DialogUnpublishGame";
 import HeaderCreation from "../../components/Header/HeaderCreation";
 import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
 import { AuthContext } from "../../contexts/auth";
@@ -11,11 +12,9 @@ import { GameContext } from "../../contexts/game";
 import { OpenAIContext } from "../../contexts/openai";
 import AppError from '../../core/app-error';
 import { HOME } from "../../core/app-urls";
+import Category from "../../models/Category";
 import { api, uploadImage, uploadRandomImage } from "../../services/api";
 import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySettingsLabel, DeleteButton, DescriptionInput, FileInput, GenerateRandomImageButton, GptIcon, ImageContainer, ImageGameContainer, ImagePlaceholder, PublishButton, RandomDescriptionButton, RandomDescriptionWrapper, Separator, SettingsContainer, SettingsWrapper, Title, TitleInput, Titles, TitlesInfo, UploadImageButton, WrapTextButton } from "../../styles/CreationSettings";
-import Game from "../Game/Game";
-import Category from "../../models/Category";
-import DialogUnpublishGame from "../../components/Dialog/DialogUnpublishGame";
 
 export default function CreationSettings() {
 
@@ -23,7 +22,7 @@ export default function CreationSettings() {
   const { user } = useContext(AuthContext);
   const { handleBackClick } = useContext(CreationContext)
   const { handleCreateClick } = useContext(CreationContext)
-  const { categories, allCategories, getCategories, getCategoriesByID } = useContext(CategoryContext)
+  const { categories, getCategories } = useContext(CategoryContext)
   const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID, addGameCategoryByID, deleteGameCategory, published, setPublished} = useContext(GameContext)
   const [descTemp, setDescTemp] = useState('');
   const [isLoading, setIsLoading] = useState(true);
