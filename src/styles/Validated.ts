@@ -2,30 +2,37 @@ import styled from "styled-components";
 
 export const ValidateStyle = styled.div`
     background-color: #282C3E;
-    height: 500px ;
+    // height: 500px ;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 `
 
-export const Title = styled.div`
+export const Title = styled.h1`
     font-weight: bold;
     color: white;
     padding-top: 5rem;
-    padding-bottom: 0.5em;
     font-size: 2.5rem;
-    margin-left: 0.1em;
     margin-top: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
     font-family: FiraCode-Bold;
     font-weight: 700;
+    margin-bottom: 0;
 `
-export const SubTitle = styled.div`
+export const SubTitle = styled.h4`
     color: white;
+    font-size: 1rem;
     font-family: FiraCode-Regular;
     font-weight: 300;
-    margin-left: 0.5em;
     opacity: 60%;
+
+    text-align: center;
+    line-height: 3em;
+    margin-top: 1em;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
 `
 
 export const Label = styled.label`
@@ -56,6 +63,7 @@ export const ButtonSend = styled.a`
     color: #FFF;
     margin-top: 2.5em;
     margin-left: 0.5em;
+    margin-bottom: 4em;
     padding: 0.2em 1.8em;
     text-decoration: none;
     transition: 0.5s;

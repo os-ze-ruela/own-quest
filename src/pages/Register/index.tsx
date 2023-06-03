@@ -83,6 +83,7 @@ function Register() {
           <Label htmlFor="birthDate">Data de Nascimento</Label>
           <Input
             type="date"
+            className="date"
             name="birthDate"
             value={birthDate}
             onChange={e => setBirthDate(e.target.value)}

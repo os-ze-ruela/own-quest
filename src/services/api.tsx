@@ -200,6 +200,10 @@ export const getUserByNickname = async (nickname: string) => {
     return await api.get(`/user/find/${nickname}`)
 }
 
+export const getUserAuthenticated = async () => {
+    return await api.get(`/user`)
+}
+
 export const postFollowUser = async (followerId: string, followedId: string) => {
     return await api.post(`/user/${followerId}/follow/${followedId}`)
 }

@@ -277,6 +277,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (e) {
       const error = (await e) as AxiosError;
       console.log(error);
+      if (error.response?.data) {
+        const { statusCode, message } = error.response.data as ErrorData;
+        if (statusCode && message) {
+          throw new AppError( statusCode, message)
+        }
+      } else {
+        throw new AppError( 400, 'Erro ao verificar o e-mail.')
+      }
     }
   }
 

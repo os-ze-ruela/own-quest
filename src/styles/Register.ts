@@ -13,7 +13,7 @@ export const FieldsDiv = styled.div`
     padding-left: 40px;
 
     @media screen and (max-width: 1024px) {
-        padding-left: 0px;
+        padding-left: 0;
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -21,7 +21,7 @@ export const FieldsDiv = styled.div`
     }
 `
 
-export const Title = styled.div`
+export const Title = styled.h1`
     font-weight: bold;
     color: white;
     width: 50%;
@@ -29,21 +29,25 @@ export const Title = styled.div`
     padding-bottom: 0em;
     font-size: 2.0rem;
     margin-left: 0.1em;
+    margin-right: 0.1em;
+    margin-bottom: 0;
     font-family: FiraCode-Bold;
     font-weight: 700;
 
     @media screen and (max-width: 1024px) {
         font-size: 1.5rem;
-        margin: 0;
-        width: 100%;
+        width: 80%;
     }
 `
 
-export const SubTitle = styled.div`
+export const SubTitle = styled.h4`
     color: white;
+    font-size: 1rem;
+    margin-top: 0;
     font-family: FiraCode-Regular;
     font-weight: 300;
-    margin-left: 0.5em;
+    margin-left: 0.1em;
+    margin-right: 0.1em;
     opacity: 60%;
 
 `
@@ -100,7 +104,7 @@ export const HideButton = styled.img`
     }
 `
 export const RegisterInputs = styled.div`
-    width: 700px;
+    width: 50%;
 
     @media screen and (max-width: 1024px) {
         width: 80%;
@@ -109,23 +113,26 @@ export const RegisterInputs = styled.div`
 
 export const Input = styled.input`
     display: flex;
-    margin-left: 0.5em;
+    // margin-left: 0.5em;
+    flex-direction: column;
     background-color: #30354B;
+    color: white;
+    font-family: FiraCode-Regular;
     margin-bottom: 1em;
     border: none;
-    padding: 0.6em;
     border-radius: 0.7em;
+    // padding: 0.6em;
     width: 100%;
-    height: 25px;
-    font-family: FiraCode-Regular;
-    color: white;
-
+    height: 40px;
+    
     @media screen and (max-width: 1024px) {
         width: 100%;
         margin-left: 0;
     }
 
 `
+
+
 export const ImgAstro = styled.img`
 
     @keyframes float {
@@ -143,7 +150,7 @@ export const ImgAstro = styled.img`
     position: absolute;
     width: 380px;
     height: 380px;
-    margin-left: 1000px;
+    margin-left: 70%;
     margin-top: 250px;
     animation: float 3s ease-in-out infinite;
 
@@ -156,7 +163,6 @@ export const ButtonRegister = styled.button`
      background-color: #568EA3;
     color: #FFF;
     margin-top: 0.5em;
-    margin-left: 0.5em;
     padding: 0.2em 1.8em;
     text-decoration: none;
     transition: 0.5s;

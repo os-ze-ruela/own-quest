@@ -15,19 +15,24 @@ export const Title = styled.h1`
     padding-top: 5rem;
     padding-bottom: 0.5em;
     font-size: 2.5rem;
-    margin-left: 0.1em;
+    margin-left: 1em;
+    margin-right: 1em;
     margin-top: 1em;
     font-family: FiraCode-Bold;
     font-weight: 700;
     margin-bottom: 0;
 `
-export const SubTitle = styled.p`
+export const SubTitle = styled.h4`
     color: white;
+    font-size: 1rem;
     font-family: FiraCode-Regular;
     font-weight: 300;
-    margin-left: 0.5em;
     opacity: 60%;
     text-align: center;
+    line-height: 3em;
+    margin-top: 0em;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
 
     a {
         color: #FFFFFF;
