@@ -43,8 +43,8 @@ export const findGamesByTitle = async (title: string) => {
 // CREATION CONTEXT
 
 //---- Page ----
-export const getPagesByGameID = async (id: string) => {
-    return await api.get(`/game/${id}/pages`)
+export const getPagesByGameID = async (id: string, play: boolean) => {
+    return await api.get(`/game/${id}/pages?play=${play}`)
 }
 
 export const patchPage = async (id: number, title: string, description: string, color: string, icon: string, number_page: number, is_last_page: boolean) => {
@@ -258,6 +258,13 @@ export const postSelectedButton = async (playGameId: number, historicGameId: num
 
 export const postFinishPlayingGame = async (gameId: number) => {
     return await api.post(`/play-games/finish-user-play/${gameId}`)
+}
+
+export const postFinishAndPlay = async (userId: number, gameId: number) => {
+    return await api.post(`/play-games/finish-and-play/`, {
+        "userId": userId,
+        "gameId": gameId
+    })
 }
 
 export const getUserPlayGames = async (userId: string) => {

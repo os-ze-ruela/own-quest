@@ -4,7 +4,7 @@ import AppError from "../core/app-error";
 import Category from "../models/Category";
 import Game from "../models/Game";
 
-import { api, fetchResumePlayedGames, postFinishPlayingGame, postPlayedGame, postSelectedButton } from "../services/api";
+import { api, fetchResumePlayedGames, postFinishAndPlay, postFinishPlayingGame, postPlayedGame, postSelectedButton } from "../services/api";
 
 
 type PlayGamesContextType = {
@@ -18,6 +18,7 @@ type PlayGamesContextType = {
     setHistoricGameId: (id: number) => void,
     playGameId: number, 
     setPlayGameId: (id: number) => void,
+    finishAndPlay: (userId: number, gameId: number) => Promise<any>,
 }
 
 export const PlayGamesContext = createContext<PlayGamesContextType>({} as PlayGamesContextType)
@@ -40,6 +41,17 @@ export const PlayGamesProvider = ({ children }: { children: ReactNode }) => {
     async function finishPlayingGame(gameId: number): Promise<any> {
         try {
             const response = await postFinishPlayingGame(gameId)
+            return response;
+        } catch (e) {
+            const error = await e as AxiosError
+            console.log(error)
+            throw new AppError(error.response!.status, error.message);
+        }
+    }
+
+    async function finishAndPlay(userId: number, gameId: number): Promise<any> {
+        try {
+            const response = await postFinishAndPlay(userId, gameId)
             return response;
         } catch (e) {
             const error = await e as AxiosError
@@ -84,7 +96,8 @@ export const PlayGamesProvider = ({ children }: { children: ReactNode }) => {
             historicGameId, 
             setHistoricGameId,
             playGameId, 
-            setPlayGameId
+            setPlayGameId,
+            finishAndPlay
         }}>
             {children}
         </PlayGamesContext.Provider>

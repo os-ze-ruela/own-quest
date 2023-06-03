@@ -1,5 +1,5 @@
 import React from 'react';
-import { GAME } from '../../core/app-urls';
+import { GAME, PLAYGAME } from '../../core/app-urls';
 import { CardUserGameImage } from '../../styles/HomeLogged';
 import { ButtonPlaying, ButtonPlayingWrapper, CardContinuePlayingWrapper, CardPlayGameTitle, CardPlayingGameContentWrapper, GamePlayingImageSpace } from '../../styles/components/CardContinuePlaying';
 import ImagePlaceholder from '../ImagePlaceholder/ImagePlaceholder';
@@ -39,7 +39,7 @@ const CardContinuePlayingGame: React.FC<CardContinuePlayingProps> = ({ idPlaying
                 <CardPlayGameTitle>{title}</CardPlayGameTitle>
                 <p className='description'>{`Iniciado em: ${formatDate(initiatedPlay.toString())}`}</p>
                 <ButtonPlayingWrapper className='button-wrapper'>
-                    <ButtonPlaying href={GAME + '/' + idGame} >{'Continuar Jogando'}</ButtonPlaying>
+                    <ButtonPlaying href={PLAYGAME + '/' + idGame + '?test=false'} >{'Continuar Jogando'}</ButtonPlaying>
                 </ButtonPlayingWrapper>
             </CardPlayingGameContentWrapper>
         </CardContinuePlayingWrapper>

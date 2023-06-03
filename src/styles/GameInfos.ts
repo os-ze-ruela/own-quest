@@ -37,6 +37,10 @@ export const GameInfosWrapper = styled.div`
     width: 100%;
     margin-top: 2rem;
     gap: 1rem;
+
+    @media screen and (max-width: 1024px) {
+        flex-direction: column;
+    }
 `
 
 export const GameImageWrapper = styled.div`
@@ -46,6 +50,10 @@ export const GameImageWrapper = styled.div`
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0px 0px 8px rgba(0,0,0,0.3);
+
+    @media screen and (max-width: 1024px) {
+        width: 100%;
+    }
 `
 
 export const ImageGame = styled.img` 
@@ -61,6 +69,10 @@ export const GamesInfosWrapper = styled.div`
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    
+    @media screen and (max-width: 1024px) {
+        width: 100%;
+    }
 `
 
 export const DescriptionWrapper = styled.div`
@@ -153,6 +165,14 @@ export const GameActionsWrapper = styled.div`
     flex-direction: column;
     align-items: flex-end;
     justify-content: flex-end;
+
+    @media screen and (max-width: 1024px) {
+        width: 100%;
+        align-items: flex-start;
+        justify-content: flex-start;
+        margin-bottom: 2rem;
+    }
+    
 `
 
 export const DenounceButton = styled.button`

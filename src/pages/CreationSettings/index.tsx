@@ -1,7 +1,8 @@
-import { Alert, CircularProgress, LinearProgress, Snackbar } from "@mui/material";
+import { Alert, Backdrop, CircularProgress, LinearProgress, Snackbar } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import GPT from "../../assets/img/gpt.svg";
+import DialogUnpublishGame from "../../components/Dialog/DialogUnpublishGame";
 import HeaderCreation from "../../components/Header/HeaderCreation";
 import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
 import { AuthContext } from "../../contexts/auth";
@@ -11,10 +12,9 @@ import { GameContext } from "../../contexts/game";
 import { OpenAIContext } from "../../contexts/openai";
 import AppError from '../../core/app-error';
 import { HOME } from "../../core/app-urls";
-import { api, uploadImage, uploadRandomImage } from "../../services/api";
-import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySettingsLabel, DeleteButton, DescriptionInput, FileInput, GenerateRandomImageButton, GptIcon, ImageContainer, ImageGameContainer, ImagePlaceholder, RandomDescriptionButton, RandomDescriptionWrapper, Separator, SettingsContainer, SettingsWrapper, Title, TitleInput, Titles, TitlesInfo, UploadImageButton, WrapTextButton } from "../../styles/CreationSettings";
-import Game from "../Game/Game";
 import Category from "../../models/Category";
+import { api, uploadImage, uploadRandomImage } from "../../services/api";
+import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySettingsLabel, DeleteButton, DescriptionInput, FileInput, GenerateRandomImageButton, GptIcon, ImageContainer, ImageGameContainer, ImagePlaceholder, PublishButton, RandomDescriptionButton, RandomDescriptionWrapper, Separator, SettingsContainer, SettingsWrapper, Title, TitleInput, Titles, TitlesInfo, UploadImageButton, WrapTextButton } from "../../styles/CreationSettings";
 
 export default function CreationSettings() {
 
@@ -22,8 +22,8 @@ export default function CreationSettings() {
   const { user } = useContext(AuthContext);
   const { handleBackClick } = useContext(CreationContext)
   const { handleCreateClick } = useContext(CreationContext)
-  const { categories, allCategories, getCategories, getCategoriesByID } = useContext(CategoryContext)
-  const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID, addGameCategoryByID, deleteGameCategory } = useContext(GameContext)
+  const { categories, getCategories } = useContext(CategoryContext)
+  const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID, addGameCategoryByID, deleteGameCategory, published, setPublished} = useContext(GameContext)
   const [descTemp, setDescTemp] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isErroImage, setErrorImage] = useState(false);
@@ -33,7 +33,10 @@ export default function CreationSettings() {
   const { loading, setLoading } = useContext(CreationContext)
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
   const [titleTemp, setTitleTemp] = useState('');
-  
+
+  const [showModal, setShowModal] = useState(false);
+
+
 
   const [availableCategories, setAvailableCategories] = useState<Category[]>([]);
   const [addedCategories, setAddedCategories] = useState<Category[]>([]);
@@ -69,6 +72,44 @@ export default function CreationSettings() {
     }
   }
 
+  const handlePublishGame = async () => {
+    if (editingGame) {
+        console.log('Publicou')
+        try {
+          setPublished(true)
+          const newEditingGame = { ...editingGame};
+          newEditingGame.isPublished = true
+          console.log(newEditingGame)
+          setEditingGame(newEditingGame)
+          const response = await updateGame(newEditingGame);
+          console.log(response)
+        } catch (error) {
+          console.log(error)
+        }
+      }
+  }
+  
+
+  const handleUnpublishGame = async () => {
+    if (editingGame) {
+        console.log('Voltou a editar')
+        try {
+          setPublished(false)
+          const newEditingGame = { ...editingGame};
+          newEditingGame.isPublished = false
+          console.log(newEditingGame)
+          setEditingGame(newEditingGame)
+          const response = await updateGame(newEditingGame);
+          console.log(response)
+          setShowModal(false)
+        } catch (error) {
+          console.log(error)
+        }
+      
+      }
+  }
+  
+  
   const handleCategories = async (content: string, categoryID: number) => {
     if (content === "+") {
       await addGameCategoryByID(Number(id), [categoryID]);
@@ -160,6 +201,7 @@ export default function CreationSettings() {
   useEffect(() => {
     if (editingGame) {
       setAddedCategories(editingGame.categories);
+      setPublished(editingGame.isPublished)
       setAvailableCategories(categories.filter(category1 => !addedCategories.some(category2 => category1.id === category2.id)));
       // const filteredCategories =  availableCategories.filter(category1 => !addedCategories.some(category2 => category1.id === category2.id));
       // setAvailableCategories(filteredCategories)
@@ -207,6 +249,7 @@ export default function CreationSettings() {
       setLoading(false);
       const newEditingGame = { ...editingGame, title };
       updateGame(newEditingGame);
+
     }
   };
   
@@ -254,6 +297,14 @@ export default function CreationSettings() {
 
   return (
     <Body>
+      {showModal && (
+        <Backdrop
+                sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={true}
+        >
+        <DialogUnpublishGame onClose={()=>{}}  handleUnpublishGame={handleUnpublishGame}/>
+        </Backdrop>
+      )}
       <Snackbar
         open={isErroImage}
         autoHideDuration={4000}
@@ -262,7 +313,7 @@ export default function CreationSettings() {
         <Alert severity="error">Ocorreu um erro ao gerar a imagem com IA</Alert>
       </Snackbar>
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
-      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={true} />
+      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={true} isPublished={published} />
       <Title>Configurações da história</Title>
       <SettingsWrapper>
         <SettingsContainer>
@@ -308,6 +359,15 @@ export default function CreationSettings() {
           <WrapTextButton>
             <TitlesInfo>Ao excluir a sua história, você não poderá mais acessar nem editar essa história novamente.</TitlesInfo>
             <DeleteButton href={HOME} onClick={handleDelete}>Excluir</DeleteButton>
+          </WrapTextButton>
+          <Separator />
+
+          <Titles>Publicar história</Titles>
+          <WrapTextButton>
+          <TitlesInfo> {published ? 'Clique em Editar História para realizar alterações no conteúdo da história e publica-la novamente.' : 'Ao publicar a sua história, você torna ela disponível para ser jogada por todas pessoas da comunidade.'}</TitlesInfo>
+          <PublishButton onClick={() => {published ? setShowModal(true) : handlePublishGame()}}>
+            {published ? 'Editar História' : 'Publicar'}
+          </PublishButton>
           </WrapTextButton>
         </SettingsContainer>
         <ImageContainer>

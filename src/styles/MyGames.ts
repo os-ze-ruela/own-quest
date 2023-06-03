@@ -16,6 +16,7 @@ export const MyGamesStyle = styled.div`
 export const MyGameWrapContainer = styled.div`
     position: relative;
     width: 100%;
+    margin-top: 12px;
     margin-bottom: 24px;
     display: flex;
     flex-direction: column;
@@ -36,7 +37,7 @@ export const ListMyGamesCardContainer = styled.div`
     /* flex-wrap: wrap; */
     width: 100%;
     gap: 1rem;
-    padding: 0px 1rem;
+    padding: 0px 12px;
     transition: all 1s ease-in-out;
 
     display: grid;
@@ -181,6 +182,7 @@ export const CardMyGameTitle = styled.h3`
 export const TitleWrapper = styled.div`
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     gap: 1rem;
     align-items: center;
@@ -188,6 +190,13 @@ export const TitleWrapper = styled.div`
     @media screen and (max-width: 1024px) {
       width: 100%;
     }
+`
+
+export const FilterMyGames = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 `
 
 export const RandomDescriptionButton = styled.button`
@@ -229,10 +238,10 @@ export const RandomDescriptionButton = styled.button`
 
      @media screen and (max-width: 1024px) {
       padding: 0px 10px;
-      width: 50%;
-      height: 45px;
+      width: 100%;
+      height: 40px;
       margin-right: 0px;
-      font-size: 10px;
+      font-size: 12px;
       justify-content: space-between;
       text-align: start;
       gap: 0px;

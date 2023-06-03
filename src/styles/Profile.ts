@@ -4,6 +4,10 @@ export const ProfileStyle = styled.div`
     width: 100%;
     flex-direction: row;
     display: flex;
+
+    @media screen and (max-width: 1024px) {
+        flex-direction: column;
+    }
 `
 
 export const ProfileOpt = styled.div`
@@ -11,6 +15,12 @@ export const ProfileOpt = styled.div`
     padding-left: 40px;
     flex-direction: column;
     padding-top: 0.5em;
+
+    @media screen and (max-width: 1024px) {
+        padding-left: 18px;
+        width: 85%;
+        padding-top: 0px;
+    }
 `
 
 export const ProfileIdent = styled.div`
@@ -89,6 +99,12 @@ export const BtnOpt = styled.button`
 export const ProfileInfo = styled.div`
     width: 60%;
     flex-direction: column;
+    margin-bottom: 2rem;
+
+    @media screen and (max-width: 1024px) {
+        width: 85%;
+        padding-left: 24px;
+    }
 `
 export const YourProfileTitle = styled.p`
     color: white;
@@ -104,6 +120,12 @@ export const WrapTextButton = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    @media screen and (max-width: 1024px) {
+       flex-direction: column;
+        align-items: flex-start;
+        padding-bottom: 1rem;
+    }
 `
 export const Text = styled.div`
     flex-direction: column;
@@ -121,6 +143,11 @@ export const EditButton = styled.button`
     font-weight: 400;
     font-size: 14px;
     padding: 0.5em;
+
+    @media screen and (max-width: 1024px) {
+        width: 30%;
+        align-self: flex-start;
+    }
 `
 
 export const Titles = styled.p`

@@ -1,31 +1,28 @@
-import { Backdrop, Modal, Skeleton } from '@mui/material';
+import { Backdrop, Skeleton } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { BiArrowBack } from "react-icons/bi";
 import { useNavigate, useParams } from "react-router-dom";
+import DialogResumeGame from '../../components/Dialog/DialogResumeGame';
 import Header from '../../components/Header/Header';
 import HeaderLogged from '../../components/Header/HeaderLogged';
 import ImagePlaceholder from '../../components/ImagePlaceholder/ImagePlaceholder';
 import { AuthContext } from '../../contexts/auth';
+import { GameContext } from '../../contexts/game';
+import { PlayGamesContext } from '../../contexts/play-games';
 import { UserContext } from '../../contexts/user';
+import AppError from '../../core/app-error';
 import { EXPLORER, LOGIN, PLAYGAME } from '../../core/app-urls';
 import Category from '../../models/Category';
 import Game from '../../models/Game';
 import { api, fetchGameById } from '../../services/api';
 import { BackButtonWrapper, CategoryGameInfoLabel, CategoryGameInfoWrapper, CategoryWrapper, CreatedByWrapper, DenounceButton, DescriptionWrapper, GameActionsWrapper, GameImageWrapper, GameInfosMain, GameInfosWrapper, GameTitle, GamesInfosWrapper, HeartIcon, ImageGame, LikeWrapper, PlayButton } from '../../styles/GameInfos';
-import { PlayGamesContext } from '../../contexts/play-games';
-import AppError from '../../core/app-error';
-import DialogResumeGame from '../../components/Dialog/DialogResumeGame';
-import { GameListContainer, HorizontalListWrapper, ListGamesCardContainer, TitleListGames } from '../../styles/Explorer';
-import { CardExplorerHotShimmer } from '../../components/Cards/CardExplorerHotShimmer';
-import CardMostViewGame from '../../components/Cards/CardMostViewGame';
-import { GameContext } from '../../contexts/game';
 
 export const GameInfos = () => {
 
 
     const { id } = useParams()
 
-    const { playGame, setCurrentPlayingPage, getResumePlayedGame, setHistoricGameId, setPlayGameId} = useContext(PlayGamesContext)
+    const { playGame, setCurrentPlayingPage, getResumePlayedGame, setHistoricGameId, setPlayGameId, finishAndPlay} = useContext(PlayGamesContext)
     const { likeGame, unlikeGame } = useContext(UserContext)
     const { authenticated, user } = useContext(AuthContext)
     const [visitingGame, setVisitingGame] = useState<Game | null>(null)
@@ -68,7 +65,9 @@ export const GameInfos = () => {
      
         try {
             const response = await playGame(user!.id, Number(id!))
-            setCurrentPlayingPage(0)
+            setPlayGameId(response.data.play_game_id)
+            setHistoricGameId(response.data.historic_last_game_id)
+            setCurrentPlayingPage(response.data.actual_page_id)
             navigate(PLAYGAME + '/' + id + '?test=false');
             
         } catch (error) {
@@ -81,7 +80,17 @@ export const GameInfos = () => {
     };
     
     const handleRestartGame = async () => {
-        setCurrentPlayingPage(0)
+
+        try {
+            const response = await finishAndPlay(user!.id, Number(id!))
+            setPlayGameId(response.data.play_game_id)
+            setHistoricGameId(response.data.historic_last_game_id)
+            setCurrentPlayingPage(response.data.actual_page_id)
+            navigate(PLAYGAME + '/' + id + '?test=false');
+        } catch (error) {
+            console.log(error)
+        }
+
         navigate(PLAYGAME + '/' + id + '?test=false');
     }
     
@@ -254,14 +263,16 @@ export const GameInfos = () => {
                             <Skeleton variant="rounded" animation="wave" width='90%' height='30px' style={{ marginTop: '3rem' }} />
                             <Skeleton variant="rounded" animation="wave" width='100%' height='40px' style={{ marginTop: '8px' }} />
                         </GameActionsWrapper>)
-                        : (<GameActionsWrapper>
+                        : (
+                        <GameActionsWrapper>
                             <LikeWrapper>
                                 <HeartIcon onClick={handleClick} liked={liked} />
                                 <p>{visitingGame?.favorites}</p>
                             </LikeWrapper>
                             <DenounceButton>Denunciar</DenounceButton>
                             <PlayButton onClick={handlePlayButton}>Jogar</PlayButton>
-                        </GameActionsWrapper>)}
+                        </GameActionsWrapper>
+                        )}
                 </GameInfosWrapper>
                 {/* <HorizontalListWrapper>
                 <TitleListGames>Histórias semelhantes para você jogar</TitleListGames>

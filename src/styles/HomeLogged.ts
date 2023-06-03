@@ -64,6 +64,7 @@ export const MyGameListContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    padding-right: 12px;
     -moz-box-sizing: border-box; 
     -webkit-box-sizing: border-box; 
     box-sizing: border-box;
@@ -125,7 +126,6 @@ export const Title = styled.h1`
 
     @media screen and (max-width: 1024px) {
       font-size: 1.5rem;
-      padding-bottom: 12px;
     }
 `
 
@@ -133,7 +133,8 @@ export const PageWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  width: 98%;
+  width: 96%;
+  padding: 0px 12px;
   gap: 2rem;
   /* max-width: 1100px; */
   margin: 12px auto;
@@ -182,14 +183,30 @@ export const CardWrapperCard = styled.a`
     }
   }
 
-  @media screen and (max-width: 1024px) {
-      width: 100%;
+    @media screen and (max-width: 1024px) {
+      width: 98%;
+      min-width: 250px;
+      height: 400px;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+
+      &:hover {
+        .button-wrapper {
+          opacity: 0;
+        } 
+      }
     }
 `;
 
 export const ImageSpace = styled.div`
   height: 100%;
   width: 40%;
+
+  @media screen and (max-width: 1024px) {
+      width: 100%;
+      height: 40%;
+  }
 `
 
 export const CardImage = styled.img`
@@ -198,6 +215,10 @@ export const CardImage = styled.img`
   border-radius: 4px;
   object-fit: cover;
   mask-image: linear-gradient(to right, #000, rgba(0,0,0,0.0));
+
+   @media screen and (max-width: 1024px) {
+    mask-image: linear-gradient(to bottom, #000, rgba(0,0,0,0.0));
+  }
 `;
 
 export const CardContentWrapper = styled.div`
@@ -213,14 +234,22 @@ export const CardContentWrapper = styled.div`
   text-align: end;
   font-family: 'FiraCode-Regular';
 
- p { 
-    font-family: 'FiraCode-Light';
-    font-size: 12px;
-    max-height: 4em; /* Set the maximum height to 3 lines */
-    overflow: hidden; /* Hide any overflowing text */
-    text-overflow: ellipsis; /* Add ellipsis at the end of the text */
- }
- 
+  p { 
+      font-family: 'FiraCode-Light';
+      font-size: 12px;
+      max-height: 4em; /* Set the maximum height to 3 lines */
+      overflow: hidden; /* Hide any overflowing text */
+      text-overflow: ellipsis; /* Add ellipsis at the end of the text */
+  }
+  
+  @media screen and (max-width: 1024px) {
+    width: 90%;
+    height: 100%;
+
+    p { 
+      max-height: 9em;
+    }
+  }
 `;
 
 export const CardTitle = styled.h3`
