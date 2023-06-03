@@ -37,9 +37,12 @@ export const DrawerContainer = styled.div<{ open: boolean }>`
 `;
 
 export const DrawerButton = styled.a`
-  display: block;
+  display: flex;
   width: 100%;
-  padding: 12px 8px;
+  padding: 18px 8px;
+  border-radius: 8px;
+  background-color: red;
+  gap: 1rem;
   border: none;
   background-color: transparent;
   text-align: left;
