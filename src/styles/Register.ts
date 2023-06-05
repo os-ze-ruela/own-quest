@@ -28,28 +28,30 @@ export const Title = styled.h1`
     padding-top: 5rem;
     padding-bottom: 0em;
     font-size: 2.0rem;
-    margin-left: 0.1em;
-    margin-right: 0.1em;
+    margin-left: 0.2em;
     margin-bottom: 0;
     font-family: FiraCode-Bold;
     font-weight: 700;
 
     @media screen and (max-width: 1024px) {
         font-size: 1.5rem;
+        margin-left: 0;
         width: 80%;
     }
 `
 
-export const SubTitle = styled.h4`
+export const SubTitle = styled.p`
     color: white;
     font-size: 1rem;
     margin-top: 0;
     font-family: FiraCode-Regular;
     font-weight: 300;
-    margin-left: 0.1em;
-    margin-right: 0.1em;
+    margin-left: 0.5em;
     opacity: 60%;
 
+    @media screen and (max-width: 1024px) {
+        margin-left: 0;
+    }
 `
 
 export const LoginText = styled.p`
@@ -113,8 +115,8 @@ export const RegisterInputs = styled.div`
 
 export const Input = styled.input`
     display: flex;
-    // margin-left: 0.5em;
-    flex-direction: column;
+    margin-left: 0.5em;
+    // flex-direction: column;
     background-color: #30354B;
     color: white;
     font-family: FiraCode-Regular;
