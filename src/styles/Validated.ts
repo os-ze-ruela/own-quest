@@ -20,6 +20,11 @@ export const Title = styled.h1`
     font-family: FiraCode-Bold;
     font-weight: 700;
     margin-bottom: 0;
+    text-align: center;
+
+    @media screen and (max-width: 1024px) {
+        font-size: 2rem;
+    }
 `
 export const SubTitle = styled.p`
     color: white;
@@ -33,6 +38,10 @@ export const SubTitle = styled.p`
     margin-top: 1em;
     margin-left: 1.5em;
     margin-right: 1.5em;
+
+    @media screen and (max-width: 1024px) {
+        line-height: 2em;
+    }
 `
 
 export const Label = styled.label`

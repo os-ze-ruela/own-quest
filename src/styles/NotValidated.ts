@@ -21,6 +21,11 @@ export const Title = styled.h1`
     font-family: FiraCode-Bold;
     font-weight: 700;
     margin-bottom: 0;
+    text-align: center;
+
+    @media screen and (max-width: 1024px) {
+        font-size: 2rem;
+    }
 `
 export const SubTitle = styled.p`
     color: white;
@@ -39,7 +44,11 @@ export const SubTitle = styled.p`
         font-family: 'FiraCode-SemiBold';
         cursor: pointer;
         text-decoration: underline;
-      }
+    }
+
+    @media screen and (max-width: 1024px) {
+        line-height: 2em;
+    }
 `
 
 export const Label = styled.label`
