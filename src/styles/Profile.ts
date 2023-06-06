@@ -232,15 +232,16 @@ export const CardTitle = styled.b`
     font-family: FiraCode-Bold;
     font-weight: 600;
     font-size: 25px;
-    margin-top: 25px;
-    padding-top: 2rem;
-    position: relative;
+    /* margin-top: 30px; */
+    padding-top: 0.3rem;
+    position: absolute;
 `
 export const CardSubInfos = styled.h1`
     font-family: FiraCode-light;
     font-weight: 300;
     color: white;
     font-size: 11px;
+    padding-top: 35px;
     padding-left: 0.5em;
 `
 interface CardStatusInfosProps {
