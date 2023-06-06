@@ -1,5 +1,5 @@
 import React from 'react';
-import { GAME, PLAYGAME } from '../../core/app-urls';
+import { GAME, GAME_DESCRIPTION, PLAYGAME } from '../../core/app-urls';
 import { CardUserGameImage } from '../../styles/HomeLogged';
 import { ButtonPlaying, ButtonPlayingWrapper, CardContinuePlayingWrapper, CardPlayGameTitle, CardPlayingGameContentWrapper, GamePlayingImageSpace } from '../../styles/components/CardContinuePlaying';
 import ImagePlaceholder from '../ImagePlaceholder/ImagePlaceholder';
@@ -52,7 +52,7 @@ const CardContinuePlayingGame: React.FC<CardContinuePlayingProps> = ({ idPlaying
     
 
     return (
-        <CardContinuePlayingWrapper>
+        <CardContinuePlayingWrapper  href={GAME_DESCRIPTION + '/' + idGame}>
             <GamePlayingImageSpace>
                 {image ?
                     <CardUserGameImage src={image} alt={title} />
@@ -64,7 +64,7 @@ const CardContinuePlayingGame: React.FC<CardContinuePlayingProps> = ({ idPlaying
                 <CardPlayGameTitle>{title}</CardPlayGameTitle>
                 <p className='description'>{`Iniciado em: ${formatDate(initiatedPlay.toString())}`}</p>
                 <ButtonPlayingWrapper className='button-wrapper'>
-                    <ButtonPlaying href={PLAYGAME + '/' + idGame + '?test=false'} >{'Continuar Jogando'}</ButtonPlaying>
+                    <ButtonPlaying onClick={handleResumeGame} >{'Continuar Jogando'}</ButtonPlaying>
                 </ButtonPlayingWrapper>
             </CardPlayingGameContentWrapper>
         </CardContinuePlayingWrapper>
