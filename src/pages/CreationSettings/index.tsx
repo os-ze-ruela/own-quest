@@ -23,7 +23,8 @@ export default function CreationSettings() {
   const { handleBackClick } = useContext(CreationContext)
   const { handleCreateClick } = useContext(CreationContext)
   const { categories, getCategories } = useContext(CategoryContext)
-  const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID, addGameCategoryByID, deleteGameCategory, published, setPublished} = useContext(GameContext)
+  const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID, addGameCategoryByID, deleteGameCategory, published, setPublished, publishGameById, unpublishGameById} = useContext(GameContext)
+
   const [descTemp, setDescTemp] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isErroImage, setErrorImage] = useState(false);
@@ -72,16 +73,43 @@ export default function CreationSettings() {
     }
   }
 
+  // const handlePublishGame = async () => {
+  //   if (editingGame) {
+  //       console.log('Publicou')
+  //       try {
+  //         setPublished(true)
+  //         const newEditingGame = { ...editingGame};
+  //         newEditingGame.isPublished = true
+  //         console.log(newEditingGame)
+  //         setEditingGame(newEditingGame)
+  //         const response = await updateGame(newEditingGame);
+  //         console.log(response)
+  //       } catch (error) {
+  //         console.log(error)
+  //       }
+  //     }
+  // }
+  
   const handlePublishGame = async () => {
     if (editingGame) {
         console.log('Publicou')
         try {
+          const response = await publishGameById(Number(id!));
           setPublished(true)
-          const newEditingGame = { ...editingGame};
-          newEditingGame.isPublished = true
-          console.log(newEditingGame)
-          setEditingGame(newEditingGame)
-          const response = await updateGame(newEditingGame);
+          console.log(response)
+        } catch (error) {
+          console.log(error)
+        }
+      }
+  }
+  
+  const handleUnpublishGame = async () => {
+    if (editingGame) {
+        console.log('Voltou a editar')
+        try {
+          const response = await unpublishGameById(Number(id!));
+          setPublished(true)
+          setShowModal(false)
           console.log(response)
         } catch (error) {
           console.log(error)
@@ -90,25 +118,7 @@ export default function CreationSettings() {
   }
   
 
-  const handleUnpublishGame = async () => {
-    if (editingGame) {
-        console.log('Voltou a editar')
-        try {
-          setPublished(false)
-          const newEditingGame = { ...editingGame};
-          newEditingGame.isPublished = false
-          console.log(newEditingGame)
-          setEditingGame(newEditingGame)
-          const response = await updateGame(newEditingGame);
-          console.log(response)
-          setShowModal(false)
-        } catch (error) {
-          console.log(error)
-        }
-      
-      }
-  }
-  
+
   
   const handleCategories = async (content: string, categoryID: number) => {
     if (content === "+") {
@@ -302,7 +312,7 @@ export default function CreationSettings() {
                 sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={true}
         >
-        <DialogUnpublishGame onClose={()=>{}}  handleUnpublishGame={handleUnpublishGame}/>
+        <DialogUnpublishGame onClose={()=>{setShowModal(false)}}  handleUnpublishGame={handleUnpublishGame}/>
         </Backdrop>
       )}
       <Snackbar
