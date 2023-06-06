@@ -1,4 +1,4 @@
-import { Backdrop, Box, styled } from '@mui/material';
+import { Backdrop, Box, ToggleButton, ToggleButtonGroup, styled } from '@mui/material';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
@@ -16,8 +16,9 @@ import { GameContext } from '../../contexts/game';
 import { OpenAIContext } from '../../contexts/openai';
 import AppError from '../../core/app-error';
 import { GAME } from '../../core/app-urls';
+import Game from '../../models/Game';
 import { AstronautLoading, BackdropWrapper, GptIcon, LoadingText } from '../../styles/CreationSettings';
-import { ListMyGamesCardContainer, MyGameWrapContainer, MyGamesStyle, RandomDescriptionButton, TitleMyGame, TitleWrapper } from '../../styles/MyGames';
+import { FilterMyGames, ListMyGamesCardContainer, MyGameWrapContainer, MyGamesStyle, RandomDescriptionButton, TitleMyGame, TitleWrapper } from '../../styles/MyGames';
 
 
 
@@ -169,6 +170,25 @@ const MyGames = () => {
     setCreatingGame(false)
   };
 
+  const [filter, setFilter] = useState('Todos');
+  const [filterGames, setFilterGames] = useState<Game[]>([]);
+
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newFilter: string,
+  ) => {
+    console.log(userGames.filter(item => item.isPublished && !item.isEditing))
+    let filteredGames: Game[];
+    if (newFilter === 'Editando') {
+      filteredGames = userGames.filter(item => !item.isPublished && item.isEditing);
+    } else {
+      filteredGames = userGames.filter(item => item.isPublished);
+    }
+    setFilterGames(filteredGames);
+    setFilter(newFilter);
+  };
+
+
   return (
     <>
       <Backdrop
@@ -194,6 +214,32 @@ const MyGames = () => {
       <MyGamesStyle>
         <TitleWrapper>
           <TitleMyGame>Minhas histórias</TitleMyGame>
+          <FilterMyGames>
+            <ToggleButtonGroup
+              color="primary"
+              value={filter}
+              exclusive
+              onChange={handleChange}
+              aria-label="Filter"
+              style={{ fontFamily: 'FiraCode-Regular' }}
+            >
+              <ToggleButton
+                value="Todos"
+                style={{ color: '#FFFFFF', fontFamily: 'FiraCode-Regular' }}>
+                Todos
+              </ToggleButton>
+              <ToggleButton
+                value="Publicados"
+                style={{ color: '#FFFFFF', fontFamily: 'FiraCode-Regular' }}>
+                Publicados
+              </ToggleButton>
+              <ToggleButton
+                value="Editando"
+                style={{ color: '#FFFFFF', fontFamily: 'FiraCode-Regular' }}>
+                Editando
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </FilterMyGames>
           <RandomDescriptionButton onClick={handleClickGenerateRandomStorie}>
             <p>Gerar uma história aleatória</p>
             <GptIcon src={GPT} />
@@ -222,7 +268,7 @@ const MyGames = () => {
                   alert(error)
                 }
               }} />
-            ) : (
+            ) : filter === 'Todos' ? (
               userGames.map((game, index) => (
                 <CardMyGame
                   key={index}
@@ -234,7 +280,21 @@ const MyGames = () => {
                   categories={game.categories}
                 />
               ))
-            )}
+            ) :
+              (
+                filterGames.map((game, index) => (
+                  <CardMyGame
+                    key={index}
+                    id={game.id}
+                    title={game.title}
+                    imageSrc={game.image}
+                    isPublished={game.isPublished}
+                    description={game.description}
+                    categories={game.categories}
+                  />
+                ))
+              )
+            }
           </ListMyGamesCardContainer>=
         </MyGameWrapContainer>
         <Backdrop

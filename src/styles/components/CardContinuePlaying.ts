@@ -12,7 +12,7 @@ export const CardContinuePlayingWrapper = styled.a`
   width: 23%;
   min-width: 300px;
   transition: all 0.2s ease-in-out;
-  height: 320px;
+  height: 400px;
   text-decoration: none;
 
   &:hover {
@@ -33,7 +33,7 @@ export const CardContinuePlayingWrapper = styled.a`
 `;
 
 export const GamePlayingImageSpace = styled.div`
-  height: 50%;
+  height: 45%;
   width: 100%;
 `
 

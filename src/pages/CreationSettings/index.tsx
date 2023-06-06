@@ -24,6 +24,7 @@ export default function CreationSettings() {
   const { handleCreateClick } = useContext(CreationContext)
   const { categories, getCategories } = useContext(CategoryContext)
   const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID, addGameCategoryByID, deleteGameCategory, published, setPublished, publishGameById, unpublishGameById} = useContext(GameContext)
+
   const [descTemp, setDescTemp] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isErroImage, setErrorImage] = useState(false);
