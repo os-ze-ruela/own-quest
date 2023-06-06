@@ -81,8 +81,6 @@ export const BtnOpt = styled.button`
     order: 1;
     flex-grow: 0;
 
-    // Font
-
     color: #FFFFFF;
     font-size: 14pt;
     transition: all 0.3s ease-in-out 0.2s;
@@ -95,6 +93,11 @@ export const BtnOpt = styled.button`
         transform: scale(1.05);
         cursor: pointer;
     }
+
+    &.active {
+    color: #b0b0b0;
+    transform: scale(1.05);
+  }
 `
 export const ProfileInfo = styled.div`
     width: 60%;
@@ -214,4 +217,103 @@ export const BtnCancel = styled.button`
     font-weight: 300;
     text-decoration: none;
    
+`
+export const HistoricTitle = styled.p`
+    color: white;
+    font-family: FiraCode-Bold;
+    font-weight: 600;
+    font-size: 30px;
+`
+export const WrapCardGame = styled.div`
+    flex-direction: column;
+    width: 60%;
+    display: flex;
+`
+export const CardGame = styled.div`
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 120px;
+    border-radius: 0.5rem;
+    background-color: #202331;
+    position: relative;
+    margin-bottom: 20px;
+
+    &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #323440;
+    }
+`
+
+export const CardInfos = styled.div`
+    flex-direction: column;
+    height: fit-content;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding-left: 0.5em;
+`
+export const CardTitle = styled.b`
+    color: white;
+    font-family: FiraCode-Bold;
+    font-weight: 600;
+    font-size: 25px;
+    /* margin-top: 30px; */
+    padding-top: 0.3rem;
+    position: absolute;
+`
+export const CardSubInfos = styled.h1`
+    font-family: FiraCode-light;
+    font-weight: 300;
+    color: white;
+    font-size: 11px;
+    padding-top: 35px;
+    padding-left: 0.5em;
+`
+interface CardStatusInfosProps {
+  status: string;
+}
+
+const getStatusColor = (status: string): string => {
+  const colorMap: { [key: string]: string } = {
+    'Em andamento': '#FEE504',
+    'Finalizado': '#66AB4E',
+    'Interrompido': '#DC4747',
+  };
+
+  return colorMap[status] || 'black'; 
+};
+
+export const CardStatusInfos = styled.h1<CardStatusInfosProps>`
+  font-family: FiraCode-medium;
+  font-weight: 300;
+  color: ${props => getStatusColor(props.status)};
+  font-size: 13px;
+  padding-top: 28px;
+  position: absolute;
+  bottom: 0;
+`
+export const ButtonHist = styled.button`
+    background-color: #568EA3;
+    font-weight: bold;
+    font-size: 12pt;
+    height: 40px;
+    padding: 0 12px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: #E0E1DD;
+    border: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: FiraCode-SemiBold;
+    font-weight: 400;
+    
+    @media screen and (max-width: 1024px) {
+        font-size: 1rem;
+    }
+
 `
