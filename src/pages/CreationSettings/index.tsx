@@ -108,7 +108,7 @@ export default function CreationSettings() {
         console.log('Voltou a editar')
         try {
           const response = await unpublishGameById(Number(id!));
-          setPublished(true)
+          setPublished(false)
           setShowModal(false)
           console.log(response)
         } catch (error) {
@@ -123,7 +123,7 @@ export default function CreationSettings() {
   const handleCategories = async (content: string, categoryID: number) => {
     if (content === "+") {
       await addGameCategoryByID(Number(id), [categoryID]);
-  
+      fetchAllRequests()
       const addedCategory = availableCategories.find(category => category.id === categoryID);
       if (addedCategory) {
         setAddedCategories(prevCategories => [...prevCategories, addedCategory]);
@@ -131,7 +131,7 @@ export default function CreationSettings() {
       }
     } else if (content === "X") {
       await deleteGameCategory(Number(id), categoryID);
-  
+      fetchAllRequests()
       const removedCategory = addedCategories.find(category => category.id === categoryID);
       if (removedCategory) {
         setAddedCategories(prevCategories => prevCategories.filter(category => category.id !== categoryID));
@@ -213,19 +213,16 @@ export default function CreationSettings() {
       setAddedCategories(editingGame.categories);
       setPublished(editingGame.isPublished)
       setAvailableCategories(categories.filter(category1 => !addedCategories.some(category2 => category1.id === category2.id)));
-      // const filteredCategories =  availableCategories.filter(category1 => !addedCategories.some(category2 => category1.id === category2.id));
-      // setAvailableCategories(filteredCategories)
-      
     }
   }, [editingGame, categories]);
   
   
-  useEffect(() => {
-    console.log("Addeded Categories")
-    console.log(addedCategories)
-    console.log("Available Categories Filtered")
-    console.log(availableCategories)
-  }, [addedCategories, availableCategories])
+  // useEffect(() => {
+  //   console.log("Addeded Categories")
+  //   console.log(addedCategories)
+  //   console.log("Available Categories Filtered")
+  //   console.log(availableCategories)
+  // }, [addedCategories, availableCategories])
 
   
   // ----- DEBOUNCE -----
@@ -259,7 +256,6 @@ export default function CreationSettings() {
       setLoading(false);
       const newEditingGame = { ...editingGame, title };
       updateGame(newEditingGame);
-
     }
   };
   
