@@ -22,11 +22,11 @@ const Card: React.FC<CardProps> = ({ id, imageSrc, title, description, categorie
   return (
     <CardWrapperCard href={GAME_DESCRIPTION + '/' + id}>
       <ImageSpace>
-        {imageSrc ? 
-        <CardImage src={imageSrc} alt={title} />
-                :
-                <ImagePlaceholder/>
-                }
+        {imageSrc ?
+          <CardImage src={imageSrc} alt={title} />
+          :
+          <ImagePlaceholder />
+        }
       </ImageSpace>
       <CardContentWrapper>
         <CardTitle>{title}</CardTitle>
