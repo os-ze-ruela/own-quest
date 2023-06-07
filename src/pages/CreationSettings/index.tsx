@@ -319,7 +319,7 @@ export default function CreationSettings() {
         <Alert severity="error">Ocorreu um erro ao gerar a imagem com IA</Alert>
       </Snackbar>
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
-      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={true} isPublished={published} />
+      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={true} isPublished={published} showHelp={null} setShowHelp={()=>{}}/>
       <Title>Configurações da história</Title>
       <SettingsWrapper>
         <SettingsContainer>

@@ -42,6 +42,7 @@ const Creation = () => {
   const { getGameById, editingGame, published, setPublished } = useContext(GameContext)
   const { id } = useParams()
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+  const [showHelp, setShowHelp] = useState(true);
   const { loading, setLoading } = useContext(CreationContext)
 
 
@@ -131,15 +132,23 @@ const Creation = () => {
         </BackdropWrapper>
 
       </CustomBackdrop>
-      <PopupContainer top={'200px'} left={'20px'}>
-        <Popup message="🚨 Após selecionar um botão, clique duas vezes na página para voltar a edita-lá" />
-        <Popup message="🚨 Após selecionar a página destino do botão, você pode usar o atalho F4 para ir até ela" />
-      </PopupContainer>
-      <PopupContainer top={'700px'} left={'1200px'}>
-        <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" />
-      </PopupContainer>
+      {showHelp ? 
+      (    
+        <>    
+        <PopupContainer top={'200px'} left={'20px'}>
+          <Popup message="🚨 Após selecionar um botão, clique duas vezes na página para voltar a edita-lá" />
+          <Popup message="🚨 Após selecionar a página destino do botão, você pode usar o atalho F4 para ir até ela" />
+        </PopupContainer>
+        <PopupContainer top={'200px'} left={'1200px'}>
+          <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" />
+          <Popup message="🚨 Acesse o menu lateral para uma melhor visualização da história e seus caminhos" />
+        </PopupContainer>
+        </>)
+        :
+        (<></>)
+    }
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
-      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={false} isPublished={published}/>
+      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={false} isPublished={published} showHelp={showHelp} setShowHelp={setShowHelp}/>
       <CreationStyle>
 
         <Body>
