@@ -86,9 +86,9 @@ const Popup = ({ message }: PopupProps) => {
   const [hidePermanently, setHidePermanently] = useState(false);
 
   const handleClosePopup = () => {
-    if (hidePermanently) {
-      localStorage.setItem("hidePopup", "true");
-    }
+    // if (hidePermanently) {
+    //   localStorage.setItem("hidePopup", "true");
+    // }
     setHidePopup(true);
   };
 
@@ -102,14 +102,14 @@ const Popup = ({ message }: PopupProps) => {
       <PopupContainer>
         <PopupContent>
           <PopupMessage>{message}</PopupMessage>
-          <PopupCheckbox>
+          {/* <PopupCheckbox>
             <Checkbox
               type="checkbox"
               checked={hidePermanently}
               onChange={() => setHidePermanently(!hidePermanently)}
             />
             Não mostrar novamente
-          </PopupCheckbox>
+          </PopupCheckbox> */}
           <PopupButton onClick={handleClosePopup}>Entendi</PopupButton>
         </PopupContent>
       </PopupContainer>
