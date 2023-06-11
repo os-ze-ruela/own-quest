@@ -207,14 +207,29 @@ export default function CreationSettings() {
   useEffect(() => {
     fetchAllRequests()
   }, [])
+
   
   useEffect(() => {
     if (editingGame) {
       setAddedCategories(editingGame.categories);
-      setPublished(editingGame.isPublished)
-      setAvailableCategories(categories.filter(category1 => !addedCategories.some(category2 => category1.id === category2.id)));
+      setPublished(editingGame.isPublished);
     }
-  }, [editingGame, categories]);
+  }, [editingGame]);
+  
+  useEffect(() => {
+    if (categories.length > 0) {
+      const filteredCategories = categories.filter(category1 => !addedCategories.some(category2 => category1.id === category2.id));
+      setAvailableCategories(filteredCategories);
+    }
+  }, [categories, addedCategories]);
+  
+  // useEffect(() => {
+  //   if (editingGame) {
+  //     setAddedCategories(editingGame.categories);
+  //     setPublished(editingGame.isPublished)
+  //     setAvailableCategories(categories.filter(category1 => !addedCategories.some(category2 => category1.id === category2.id)));
+  //   }
+  // }, [editingGame, categories]);
   
   
   // useEffect(() => {
