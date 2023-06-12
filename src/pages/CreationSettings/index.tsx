@@ -222,22 +222,6 @@ export default function CreationSettings() {
       setAvailableCategories(filteredCategories);
     }
   }, [categories, addedCategories]);
-  
-  // useEffect(() => {
-  //   if (editingGame) {
-  //     setAddedCategories(editingGame.categories);
-  //     setPublished(editingGame.isPublished)
-  //     setAvailableCategories(categories.filter(category1 => !addedCategories.some(category2 => category1.id === category2.id)));
-  //   }
-  // }, [editingGame, categories]);
-  
-  
-  // useEffect(() => {
-  //   console.log("Addeded Categories")
-  //   console.log(addedCategories)
-  //   console.log("Available Categories Filtered")
-  //   console.log(availableCategories)
-  // }, [addedCategories, availableCategories])
 
   
   // ----- DEBOUNCE -----

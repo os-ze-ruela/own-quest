@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { HiPlus } from 'react-icons/hi';
 import { MdOutlineAddCircleOutline } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
@@ -9,7 +9,7 @@ import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated
 import { AuthContext } from '../../contexts/auth';
 import { CreationContext } from '../../contexts/creation';
 import { GameContext } from '../../contexts/game';
-import { ActualPage, AddButton, AddPage, Body, ButtonContainer, CreationBody, CreationStyle, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu, PopupContainer } from '../../styles/Creation';
+import { ActualPage, AddButton, AddPage, Body, ButtonContainer, ButtonSettings, ButtonSettingsWrapper, CreationBody, CreationStyle, DeleteButton, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu, PopupContainer } from '../../styles/Creation';
 import ButtonActionBar from './components/ButtonActionBar';
 import NoPagePlaceholder from './components/NoPagePlaceholder';
 import PageActionBar from './components/PageActionBar';
@@ -17,6 +17,10 @@ import { Backdrop, Box } from '@mui/material';
 import { AstronautLoading, BackdropWrapper, LoadingText } from '../../styles/CreationSettings';
 import styled from 'styled-components';
 import ASTROPC from "../../assets/img/astronauta-pc.svg";
+import ColorPicker from '../../components/ButtonWithColorPicker/ButtonWithColorPicker';
+import SelectBoxComponent from '../../components/SelectBoxComponent/SelectBoxComponent';
+import { BiTrash } from 'react-icons/bi';
+import { Button } from '../../models/Button';
 
 const Creation = () => {
 
@@ -43,7 +47,14 @@ const Creation = () => {
   const { id } = useParams()
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
   const [showHelp, setShowHelp] = useState(true);
+  // const {showButtonSettings, setShowButtonSettings} = useContext(CreationContext)
+  // const [showButtonSettings, setShowButtonSettings] = useState(false);
+  const { handleButtonColorChange } = useContext(CreationContext)
   const { loading, setLoading } = useContext(CreationContext)
+  const { handleSelectChange } = useContext(CreationContext)
+  const { handleDeleteButton } = useContext(CreationContext)
+  const [showButtonSettings, setShowButtonSettings] = useState(Array(4).fill(false));
+  
 
 
   const debounceSaveChanges = () => {
@@ -78,6 +89,7 @@ const Creation = () => {
     updateButton(pages[indexSelected].buttons[indexButton])
   };
 
+
   useEffect(() => {
     return () => {
       if (timerId) {
@@ -91,7 +103,7 @@ const Creation = () => {
     getPagesFromGameID(id!, false)
     getGameById(id!)
   }, [])
-
+  
   useEffect(() => {
     const setDocumentTitle = () => {
       if (editingGame) {
@@ -118,6 +130,31 @@ const Creation = () => {
   }
 `;
 
+const buttonContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        buttonContainerRef.current &&
+        !buttonContainerRef.current.contains(event.target as Node)
+      ) {
+        setIndexButton(-1);
+        console.log("clicou fora")
+        setShowButtonSettings(prevState => {
+          const newState = Array(4).fill(false);
+          return newState;
+        }
+        );
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
     <CreationBody>
       <CustomBackdrop
@@ -136,11 +173,10 @@ const Creation = () => {
       (    
         <>    
         <PopupContainer top={'200px'} left={'20px'}>
-          <Popup message="🚨 Após selecionar um botão, clique duas vezes na página para voltar a edita-lá" />
           <Popup message="🚨 Após selecionar a página destino do botão, você pode usar o atalho F4 para ir até ela" />
+          <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" />
         </PopupContainer>
         <PopupContainer top={'200px'} left={'1200px'}>
-          <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" />
           <Popup message="🚨 Acesse o menu lateral para uma melhor visualização da história e seus caminhos" />
         </PopupContainer>
         </>)
@@ -153,22 +189,28 @@ const Creation = () => {
 
         <Body>
           <PageBody>
-            {pages.length > 0 ? actionBarSelected ?
+            {pages.length > 0 ?
               (
                 <PageActionBar />
               )
               :
-              (
-                <ButtonActionBar />
-              ) : (<></>)
+              (<></>)
             }
-
+            {/* <PageActionBar /> */}
             <ActualPage>
               {pages.length < 1 ? (
                 <NoPagePlaceholder />
               ) : (
                 <Page background={pages[indexSelected].color}
-                  onDoubleClick={() => handlePageActionBar(indexButton, actionBarSelected)}   >
+                  // onDoubleClick={() => handlePageActionBar(indexButton, actionBarSelected)}  
+                //   onDoubleClick={()=>{
+                //     setShowButtonSettings(prevState => {
+                //     const newState = Array(pages[indexSelected].buttons.length).fill(false);
+                //     return newState;
+                //   }
+                //   );
+                // }}
+                  >
                   <PageTitle
                     type="text"
                     name="PageTitle"
@@ -196,8 +238,24 @@ const Creation = () => {
                       debounceSaveChanges()
                     }}
                   />
-                  <ButtonContainer>
-                    {pages[indexSelected].buttons.map((button, index) => (
+                  <ButtonContainer ref={buttonContainerRef}>
+                  {pages[indexSelected].buttons.map((button, index) => (
+                  <ButtonSettingsWrapper>
+                     {showButtonSettings[index]  && (
+                        <ButtonSettings>
+                          <ColorPicker
+                            color={pages[indexSelected].buttons[indexButton].color}
+                            setColor={(color) => {
+                              handleButtonColorChange(indexSelected, indexButton, color)
+                              updateButton(pages[indexSelected].buttons[indexButton])
+                            }} />
+                           <SelectBoxComponent defaultValue="Ir para página" pageList={pages.map((page, index) => `Página ${index + 1}`)} onChange={handleSelectChange} /> 
+                          <DeleteButton onClick={handleDeleteButton}>
+                            <BiTrash size={30} color="#000" />
+                          </DeleteButton> 
+                        </ButtonSettings>
+                      )} 
+                    
                       <EditableButton
                         key={index}
                         value={button.title}
@@ -206,7 +264,12 @@ const Creation = () => {
                         placeholder={"Botão " + (index + 1).toString()}
                         background={button.color}
                         onClick={() => {
-                          handleButton(index, button)
+                          setShowButtonSettings(prevState => {
+                            const newState = Array(pages[indexSelected].buttons.length).fill(false);
+                            newState[index] = true; // Mostra o ButtonSettings para o botão selecionado
+                            return newState;
+                          });
+                          handleButton(index, button);
                         }}
                         onChange={(event) => {
                           handleTextChange(indexSelected, index, event.target.value);
@@ -220,13 +283,17 @@ const Creation = () => {
                           }
                         }}
                       />
-                    ))}
+                    </ButtonSettingsWrapper>
+                      ))}
                     <AddButton onClick={
                       () => { handleAddButtonClick(indexSelected); }}
                       canAdd={pages[indexSelected].buttons.length < 4} >
                       <MdOutlineAddCircleOutline size={25} color="#fff" />
                     </AddButton>
                   </ButtonContainer>
+                      
+
+   
                 </Page>)}
 
             </ActualPage>

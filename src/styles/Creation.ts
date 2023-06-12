@@ -309,3 +309,46 @@ export const PopupContainer = styled.div.attrs((props: {top: string, left: strin
   top: ${props => props.top};
   left: ${props => props.left};
 `;
+
+export const ButtonSettingsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+`
+export const ButtonSettings = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto; 
+  background: #FFFF;
+  line-height: 1.6em;  
+  border-radius: 15px;
+  width: 17%;
+  height: 3%;
+  color: 'black';
+  padding: 20px;
+  position: absolute;
+  top: 48%;
+
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+
+  &:after { /*Triangulo*/
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    /*Faz seta "apontar para baixo. Definir o valor como 'top' fará ela "apontar para cima" */
+    /*Aqui entra a cor da "aba" do balão */
+    border-top: 10px solid #FFFF;
+    bottom: -10px; /*localização. Experimente alterar para 'bottom'*/
+    right: 50%;
+    left: 50%;
+  }
+
+`
+
+

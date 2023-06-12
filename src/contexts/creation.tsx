@@ -39,6 +39,8 @@ type CreationContextType = {
   destinyPage: number
   setDestinyPage: (page: number) => void
   handleButton: (index: number, button: ButtonModel) => void
+  showButtonSettings: boolean
+  setShowButtonSettings: (show: boolean) => void
 }
 
 interface PageResponse {
@@ -56,6 +58,8 @@ interface PageResponse {
 export const CreationContext = createContext<CreationContextType>({} as CreationContextType)
 
 export const CreationProvider = ({ children }: { children: ReactNode }) => {
+
+
 
   //---Page---
   async function addPage(gameId: number, numberPage: number): Promise<PageModel> {
@@ -182,7 +186,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(false);
   const [selectedPage, setSelectedPage] = useState(0);
   const [destinyPage, setDestinyPage] = useState(-1);
-
+  const [showButtonSettings, setShowButtonSettings] = useState(false);
 
   // 0 - PAGE | 1 - BUTTON
   const [actionBarSelected, setActionBarSelected] = useState(true);
@@ -289,6 +293,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
 
   const handleButton = (index: number, button: ButtonModel) => {
     setIndexButton(index) 
+    setShowButtonSettings(true)
     handleButtonActionBar(index, actionBarSelected); 
     setDestinyPage(findPageIndex(pages, button.nextPageId))
   };
@@ -358,7 +363,9 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
       findPageIndex,
       destinyPage,
       setDestinyPage,
-      handleButton
+      handleButton,
+      showButtonSettings,
+      setShowButtonSettings
     }}>
       {children}
     </CreationContext.Provider>
