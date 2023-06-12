@@ -3,7 +3,7 @@
 
 import styled from "styled-components";
 
-export const CardHighlightGameWrapper = styled.div`
+export const CardHighlightGameWrapper = styled.a`
     position: relative;
     display: flex;
     flex-direction: column;

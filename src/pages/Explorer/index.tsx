@@ -163,6 +163,7 @@ const Explorer = () => {
                     </>
                   ) : (
                     <CardHighlightGame
+                      id={highlightGame!.id}
                       key={0}
                       title={highlightGame!.title}
                       imageSrc={highlightGame!.image}
