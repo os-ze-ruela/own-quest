@@ -4,7 +4,7 @@ import AppError from "../core/app-error";
 import Category from "../models/Category";
 import Game from "../models/Game";
 import PlayGames from "../models/PlayGame";
-import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchHighlightGame, findGamesByTitle, getGamesByCategory, getHotGames, getUserGamesByToken, getUserPlayGames, patchGame, postFullGame, postGame, postGameCategoryByID, publishGame, unpublishGame } from "../services/api";
+import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchHighlightGame, findGamesByTitle, getGamesByCategory, getHotGames, getUserGamesByToken, getUserPlayGames, patchGame, postFullGame, postGame, postGameCategoryByID, publishGame, reportGame, unpublishGame } from "../services/api";
 
 
 
@@ -21,6 +21,7 @@ type GameContextType = {
     getHotGamesForHome: () => Promise<void>,
     searchGamesByTitle: (title: string) => Promise<void>,
     setPagesOfHotGames: (page: number) => void,
+    reportGameById: (gameId: number, userId: number, complain: string) => Promise<void>,
     pagesOfHotGames: number,
     userGames: Game[],
     userPlayingGames: PlayGames[],
@@ -464,6 +465,14 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     };
 
 
+    async function reportGameById(gameId: number, userId: number, complain: string): Promise<any> {
+        try {
+            await reportGame(gameId, userId, complain);
+        } catch (error) {
+            console.error(error)
+            throw error
+        }
+    }
 
 
     return (
@@ -480,6 +489,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             getHighlightGame,
             searchGamesByTitle,
             getUserPlayingGames,
+            reportGameById,
             userGames,
             userPlayingGames,
             hotGames,
