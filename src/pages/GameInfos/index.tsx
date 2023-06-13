@@ -1,7 +1,8 @@
-import { Backdrop, Skeleton } from '@mui/material';
+import { Alert, Backdrop, Skeleton, Snackbar } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { BiArrowBack } from "react-icons/bi";
 import { useNavigate, useParams } from "react-router-dom";
+import DialogReportGame from '../../components/Dialog/DialogReportGame';
 import DialogResumeGame from '../../components/Dialog/DialogResumeGame';
 import Header from '../../components/Header/Header';
 import HeaderLogged from '../../components/Header/HeaderLogged';
@@ -34,6 +35,7 @@ export const GameInfos = () => {
 
 
     const [showModal, setShowModal] = useState(false);
+    const [showModalReport, setShowModalReport] = useState(false);
 
 
 
@@ -179,6 +181,20 @@ export const GameInfos = () => {
         }
     }, [visitingGame]);
 
+
+    const [successReportSnack, setSuccessReportSnack] = useState(false)
+    const [errorReportSnack, setErrorReportSnack] = useState(false)
+
+    const handleSuccessCloseAlert = () => {
+        setSuccessReportSnack(false)
+    };
+
+    const handleErrorCloseAlert = () => {
+        setErrorReportSnack(false)
+    };
+
+
+
     return (
         <>
             {authenticated ?
@@ -193,6 +209,34 @@ export const GameInfos = () => {
                     <DialogResumeGame onClose={() => { setShowModal(false) }} handleRestartGame={handleRestartGame} handleResumeGame={handleResumeGame} />
                 </Backdrop>
             )}
+            {showModalReport && (
+                <Backdrop
+                    sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={true}
+                >
+                    <DialogReportGame
+                        onClose={() => { setShowModalReport(false) }}
+                        onCloseError={() => {
+                            setShowModalReport(false)
+                            setErrorReportSnack(true)
+                        }}
+                        onCloseSuccess={() => {
+                            setShowModalReport(false)
+                            setSuccessReportSnack(true)
+                        }}
+                        gameId={visitingGame?.id!} userId={user?.id!} />
+                </Backdrop>
+            )}
+            <Snackbar open={successReportSnack} autoHideDuration={5000} onClose={handleSuccessCloseAlert}>
+                <Alert onClose={handleSuccessCloseAlert} severity="success" sx={{ backgroundColor: '#69EC31', color: 'black', width: '100%' }}>
+                    História reportado. Nós iremos analisar e tomar as próximas medidas daqui para frente!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={errorReportSnack} autoHideDuration={5000} onClose={handleErrorCloseAlert}>
+                <Alert onClose={handleErrorCloseAlert} severity="warning" sx={{ backgroundColor: '#EC8831', color: 'black', width: '100%' }}>
+                    Ocorreu um erro ao fazer a denúncia dessa história.
+                </Alert>
+            </Snackbar>
             <GameInfosMain>
                 <BackButtonWrapper href={EXPLORER}>
                     <BiArrowBack />
@@ -268,7 +312,7 @@ export const GameInfos = () => {
                                     <HeartIcon onClick={handleClick} liked={liked} />
                                     <p>{visitingGame?.favorites}</p>
                                 </LikeWrapper>
-                                <DenounceButton>Denunciar</DenounceButton>
+                                <DenounceButton onClick={() => setShowModalReport(true)} >Denunciar</DenounceButton>
                                 <PlayButton onClick={handlePlayButton}>Jogar</PlayButton>
                             </GameActionsWrapper>
                         )}
