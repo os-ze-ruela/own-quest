@@ -15,6 +15,8 @@ import { HOME } from "../../core/app-urls";
 import Category from "../../models/Category";
 import { api, uploadImage, uploadRandomImage } from "../../services/api";
 import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySettingsLabel, DeleteButton, DescriptionInput, FileInput, GenerateRandomImageButton, GptIcon, ImageContainer, ImageGameContainer, ImagePlaceholder, PublishButton, RandomDescriptionButton, RandomDescriptionWrapper, Separator, SettingsContainer, SettingsWrapper, Title, TitleInput, Titles, TitlesInfo, UploadImageButton, WrapTextButton } from "../../styles/CreationSettings";
+import { PopupContainer } from "../../styles/Creation";
+import Popup from "../../components/Popup/Popup";
 
 export default function CreationSettings() {
 
@@ -318,6 +320,9 @@ export default function CreationSettings() {
 
   return (
     <Body>
+        <PopupContainer top={'550px'} left={'1100px'}>
+          <Popup message="🚨 A imagem é gerada com base na descrição da história, certifique-se de digitar a descrição antes de gerar" />
+        </PopupContainer>
       {showModal && (
         <Backdrop
                 sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
