@@ -8,22 +8,49 @@ import {
   ButtonRecover,
   Input,
   Label,
+  MessageError,
+  MessageSuccess,
   RecoverStyle,
   Title,
 } from "../../styles/Recover";
 import { AuthContext } from "../../contexts/auth";
+import { AxiosError } from "axios";
 
 export default function Recover() {
   const [emailInfo, setEmailInfo] = useState("");
-  const [isEmailSent, setIsEmailSent] = useState(false);
+  const [messageErr, setMessageErr] = useState("");
+  const [showErr, setShowErr] = useState(false);
+  const [showSucc, setShowSucc] = useState(false);
   const { sendRecover } = useContext(AuthContext);
 
   async function sendEmail(email: string) {
+    setShowSucc(false);
+    setShowErr(false);
     try {
       await sendRecover(email);
       console.log(email);
-    } catch (e) {
-      //   alert("ERRO AO ENVIAR E-MAIL. VERIFIQUE SE JÁ POSSUI CADASTRO");
+      setShowSucc(true);
+      setMessageErr("Email enviado com sucesso!");
+    } catch (error) {
+      const e = (await error) as AxiosError;
+      if (e.response) {
+        const statusCode = e.response.status;
+        if (statusCode === 400) {
+          setMessageErr("Nenhum usuário encontrado");
+          console.error("Erro 400: Requisição inválida");
+          setShowErr(true);
+        } else if (statusCode === 401) {
+          setMessageErr("Token não está autorizado");
+          console.error("Erro 401: Não autorizado");
+          setShowErr(true);
+        } else if (statusCode === 500) {
+          setMessageErr("Erro ao enviar o email");
+          console.error("Erro 500: Erro interno do servidor");
+          setShowErr(true);
+        }
+      } else {
+        console.error("Erro ao enviar email:", error);
+      }
     }
   }
 
@@ -52,6 +79,13 @@ export default function Recover() {
           value={emailInfo}
           onChange={handleEmailChange}
         />
+
+        { showErr &&
+            <MessageError>{messageErr}</MessageError>}
+
+        { showSucc &&
+            <MessageSuccess>{messageErr}</MessageSuccess>}
+
         <ButtonRecover
           onClick={async () => {
             await sendEmail(emailInfo);

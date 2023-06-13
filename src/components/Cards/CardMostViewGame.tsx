@@ -42,7 +42,7 @@ import ImagePlaceholder from '../ImagePlaceholder/ImagePlaceholder';
                     </CardMostViewGameCreatedBy>
                 </CardMostViewGameContentWrapper>
                 <PlayButtonWrapper className='button-wrapper'>
-                    <Button href=''>Jogar</Button>
+                    <Button href={GAME_DESCRIPTION + '/' + id}>Jogar</Button>
                 </PlayButtonWrapper>
             </CardMostViewGameWrapper>
         );
