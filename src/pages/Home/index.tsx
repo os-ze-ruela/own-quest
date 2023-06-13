@@ -6,6 +6,10 @@ import { LOGIN, REGISTER } from "../../core/app-urls";
 import { BannerInfo, FunctionItem, HomeActionButton, HomeDiv, ImgAstroHome, ListOfFuncs, MainContent, MainInfos } from "../../styles/Home";
 
 
+import ASTRO_CONVERSANDO from "../../assets/img/astronauta-conversando 1.svg";
+import ASTRO_PC from "../../assets/img/astronauta-pc.svg";
+import ASTRO_LAPIS from "../../assets/img/astrounauta-lapis.svg";
+
 export default function Home() {
     return (
         <HomeDiv>
@@ -52,25 +56,33 @@ export default function Home() {
                         <div>
                             <h3>Diga olá a um novo jeito de criar histórias customizáveis</h3>
                             <p>Com o sistema de criação de histórias, você pode personalizar, adicionar e colocar a quantidade que quiser de caminhos para a sua história</p>
-                            <HomeActionButton>Comece a criar histórias</HomeActionButton>
+                            <HomeActionButton href={REGISTER}>Comece a criar histórias</HomeActionButton>
                         </div>
-                        <div className="img-example" ></div>
+                        <div className="img-example" >
+                            <img src={ASTRO_LAPIS} alt="" />
+                        </div>
                     </FunctionItem>
                     <FunctionItem flexDirection="row-reverse">
                         <div>
                             <h3>Compartilhe para os seus amigos jogarem</h3>
                             <p>Com um link personalizado que é gerado, você pode enviar e permitir com que as pessoas joguem e avaliem a sua história criado</p>
-                            <HomeActionButton>Comece a criar histórias </HomeActionButton>
+                            <HomeActionButton href={REGISTER}>Comece a criar histórias </HomeActionButton>
                         </div>
-                        <div className="img-example" ></div>
+                        <div className="img-example" >
+
+                            <img src={ASTRO_CONVERSANDO} alt="" />
+                        </div>
                     </FunctionItem>
                     <FunctionItem>
                         <div>
                             <h3>Mais de 10 categorias diferentes para você jogar</h3>
                             <p>Terror, drama, aventura e diversão, todos esses são algumas das mais de 10 categorias de jogos dentro da plataforma</p>
-                            <HomeActionButton>Escolha uma categoria</HomeActionButton>
+                            <HomeActionButton href={REGISTER}>Escolha uma categoria</HomeActionButton>
                         </div>
-                        <div className="img-example" ></div>
+                        <div className="img-example">
+
+                            <img src={ASTRO_PC} alt="" />
+                        </div>
                     </FunctionItem>
                 </ListOfFuncs>
             </section>

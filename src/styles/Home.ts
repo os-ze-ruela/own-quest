@@ -189,10 +189,16 @@ export const FunctionItem = styled.li.attrs((props: { flexDirection: string }) =
 
     .img-example {
         flex: 10%;
-        background: grey;
         border-radius: 12px;
-        height: 90%;
+        height: 100%;
         width: 60%;
+        overflow: hidden;
+    }
+
+    .img-example img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 
     @media screen and (max-width: 1024px) {

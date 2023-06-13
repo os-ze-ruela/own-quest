@@ -38,7 +38,7 @@ const CardUserGame: React.FC<CardUserGameProps> = ({ id, imageSrc, title, descri
                     ))}
                 </CategoryLabelWrapper>
                 <ButtonWrapper className='button-wrapper'>
-                    <Button href={GAME + '/' + id} >{isPublished ? 'Jogar' : 'Editar'}</Button>
+                    <Button href={GAME + '/' + id} >{'Editar'}</Button>
                 </ButtonWrapper>
             </CardUserGameContentWrapper>
         </CardUserGameWrapper>

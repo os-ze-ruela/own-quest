@@ -11,7 +11,7 @@ import { GameContext } from '../../contexts/game';
 import { PlayGamesContext } from '../../contexts/play-games';
 import { UserContext } from '../../contexts/user';
 import AppError from '../../core/app-error';
-import { EXPLORER, LOGIN, PLAYGAME } from '../../core/app-urls';
+import { CREATOR, EXPLORER, LOGIN, PLAYGAME } from '../../core/app-urls';
 import Category from '../../models/Category';
 import Game from '../../models/Game';
 import { api, fetchGameById } from '../../services/api';
@@ -22,7 +22,7 @@ export const GameInfos = () => {
 
     const { id } = useParams()
 
-    const { playGame, setCurrentPlayingPage, getResumePlayedGame, setHistoricGameId, setPlayGameId, finishAndPlay} = useContext(PlayGamesContext)
+    const { playGame, setCurrentPlayingPage, getResumePlayedGame, setHistoricGameId, setPlayGameId, finishAndPlay } = useContext(PlayGamesContext)
     const { likeGame, unlikeGame } = useContext(UserContext)
     const { authenticated, user } = useContext(AuthContext)
     const [visitingGame, setVisitingGame] = useState<Game | null>(null)
@@ -36,7 +36,7 @@ export const GameInfos = () => {
     const [showModal, setShowModal] = useState(false);
 
 
-    
+
     const handleClick = async () => {
         if (!liked) {
             try {
@@ -56,29 +56,29 @@ export const GameInfos = () => {
                 gameTemp!.favorites = gameTemp?.favorites! - 1;
                 setVisitingGame(gameTemp)
             } catch (error) {
-               console.log(error)
+                console.log(error)
             }
         }
     };
 
     const handlePlayButton = async () => {
-     
+
         try {
             const response = await playGame(user!.id, Number(id!))
             setPlayGameId(response.data.play_game_id)
             setHistoricGameId(response.data.historic_last_game_id)
             setCurrentPlayingPage(response.data.actual_page_id)
             navigate(PLAYGAME + '/' + id + '?test=false');
-            
+
         } catch (error) {
             console.log(error)
             if (error instanceof AppError && error.statusCode === 409) {
                 setShowModal(true);
             }
         }
-        
+
     };
-    
+
     const handleRestartGame = async () => {
 
         try {
@@ -93,13 +93,13 @@ export const GameInfos = () => {
 
         navigate(PLAYGAME + '/' + id + '?test=false');
     }
-    
+
     const handleResumeGame = async () => {
-        
+
         try {
             const response = await getResumePlayedGame(user!.id, Number(id!))
             console.log(response)
-            if(response.data.is_ongoing === true){
+            if (response.data.is_ongoing === true) {
                 setPlayGameId(response.data.play_game_id)
                 setCurrentPlayingPage(response.data.historic_last_page.page_game_id)
                 setHistoricGameId(response.data.historic_last_page.id)
@@ -109,7 +109,7 @@ export const GameInfos = () => {
             console.log(error)
         }
     }
-    
+
 
     async function getGameById(id: string): Promise<void> {
         try {
@@ -142,7 +142,7 @@ export const GameInfos = () => {
                 isDeleted: isDeleted,
                 createdBy: createdBy
             }))
-          
+
             await fetchGamesByCategory(categorieGame[0].id);
 
             setLiked(isFavorited)
@@ -165,24 +165,20 @@ export const GameInfos = () => {
 
     useEffect(() => {
         const setDocumentTitle = () => {
-          if (visitingGame) {
-            document.title = visitingGame.title;
-          }
+            if (visitingGame) {
+                document.title = visitingGame.title;
+            }
         };
-    
+
         setDocumentTitle(); // Chamada inicial para definir o título assim que o componente for montado
-    
+
         // Monitora as mudanças no estado visitingGame
         const visitingGameUpdated = visitingGame !== null && visitingGame !== undefined;
         if (visitingGameUpdated) {
-          setDocumentTitle();
+            setDocumentTitle();
         }
-      }, [visitingGame]);
+    }, [visitingGame]);
 
-
-
-
-    
     return (
         <>
             {authenticated ?
@@ -191,10 +187,10 @@ export const GameInfos = () => {
             }
             {showModal && (
                 <Backdrop
-                        sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                        open={true}
+                    sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={true}
                 >
-                <DialogResumeGame onClose={()=>{}} handleRestartGame={handleRestartGame} handleResumeGame={handleResumeGame}/>
+                    <DialogResumeGame onClose={() => { setShowModal(false) }} handleRestartGame={handleRestartGame} handleResumeGame={handleResumeGame} />
                 </Backdrop>
             )}
             <GameInfosMain>
@@ -212,7 +208,7 @@ export const GameInfos = () => {
                             (<Skeleton variant="rounded" animation="wave" width='100%' height='200px' />)
                             :
                             (visitingGame?.image != null ? <ImageGame src={visitingGame?.image} /> : (
-                                <ImagePlaceholder/>
+                                <ImagePlaceholder />
                             ))}
                     </GameImageWrapper>
                     <GamesInfosWrapper>
@@ -254,7 +250,10 @@ export const GameInfos = () => {
                             :
                             (<CreatedByWrapper>
                                 <h3>Criado Por</h3>
-                                <p>@{visitingGame?.createdBy?.nickname}</p>
+                                <a href={CREATOR + '/' + visitingGame?.createdBy?.nickname}>
+                                    <p>@{visitingGame?.createdBy?.nickname}</p>
+                                </a>
+
                             </CreatedByWrapper>)}
                     </GamesInfosWrapper>
                     {loading ?
@@ -264,14 +263,14 @@ export const GameInfos = () => {
                             <Skeleton variant="rounded" animation="wave" width='100%' height='40px' style={{ marginTop: '8px' }} />
                         </GameActionsWrapper>)
                         : (
-                        <GameActionsWrapper>
-                            <LikeWrapper>
-                                <HeartIcon onClick={handleClick} liked={liked} />
-                                <p>{visitingGame?.favorites}</p>
-                            </LikeWrapper>
-                            <DenounceButton>Denunciar</DenounceButton>
-                            <PlayButton onClick={handlePlayButton}>Jogar</PlayButton>
-                        </GameActionsWrapper>
+                            <GameActionsWrapper>
+                                <LikeWrapper>
+                                    <HeartIcon onClick={handleClick} liked={liked} />
+                                    <p>{visitingGame?.favorites}</p>
+                                </LikeWrapper>
+                                <DenounceButton>Denunciar</DenounceButton>
+                                <PlayButton onClick={handlePlayButton}>Jogar</PlayButton>
+                            </GameActionsWrapper>
                         )}
                 </GameInfosWrapper>
                 {/* <HorizontalListWrapper>

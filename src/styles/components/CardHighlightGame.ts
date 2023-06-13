@@ -16,6 +16,8 @@ export const CardHighlightGameWrapper = styled.a`
     transition: all 0.2s ease-in-out;
     height: 550px;
     background-color: #202331;
+    text-decoration: none;
+    
 
     -moz-box-sizing: border-box; 
     -webkit-box-sizing: border-box; 

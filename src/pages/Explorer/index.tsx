@@ -20,8 +20,6 @@ const Explorer = () => {
   const { authenticated, user, } = useContext(AuthContext)
   const { hotGames, highlightGame, getHotGamesForHome, getHighlightGame, searchGamesByTitle } = useContext(GameContext)
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingSearch, setIsLoadingSearch] = useState(false);
-  const [sliderOffset, setSliderOffset] = useState(0);
   const [search, setSearch] = useState('');
 
 

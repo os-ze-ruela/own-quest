@@ -3,14 +3,14 @@ import ASTRO from "../../assets/img/astronauta-saturno 1.png";
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
 import { AuthContext } from '../../contexts/auth';
-import { ButtonLogin, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginInputs, LoginRecoverItemsDiv, LoginStyle, MessageError, RecoverLink, RecoverText, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login';
 import AppError from '../../core/app-error';
+import { ButtonLogin, FieldsDiv, HideButton, ImgAstro, Input, InputButtonDiv, Label, LoginInputs, LoginRecoverItemsDiv, LoginStyle, MessageError, RecoverLink, RecoverText, RegisterLink, RegisterText, SubTitle, Title } from '../../styles/Login';
 
+import { CircularProgress } from '@mui/material';
 import showPasswordImg from "../../assets/img/hide.svg";
 import hidePasswordImg from "../../assets/img/show.svg";
 import AskRegisterBar from '../../components/Bar/AskRegisterBar';
 import { RECOVER_PASSWORD, REGISTER } from '../../core/app-urls';
-import { CircularProgress } from '@mui/material';
 
 function Login() {
 
