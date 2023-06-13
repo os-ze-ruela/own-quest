@@ -251,7 +251,9 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
             </StorieTitle>
 
             <HelpIcon onClick={() => {
-              setShowHelp(!showHelp)
+              setShowHelp(true)
+              localStorage.removeItem("hidePopup");
+              window.location.reload();
               }}  title='Ajuda'>
               <BiHelpCircle/>
             </HelpIcon>
