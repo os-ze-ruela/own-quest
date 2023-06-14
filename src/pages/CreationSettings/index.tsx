@@ -22,6 +22,7 @@ export default function CreationSettings() {
 
   const { id } = useParams()
   const { user } = useContext(AuthContext);
+  const { userGames, getUserGames } = useContext(GameContext);
   const { handleBackClick } = useContext(CreationContext)
   const { handleCreateClick } = useContext(CreationContext)
   const { categories, getCategories } = useContext(CategoryContext)
@@ -36,7 +37,6 @@ export default function CreationSettings() {
   const { loading, setLoading } = useContext(CreationContext)
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
   const [titleTemp, setTitleTemp] = useState('');
-
   const [showModal, setShowModal] = useState(false);
 
 
