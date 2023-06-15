@@ -114,7 +114,8 @@ export const ListMyGamesCardContainer = styled.div.attrs((props: { translateX: s
 `;
 
 
-export const Title = styled.h1`
+export const Title = styled.a`
+    text-decoration: none;
     font-weight: bold;
     color: white;
     padding-top: 12px;

@@ -4,7 +4,7 @@ import AppError from "../core/app-error";
 import Category from "../models/Category";
 import Game from "../models/Game";
 import PlayGames from "../models/PlayGame";
-import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchHighlightGame, findGamesByTitle, getGamesByCategory, getHotGames, getUserGamesByToken, getUserPlayGames, patchGame, postFullGame, postGame, postGameCategoryByID } from "../services/api";
+import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchHighlightGame, findGamesByTitle, getGamesByCategory, getHotGames, getUserGamesByToken, getUserPlayGames, patchGame, postFullGame, postGame, postGameCategoryByID, publishGame, reportGame, unpublishGame } from "../services/api";
 
 
 
@@ -21,6 +21,7 @@ type GameContextType = {
     getHotGamesForHome: () => Promise<void>,
     searchGamesByTitle: (title: string) => Promise<void>,
     setPagesOfHotGames: (page: number) => void,
+    reportGameById: (gameId: number, userId: number, complain: string) => Promise<void>,
     pagesOfHotGames: number,
     userGames: Game[],
     userPlayingGames: PlayGames[],
@@ -36,6 +37,8 @@ type GameContextType = {
     gamesByCategory: Game[],
     published: boolean,
     setPublished: (status: boolean) => void
+    publishGameById: (id: number) => Promise<any>
+    unpublishGameById: (id: number) => Promise<any>
 }
 
 export const GameContext = createContext<GameContextType>({} as GameContextType)
@@ -53,6 +56,32 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     const [pagesOfHotGames, setPagesOfHotGames] = useState(1);
     const [loading, setLoading] = useState(false)
     const [published, setPublished] = useState(false);
+
+
+    async function publishGameById(id: number): Promise<any> {
+        try {
+            setLoading(true)
+            const response = await publishGame(id);
+            setLoading(false)
+            return response
+        } catch (error) {
+            setLoading(false)
+            console.error(error)
+        }
+    }
+
+    async function unpublishGameById(id: number): Promise<any> {
+        try {
+            setLoading(true)
+            const response = await unpublishGame(id);
+            setLoading(false)
+            return response
+        } catch (error) {
+            setLoading(false)
+            console.error(error)
+        }
+    }
+
 
     async function createGame(): Promise<number> {
         try {
@@ -436,6 +465,14 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     };
 
 
+    async function reportGameById(gameId: number, userId: number, complain: string): Promise<any> {
+        try {
+            await reportGame(gameId, userId, complain);
+        } catch (error) {
+            console.error(error)
+            throw error
+        }
+    }
 
 
     return (
@@ -452,6 +489,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             getHighlightGame,
             searchGamesByTitle,
             getUserPlayingGames,
+            reportGameById,
             userGames,
             userPlayingGames,
             hotGames,
@@ -465,7 +503,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             fetchGamesByCategory,
             gamesByCategory,
             published,
-            setPublished
+            setPublished,
+            publishGameById,
+            unpublishGameById
 
         }}>
             {children}

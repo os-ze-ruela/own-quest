@@ -113,6 +113,23 @@ export const deleteButton = async (id: number) => {
 
 //---- Game  ----
 
+export const publishGame = async (id: number) => {
+    return await api.patch(`/game/publish/${id}`)
+}
+
+export const unpublishGame = async (id: number) => {
+    return await api.patch(`/game/unpublish/${id}`)
+}
+
+export const reportGame = async (gameId: number, userId: number, complain: string ) => {
+    return await api.post(`/report`, {
+        "gameId": gameId,
+        "userId": userId,
+        "complain": complain,
+    })
+}
+
+
 export const fetchGameById = async (id: string) => {
     return await api.get(`/game/${id}`)
 }

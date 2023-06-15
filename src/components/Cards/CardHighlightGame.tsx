@@ -3,8 +3,10 @@ import Category from '../../models/Category';
 import { Button, CategoryLabel, CategoryLabelWrapper } from '../../styles/HomeLogged';
 import { CardHighlightGameContentWrapper, CardHighlightGameCreatedBy, CardHighlightGameImage, CardHighlightGameImageSpace, CardHighlightGameTitle, CardHighlightGameWrapper, CreatedByLabel, CreatedByName, PlayButtonWrapper } from '../../styles/components/CardHighlightGame';
 import ImagePlaceholder from '../ImagePlaceholder/ImagePlaceholder';
+import { GAME_DESCRIPTION } from '../../core/app-urls';
 
 type CardHighlightGameProps = {
+    id: number;
     imageSrc: string;
     title: string;
     description: string;
@@ -12,10 +14,10 @@ type CardHighlightGameProps = {
     createdByNickname: string;
 };
 
-const CardHighlightGame: React.FC<CardHighlightGameProps> = ({ imageSrc, title, description, categories, createdByNickname }) => {
+const CardHighlightGame: React.FC<CardHighlightGameProps> = ({ id, imageSrc, title, description, categories, createdByNickname }) => {
 
     return (
-        <CardHighlightGameWrapper >
+        <CardHighlightGameWrapper href={GAME_DESCRIPTION + '/' + id} >
             <CardHighlightGameImageSpace>
                 {imageSrc ? 
                 <CardHighlightGameImage src={imageSrc} alt={title} />
@@ -39,7 +41,7 @@ const CardHighlightGame: React.FC<CardHighlightGameProps> = ({ imageSrc, title, 
                 </CardHighlightGameCreatedBy>
             </CardHighlightGameContentWrapper>
             <PlayButtonWrapper className='button-wrapper'>
-                <Button href=''>Jogar</Button>
+                <Button href={GAME_DESCRIPTION + '/' + id}>Jogar</Button>
             </PlayButtonWrapper>
         </CardHighlightGameWrapper>
     );

@@ -178,7 +178,7 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
 
 
   const [indexSelected, setIndexSelected] = useState(0);
-  const [indexButton, setIndexButton] = useState(0);
+  const [indexButton, setIndexButton] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [selectedPage, setSelectedPage] = useState(0);
   const [destinyPage, setDestinyPage] = useState(-1);

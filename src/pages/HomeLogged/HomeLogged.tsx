@@ -12,7 +12,7 @@ import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated
 import { AuthContext } from '../../contexts/auth';
 import { GameContext } from '../../contexts/game';
 import AppError from '../../core/app-error';
-import { GAME } from '../../core/app-urls';
+import { GAME, MYGAMES } from '../../core/app-urls';
 import { ListMyGamesCardContainer, LoggedStyle, MyGameListContainer, PageWrapper, Title } from '../../styles/HomeLogged';
 
 const HomeLogged = () => {
@@ -80,7 +80,7 @@ const HomeLogged = () => {
               </ListMyGamesCardContainer>
             </>
           ) : (<></>)}
-          <Title>Minhas histórias</Title>
+          <Title href={MYGAMES}>Minhas histórias</Title>
           <ListMyGamesCardContainer translateX={`-${sliderOffset * 80}vw`} >
             {isLoading ? (
               <>

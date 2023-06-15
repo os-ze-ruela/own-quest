@@ -20,8 +20,6 @@ const Explorer = () => {
   const { authenticated, user, } = useContext(AuthContext)
   const { hotGames, highlightGame, getHotGamesForHome, getHighlightGame, searchGamesByTitle } = useContext(GameContext)
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingSearch, setIsLoadingSearch] = useState(false);
-  const [sliderOffset, setSliderOffset] = useState(0);
   const [search, setSearch] = useState('');
 
 
@@ -163,6 +161,7 @@ const Explorer = () => {
                     </>
                   ) : (
                     <CardHighlightGame
+                      id={highlightGame!.id}
                       key={0}
                       title={highlightGame!.title}
                       imageSrc={highlightGame!.image}

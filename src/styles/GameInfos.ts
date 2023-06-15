@@ -146,7 +146,13 @@ export const CreatedByWrapper = styled.div`
         margin: 0px;
     }
     
+
+    a {
+        text-decoration: none;
+    }
+
     p {
+        color: #FFFFFF;
         margin: 0px;
         font-family: FiraCode-Light; 
         font-size: 14px;
@@ -157,6 +163,7 @@ export const CreatedByWrapper = styled.div`
             cursor: pointer;
         }
     }
+    
 `
 
 export const GameActionsWrapper = styled.div`

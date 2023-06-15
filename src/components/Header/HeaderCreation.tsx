@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { BsCloudArrowDown, BsCloudCheck } from 'react-icons/bs';
-import { MdArrowBack } from 'react-icons/md';
+import { BsCloudArrowDown, BsCloudCheck, BsCheckCircleFill } from 'react-icons/bs';
+import { MdArrowBack, MdUnpublished } from 'react-icons/md';
 import { RiSettings5Fill } from 'react-icons/ri';
+import { BiHelpCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { CreationContext } from '../../contexts/creation';
 import { GameContext } from '../../contexts/game';
@@ -14,6 +15,8 @@ interface HeaderProps {
     isSaved: boolean;
     set: boolean;
     isPublished: boolean;
+    showHelp: boolean | null;
+    setShowHelp: (set: boolean) => void;
   }
   
 
@@ -112,14 +115,29 @@ const WrapItems = styled.div`
 const SettingIcon = styled.a`
   color: white;
   font-size: 28px;
+  cursor: pointer;
   .hovered {
     transform: scale(1.2) rotate(35deg);
     transition: transform 0.3s ease-in-out;
-  }
+  } 
+`
+const HelpIcon = styled.a`
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  :hover {
+    transform: scale(1.2);
+    transition: transform 0.3s ease-in-out;
+  } 
+`
+const PublishIconWrapper = styled.a`
+  display: flex;
+  color: white;
+  flex-direction: row;
 `
 
  
-const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick, isSaved, set, isPublished }) => {
+const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick, isSaved, set, isPublished, showHelp, setShowHelp}) => {
 
 
   const { loading , setLoading} = useContext(CreationContext)
@@ -208,7 +226,10 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
                 <BsCloudCheck size={30} color="#fff" />
                 )}
           </SavedIcon>
-          <HeaderText>Status: {isPublished ? 'História Publicada' : 'História Não Publicada'}</HeaderText>
+          <PublishIconWrapper title={isPublished ? 'História Publicada' : 'História Não Publicada'}>
+            <HeaderText>Status:</HeaderText>
+            {isPublished ? <BsCheckCircleFill size={25}/> : <MdUnpublished size={25}/>}
+          </PublishIconWrapper>
         </WrapItems>
         <WrapItems>
           <StorieTitle       
@@ -220,6 +241,9 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
               onChange={handleChange}
               >
             </StorieTitle>
+            <HelpIcon onClick={() => {setShowHelp(!showHelp)}}  title='Ajuda'>
+              <BiHelpCircle/>
+            </HelpIcon>
             <SettingIcon href={GAME + '/' + id + SETTINGS} onMouseEnter={handleHover} onMouseLeave={handleHover} title='Configurações'>
               <RiSettings5Fill className={isHovered ? 'hovered' : ''} />
             </SettingIcon>

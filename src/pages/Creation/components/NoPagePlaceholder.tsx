@@ -33,7 +33,7 @@ function NoPagePlaceholder() {
     return (
         <NoPage>
             <img src={ASTRO_LAPIS} alt="" />
-            <p>Clique no botão 'Nova Página' para adicionar a sua primeira página</p>
+            <p>Clique no botão abaixo [+] para adicionar a sua primeira página</p>
         </NoPage>
     )
   }
