@@ -233,7 +233,7 @@ export const AddButton = styled.button.attrs((props: {canAdd: boolean}) => props
 
 export const EditableButton = styled.textarea.attrs((props: {isSelected: boolean, background: string, textLength:number}) => props)`
   margin-right: 10px;
-   
+  min-width: 80px;
   width: ${props => props.textLength ? `${(props.textLength + 2) * 8}px` : '20%'};
   color: white;
   height: 20px;
