@@ -37,6 +37,7 @@ export const GameInfosWrapper = styled.div`
     width: 100%;
     margin-top: 2rem;
     gap: 1rem;
+    margin-bottom: 8rem;
 
     @media screen and (max-width: 1024px) {
         flex-direction: column;
@@ -90,7 +91,8 @@ export const DescriptionWrapper = styled.div`
     p {
         margin: 0px;
         font-family: FiraCode-Light; 
-        font-size: 14px;
+        font-size: 16px;
+        text-align: justify;
     }
 `
 
@@ -118,7 +120,7 @@ export const CategoryGameInfoWrapper = styled.div`
 `;
 
 export const CategoryGameInfoLabel = styled.a.attrs((props: { color: string, }) => props)`
-    font-size: 10px;
+    font-size: 15px;
     font-weight: 500;
     /* background-color: ${(props) => props.color}; */
     background: linear-gradient(to right, ${(props) => props.color}, ${(props) => props.color + 'AD'});
@@ -155,7 +157,7 @@ export const CreatedByWrapper = styled.div`
         color: #FFFFFF;
         margin: 0px;
         font-family: FiraCode-Light; 
-        font-size: 14px;
+        font-size: 20px;
         transition: all 0.3s ease-in-out;
 
         &:hover {

@@ -19,7 +19,7 @@ import { PlayGamesProvider } from '../contexts/play-games';
 import { GameProvider } from '../contexts/game';
 import { OpenAIProvider } from '../contexts/openai';
 import { UserProvider } from '../contexts/user';
-import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, EXPLORER, GAME, GAME_DESCRIPTION, HOME, LANDING_PAGE, LOGIN, MYGAMES, NEW_PASSWORD, PLAYGAME, PROFILE, RECOVER_PASSWORD, REGISTER, SETTINGS, TEST, USER_DESCRIPTION } from '../core/app-urls';
+import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, EXPLORER, GAME, GAME_DESCRIPTION, GAME_HISTORY, HOME, LANDING_PAGE, LOGIN, MYGAMES, NEW_PASSWORD, PLAYGAME, PROFILE, RECOVER_PASSWORD, REGISTER, SETTINGS, TEST, USER_DESCRIPTION } from '../core/app-urls';
 import CreationSettings from '../pages/CreationSettings';
 import Explorer from '../pages/Explorer';
 import { GameInfos } from '../pages/GameInfos';
@@ -27,6 +27,7 @@ import MyGames from '../pages/MyGames';
 import Profile from '../pages/Profile';
 import VisualizationTest from '../pages/VisualizationTest/VisualizationTest';
 import { UserInfos} from '../pages/UserInfos';
+import GameHistory from '../pages/GameHistory/GameHistory';
 
 function AppRoutes() {
     function Private({ children }: { children: ReactNode }) {
@@ -83,6 +84,7 @@ function AppRoutes() {
                                             <Route path={USER_DESCRIPTION + '/:nickname'} element={<Private><UserInfos /></Private>}></Route>
                                             <Route path={TEST} element={<VisualizationTest />} > </Route>
                                             <Route path={GAME + '/:id' + SETTINGS} element={<Private><CreationSettings /></Private>} > </Route>
+                                            <Route path={GAME_HISTORY} element={<Private><GameHistory /></Private>} > </Route>
                                         </Routes>
                                     </UserProvider>
                                 </OpenAIProvider>
