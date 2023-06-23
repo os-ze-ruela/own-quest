@@ -22,7 +22,6 @@ const PopupContainer = styled.div`
   z-index: 9999;
   box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
-
 `;
 const PopupContent = styled.div`
   display: flex;
@@ -52,9 +51,9 @@ const Checkbox = styled.input`
 
 const PopupButton = styled.button`
   margin-top: 10px;
-  color:white;
+  color: white;
   font-family: FiraCode-Light;
-  background-color: #282C3E;
+  background-color: #282c3e;
   border: 0;
   border-radius: 5px;
   width: 100px;
@@ -62,7 +61,7 @@ const PopupButton = styled.button`
 `;
 
 const PopupCheckbox = styled.button`
-  color:white;
+  color: white;
   font-family: FiraCode-Light;
   background-color: transparent;
   outline: none;
@@ -70,35 +69,37 @@ const PopupCheckbox = styled.button`
 `;
 
 const PopupMessage = styled.button`
-    font-family: FiraCode-Light;
-    border: 0;
-    background-color: transparent;
-    color: white;
-
+  font-family: FiraCode-Light;
+  border: 0;
+  background-color: transparent;
+  color: white;
 `;
 
 interface PopupProps {
-    message: string;
-  }
+  id: string;
+  message: string;
+}
 
-const Popup = ({ message }: PopupProps) => {
-  const [hidePopup, setHidePopup] = useState(false);
+const Popup = ({ id, message }: PopupProps) => {
+  const [hidePopup, setHidePopup] = useState(
+    localStorage.getItem(`hidePopup_${id}`) === "true"
+  );
   const [hidePermanently, setHidePermanently] = useState(false);
 
   const handleClosePopup = () => {
     if (hidePermanently) {
-      localStorage.setItem("hidePopup", "true");
+      localStorage.setItem(`hidePopup_${id}`, "true");
     }
     setHidePopup(true);
   };
 
-  if (hidePopup || localStorage.getItem("hidePopup")) {
+  if (hidePopup) {
     return null;
   }
 
   return (
     <>
-     {/* <Overlay onClick={handleClosePopup} /> */}
+      {/* <Overlay onClick={handleClosePopup} /> */}
       <PopupContainer>
         <PopupContent>
           <PopupMessage>{message}</PopupMessage>
@@ -116,5 +117,5 @@ const Popup = ({ message }: PopupProps) => {
     </>
   );
 };
-  
-  export default Popup
+
+export default Popup;

@@ -250,13 +250,21 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
               >
             </StorieTitle>
 
-            <HelpIcon onClick={() => {
-              setShowHelp(true)
-              localStorage.removeItem("hidePopup");
-              window.location.reload();
-              }}  title='Ajuda'>
-              <BiHelpCircle/>
+            <HelpIcon
+              onClick={() => {
+                setShowHelp(true);
+                for (let key in localStorage) {
+                  if (key.startsWith("hidePopup_")) {
+                    localStorage.removeItem(key);
+                  }
+                }
+                window.location.reload();
+              }}
+              title="Ajuda"
+            >
+              <BiHelpCircle />
             </HelpIcon>
+
 
             <SettingIcon href={GAME + '/' + id + SETTINGS} onMouseEnter={handleHover} onMouseLeave={handleHover} title='Configurações'>
               <RiSettings5Fill className={isHovered ? 'hovered' : ''} />

@@ -54,7 +54,7 @@ const Creation = () => {
   const { handleSelectChange } = useContext(CreationContext)
   const { handleDeleteButton } = useContext(CreationContext)
   const [showButtonSettings, setShowButtonSettings] = useState(Array(4).fill(false));
-  
+  const [buttonSettingsTop, setButtonSettingsTop] = useState(0);
 
 
   const debounceSaveChanges = () => {
@@ -174,11 +174,9 @@ const buttonContainerRef = useRef<HTMLDivElement | null>(null);
       (    
         <>    
         <PopupContainer top={'200px'} left={'20px'}>
-          <Popup message="🚨 Após selecionar a página destino do botão, você pode usar o atalho F4 para ir até ela" />
-          <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" />
-        </PopupContainer>
-        <PopupContainer top={'200px'} left={'1200px'}>
-          <Popup message="🚨 Acesse o menu lateral para uma melhor visualização da história e seus caminhos" />
+          <Popup message="🚨 Após selecionar a página destino do botão, você pode usar o atalho F4 para ir até ela" id="popup1"/>
+          <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" id="popup2"/>
+          <Popup message="🚨 Acesse o menu lateral ◀ a direita para uma melhor visualização da história e seus caminhos" id="popup3"/>
         </PopupContainer>
         </>)
         :
@@ -243,7 +241,7 @@ const buttonContainerRef = useRef<HTMLDivElement | null>(null);
                   {pages[indexSelected].buttons.map((button, index) => (
                   <ButtonSettingsWrapper>
                      {showButtonSettings[index]  && (
-                        <ButtonSettings>
+                        <ButtonSettings style={{ top: buttonSettingsTop }}>
                           <ColorPicker
                             color={pages[indexSelected].buttons[indexButton].color}
                             setColor={(color) => {
@@ -259,6 +257,7 @@ const buttonContainerRef = useRef<HTMLDivElement | null>(null);
                     
                       <EditableButton
                         key={index}
+                        id={`editable-button-${index}`}
                         value={button.title}
                         textLength={button.title.length}
                         isSelected={index === indexButton}
@@ -268,6 +267,20 @@ const buttonContainerRef = useRef<HTMLDivElement | null>(null);
                           setShowButtonSettings(prevState => {
                             const newState = Array(pages[indexSelected].buttons.length).fill(false);
                             newState[index] = true; // Mostra o ButtonSettings para o botão selecionado
+
+
+                            // Obtenha o elemento do botão EditableButton
+                            const buttonElement = document.getElementById(`editable-button-${index}`);
+                            
+                            if (buttonElement) {
+                              // Se o elemento existir, obtenha a posição
+                              const buttonRect = buttonElement.getBoundingClientRect();
+                              const buttonTop = buttonRect.top;
+                              console.log(buttonTop)
+                              // Defina a posição top do ButtonSettings no estado
+                              setButtonSettingsTop(buttonTop - 120); // Ajuste conforme necessário
+                            }
+
                             return newState;
                           });
                           handleButton(index, button);

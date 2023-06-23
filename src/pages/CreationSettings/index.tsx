@@ -305,7 +305,7 @@ export default function CreationSettings() {
   return (
     <Body>
         <PopupContainer top={'550px'} left={'1100px'}>
-          <Popup message="🚨 A imagem é gerada com base na descrição da história, certifique-se de digitar a descrição antes de gerar" />
+          <Popup message="🚨 A imagem é gerada com base na descrição da história, certifique-se de digitar a descrição antes de gerar" id="popupSettings"/>
         </PopupContainer>
       {showModal && (
         <Backdrop
