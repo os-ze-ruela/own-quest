@@ -43,7 +43,8 @@ import AppError from "../../core/app-error";
 
 export default function Profile() {
   const { user, refresh, logout } = useContext(AuthContext);
-  const { getUserPlayingGames, userPlayingGames } = useContext(GameContext);
+  const { getUserPlayingAllGames, userPlayingAllGames } =
+    useContext(GameContext);
   const [isSelected1, setIsSelected1] = useState(true);
   const [isSelected2, setIsSelected2] = useState(false);
   const [isSelected3, setIsSelected3] = useState(false);
@@ -53,7 +54,7 @@ export default function Profile() {
 
   const fetchGames = async () => {
     try {
-      await Promise.all([getUserPlayingGames()]);
+      await Promise.all([getUserPlayingAllGames()]);
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
@@ -208,10 +209,12 @@ export default function Profile() {
           <WrapCardGame>
             <HistoricTitle>Histórico de Jogos</HistoricTitle>
 
-            {userPlayingGames.map((listgame, index) => {
+            {userPlayingAllGames.map((listgame, index) => {
               const gameDate = new Date(listgame.game_date_play);
-              const day = gameDate.getDate().toString().padStart(2, '0');
-              const month = (gameDate.getMonth() + 1).toString().padStart(2, '0');
+              const day = gameDate.getDate().toString().padStart(2, "0");
+              const month = (gameDate.getMonth() + 1)
+                .toString()
+                .padStart(2, "0");
               const year = gameDate.getFullYear().toString();
               const formattedDate = `${day}/${month}/${year}`;
 
@@ -221,8 +224,12 @@ export default function Profile() {
                     <CardTitle>{listgame.game.title}</CardTitle>
                     <CardSubInfos>Jogado em: {formattedDate}</CardSubInfos>
                     {/* <CardSubInfos>{listgame.game.createdBy!.name}</CardSubInfos> */}
-                    <CardStatusInfos status="Em andamento">
-                    {listgame.is_ongoing ? 'Em andamento' : 'Finalizado'}
+                    <CardStatusInfos
+                      status={
+                        listgame.is_ongoing ? "Em andamento" : "Finalizado"
+                      }
+                    >
+                      {listgame.is_ongoing ? "Em andamento" : "Finalizado"}
                     </CardStatusInfos>
                   </CardInfos>
                   <ButtonHist>Ver Histórico</ButtonHist>

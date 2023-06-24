@@ -284,3 +284,7 @@ export const getUserPlayGames = async (userId: string) => {
     return await api.get(`/play-games/user/${userId}`)
 }
 
+export const getUserPlayAllGames = async (userId: string) => {
+    return await api.get(`/play-games/user/${userId}/all`)
+}
+
