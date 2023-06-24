@@ -1,24 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { BsCloudArrowDown, BsCloudCheck, BsCheckCircleFill } from 'react-icons/bs';
+import { BiHelpCircle } from 'react-icons/bi';
+import { BsCheckCircleFill, BsCloudArrowDown, BsCloudCheck } from 'react-icons/bs';
 import { MdArrowBack, MdUnpublished } from 'react-icons/md';
 import { RiSettings5Fill } from 'react-icons/ri';
-import { BiHelpCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { CreationContext } from '../../contexts/creation';
 import { GameContext } from '../../contexts/game';
 import { GAME, HOME, PLAYGAME, SETTINGS } from '../../core/app-urls';
 
 interface HeaderProps {
-    id: number;
-    onBackClick: () => void;
-    onCreateClick: () => void;
-    isSaved: boolean;
-    set: boolean;
-    isPublished: boolean;
-    showHelp: boolean | null;
-    setShowHelp: (set: boolean) => void;
-  }
-  
+  id: number;
+  onBackClick: () => void;
+  onCreateClick: () => void;
+  isSaved: boolean;
+  set: boolean;
+  isPublished: boolean;
+  showHelp: boolean | null;
+  setShowHelp: (set: boolean) => void;
+}
+
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -144,12 +144,12 @@ export const HelpWrapper = styled.div`
   
 `
 
- 
-const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick, isSaved, set, isPublished, showHelp, setShowHelp}) => {
+
+const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick, isSaved, set, isPublished, showHelp, setShowHelp }) => {
 
 
-  const { loading , setLoading} = useContext(CreationContext)
-  const { editingGame, updateGame, setEditingGame,  } = useContext(GameContext)
+  const { loading, setLoading } = useContext(CreationContext)
+  const { editingGame, updateGame, setEditingGame, } = useContext(GameContext)
   const [titleTemp, setTitleTemp] = useState('');
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
   const { pages, setPages } = useContext(CreationContext)
@@ -165,7 +165,7 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
     }, 1000);
     setTimerId(idTimer);
   };
-  
+
   const saveChanges = () => {
     setLoading(false);
     updateGame(editingGame!);
@@ -178,13 +178,13 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
       }
     };
   }, [timerId]);
-  
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitleTemp(event.target.value);
   };
 
-  
+
   useEffect(() => {
     if (editingGame) {
       setTitleTemp(editingGame.title);
@@ -194,25 +194,25 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
   // Debounce no titulo causando erros
   useEffect(() => {
     if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0)) {
-      const newEditingGame = {...editingGame, title: titleTemp};
+      const newEditingGame = { ...editingGame, title: titleTemp };
       setEditingGame(newEditingGame);
       updateGame(newEditingGame);
       // debounceSaveChanges()
     }
   }, [titleTemp])
 
-  //Tratamento para historia criada vazia, sem paginas e sem titulo
-  const handleBack = () => {
-    if (editingGame) {
-      if(pages.length === 0 && editingGame.title === "Nova história"){
-        console.log("apagando jogo")
-        deleteGameByID(editingGame.id)
-      }
-    }
-  };
+  // TODO REVISAR ESSA LÓGICA
+  // //Tratamento para historia criada vazia, sem paginas e sem titulo
+  // const handleBack = () => {
+  //   if (editingGame) {
+  //     if (pages.length === 0 && editingGame.title === "Nova história") {
+  //       deleteGameByID(editingGame.id)
+  //     }
+  //   }
+  // };
 
   const [isHovered, setIsHovered] = useState(false);
-  
+
   const handleHover = () => {
     setIsHovered(!isHovered);
   }
@@ -220,34 +220,34 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
 
   return (
     <>
-    {!set ?
-      <HeaderContainer>
-        <WrapItems>
-          <BackButton href={HOME} onClick={handleBack}>
-            <MdArrowBack color="#fff" size={24} />
-          </BackButton>
-          <HeaderText>Voltar</HeaderText>
-          <SavedIcon isSaved={isSaved}>
-            {loading ? (
-              <BsCloudArrowDown size={30} color="#fff" />
-              ):(
+      {!set ?
+        <HeaderContainer>
+          <WrapItems>
+            <BackButton href={HOME}>
+              <MdArrowBack color="#fff" size={24} />
+            </BackButton>
+            <HeaderText>Voltar</HeaderText>
+            <SavedIcon isSaved={isSaved}>
+              {loading ? (
+                <BsCloudArrowDown size={30} color="#fff" />
+              ) : (
                 <BsCloudCheck size={30} color="#fff" />
-                )}
-          </SavedIcon>
-          <PublishIconWrapper title={isPublished ? 'História Publicada' : 'História Não Publicada'}>
-            <HeaderText>Status:</HeaderText>
-            {isPublished ? <BsCheckCircleFill size={25}/> : <MdUnpublished size={25}/>}
-          </PublishIconWrapper>
-        </WrapItems>
-        <WrapItems>
-          <StorieTitle       
+              )}
+            </SavedIcon>
+            <PublishIconWrapper title={isPublished ? 'História Publicada' : 'História Não Publicada'}>
+              <HeaderText>Status:</HeaderText>
+              {isPublished ? <BsCheckCircleFill size={25} /> : <MdUnpublished size={25} />}
+            </PublishIconWrapper>
+          </WrapItems>
+          <WrapItems>
+            <StorieTitle
               type="text"
               name="StorieTitle"
               autoComplete="off"
               value={titleTemp!}
               placeholder="Minha primeira história"
               onChange={handleChange}
-              >
+            >
             </StorieTitle>
 
             <HelpIcon
@@ -269,36 +269,36 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
             <SettingIcon href={GAME + '/' + id + SETTINGS} onMouseEnter={handleHover} onMouseLeave={handleHover} title='Configurações'>
               <RiSettings5Fill className={isHovered ? 'hovered' : ''} />
             </SettingIcon>
-          <CreateButton href={PLAYGAME + '/' + id + '?test=true'} onClick={onCreateClick}>Testar</CreateButton>
-        </WrapItems>
-      </HeaderContainer>
-      :
-      <HeaderContainer2>
-        <WrapItems>
-          <BackButton href={GAME + '/' + id} onClick={handleBack}>
-            <MdArrowBack color="#fff" size={24} />
-          </BackButton>
-          <HeaderText>Voltar</HeaderText>
-          <SavedIcon isSaved={isSaved}>
-            {loading ? (
-              <BsCloudArrowDown size={30} color="#fff" />
-              ):(
+            <CreateButton href={PLAYGAME + '/' + id + '?test=true'} onClick={onCreateClick}>Testar</CreateButton>
+          </WrapItems>
+        </HeaderContainer>
+        :
+        <HeaderContainer2>
+          <WrapItems>
+            <BackButton href={GAME + '/' + id}>
+              <MdArrowBack color="#fff" size={24} />
+            </BackButton>
+            <HeaderText>Voltar</HeaderText>
+            <SavedIcon isSaved={isSaved}>
+              {loading ? (
+                <BsCloudArrowDown size={30} color="#fff" />
+              ) : (
                 <BsCloudCheck size={30} color="#fff" />
-                )}
-          </SavedIcon>
-        </WrapItems>
-        <WrapItems>
-          <StorieTitle       
+              )}
+            </SavedIcon>
+          </WrapItems>
+          <WrapItems>
+            <StorieTitle
               type="text"
               name="StorieTitle"
               autoComplete="off"
               value={titleTemp!}
               placeholder="Minha primeira história"
               onChange={handleChange}
-              >
+            >
             </StorieTitle>
-        </WrapItems>
-      </HeaderContainer2>
+          </WrapItems>
+        </HeaderContainer2>
       }
     </>
   );

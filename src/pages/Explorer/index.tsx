@@ -82,7 +82,7 @@ const Explorer = () => {
           (<HeaderLogged nickname={user!.nickname} photo={user!.photo} />) :
           (<Header page='Login' redirect={LOGIN} />)
         }
-        {authenticated === true && user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
+        {user == null ? (<></>) : (authenticated === true && user!.email_validated) ? (<></>) : (<><EmailNotValidatedWarning /></>)}
         <FiltersContainer>
           <SearchContainer>
             <BsSearch className='search-icon' />

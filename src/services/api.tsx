@@ -18,6 +18,10 @@ export const refreshToken = async () => {
     return await api.post('/auth/refresh')
 }
 
+export const getUserByAccessToken = async () => {
+    return await api.get('/user')
+}
+
 // GAME CONTEXT
 export const getUserGamesByToken = async () => {
     return await api.get('/user/games')
@@ -121,7 +125,7 @@ export const unpublishGame = async (id: number) => {
     return await api.patch(`/game/unpublish/${id}`)
 }
 
-export const reportGame = async (gameId: number, userId: number, complain: string ) => {
+export const reportGame = async (gameId: number, userId: number, complain: string) => {
     return await api.post(`/report`, {
         "gameId": gameId,
         "userId": userId,
@@ -166,7 +170,6 @@ export const deleteGameCategoryByID = async (idGame: number, idCategory: number)
 }
 
 export const postFullGame = async (title: string, description: string, image: string, categories: Category[]) => {
-    console.log(title, description, image, categories)
     return await api.post(`/game`, {
         "title": title,
         "description": description,
@@ -178,6 +181,12 @@ export const postFullGame = async (title: string, description: string, image: st
 export const getButton = async (id: number) => {
     return await api.delete(`/button/${id}`)
 }
+
+
+export const fetchGameHistory = async (id: number) => {
+    return await api.get(`/play-games/${id}`)
+}
+
 
 // --- Verification ---
 
@@ -217,6 +226,10 @@ export const getUserByNickname = async (nickname: string) => {
     return await api.get(`/user/find/${nickname}`)
 }
 
+export const getUserAuthenticated = async () => {
+    return await api.get(`/user`)
+}
+
 export const postFollowUser = async (followerId: string, followedId: string) => {
     return await api.post(`/user/${followerId}/follow/${followedId}`)
 }
@@ -245,7 +258,6 @@ export const sendRecoverEmail = async () => {
 
 
 // ------ PLAY GAMES  ----
-
 
 export const fetchResumePlayedGames = async (userId: number, gameId: number) => {
     return await api.get(`/play-games/resume-game/user/${userId}/game/${gameId}`)
@@ -288,3 +300,23 @@ export const getUserPlayAllGames = async (userId: string) => {
     return await api.get(`/play-games/user/${userId}/all`)
 }
 
+// AI
+export const generateDescriptionWithIA = async (userId: number, description: string) => {
+    return await api.post(`/ia-generation/description`, {
+        "userId": userId,
+        "description": description
+    })
+}
+
+export const generateImageWithIA = async (userId: number, description: string) => {
+    return await api.post(`/ia-generation/image`, {
+        "userId": userId,
+        "description": description
+    })
+}
+
+export const postIncrementAIGameGeneration = async (userId: number) => {
+    return await api.post(`/ia-generation/game`, {
+        "userId": userId
+    })
+}

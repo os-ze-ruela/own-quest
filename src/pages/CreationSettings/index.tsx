@@ -1,9 +1,10 @@
 import { Alert, Backdrop, CircularProgress, LinearProgress, Snackbar } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import GPT from "../../assets/img/gpt.svg";
 import DialogUnpublishGame from "../../components/Dialog/DialogUnpublishGame";
 import HeaderCreation from "../../components/Header/HeaderCreation";
+import Popup from "../../components/Popup/Popup";
 import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
 import { AuthContext } from "../../contexts/auth";
 import { CategoryContext } from "../../contexts/category";
@@ -14,10 +15,8 @@ import AppError from '../../core/app-error';
 import { HOME } from "../../core/app-urls";
 import Category from "../../models/Category";
 import { api, uploadImage, uploadRandomImage } from "../../services/api";
-import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySettingsLabel, DeleteButton, DescriptionInput, FileInput, GenerateRandomImageButton, GptIcon, ImageContainer, ImageGameContainer, ImagePlaceholder, PublishButton, RandomDescriptionButton, RandomDescriptionWrapper, Separator, SettingsContainer, SettingsWrapper, Title, TitleInput, Titles, TitlesInfo, UploadImageButton, WrapTextButton } from "../../styles/CreationSettings";
 import { PopupContainer } from "../../styles/Creation";
-import Popup from "../../components/Popup/Popup";
-import { useNavigate } from "react-router-dom";
+import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySettingsLabel, DeleteButton, DescriptionInput, FileInput, GenerateRandomImageButton, GptIcon, ImageContainer, ImageGameContainer, ImagePlaceholder, PublishButton, RandomDescriptionButton, RandomDescriptionWrapper, Separator, SettingsContainer, SettingsWrapper, Title, TitleInput, Titles, TitlesInfo, UploadImageButton, WrapTextButton } from "../../styles/CreationSettings";
 
 export default function CreationSettings() {
 
@@ -27,22 +26,20 @@ export default function CreationSettings() {
   const { handleBackClick } = useContext(CreationContext)
   const { handleCreateClick } = useContext(CreationContext)
   const { categories, getCategories } = useContext(CategoryContext)
-  const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID, addGameCategoryByID, deleteGameCategory, published, setPublished, publishGameById, unpublishGameById} = useContext(GameContext)
+  const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID, addGameCategoryByID, deleteGameCategory, published, setPublished, publishGameById, unpublishGameById } = useContext(GameContext)
 
   const [descTemp, setDescTemp] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [isErroImage, setErrorImage] = useState(false);
+  const [isErrorIAGeneration, setErrorIAGeneration] = useState(false);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
-  const { improveDescription, dalleAPI } = useContext(OpenAIContext);
+  const { improveDescription, generateImage } = useContext(OpenAIContext);
   const [loadingDescriptionAI, setLoadingDescriptionAI] = useState(false);
   const { loading, setLoading } = useContext(CreationContext)
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
   const [titleTemp, setTitleTemp] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [listIds, setListIds] = useState<Number[]>([]);
-  const history = useNavigate();
-
-
+  const [errorIAMessage, setErrorIAMessage] = useState<string>('');
 
   const [availableCategories, setAvailableCategories] = useState<Category[]>([]);
   const [addedCategories, setAddedCategories] = useState<Category[]>([]);
@@ -87,7 +84,6 @@ export default function CreationSettings() {
     
   }, [userGames, history]);
 
- 
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsLoadingImage(true)
@@ -117,53 +113,34 @@ export default function CreationSettings() {
     }
   }
 
-  // const handlePublishGame = async () => {
-  //   if (editingGame) {
-  //       console.log('Publicou')
-  //       try {
-  //         setPublished(true)
-  //         const newEditingGame = { ...editingGame};
-  //         newEditingGame.isPublished = true
-  //         console.log(newEditingGame)
-  //         setEditingGame(newEditingGame)
-  //         const response = await updateGame(newEditingGame);
-  //         console.log(response)
-  //       } catch (error) {
-  //         console.log(error)
-  //       }
-  //     }
-  // }
-  
   const handlePublishGame = async () => {
     if (editingGame) {
-        console.log('Publicou')
-        try {
-          const response = await publishGameById(Number(id!));
-          setPublished(true)
-          console.log(response)
-        } catch (error) {
-          console.log(error)
-        }
+      try {
+        const response = await publishGameById(Number(id!));
+        setPublished(true)
+        console.log(response)
+      } catch (error) {
+        console.log(error)
       }
+    }
   }
-  
+
   const handleUnpublishGame = async () => {
     if (editingGame) {
-        console.log('Voltou a editar')
-        try {
-          const response = await unpublishGameById(Number(id!));
-          setPublished(false)
-          setShowModal(false)
-          console.log(response)
-        } catch (error) {
-          console.log(error)
-        }
+      try {
+        const response = await unpublishGameById(Number(id!));
+        setPublished(false)
+        setShowModal(false)
+        console.log(response)
+      } catch (error) {
+        console.log(error)
       }
+    }
   }
-  
 
 
-  
+
+
   const handleCategories = async (content: string, categoryID: number) => {
     if (content === "+") {
       await addGameCategoryByID(Number(id), [categoryID]);
@@ -183,15 +160,22 @@ export default function CreationSettings() {
       }
     }
   };
-  
-  
+
+
 
   async function handleClickRandomDescription() {
-    if (editingGame) {
-      setLoadingDescriptionAI(true)
-      const response = await improveDescription(editingGame.description);
-      setDescTemp(response)
+    try {
+      if (editingGame) {
+        setLoadingDescriptionAI(true)
+        const response = await improveDescription(user!.id, editingGame.description);
+        setDescTemp(response)
+        setLoadingDescriptionAI(false)
+      }
+    }
+    catch (error: any) {
       setLoadingDescriptionAI(false)
+      setErrorIAMessage(error.response.data.message)
+      setErrorIAGeneration(true)
     }
   }
 
@@ -200,19 +184,18 @@ export default function CreationSettings() {
       try {
         setIsLoadingImage(true)
 
-        const dalleImageUrl = await dalleAPI(editingGame.description);
-        console.log(dalleImageUrl)
-        const response = await uploadRandomImage(dalleImageUrl)
+        const generateImageURL = await generateImage(user!.id, editingGame.description);
+        const response = await uploadRandomImage(generateImageURL)
         const newEditingGame = editingGame!
         newEditingGame.image = response.data.imagePath;
         setEditingGame(newEditingGame);
         await updateGame(newEditingGame);
 
         setIsLoadingImage(false)
-      } catch (error) {
-        console.log(error)
+      } catch (error: any) {
+        setErrorIAMessage(error.response.data.message)
         setIsLoadingImage(false)
-        setErrorImage(true)
+        setErrorIAGeneration(true)
       }
     }
   }
@@ -232,7 +215,7 @@ export default function CreationSettings() {
   const fetchAllRequests = async () => {
     try {
       setIsLoading(true)
-      
+
       const tokensJSON = localStorage.getItem('token')
       const tokens = JSON.parse(tokensJSON!)
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
@@ -247,19 +230,19 @@ export default function CreationSettings() {
       const error = await e as AppError
     }
   };
-  
+
   useEffect(() => {
     fetchAllRequests()
   }, [])
 
-  
+
   useEffect(() => {
     if (editingGame) {
       setAddedCategories(editingGame.categories);
       setPublished(editingGame.isPublished);
     }
   }, [editingGame]);
-  
+
   useEffect(() => {
     if (categories.length > 0) {
       const filteredCategories = categories.filter(category1 => !addedCategories.some(category2 => category1.id === category2.id));
@@ -267,7 +250,7 @@ export default function CreationSettings() {
     }
   }, [categories, addedCategories]);
 
-  
+
   // ----- DEBOUNCE -----
 
 
@@ -281,8 +264,8 @@ export default function CreationSettings() {
     }, 500);
     setTimerId(idTimer);
   };
-  
-  const debounceSaveChangesDescription= () => {
+
+  const debounceSaveChangesDescription = () => {
     setLoading(true);
     if (timerId) {
       clearTimeout(timerId);
@@ -292,7 +275,7 @@ export default function CreationSettings() {
     }, 500);
     setTimerId(idTimer);
   };
-  
+
 
   const saveChangesTitle = (title: string) => {
     if (editingGame) {
@@ -301,7 +284,7 @@ export default function CreationSettings() {
       updateGame(newEditingGame);
     }
   };
-  
+
   const saveChangesDescription = (description: string) => {
     if (editingGame) {
       setLoading(false);
@@ -309,7 +292,7 @@ export default function CreationSettings() {
       updateGame(newEditingGame);
     }
   };
-  
+
 
   useEffect(() => {
     return () => {
@@ -328,14 +311,14 @@ export default function CreationSettings() {
 
 
   useEffect(() => {
-    if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0) ) {
-      const newEditingGame = { ...editingGame};
+    if (editingGame && titleTemp !== editingGame.title && (titleTemp.length > 0)) {
+      const newEditingGame = { ...editingGame };
       newEditingGame.title = titleTemp
       setEditingGame(newEditingGame);
       debounceSaveChangesTitle();
     }
   }, [titleTemp, editingGame]); // Include editingGame as a dependency
-  
+
   useEffect(() => {
     if (editingGame && descTemp !== editingGame.description && (descTemp.length > 0)) {
       const newEditingGame = { ...editingGame, description: descTemp };
@@ -346,26 +329,26 @@ export default function CreationSettings() {
 
   return (
     <Body>
-        <PopupContainer top={'550px'} left={'1100px'}>
-          <Popup message="🚨 A imagem é gerada com base na descrição da história, certifique-se de digitar a descrição antes de gerar" id="popupSettings"/>
-        </PopupContainer>
+      <PopupContainer top={'550px'} left={'1100px'}>
+        <Popup message="🚨 A imagem é gerada com base na descrição da história, certifique-se de digitar a descrição antes de gerar" id="popupSettings" />
+      </PopupContainer>
       {showModal && (
         <Backdrop
-                sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={true}
+          sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={true}
         >
-        <DialogUnpublishGame onClose={()=>{setShowModal(false)}}  handleUnpublishGame={handleUnpublishGame}/>
+          <DialogUnpublishGame onClose={() => { setShowModal(false) }} handleUnpublishGame={handleUnpublishGame} />
         </Backdrop>
       )}
       <Snackbar
-        open={isErroImage}
+        open={isErrorIAGeneration}
         autoHideDuration={4000}
-        onClose={() => { setErrorImage(false) }}
+        onClose={() => { setErrorIAGeneration(false) }}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-        <Alert severity="error">Ocorreu um erro ao gerar a imagem com IA</Alert>
+        <Alert severity="error">{errorIAMessage}</Alert>
       </Snackbar>
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
-      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={true} isPublished={published} showHelp={null} setShowHelp={()=>{}}/>
+      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={true} isPublished={published} showHelp={null} setShowHelp={() => { }} />
       <Title>Configurações da história</Title>
       <SettingsWrapper>
         <SettingsContainer>
@@ -381,7 +364,7 @@ export default function CreationSettings() {
           <Separator />
 
           <Titles>Descrição</Titles>
-          {loadingDescriptionAI ? (<LinearProgress color="success" />) : (<></>)}
+          {loadingDescriptionAI ? (<LinearProgress color="success" style={{borderRadius: '12px'}} />) : (<></>)}
           <DescriptionInput
             name="StoryDescription"
             autoComplete="off"
@@ -396,14 +379,14 @@ export default function CreationSettings() {
           <Titles>Categorias disponíveis:</Titles>
           <CategoryLabelEditingWrapper className='category-label-wrapper'>
             {availableCategories.map((category, index) => (
-              <CategorySettingsLabel key={index} color={category.color} content='+' onClick={()=>{handleCategories('+', category.id)}}>{category.title}</CategorySettingsLabel>))}
+              <CategorySettingsLabel key={index} color={category.color} content='+' onClick={() => { handleCategories('+', category.id) }}>{category.title}</CategorySettingsLabel>))}
           </CategoryLabelEditingWrapper>
           <Separator />
 
           <Titles>Categorias adicionadas:</Titles>
           <CategoryLabelEditingWrapper className='category-label-wrapper'>
             {addedCategories.map((category, index) => (
-              <CategorySettingsLabel key={category.id} color={category.color} content='X' onClick={()=>{handleCategories('X', category.id)}}>{category.title}</CategorySettingsLabel>))}
+              <CategorySettingsLabel key={category.id} color={category.color} content='X' onClick={() => { handleCategories('X', category.id) }}>{category.title}</CategorySettingsLabel>))}
           </CategoryLabelEditingWrapper>
           <Separator />
 
@@ -416,10 +399,10 @@ export default function CreationSettings() {
 
           <Titles>Publicar história</Titles>
           <WrapTextButton>
-          <TitlesInfo> {published ? 'Clique em Editar História para realizar alterações no conteúdo da história e publica-la novamente.' : 'Ao publicar a sua história, você torna ela disponível para ser jogada por todas pessoas da comunidade.'}</TitlesInfo>
-          <PublishButton onClick={() => {published ? setShowModal(true) : handlePublishGame()}}>
-            {published ? 'Editar História' : 'Publicar'}
-          </PublishButton>
+            <TitlesInfo> {published ? 'Clique em Editar História para realizar alterações no conteúdo da história e publica-la novamente.' : 'Ao publicar a sua história, você torna ela disponível para ser jogada por todas pessoas da comunidade.'}</TitlesInfo>
+            <PublishButton onClick={() => { published ? setShowModal(true) : handlePublishGame() }}>
+              {published ? 'Editar História' : 'Publicar'}
+            </PublishButton>
           </WrapTextButton>
         </SettingsContainer>
         <ImageContainer>

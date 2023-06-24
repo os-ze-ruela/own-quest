@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useContext, useState } from 'react';
 import { OpenAIContext } from '../../contexts/openai';
 
 
@@ -13,7 +13,6 @@ function Chatbot() {
     event.preventDefault();
     const response = await chat(input);
     const parseJSON = JSON.parse(response);
-    console.log(parseJSON)
     setOutput(response);
     createRandomGame(parseJSON)
   }
