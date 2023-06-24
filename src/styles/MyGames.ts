@@ -236,6 +236,17 @@ export const RandomDescriptionButton = styled.button`
         cursor: pointer;
     }
 
+    /* &::after {
+        content: "3";
+        display: inline-block;
+        width: 2px;
+        height: 100%;
+        background: #FFFFFF;  
+        margin-left: 2rem;
+        margin-right: 2rem;
+        align-items: center;
+    } */
+
      @media screen and (max-width: 1024px) {
       padding: 0px 10px;
       width: 100%;

@@ -1,11 +1,17 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { ReactNode, createContext, useContext, useState, useEffect } from "react";
 import { GameContext } from '../contexts/game';
 import { Button } from "../models/Button";
 import { Page } from "../models/Page";
-import { postButton, postPage } from "../services/api";
+import { postButton, postIncrementAIGameGeneration, postPage } from "../services/api";
 import { CreationContext } from './creation';
 import { api, uploadImage, uploadRandomImage } from "../services/api";
+import AppError from '../core/app-error';
+
+interface ErrorData {
+  statusCode: number;
+  message: string;
+}
 
 type OpenAIContextType = {
     pages: Page[],
@@ -16,6 +22,7 @@ type OpenAIContextType = {
     improveDescription: (description: string) => Promise<string>, 
     generateRandomGame: (numPages: number, category: string) => Promise<string>
     generateRandomGameByDescription: (numPages: number, category: string, description: string) => Promise<string>
+    incrementAIGameGeneration: (userId: number) => Promise<void>
 }
 
 export const OpenAIContext = createContext<OpenAIContextType>({} as OpenAIContextType)
@@ -286,9 +293,24 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
             return response.data.data[0].url;
         }
 
+    async function incrementAIGameGeneration(userId: number): Promise<void> {
+      try{
+        await postIncrementAIGameGeneration(userId)
+      }
+      catch (e) {
+        const error = (await e) as AxiosError;
+        if (error.response?.data) {
+          const { statusCode, message } = error.response.data as ErrorData;
+          if (statusCode && message) {
+            throw new AppError( statusCode, message)
+          }
+        }
+      }
+    }
+
 
     return (
-        <OpenAIContext.Provider value={{pages, setPages, createRandomGame, chat, dalleAPI, improveDescription, generateRandomGame, generateRandomGameByDescription}}>
+        <OpenAIContext.Provider value={{pages, setPages, createRandomGame, chat, dalleAPI, improveDescription, generateRandomGame, generateRandomGameByDescription, incrementAIGameGeneration}}>
             {children}
         </OpenAIContext.Provider>
     )

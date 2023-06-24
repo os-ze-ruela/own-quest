@@ -15,15 +15,18 @@ import {
 } from "../../styles/Recover";
 import { AuthContext } from "../../contexts/auth";
 import { AxiosError } from "axios";
+import { CircularProgress } from "@mui/material";
 
 export default function Recover() {
   const [emailInfo, setEmailInfo] = useState("");
   const [messageErr, setMessageErr] = useState("");
   const [showErr, setShowErr] = useState(false);
   const [showSucc, setShowSucc] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { sendRecover } = useContext(AuthContext);
 
   async function sendEmail(email: string) {
+    setLoading(true);
     setShowSucc(false);
     setShowErr(false);
     try {
@@ -52,6 +55,7 @@ export default function Recover() {
         console.error("Erro ao enviar email:", error);
       }
     }
+    setLoading(false);
   }
 
   const handleEmailChange = (event: {
@@ -91,7 +95,7 @@ export default function Recover() {
             await sendEmail(emailInfo);
           }}
         >
-          Recuperar Senha
+          {loading ? <CircularProgress size={20} color="inherit" /> : 'Recuperar Senha'}
         </ButtonRecover>
       </RecoverStyle>
       <AskRegisterBar />

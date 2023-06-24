@@ -279,7 +279,7 @@ const getStatusColor = (status: string): string => {
   const colorMap: { [key: string]: string } = {
     'Em andamento': '#FEE504',
     'Finalizado': '#66AB4E',
-    'Interrompido': '#DC4747',
+    'Interrompido por nova versão': '#DC4747',
   };
 
   return colorMap[status] || 'black'; 

@@ -51,6 +51,7 @@ interface User {
   email: string;
   name: string;
   nickname: string;
+  game_ia_generation_count: number;
 }
 
 interface Token {

@@ -80,8 +80,8 @@ export const Page = styled.div.attrs((props: { background: string }) => props)`
   border-radius: 5px;
 
   @media screen and (max-width: 1024px) {
-    width: 80%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
   }
 `
 
@@ -231,11 +231,12 @@ export const AddButton = styled.button.attrs((props: {canAdd: boolean}) => props
   }
 `;
 
-export const EditableButton = styled.input.attrs((props: {isSelected: boolean, background: string, textLength:number}) => props)`
+export const EditableButton = styled.textarea.attrs((props: {isSelected: boolean, background: string, textLength:number}) => props)`
   margin-right: 10px;
-   
+  min-width: 80px;
   width: ${props => props.textLength ? `${(props.textLength + 2) * 8}px` : '20%'};
   color: white;
+  height: 20px;
   background-color: ${props => props.background};
   font-family: FiraCode-Light;
   padding: 10px 8px;
@@ -243,6 +244,7 @@ export const EditableButton = styled.input.attrs((props: {isSelected: boolean, b
   border: 0;
   outline: none;
   border-radius: 5px;
+  resize: none;
 
   :focus{
     border-color: ${props => props.isSelected ? '#6BF0DF' : 'none'};
@@ -253,6 +255,15 @@ export const EditableButton = styled.input.attrs((props: {isSelected: boolean, b
   ::placeholder{
     color: white;
     opacity: 70%;
+  }
+
+
+  @media screen and (max-width: 1024px) {
+    width: 350px; /* Define a largura para ocupar 90% do contêiner */
+    max-width: none; /* Remove a largura máxima */
+    height: auto; /* A altura se ajustará automaticamente com base no conteúdo */
+    white-space: normal; /* Permite a quebra de linha */
+    word-wrap: break-word;
   }
 `;
 
@@ -308,4 +319,92 @@ export const PopupContainer = styled.div.attrs((props: {top: string, left: strin
   position: fixed;
   top: ${props => props.top};
   left: ${props => props.left};
+`;
+
+export const ButtonSettingsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+`
+
+// export const ButtonSettingsWrapper = styled.div`
+//   position: relative;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   gap: 1rem;
+// `;
+
+// export const ButtonSettings = styled.div`
+//   display: flex;
+//   flex-direction: row;
+//   margin: 0 auto; 
+//   background: #FFFF;
+//   line-height: 1.6em;  
+//   border-radius: 15px;
+//   width: 17%;
+//   height: 3%;
+//   color: 'black';
+//   padding: 20px;
+//   position: absolute;
+//   top: 48%;
+
+//   align-items: center;
+//   justify-content: flex-start;
+//   gap: 1rem;
+
+//   &:after { /*Triangulo*/
+//     content: "";
+//     width: 0;
+//     height: 0;
+//     position: absolute;
+//     border-left: 10px solid transparent;
+//     border-right: 10px solid transparent;
+//     /*Faz seta "apontar para baixo. Definir o valor como 'top' fará ela "apontar para cima" */
+//     /*Aqui entra a cor da "aba" do balão */
+//     border-top: 10px solid #FFFF;
+//     bottom: -10px; /*localização. Experimente alterar para 'bottom'*/
+//     right: 50%;
+//     left: 50%;
+//   }
+
+// `
+
+
+export const ButtonSettings = styled.div`
+  display: flex;
+  flex-direction: row;
+  background: #FFFF;
+  line-height: 1.6em;  
+  border-radius: 15px;
+  width: 17%;
+  height: 3%; /* Altura ajustada conforme necessário */
+  color: 'black';
+  padding: 20px;
+  position: absolute;
+  /* top: 20%; */
+  transform: translateY(-50%); /* Centraliza verticalmente */
+
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+
+  &:after { /* Triângulo */
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #FFFF;
+    bottom: -10px;
+    right: 50%;
+    left: 50%;
+  }
+
+
+  @media screen and (max-width: 1024px) {
+    width: 85%;
+  }
 `;

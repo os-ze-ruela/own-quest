@@ -136,6 +136,14 @@ const PublishIconWrapper = styled.a`
   flex-direction: row;
 `
 
+
+export const HelpWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+`
+
  
 const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick, isSaved, set, isPublished, showHelp, setShowHelp}) => {
 
@@ -241,9 +249,23 @@ const HeaderCreation: React.FC<HeaderProps> = ({ id, onBackClick, onCreateClick,
               onChange={handleChange}
               >
             </StorieTitle>
-            <HelpIcon onClick={() => {setShowHelp(!showHelp)}}  title='Ajuda'>
-              <BiHelpCircle/>
+
+            <HelpIcon
+              onClick={() => {
+                setShowHelp(true);
+                for (let key in localStorage) {
+                  if (key.startsWith("hidePopup_")) {
+                    localStorage.removeItem(key);
+                  }
+                }
+                window.location.reload();
+              }}
+              title="Ajuda"
+            >
+              <BiHelpCircle />
             </HelpIcon>
+
+
             <SettingIcon href={GAME + '/' + id + SETTINGS} onMouseEnter={handleHover} onMouseLeave={handleHover} title='Configurações'>
               <RiSettings5Fill className={isHovered ? 'hovered' : ''} />
             </SettingIcon>
