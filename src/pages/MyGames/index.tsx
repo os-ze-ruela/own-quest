@@ -1,4 +1,4 @@
-import { Backdrop, Box, ToggleButton, ToggleButtonGroup, styled } from '@mui/material';
+import { Backdrop, Badge, Box, ToggleButton, ToggleButtonGroup, styled } from '@mui/material';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
@@ -31,7 +31,7 @@ const MyGames = () => {
   const { categories, getCategories } = useContext(CategoryContext)
   const [progress, setProgress] = useState(0);
   const { createGame } = useContext(GameContext)
-  const { generateRandomGame, generateRandomGameByDescription, createRandomGame } = useContext(OpenAIContext)
+  const { generateRandomGame, generateRandomGameByDescription, createRandomGame, incrementAIGameGeneration } = useContext(OpenAIContext)
   const navigate = useNavigate()
   const [progressText, setProgressText] = useState('');
   const [numPageSelected, setNumPageSelected] = useState(3)
@@ -73,15 +73,14 @@ const MyGames = () => {
 
     let randomGame = ""
 
-    // if(selectedOption){
-    //   console.log("Gerando historia pela descricao")
+    try{
+      await incrementAIGameGeneration(user!.id)
+    }catch(e){
+      console.log("Limite excedido")
+      return
+    }
     randomGame = await generateRandomGameByDescription(numPageSelected, categorySelected, description)
-    // }
-    // else{
-    //   console.log("Gerando historia parametros")
-    //   randomGame = await generateRandomGame(numPageSelected, categorySelected)
-    // }
-
+    
     let randomGameJSON = JSON.parse(randomGame)
 
 
@@ -240,10 +239,16 @@ const MyGames = () => {
               </ToggleButton>
             </ToggleButtonGroup>
           </FilterMyGames>
-          <RandomDescriptionButton onClick={handleClickGenerateRandomStorie}>
-            <p>Gerar uma história aleatória</p>
-            <GptIcon src={GPT} />
-          </RandomDescriptionButton>
+
+          <div style={{marginRight: '2rem'}}>
+          <Badge color='success'  badgeContent={3-user!.game_ia_generation_count ?? 0}>
+            <RandomDescriptionButton onClick={handleClickGenerateRandomStorie}>
+              <p>Gerar uma história aleatória</p>
+              <GptIcon src={GPT} />
+            </RandomDescriptionButton>
+          </Badge>
+          </div>
+  
         </TitleWrapper>
         <MyGameWrapContainer>
           <ListMyGamesCardContainer  >
@@ -295,7 +300,7 @@ const MyGames = () => {
                 ))
               )
             }
-          </ListMyGamesCardContainer>=
+          </ListMyGamesCardContainer>
         </MyGameWrapContainer>
         <Backdrop
           sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}

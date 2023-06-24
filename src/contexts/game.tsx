@@ -4,7 +4,8 @@ import AppError from "../core/app-error";
 import Category from "../models/Category";
 import Game from "../models/Game";
 import PlayGames from "../models/PlayGame";
-import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchHighlightGame, findGamesByTitle, getGamesByCategory, getHotGames, getUserGamesByToken, getUserPlayAllGames, getUserPlayGames, patchGame, postFullGame, postGame, postGameCategoryByID, publishGame, reportGame, unpublishGame } from "../services/api";
+import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchGameHistory, fetchHighlightGame, findGamesByTitle, getGamesByCategory, getHotGames, getUserGamesByToken, getUserPlayAllGames, getUserPlayGames, patchGame, postFullGame, postGame, postGameCategoryByID, publishGame, reportGame, unpublishGame } from "../services/api";
+
 
 
 
@@ -41,6 +42,7 @@ type GameContextType = {
     setPublished: (status: boolean) => void
     publishGameById: (id: number) => Promise<any>
     unpublishGameById: (id: number) => Promise<any>
+    getGameHistoryById: (idPlayGame: number) => Promise<any>
 }
 
 export const GameContext = createContext<GameContextType>({} as GameContextType)
@@ -164,6 +166,19 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             throw error
         }
     }
+
+    async function getGameHistoryById(idPlayGame: number): Promise<any> {
+        try {
+            const response = await fetchGameHistory(idPlayGame);
+            return response.data
+            
+        } catch (error) {
+
+            console.error(error)
+            throw error
+        }
+    }
+
 
     async function getHighlightGame(): Promise<void> {
         try {
@@ -568,7 +583,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             published,
             setPublished,
             publishGameById,
-            unpublishGameById
+            unpublishGameById,
+            getGameHistoryById
 
         }}>
             {children}
