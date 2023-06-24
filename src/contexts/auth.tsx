@@ -10,6 +10,7 @@ import {
   signupUser,
   verifyEmail,
   sendEmail,
+  getUserAuthenticated,
 } from "../services/api";
 
 type AuthContextType = {
@@ -40,6 +41,7 @@ type AuthContextType = {
   sendValidateEmail: () => Promise<void>;
   sendRecover: (email: string) => Promise<void>;
   updatePassword: (id: number, pswd1: string, pswd2: string) => Promise<void>;
+  getUserAuth: () => Promise<void>;
 };
 
 interface User {
@@ -71,12 +73,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const recoveredUser = localStorage.getItem("user");
-    if (recoveredUser) {
-      setUser(JSON.parse(recoveredUser));
+    try{
+      const tokensJSON = localStorage.getItem("token");
+      const tokens = JSON.parse(tokensJSON!);
+      api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
+      if (!!tokens) {
+        console.log('tentando encontrar usuario')
+        getUserAuth()
+      } else {
+        setLoading(false);
+      }
+    } catch(e) {
+      const error = e as AppError;
+      setLoading(false)
     }
-    setLoading(false);
+    
+    
   }, []);
+
+  useEffect(() => {
+    if (!!user) {
+      setLoading(false)
+    } 
+}, [user, setUser])
 
   async function validLogin(email: string, password: string) {
     if (email === "") {
@@ -100,13 +119,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const loggedUser = await response.data.user;
       const tokens = await response.data.tokens;
 
-      localStorage.setItem("user", JSON.stringify(loggedUser));
       localStorage.setItem("token", JSON.stringify(tokens));
 
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
 
       setUser(loggedUser);
-      console.log("set user");
       navigate(HOME);
     } catch (e) {
       const error = (await e) as AxiosError;
@@ -152,7 +169,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   function logout() {
     console.log("logout");
-    localStorage.removeItem("user");
     localStorage.removeItem("token");
     api.defaults.headers.Authorization = null;
     setUser(null);
@@ -225,10 +241,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const loggedUser = await response.data.user;
       const tokens = await response.data.tokens;
 
-      localStorage.setItem("user", JSON.stringify(loggedUser));
       localStorage.setItem("token", JSON.stringify(tokens));
 
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
+      setUser(loggedUser)
 
       navigate(EMAIL_NOT_VALIDATED);
     } catch (e) {
@@ -261,19 +277,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const tokenJSON = JSON.parse(recoveredToken);
         api.defaults.headers.Authorization = `Bearer ${tokenJSON.access_token}`;
         await verifyEmail(token);
-
-        const recoveredUser = localStorage.getItem("user");
-        if (recoveredUser) {
-          let validatedUser = JSON.parse(recoveredUser);
-          validatedUser.email_validated = true;
-          setUser(validatedUser);
-          localStorage.setItem("user", JSON.stringify(validatedUser));
-        }
+        await getUserAuth()
       } else {
         api.defaults.headers.Authorization = `Bearer ${access_token}`;
         await verifyEmail(token);
       }
-      // user!.email_validated=true;
     } catch (e) {
       const error = (await e) as AxiosError;
       console.log(error);
@@ -349,6 +357,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  async function getUserAuth() {
+    try {
+      const tokensJSON = localStorage.getItem("token");
+      const tokens = JSON.parse(tokensJSON!);
+      api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
+
+      const response = await getUserAuthenticated()
+      const loggedUser = await response.data
+      setUser(loggedUser)
+      
+    } catch(e) {
+        const error = (await e) as AxiosError;
+        console.error(
+          `Erro (${error.response?.status}) ao recuperar usuário:`,
+          error
+        );
+        if (error.response?.data) {
+          const { statusCode, message } = error.response.data as ErrorData;
+          if (statusCode && message) {
+            throw new AppError( statusCode, message)
+          }
+        }
+        throw new AppError(
+          400,
+          "Erro ao realizar recuperação de usuário.",
+        );
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -364,7 +401,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         validateEmail,
         sendValidateEmail,
         sendRecover,
-        updatePassword
+        updatePassword,
+        getUserAuth
       }}
     >
       {children}
