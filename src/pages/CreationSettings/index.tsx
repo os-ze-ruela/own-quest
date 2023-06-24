@@ -68,22 +68,22 @@ export default function CreationSettings() {
     fetchGames()
   }, [])
 
-  useEffect(() => {
-    userGames.forEach((game) => {
-      setListIds((listIds) => [...listIds, game.id]);
-    });
-  }, [userGames]);
-  // Verificar o porque da "listIds" estar vindo vazia
-
-  useEffect(() => {
-    if (listIds.length == 0) {
-      console.log('a')
-    }
-    if (id !== undefined && (typeof id === 'string' || typeof id === 'number') && !listIds.includes(Number(id))) {
-      // history(HOME);
+  useEffect(() => { 
+    let foundMatch = false; 
+  
+    for (const game of userGames) {
+      if (game.id.toString() === id) { 
+        foundMatch = true; 
+        break; 
+      }
     }
 
-  }, [listIds, id]);
+    if (!foundMatch && userGames.length > 0) {
+      history('/denied'); 
+    }
+    
+  }, [userGames, history]);
+
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsLoadingImage(true)

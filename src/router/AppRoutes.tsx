@@ -20,7 +20,8 @@ import { GameProvider } from '../contexts/game';
 import { OpenAIProvider } from '../contexts/openai';
 import { PlayGamesProvider } from '../contexts/play-games';
 import { UserProvider } from '../contexts/user';
-import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, EXPLORER, GAME, GAME_DESCRIPTION, GAME_HISTORY, HOME, LANDING_PAGE, LOGIN, MYGAMES, NEW_PASSWORD, PLAYGAME, PROFILE, RECOVER_PASSWORD, REGISTER, SETTINGS, TEST, USER_DESCRIPTION } from '../core/app-urls';
+import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, EXPLORER, GAME, GAME_DESCRIPTION, GAME_HISTORY, HOME, LANDING_PAGE, LOGIN, MYGAMES, NEW_PASSWORD, PERMISSION_DENIED, PLAYGAME, PROFILE, RECOVER_PASSWORD, REGISTER, SETTINGS, TEST, USER_DESCRIPTION } from '../core/app-urls';
+
 import CreationSettings from '../pages/CreationSettings';
 import Explorer from '../pages/Explorer';
 import GameHistory from '../pages/GameHistory/GameHistory';
@@ -29,6 +30,8 @@ import MyGames from '../pages/MyGames';
 import Profile from '../pages/Profile';
 import { UserInfos } from '../pages/UserInfos';
 import VisualizationTest from '../pages/VisualizationTest/VisualizationTest';
+import { UserInfos} from '../pages/UserInfos';
+import PermissionDenied from '../pages/PermissionDenied';
 
 function AppRoutes() {
     function Private({ children }: { children: ReactNode }) {
@@ -84,6 +87,7 @@ function AppRoutes() {
                                             <Route path={MYGAMES} element={<Private><MyGames /></Private>} > </Route>
                                             <Route path={EXPLORER} element={<Explorer />}></Route>
                                             <Route path={GAME_DESCRIPTION + '/:id'} element={<GameInfos />} > </Route>
+                                            <Route path={PERMISSION_DENIED} element={<PermissionDenied />} > </Route>
                                             <Route path={USER_DESCRIPTION + '/:nickname'} element={<Private><UserInfos /></Private>}></Route>
                                             <Route path={TEST} element={<VisualizationTest />} > </Route>
                                             <Route path={GAME + '/:id' + SETTINGS} element={<Private><CreationSettings /></Private>} > </Route>

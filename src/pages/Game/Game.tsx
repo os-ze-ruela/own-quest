@@ -7,6 +7,9 @@ import { useNavigate  } from 'react-router-dom';
 import { GAME, GAME_DESCRIPTION } from '../../core/app-urls';
 import { Snackbar, Alert } from '@mui/material';
 import { PlayGamesContext } from '../../contexts/play-games';
+import { GameContext } from '../../contexts/game';
+import { AuthContext } from '../../contexts/auth';
+import AppError from '../../core/app-error';
 
 
 
@@ -16,17 +19,38 @@ const Game = () => {
     const {currentPlayingPage, setCurrentPlayingPage, postSelectedButtonPlayingGame, historicGameId, setHistoricGameId, playGameId, finishPlayingGame} = useContext(PlayGamesContext)
     const [ buttonIndex, setButtonIndex ] = useState(-1)
     const { pages, setPages } = useContext(CreationContext)
+    const { user, refresh } = useContext(AuthContext)
     const { id } = useParams()
     const [ indexPage, setIndexPage ] = useState(0)
+    const { userGames, getUserGames } = useContext(GameContext);
     const navigate = useNavigate();
     const [alert, setAlert] = useState(false)
     const [isSelect, setIsSelect] = useState(false)
+    const [isLoading, setIsLoading] = useState(true);
+    const history = useNavigate();
     
 
     //Para diferenciar o teste do jogar
     const test = searchParams.get("test");
 
     const buttonContainerRef = useRef<HTMLDivElement | null>(null);
+
+    const fetchGames = async () => {
+      try {
+        await Promise.all([getUserGames()]);
+        setIsLoading(false);
+      } catch (e) {
+        setIsLoading(false);
+        const error = await e as AppError
+        if (error.statusCode === 401) {
+          try {
+            await refresh()
+            await fetchGames()
+          } catch (e) {
+          }
+        }
+      }
+    }
 
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
