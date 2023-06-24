@@ -1,9 +1,10 @@
+
 import { Backdrop } from '@mui/material';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { BiTrash } from 'react-icons/bi';
 import { HiPlus } from 'react-icons/hi';
 import { MdOutlineAddCircleOutline } from 'react-icons/md';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ASTROPC from "../../assets/img/astronauta-pc.svg";
 import ColorPicker from '../../components/ButtonWithColorPicker/ButtonWithColorPicker';
@@ -15,20 +16,11 @@ import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated
 import { AuthContext } from '../../contexts/auth';
 import { CreationContext } from '../../contexts/creation';
 import { GameContext } from '../../contexts/game';
+import AppError from '../../core/app-error';
 import { ActualPage, AddButton, AddPage, Body, ButtonContainer, ButtonSettings, ButtonSettingsWrapper, CreationBody, CreationStyle, DeleteButton, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu, PopupContainer } from '../../styles/Creation';
 import { AstronautLoading, BackdropWrapper, LoadingText } from '../../styles/CreationSettings';
 import NoPagePlaceholder from './components/NoPagePlaceholder';
 import PageActionBar from './components/PageActionBar';
-import { Backdrop, Box } from '@mui/material';
-import { AstronautLoading, BackdropWrapper, LoadingText } from '../../styles/CreationSettings';
-import styled from 'styled-components';
-import ASTROPC from "../../assets/img/astronauta-pc.svg";
-import ColorPicker from '../../components/ButtonWithColorPicker/ButtonWithColorPicker';
-import SelectBoxComponent from '../../components/SelectBoxComponent/SelectBoxComponent';
-import { BiTrash } from 'react-icons/bi';
-import { Button } from '../../models/Button';
-import AppError from '../../core/app-error';
-import { useNavigate } from "react-router-dom";
 
 const Creation = () => {
 
@@ -82,7 +74,7 @@ const Creation = () => {
 
   // useEffect(() => { 
   //   let foundMatch = false; 
-  
+
   //   for (const game of userGames) {
   //     if (game.id.toString() === id) { 
   //       foundMatch = true; 
@@ -93,7 +85,7 @@ const Creation = () => {
   //   if (!foundMatch && userGames.length > 0) {
   //     history('/denied'); 
   //   }
-    
+
   // }, [userGames, history]);
 
 
@@ -145,7 +137,7 @@ const Creation = () => {
     getGameById(id!)
 
   }, [])
-  
+
   useEffect(() => {
     const setDocumentTitle = () => {
       if (editingGame) {
@@ -172,7 +164,7 @@ const Creation = () => {
   }
 `;
 
-const buttonContainerRef = useRef<HTMLDivElement | null>(null);
+  const buttonContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -200,31 +192,31 @@ const buttonContainerRef = useRef<HTMLDivElement | null>(null);
   return (
     <CreationBody>
       <CustomBackdrop
-        sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.95)', zIndex: (theme) => theme.zIndex.drawer + 1, width: '100%'}}
+        sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.95)', zIndex: (theme) => theme.zIndex.drawer + 1, width: '100%' }}
         open={published}
       >
         <BackdropWrapper>
 
           <AstronautLoading src={ASTROPC} />
           <LoadingText>Não é possivel editar um jogo publicado, para alterá-lo você deve acessar a página de configuração no ícone de engrenagem acima</LoadingText>
-   
+
         </BackdropWrapper>
 
       </CustomBackdrop>
-      {showHelp ? 
-      (    
-        <>    
-        <PopupContainer top={'200px'} left={'20px'}>
-          <Popup message="🚨 Após selecionar a página destino do botão, você pode usar o atalho F4 para ir até ela" id="popup1"/>
-          <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" id="popup2"/>
-          <Popup message="🚨 Acesse o menu lateral ◀ a direita para uma melhor visualização da história e seus caminhos" id="popup3"/>
-        </PopupContainer>
-        </>)
+      {showHelp ?
+        (
+          <>
+            <PopupContainer top={'200px'} left={'20px'}>
+              <Popup message="🚨 Após selecionar a página destino do botão, você pode usar o atalho F4 para ir até ela" id="popup1" />
+              <Popup message="🚨 As páginas finais ficam destacadas com uma borda vermelha" id="popup2" />
+              <Popup message="🚨 Acesse o menu lateral ◀ a direita para uma melhor visualização da história e seus caminhos" id="popup3" />
+            </PopupContainer>
+          </>)
         :
         (<></>)
-    }
+      }
       {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
-      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={false} isPublished={published} showHelp={showHelp} setShowHelp={setShowHelp}/>
+      <HeaderCreation id={Number(id)} onBackClick={handleBackClick} onCreateClick={handleCreateClick} isSaved={false} set={false} isPublished={published} showHelp={showHelp} setShowHelp={setShowHelp} />
       <CreationStyle>
 
         <Body>
@@ -242,7 +234,7 @@ const buttonContainerRef = useRef<HTMLDivElement | null>(null);
                 <NoPagePlaceholder />
               ) : (
                 <Page background={pages[indexSelected].color}
-                  // onDoubleClick={() => handlePageActionBar(indexButton, actionBarSelected)}  
+                // onDoubleClick={() => handlePageActionBar(indexButton, actionBarSelected)}  
                 //   onDoubleClick={()=>{
                 //     setShowButtonSettings(prevState => {
                 //     const newState = Array(pages[indexSelected].buttons.length).fill(false);
@@ -250,7 +242,7 @@ const buttonContainerRef = useRef<HTMLDivElement | null>(null);
                 //   }
                 //   );
                 // }}
-                  >
+                >
                   <PageTitle
                     type="text"
                     name="PageTitle"
@@ -279,76 +271,76 @@ const buttonContainerRef = useRef<HTMLDivElement | null>(null);
                     }}
                   />
                   <ButtonContainer ref={buttonContainerRef}>
-                  {pages[indexSelected].buttons.map((button, index) => (
-                  <ButtonSettingsWrapper>
-                     {showButtonSettings[index]  && (
-                        <ButtonSettings style={{ top: buttonSettingsTop }}>
-                          <ColorPicker
-                            color={pages[indexSelected].buttons[indexButton].color}
-                            setColor={(color) => {
-                              handleButtonColorChange(indexSelected, indexButton, color)
-                              updateButton(pages[indexSelected].buttons[indexButton])
-                            }} />
-                           <SelectBoxComponent defaultValue="Ir para página" pageList={pages.map((page, index) => `Página ${index + 1}`)} onChange={handleSelectChange} /> 
-                          <DeleteButton onClick={handleDeleteButton}>
-                            <BiTrash size={30} color="#000" />
-                          </DeleteButton> 
-                        </ButtonSettings>
-                      )} 
-                    
-                      <EditableButton
-                        key={index}
-                        id={`editable-button-${index}`}
-                        value={button.title}
-                        textLength={button.title.length}
-                        isSelected={index === indexButton}
-                        placeholder={"Botão " + (index + 1).toString()}
-                        background={button.color}
-                        onClick={() => {
-                          setShowButtonSettings(prevState => {
-                            const newState = Array(pages[indexSelected].buttons.length).fill(false);
-                            newState[index] = true; // Mostra o ButtonSettings para o botão selecionado
+                    {pages[indexSelected].buttons.map((button, index) => (
+                      <ButtonSettingsWrapper>
+                        {showButtonSettings[index] && (
+                          <ButtonSettings style={{ top: buttonSettingsTop }}>
+                            <ColorPicker
+                              color={pages[indexSelected].buttons[indexButton].color}
+                              setColor={(color) => {
+                                handleButtonColorChange(indexSelected, indexButton, color)
+                                updateButton(pages[indexSelected].buttons[indexButton])
+                              }} />
+                            <SelectBoxComponent defaultValue="Ir para página" pageList={pages.map((page, index) => `Página ${index + 1}`)} onChange={handleSelectChange} />
+                            <DeleteButton onClick={handleDeleteButton}>
+                              <BiTrash size={30} color="#000" />
+                            </DeleteButton>
+                          </ButtonSettings>
+                        )}
+
+                        <EditableButton
+                          key={index}
+                          id={`editable-button-${index}`}
+                          value={button.title}
+                          textLength={button.title.length}
+                          isSelected={index === indexButton}
+                          placeholder={"Botão " + (index + 1).toString()}
+                          background={button.color}
+                          onClick={() => {
+                            setShowButtonSettings(prevState => {
+                              const newState = Array(pages[indexSelected].buttons.length).fill(false);
+                              newState[index] = true; // Mostra o ButtonSettings para o botão selecionado
 
 
-                            // Obtenha o elemento do botão EditableButton
-                            const buttonElement = document.getElementById(`editable-button-${index}`);
-                            
-                            if (buttonElement) {
-                              // Se o elemento existir, obtenha a posição
-                              const buttonRect = buttonElement.getBoundingClientRect();
-                              const buttonTop = buttonRect.top;
-                              console.log(buttonTop)
-                              // Defina a posição top do ButtonSettings no estado
-                              setButtonSettingsTop(buttonTop - 120); // Ajuste conforme necessário
+                              // Obtenha o elemento do botão EditableButton
+                              const buttonElement = document.getElementById(`editable-button-${index}`);
+
+                              if (buttonElement) {
+                                // Se o elemento existir, obtenha a posição
+                                const buttonRect = buttonElement.getBoundingClientRect();
+                                const buttonTop = buttonRect.top;
+                                console.log(buttonTop)
+                                // Defina a posição top do ButtonSettings no estado
+                                setButtonSettingsTop(buttonTop - 120); // Ajuste conforme necessário
+                              }
+
+                              return newState;
+                            });
+                            handleButton(index, button);
+                          }}
+                          onChange={(event) => {
+                            handleTextChange(indexSelected, index, event.target.value);
+                            // updateButton(button)
+                            debounceSaveChangesButton()
+                          }}
+                          onKeyDown={(event) => {
+                            if (event.key === "F4" && button.nextPageId !== -1) {
+                              setActionBarSelected(true)
+                              setIndexSelected(findPageIndex(pages, button.nextPageId))
                             }
-
-                            return newState;
-                          });
-                          handleButton(index, button);
-                        }}
-                        onChange={(event) => {
-                          handleTextChange(indexSelected, index, event.target.value);
-                          // updateButton(button)
-                          debounceSaveChangesButton()
-                        }}
-                        onKeyDown={(event) => {
-                          if (event.key === "F4" && button.nextPageId !== -1) {
-                            setActionBarSelected(true)
-                            setIndexSelected(findPageIndex(pages, button.nextPageId))
-                          }
-                        }}
-                      />
-                    </ButtonSettingsWrapper>
-                      ))}
+                          }}
+                        />
+                      </ButtonSettingsWrapper>
+                    ))}
                     <AddButton onClick={
                       () => { handleAddButtonClick(indexSelected); }}
                       canAdd={pages[indexSelected].buttons.length < 4} >
                       <MdOutlineAddCircleOutline size={25} color="#fff" />
                     </AddButton>
                   </ButtonContainer>
-                      
 
-   
+
+
                 </Page>)}
 
             </ActualPage>
