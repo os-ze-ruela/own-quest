@@ -73,14 +73,14 @@ const MyGames = () => {
 
     let randomGame = ""
 
-    try{
+    try {
       await incrementAIGameGeneration(user!.id)
-    }catch(e){
+    } catch (e) {
       console.log("Limite excedido")
       return
     }
     randomGame = await generateRandomGameByDescription(numPageSelected, categorySelected, description)
-    
+
     let randomGameJSON = JSON.parse(randomGame)
 
 
@@ -209,7 +209,7 @@ const MyGames = () => {
 
       </Backdrop>
       <HeaderLogged nickname={user!.nickname} photo={user!.photo} />
-      {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
+      {user == null ? (<></>) : user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <MyGamesStyle>
         <TitleWrapper>
           <TitleMyGame>Minhas histórias</TitleMyGame>
@@ -240,15 +240,15 @@ const MyGames = () => {
             </ToggleButtonGroup>
           </FilterMyGames>
 
-          <div style={{marginRight: '2rem'}}>
-          <Badge color='success'  badgeContent={3-user!.game_ia_generation_count ?? 0}>
-            <RandomDescriptionButton onClick={handleClickGenerateRandomStorie}>
-              <p>Gerar uma história aleatória</p>
-              <GptIcon src={GPT} />
-            </RandomDescriptionButton>
-          </Badge>
+          <div style={{ marginRight: '2rem' }}>
+            <Badge color='success' badgeContent={3 - user!.game_ia_generation_count ?? 0}>
+              <RandomDescriptionButton onClick={handleClickGenerateRandomStorie}>
+                <p>Gerar uma história aleatória</p>
+                <GptIcon src={GPT} />
+              </RandomDescriptionButton>
+            </Badge>
           </div>
-  
+
         </TitleWrapper>
         <MyGameWrapContainer>
           <ListMyGamesCardContainer  >

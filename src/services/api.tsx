@@ -18,6 +18,10 @@ export const refreshToken = async () => {
     return await api.post('/auth/refresh')
 }
 
+export const getUserByAccessToken = async () => {
+    return await api.get('/user')
+}
+
 // GAME CONTEXT
 export const getUserGamesByToken = async () => {
     return await api.get('/user/games')
@@ -256,7 +260,6 @@ export const sendRecoverEmail = async () => {
 
 // ------ PLAY GAMES  ----
 
-
 export const fetchResumePlayedGames = async (userId: number, gameId: number) => {
     return await api.get(`/play-games/resume-game/user/${userId}/game/${gameId}`)
 }
@@ -294,13 +297,13 @@ export const getUserPlayGames = async (userId: string) => {
     return await api.get(`/play-games/user/${userId}`)
 }
 
-// Ai
+export const getUserPlayAllGames = async (userId: string) => {
+    return await api.get(`/play-games/user/${userId}/all`)
+}
+
+// AI
 export const postIncrementAIGameGeneration = async (userId: number) => {
     return await api.post(`/ia-generation/game/`, {
         "userId": userId
     })
-}
-  
-export const getUserPlayAllGames = async (userId: string) => {
-    return await api.get(`/play-games/user/${userId}/all`)
 }

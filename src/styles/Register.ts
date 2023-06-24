@@ -24,12 +24,10 @@ export const FieldsDiv = styled.div`
 export const Title = styled.h1`
     font-weight: bold;
     color: white;
-    width: 50%;
-    padding-top: 5rem;
-    padding-bottom: 0em;
+    width: 100%;
     font-size: 2.0rem;
-    margin-left: 0.2em;
-    margin-bottom: 0;
+    margin-left: 0.1em;
+    margin-bottom: 0.2em;
     font-family: FiraCode-Bold;
     font-weight: 700;
 

@@ -52,7 +52,7 @@ const HomeLogged = () => {
     <>
       <Drawer />
       <HeaderLogged nickname={user!.nickname} photo={user!.photo} />
-      {user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
+      {user == null ? (<></>) : user!.email_validated ? (<></>) : (<><EmailNotValidatedWarning /></>)}
       <LoggedStyle>
         <MyGameListContainer>
           {isLoading ? (
