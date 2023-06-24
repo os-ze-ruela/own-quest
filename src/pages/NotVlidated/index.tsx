@@ -42,10 +42,10 @@ export default function NotValidated(){
             <Header page='Minha conta' redirect=''/>
             <ValidateStyle>
                 <Title>Valide sua conta!</Title>
-                <SubTitle>Meus parabéns! você acaba de criar uma conta no Own Quest.</SubTitle>
-                <SubTitle>Para começar a criar suas histórias com Own Quest é necessário validar seu e-mail.</SubTitle>
-                <SubTitle>O link foi enviado em seu e-mail e tem validade de 24 horas.</SubTitle>
-                <SubTitle>Caso não tenha recebido o e-mail. <a onClick={async () => {await resendEmail()}}>Clique aqui</a> para reenviar o e-mail de verificação.</SubTitle>
+                <SubTitle>Meus parabéns! você acaba de criar uma conta no Own Quest.<br/>
+                Para começar a criar suas histórias com Own Quest é necessário validar seu e-mail.<br/>
+                O link foi enviado em seu e-mail e tem validade de 24 horas.<br/>
+                Caso não tenha recebido o e-mail. <a onClick={async () => {await resendEmail()}}>Clique aqui</a> para reenviar o e-mail de verificação.</SubTitle>
                 <ButtonSend href={HOME}>Continuar na plataforma</ButtonSend>
                 { typeAlert === 1 &&
                 <Snackbar open={alert} autoHideDuration={4000} onClose={handleCloseAlert}>
