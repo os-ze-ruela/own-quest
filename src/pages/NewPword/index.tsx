@@ -73,7 +73,7 @@ export default function NewPword() {
             await compareAndSend(pswd, pswdConf);
           }}
         >
-          Definir Senha
+          Redefinir Senha
         </ButtonRecover>
       </RecoverStyle>
       <AskRegisterBar />
