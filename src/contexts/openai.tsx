@@ -1,12 +1,10 @@
 import axios, { AxiosError } from 'axios';
-import { ReactNode, createContext, useContext, useState, useEffect } from "react";
+import { ReactNode, createContext, useContext, useState } from "react";
 import { GameContext } from '../contexts/game';
+import AppError from '../core/app-error';
 import { Button } from "../models/Button";
 import { Page } from "../models/Page";
-import { postButton, postIncrementAIGameGeneration, postPage } from "../services/api";
-import { CreationContext } from './creation';
-import { api, uploadImage, uploadRandomImage } from "../services/api";
-import AppError from '../core/app-error';
+import { generateDescriptionWithIA, generateImageWithIA, postButton, postIncrementAIGameGeneration, postPage } from "../services/api";
 
 interface ErrorData {
   statusCode: number;
@@ -14,55 +12,67 @@ interface ErrorData {
 }
 
 type OpenAIContextType = {
-    pages: Page[],
-    setPages: (pages: Page[]) => void,
-    createRandomGame: (randomGame: any) =>  Promise<number>,
-    chat: (message: string) => Promise<string>,
-    dalleAPI: (message: string) => Promise<string>,
-    improveDescription: (description: string) => Promise<string>, 
-    generateRandomGame: (numPages: number, category: string) => Promise<string>
-    generateRandomGameByDescription: (numPages: number, category: string, description: string) => Promise<string>
-    incrementAIGameGeneration: (userId: number) => Promise<void>
+  pages: Page[],
+  setPages: (pages: Page[]) => void,
+  createRandomGame: (randomGame: any) => Promise<number>,
+  chat: (message: string) => Promise<string>,
+  improveDescription: (userId: number, description: string) => Promise<string>,
+  generateImage: (userId: number, description: string) => Promise<string>,
+  generateRandomGame: (numPages: number, category: string) => Promise<string>
+  generateRandomGameByDescription: (numPages: number, category: string, description: string) => Promise<string>
+  incrementAIGameGeneration: (userId: number) => Promise<void>
 }
 
 export const OpenAIContext = createContext<OpenAIContextType>({} as OpenAIContextType)
 
 export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
 
-    const [pages, setPages] = useState<Page[]>([])
 
-    const API_KEY = process.env.REACT_APP_OPEN_AI_API_KEY;
+  const { createFullGame } = useContext(GameContext)
 
-    async function chat(message: string): Promise<string> {
-        const response = await axios.post(
-            `https://api.openai.com/v1/chat/completions`,
-            {
-                "model": "gpt-3.5-turbo",
-                "messages": [{"role": "user", "content": `${message}`}],
-                "temperature": 1.0
-            },
-            {
-            headers: {
-                Authorization: `Bearer ${API_KEY}`,
-                'Content-Type': 'application/json',
-            },
-            }
-        );
-        return response.data.choices[0].message.content;
+  const [pages, setPages] = useState<Page[]>([])
+
+  const API_KEY = process.env.REACT_APP_OPEN_AI_API_KEY;
+
+  async function chat(message: string): Promise<string> {
+    const response = await axios.post(
+      `https://api.openai.com/v1/chat/completions`,
+      {
+        "model": "gpt-3.5-turbo",
+        "messages": [{ "role": "user", "content": `${message}` }],
+        "temperature": 1.0
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return response.data.choices[0].message.content;
+  }
+
+  async function improveDescription(userId: number, description: string): Promise<string> {
+
+    const response = await generateDescriptionWithIA(userId, description);
+
+    return response.data.description
+  }
+
+  async function generateImage(userId: number, description: string): Promise<string> {
+
+    try {
+      const response = await generateImageWithIA(userId, description);
+      return response.data.image
+    } catch (e) {
+      const error = (await e) as AppError;
+      throw error;
     }
 
-    async function improveDescription(description: string): Promise<string>{
-        const defaultPrompt = "Substitua a sinopse da história deixando-a mais detalhada, utilizando apenas um parágrafo: "
+  }
 
-        const response = await chat(defaultPrompt+description);
-
-        console.log(response)
-
-        return response
-    }
-
-    async function generateRandomGame(numPages: number, category: string): Promise<string>{
-        const defaultPrompt = `Eu tenho uma plataforma de criação de histórias e desejo criar histórias aleatórias. Todas
+  async function generateRandomGame(numPages: number, category: string): Promise<string> {
+    const defaultPrompt = `Eu tenho uma plataforma de criação de histórias e desejo criar histórias aleatórias. Todas
                                 histórias seguem um padrão de criação. A história possui uma ou mais categorias
                                 (Aventura, ação, terror, suspense, e outras.), possui um título e uma descrição. Cada história é dividida em páginas. Cada página possui: um título, uma descrição, um conjunto de botões
                                 e um indicação se é uma página de final da história (pode haver uma ou mais páginas de
@@ -106,16 +116,16 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
                                 `;
 
 
-        const response = await chat(defaultPrompt);
+    const response = await chat(defaultPrompt);
 
-        return response
-    }
+    return response
+  }
 
-    async function generateRandomGameByDescription(numPages: number, category: string, description: string): Promise<string>{
-        console.log("generateRandomGameByDescription...")
-        console.log("Numero de paginas = ", numPages)
-        const defaultPrompt = 
-        `
+  async function generateRandomGameByDescription(numPages: number, category: string, description: string): Promise<string> {
+    console.log("generateRandomGameByDescription...")
+    console.log("Numero de paginas = ", numPages)
+    const defaultPrompt =
+      `
         Eu tenho uma plataforma de criação de histórias e desejo criar histórias aleatórias. Todas histórias seguem um padrão de criação. 
 
         Regra 1: A história possui uma ou mais categorias (Aventura, ação, terror, suspense, e outras.), possui um título e uma descrição.
@@ -178,140 +188,113 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
         `;
 
 
-        const response = await chat(defaultPrompt);
+    const response = await chat(defaultPrompt);
 
-        return response
-    }
-
-    const { createFullGame } = useContext(GameContext)
-    const { editingGame, updateGame, setEditingGame, getGameById, deleteGameByID } = useContext(GameContext)
+    return response
+  }
 
 
-    useEffect(() => {
-        console.log(editingGame);
-      }, [editingGame]);
-      
 
-      async function createRandomGame(randomGame: any): Promise<number> {
-        console.log("JSON do game a ser gerado = ");
-        console.log(randomGame);
-      
-        // cria um novo jogo
-        const newGameID = await createFullGame(randomGame);
-      
-        const pagesTemp: Page[] = [];
-        await Promise.all(
-          randomGame.pages.map(async (page: any, index: any) => {
-            const pageTemp = page;
-            console.log("Página que será gerada:")
-            console.log(pageTemp)
-            console.log("Cor da página que será gerada: ", pageTemp.color)
+  async function createRandomGame(randomGame: any): Promise<number> {
+    console.log("JSON do game a ser gerado = ");
+    console.log(randomGame);
+
+    // cria um novo jogo
+    const newGameID = await createFullGame(randomGame);
+
+    const pagesTemp: Page[] = [];
+    await Promise.all(
+      randomGame.pages.map(async (page: any, index: any) => {
+        const pageTemp = page;
+        console.log("Página que será gerada:")
+        console.log(pageTemp)
+        console.log("Cor da página que será gerada: ", pageTemp.color)
+        try {
+          const response = await postPage({
+            title: pageTemp.title,
+            description: pageTemp.description,
+            icon: pageTemp.icon,
+            color: pageTemp.color,
+            number_page: Number(index),
+            is_last_page: Boolean(pageTemp.is_last_page),
+            game_id: newGameID,
+          });
+          pageTemp.id = response.data.id;
+          pagesTemp.push(pageTemp);
+        } catch (error) {
+          console.error(error)
+        }
+      })
+    );
+
+    console.log("Páginas a ser criadas = ", pagesTemp.length)
+
+    // Post buttons for each page
+    for (let i = 0; i < pagesTemp.length; i++) {
+      const page = pagesTemp[i];
+      const buttonsTemp: Button[] = [];
+
+      const pageId = page.id;
+      console.log("Quantidade de botões na página a ser criada = ", page.buttons.length);
+      if (page.buttons.length > 0) {
+        for (let j = 0; j < page.buttons.length; j++) {
+          const button = page.buttons[j];
+          const buttonTemp = button;
+
+          const destinationPage = pagesTemp.find(p => p.number_page === button.nextPageId);
+          if (destinationPage) {
+            const destinationId = destinationPage.id;
+            buttonTemp.nextPageId = destinationId;
+
+            console.log("Botão que será adicionado:")
+            console.log(buttonTemp)
+
             try {
-              const response = await postPage({
-                title: pageTemp.title,
-                description: pageTemp.description,
-                icon: pageTemp.icon,
-                color: pageTemp.color,
-                number_page: Number(index),
-                is_last_page: Boolean(pageTemp.is_last_page),
-                game_id: newGameID,
-              });
-              pageTemp.id = response.data.id;
-              pagesTemp.push(pageTemp);
+              const response = await postButton(
+                pageId,
+                buttonTemp.title,
+                buttonTemp.color,
+                buttonTemp.icon,
+                buttonTemp.nextPageId
+              );
+              console.log("Resposta do botão criada: ", response)
+              buttonsTemp.push(buttonTemp);
             } catch (error) {
               console.error(error)
             }
-          })
-        );
-      
-        console.log("Páginas a ser criadas = ", pagesTemp.length)
-      
-        // Post buttons for each page
-        for (let i = 0; i < pagesTemp.length; i++) {
-          const page = pagesTemp[i];
-          const buttonsTemp: Button[] = [];
-      
-          const pageId = page.id;
-          console.log("Quantidade de botões na página a ser criada = ", page.buttons.length);
-          if (page.buttons.length > 0) {
-            for (let j = 0; j < page.buttons.length; j++) {
-              const button = page.buttons[j];
-              const buttonTemp = button;
-      
-              const destinationPage = pagesTemp.find(p => p.number_page === button.nextPageId);
-              if (destinationPage) {
-                const destinationId = destinationPage.id;
-                buttonTemp.nextPageId = destinationId;
-      
-                console.log("Botão que será adicionado:")
-                console.log(buttonTemp)
-      
-                try {
-                  const response = await postButton(
-                    pageId,
-                    buttonTemp.title,
-                    buttonTemp.color,
-                    buttonTemp.icon,
-                    buttonTemp.nextPageId
-                  );
-                  console.log("Resposta do botão criada: ", response)
-                  buttonsTemp.push(buttonTemp);
-                } catch (error) {
-                  console.error(error)
-                }
-              } else {
-                console.error("Destination page not found");
-              }
-            }
+          } else {
+            console.error("Destination page not found");
           }
-      
-          pagesTemp[i].buttons = buttonsTemp;
         }
-      
-        setPages(pagesTemp);
-      
-        return newGameID;
       }
-      
 
+      pagesTemp[i].buttons = buttonsTemp;
+    }
 
-    async function dalleAPI(message: string): Promise<string> {
-            const response = await axios.post(
-            "https://api.openai.com/v1/images/generations",
-            {
-                prompt: message,
-                num_images: 1,
-                size: "512x512",
-            },
-            {
-                headers: {
-                Authorization: `Bearer ${API_KEY}`,
-                "Content-Type": "application/json",
-                },
-            }
-            );
-            return response.data.data[0].url;
-        }
+    setPages(pagesTemp);
 
-    async function incrementAIGameGeneration(userId: number): Promise<void> {
-      try{
-        await postIncrementAIGameGeneration(userId)
-      }
-      catch (e) {
-        const error = (await e) as AxiosError;
-        if (error.response?.data) {
-          const { statusCode, message } = error.response.data as ErrorData;
-          if (statusCode && message) {
-            throw new AppError( statusCode, message)
-          }
+    return newGameID;
+  }
+
+  async function incrementAIGameGeneration(userId: number): Promise<void> {
+    try {
+      await postIncrementAIGameGeneration(userId)
+    }
+    catch (e) {
+      const error = (await e) as AxiosError;
+      if (error.response?.data) {
+        const { statusCode, message } = error.response.data as ErrorData;
+        if (statusCode && message) {
+          throw new AppError(statusCode, message)
         }
       }
     }
+  }
 
 
-    return (
-        <OpenAIContext.Provider value={{pages, setPages, createRandomGame, chat, dalleAPI, improveDescription, generateRandomGame, generateRandomGameByDescription, incrementAIGameGeneration}}>
-            {children}
-        </OpenAIContext.Provider>
-    )
+  return (
+    <OpenAIContext.Provider value={{ pages, setPages, createRandomGame, chat, generateImage, improveDescription, generateRandomGame, generateRandomGameByDescription, incrementAIGameGeneration }}>
+      {children}
+    </OpenAIContext.Provider>
+  )
 }

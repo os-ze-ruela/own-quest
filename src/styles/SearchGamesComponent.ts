@@ -83,7 +83,7 @@ export const CardSearchGameWrapper = styled.a`
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   min-width: 300px;
   transition: all 0.2s ease-in-out;
-  height: auto;
+  height: 510px;
   text-decoration: none;
 
   &:hover {

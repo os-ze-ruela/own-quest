@@ -32,11 +32,9 @@ export default function NewPword() {
 
   async function compareAndSend(password: string, password2: string) {
     if(password === password2){
-        console.log("igual")
         console.log(password)
         console.log(password2)
     }else{
-        console.log("dif")
         console.log(password)
         console.log(password2)
         setShowError(true)

@@ -125,7 +125,7 @@ export const unpublishGame = async (id: number) => {
     return await api.patch(`/game/unpublish/${id}`)
 }
 
-export const reportGame = async (gameId: number, userId: number, complain: string ) => {
+export const reportGame = async (gameId: number, userId: number, complain: string) => {
     return await api.post(`/report`, {
         "gameId": gameId,
         "userId": userId,
@@ -170,7 +170,6 @@ export const deleteGameCategoryByID = async (idGame: number, idCategory: number)
 }
 
 export const postFullGame = async (title: string, description: string, image: string, categories: Category[]) => {
-    console.log(title, description, image, categories)
     return await api.post(`/game`, {
         "title": title,
         "description": description,
@@ -184,7 +183,7 @@ export const getButton = async (id: number) => {
 }
 
 
-export const fetchGameHistory = async(id: number) => {
+export const fetchGameHistory = async (id: number) => {
     return await api.get(`/play-games/${id}`)
 }
 
@@ -302,8 +301,22 @@ export const getUserPlayAllGames = async (userId: string) => {
 }
 
 // AI
+export const generateDescriptionWithIA = async (userId: number, description: string) => {
+    return await api.post(`/ia-generation/description`, {
+        "userId": userId,
+        "description": description
+    })
+}
+
+export const generateImageWithIA = async (userId: number, description: string) => {
+    return await api.post(`/ia-generation/image`, {
+        "userId": userId,
+        "description": description
+    })
+}
+
 export const postIncrementAIGameGeneration = async (userId: number) => {
-    return await api.post(`/ia-generation/game/`, {
+    return await api.post(`/ia-generation/game`, {
         "userId": userId
     })
 }

@@ -208,7 +208,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
             setHighlightGame(game)
 
-            console.log(editingGame)
             //   setLoading(false)
         } catch (error) {
             //   setLoading(false)

@@ -51,6 +51,7 @@ interface User {
   email: string;
   name: string;
   nickname: string;
+  is_premium: boolean;
   game_ia_generation_count: number;
 }
 
@@ -375,7 +376,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const tokens = JSON.parse(tokensJSON!);
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
 
-      const response = await getUserAuthenticated()
+      const response = await getUserByAccessToken()
       const loggedUser = await response.data
       setUser(loggedUser)
       

@@ -176,7 +176,6 @@ const MyGames = () => {
     event: React.MouseEvent<HTMLElement>,
     newFilter: string,
   ) => {
-    console.log(userGames.filter(item => item.isPublished && !item.isEditing))
     let filteredGames: Game[];
     if (newFilter === 'Editando') {
       filteredGames = userGames.filter(item => !item.isPublished && item.isEditing);
@@ -241,7 +240,11 @@ const MyGames = () => {
           </FilterMyGames>
 
           <div style={{ marginRight: '2rem' }}>
-            <Badge color='success' badgeContent={3 - user!.game_ia_generation_count ?? 0}>
+            <Badge
+              color={3 - (user!.game_ia_generation_count ?? 0) <= 0 ? 'warning' : 'success'}
+              badgeContent={3 - user!.game_ia_generation_count ?? 0}
+              invisible={user!.is_premium}
+            >
               <RandomDescriptionButton onClick={handleClickGenerateRandomStorie}>
                 <p>Gerar uma história aleatória</p>
                 <GptIcon src={GPT} />
