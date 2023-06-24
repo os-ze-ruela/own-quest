@@ -278,9 +278,9 @@ const MyGames = () => {
                   isPublished={game.isPublished}
                   description={game.description}
                   categories={game.categories}
-                />
-              ))
-            ) :
+                  />
+                  ))
+                  ) :
               (
                 filterGames.map((game, index) => (
                   <CardMyGame

@@ -21,10 +21,12 @@ import ColorPicker from '../../components/ButtonWithColorPicker/ButtonWithColorP
 import SelectBoxComponent from '../../components/SelectBoxComponent/SelectBoxComponent';
 import { BiTrash } from 'react-icons/bi';
 import { Button } from '../../models/Button';
+import AppError from '../../core/app-error';
+import { useNavigate } from "react-router-dom";
 
 const Creation = () => {
 
-  const { user } = useContext(AuthContext)
+  const { user, refresh } = useContext(AuthContext)
   const { pages, setPages } = useContext(CreationContext)
   const { indexButton, setIndexButton } = useContext(CreationContext)
   const { indexSelected, setIndexSelected } = useContext(CreationContext)
@@ -38,6 +40,7 @@ const Creation = () => {
   const { handlePageActionBar } = useContext(CreationContext)
   const { actionBarSelected, setActionBarSelected } = useContext(CreationContext)
   const { getPagesFromGameID } = useContext(CreationContext)
+  const { userGames, getUserGames } = useContext(GameContext)
   const { updatePage } = useContext(CreationContext)
   const { updateButton } = useContext(CreationContext)
   const { findPageIndex } = useContext(CreationContext)
@@ -55,6 +58,41 @@ const Creation = () => {
   const { handleDeleteButton } = useContext(CreationContext)
   const [showButtonSettings, setShowButtonSettings] = useState(Array(4).fill(false));
   const [buttonSettingsTop, setButtonSettingsTop] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const history = useNavigate();
+
+  const fetchGames = async () => {
+    try {
+      await Promise.all([getUserGames()]);
+      setIsLoading(false);
+    } catch (e) {
+      setIsLoading(false);
+      const error = await e as AppError
+      if (error.statusCode === 401) {
+        try {
+          await refresh()
+          await fetchGames()
+        } catch (e) {
+        }
+      }
+    }
+  }
+
+  // useEffect(() => { 
+  //   let foundMatch = false; 
+  
+  //   for (const game of userGames) {
+  //     if (game.id.toString() === id) { 
+  //       foundMatch = true; 
+  //       break; 
+  //     }
+  //   }
+
+  //   if (!foundMatch && userGames.length > 0) {
+  //     history('/denied'); 
+  //   }
+    
+  // }, [userGames, history]);
 
 
   const debounceSaveChanges = () => {
@@ -67,6 +105,7 @@ const Creation = () => {
     }, 500);
     setTimerId(idTimer);
   };
+
 
   const saveChanges = () => {
     setLoading(false);
@@ -102,6 +141,7 @@ const Creation = () => {
   useEffect(() => {
     getPagesFromGameID(id!, false)
     getGameById(id!)
+
   }, [])
   
   useEffect(() => {
