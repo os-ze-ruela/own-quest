@@ -56,7 +56,7 @@ export const Input = styled.input`
     border-radius: 0.7em;
     width: 700px;
     height: 25px;
-
+    color: white;
 `
 
 export const ButtonRecover = styled.button`

@@ -290,10 +290,13 @@ export const getUserPlayGames = async (userId: string) => {
     return await api.get(`/play-games/user/${userId}`)
 }
 
-// AI 
-
+// Ai
 export const postIncrementAIGameGeneration = async (userId: number) => {
     return await api.post(`/ia-generation/game/`, {
         "userId": userId
     })
+}
+  
+export const getUserPlayAllGames = async (userId: string) => {
+    return await api.get(`/play-games/user/${userId}/all`)
 }

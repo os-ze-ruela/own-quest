@@ -1,6 +1,6 @@
 import { Alert, Backdrop, CircularProgress, LinearProgress, Snackbar } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import GPT from "../../assets/img/gpt.svg";
 import DialogUnpublishGame from "../../components/Dialog/DialogUnpublishGame";
 import HeaderCreation from "../../components/Header/HeaderCreation";
@@ -17,11 +17,13 @@ import { api, uploadImage, uploadRandomImage } from "../../services/api";
 import { ActionsImageWrapper, Body, CategoryLabelEditingWrapper, CategorySettingsLabel, DeleteButton, DescriptionInput, FileInput, GenerateRandomImageButton, GptIcon, ImageContainer, ImageGameContainer, ImagePlaceholder, PublishButton, RandomDescriptionButton, RandomDescriptionWrapper, Separator, SettingsContainer, SettingsWrapper, Title, TitleInput, Titles, TitlesInfo, UploadImageButton, WrapTextButton } from "../../styles/CreationSettings";
 import { PopupContainer } from "../../styles/Creation";
 import Popup from "../../components/Popup/Popup";
+import { useNavigate } from "react-router-dom";
 
 export default function CreationSettings() {
 
   const { id } = useParams()
-  const { user } = useContext(AuthContext);
+  const { user, refresh, logout } = useContext(AuthContext);
+  const { userGames, getUserGames } = useContext(GameContext);
   const { handleBackClick } = useContext(CreationContext)
   const { handleCreateClick } = useContext(CreationContext)
   const { categories, getCategories } = useContext(CategoryContext)
@@ -36,8 +38,9 @@ export default function CreationSettings() {
   const { loading, setLoading } = useContext(CreationContext)
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
   const [titleTemp, setTitleTemp] = useState('');
-
   const [showModal, setShowModal] = useState(false);
+  const [listIds, setListIds] = useState<Number[]>([]);
+  const history = useNavigate();
 
 
 
@@ -46,6 +49,44 @@ export default function CreationSettings() {
 
   // IMAGE USE STATES
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const fetchGames = async () => {
+    try {
+      await Promise.all([getUserGames()]);
+      setIsLoading(false);
+    } catch (e) {
+      setIsLoading(false);
+      const error = await e as AppError
+      if (error.statusCode === 401) {
+        try {
+          await refresh()
+          await fetchGames()
+        } catch (e) {
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    fetchGames()
+  }, [])
+
+  useEffect(() => {
+    userGames.forEach((game) => {
+      setListIds((listIds) => [...listIds, game.id]);
+    });
+  }, [userGames]);
+  // Verificar o porque da "listIds" estar vindo vazia
+  
+  useEffect(() => {
+    if(listIds.length == 0) {
+      console.log('a')
+    }
+    if (id !== undefined && (typeof id === 'string' || typeof id === 'number') && !listIds.includes(Number(id))) {
+      // history(HOME);
+    }
+    
+  }, [listIds, id]);
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsLoadingImage(true)
