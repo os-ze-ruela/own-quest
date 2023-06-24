@@ -2,6 +2,8 @@ import { Alert, Backdrop, Skeleton, Snackbar } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { BiArrowBack } from "react-icons/bi";
 import { useNavigate, useParams } from "react-router-dom";
+import { CardExplorerHotShimmer } from '../../components/Cards/CardExplorerHotShimmer';
+import CardMostViewGame from '../../components/Cards/CardMostViewGame';
 import DialogReportGame from '../../components/Dialog/DialogReportGame';
 import DialogResumeGame from '../../components/Dialog/DialogResumeGame';
 import Header from '../../components/Header/Header';
@@ -16,10 +18,8 @@ import { CREATOR, EXPLORER, LOGIN, PLAYGAME } from '../../core/app-urls';
 import Category from '../../models/Category';
 import Game from '../../models/Game';
 import { api, fetchGameById } from '../../services/api';
-import { BackButtonWrapper, CategoryGameInfoLabel, CategoryGameInfoWrapper, CategoryWrapper, CreatedByWrapper, DenounceButton, DescriptionWrapper, GameActionsWrapper, GameImageWrapper, GameInfosMain, GameInfosWrapper, GameTitle, GamesInfosWrapper, HeartIcon, ImageGame, LikeWrapper, PlayButton } from '../../styles/GameInfos';
 import { GameListContainer, HorizontalListWrapper, ListGamesCardContainer, TitleListGames } from '../../styles/Explorer';
-import { CardExplorerHotShimmer } from '../../components/Cards/CardExplorerHotShimmer';
-import CardMostViewGame from '../../components/Cards/CardMostViewGame';
+import { BackButtonWrapper, CategoryGameInfoLabel, CategoryGameInfoWrapper, CategoryWrapper, CreatedByWrapper, DenounceButton, DescriptionWrapper, GameActionsWrapper, GameImageWrapper, GameInfosMain, GameInfosWrapper, GameTitle, GamesInfosWrapper, HeartIcon, ImageGame, LikeWrapper, PlayButton } from '../../styles/GameInfos';
 
 export const GameInfos = () => {
 
@@ -130,7 +130,6 @@ export const GameInfos = () => {
             const categorieGame = categories.map((category: { category: any }) => {
                 return new Category({ title: category.category.title, id: category.category.id, color: category.category.color, plus18: category.category.plus18 });
             });
-            console.log("Categoria principal = ", categorieGame[0].id)
             setCategoryID(categorieGame[0].id)
 
             setVisitingGame(new Game({

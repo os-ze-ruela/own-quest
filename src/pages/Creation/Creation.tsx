@@ -1,26 +1,24 @@
-import { useContext, useEffect, useState, useRef } from 'react';
+import { Backdrop } from '@mui/material';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { BiTrash } from 'react-icons/bi';
 import { HiPlus } from 'react-icons/hi';
 import { MdOutlineAddCircleOutline } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import ASTROPC from "../../assets/img/astronauta-pc.svg";
+import ColorPicker from '../../components/ButtonWithColorPicker/ButtonWithColorPicker';
 import HeaderCreation from '../../components/Header/HeaderCreation';
 import Popup from '../../components/Popup/Popup';
+import SelectBoxComponent from '../../components/SelectBoxComponent/SelectBoxComponent';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated';
 import { AuthContext } from '../../contexts/auth';
 import { CreationContext } from '../../contexts/creation';
 import { GameContext } from '../../contexts/game';
 import { ActualPage, AddButton, AddPage, Body, ButtonContainer, ButtonSettings, ButtonSettingsWrapper, CreationBody, CreationStyle, DeleteButton, EditableButton, MiniPage, Page, PageBody, PageDescription, PageListContainer, PageTitle, PagesMenu, PopupContainer } from '../../styles/Creation';
-import ButtonActionBar from './components/ButtonActionBar';
+import { AstronautLoading, BackdropWrapper, LoadingText } from '../../styles/CreationSettings';
 import NoPagePlaceholder from './components/NoPagePlaceholder';
 import PageActionBar from './components/PageActionBar';
-import { Backdrop, Box } from '@mui/material';
-import { AstronautLoading, BackdropWrapper, LoadingText } from '../../styles/CreationSettings';
-import styled from 'styled-components';
-import ASTROPC from "../../assets/img/astronauta-pc.svg";
-import ColorPicker from '../../components/ButtonWithColorPicker/ButtonWithColorPicker';
-import SelectBoxComponent from '../../components/SelectBoxComponent/SelectBoxComponent';
-import { BiTrash } from 'react-icons/bi';
-import { Button } from '../../models/Button';
 
 const Creation = () => {
 
@@ -30,18 +28,14 @@ const Creation = () => {
   const { indexSelected, setIndexSelected } = useContext(CreationContext)
   const { handleAddButtonClick } = useContext(CreationContext)
   const { handleAddPageClick } = useContext(CreationContext)
-  const { handleCheckboxClick } = useContext(CreationContext)
   const { handleBackClick } = useContext(CreationContext)
   const { handleCreateClick } = useContext(CreationContext)
   const { handleTextChange } = useContext(CreationContext)
-  const { handleButtonActionBar } = useContext(CreationContext)
-  const { handlePageActionBar } = useContext(CreationContext)
   const { actionBarSelected, setActionBarSelected } = useContext(CreationContext)
   const { getPagesFromGameID } = useContext(CreationContext)
   const { updatePage } = useContext(CreationContext)
   const { updateButton } = useContext(CreationContext)
   const { findPageIndex } = useContext(CreationContext)
-  const { destinyPage, setDestinyPage } = useContext(CreationContext)
   const { handleButton } = useContext(CreationContext)
   const { getGameById, editingGame, published, setPublished } = useContext(GameContext)
   const { id } = useParams()
@@ -139,7 +133,6 @@ const buttonContainerRef = useRef<HTMLDivElement | null>(null);
         !buttonContainerRef.current.contains(event.target as Node)
       ) {
         setIndexButton(-1);
-        console.log("clicou fora")
         setShowButtonSettings(prevState => {
           const newState = Array(4).fill(false);
           return newState;

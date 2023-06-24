@@ -1,10 +1,8 @@
 import { AxiosError } from "axios";
 import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
-import Category from "../models/Category";
-import Game from "../models/Game";
 
-import { api, fetchResumePlayedGames, postFinishAndPlay, postFinishPlayingGame, postPlayedGame, postSelectedButton } from "../services/api";
+import { fetchResumePlayedGames, postFinishAndPlay, postFinishPlayingGame, postPlayedGame, postSelectedButton } from "../services/api";
 
 
 type PlayGamesContextType = {
@@ -34,7 +32,6 @@ export const PlayGamesProvider = ({ children }: { children: ReactNode }) => {
             return response;
         } catch (e) {
             const error = await e as AxiosError
-            console.log(error)
             throw new AppError(error.response!.status, error.message);
         }
     }
@@ -44,7 +41,6 @@ export const PlayGamesProvider = ({ children }: { children: ReactNode }) => {
             return response;
         } catch (e) {
             const error = await e as AxiosError
-            console.log(error)
             throw new AppError(error.response!.status, error.message);
         }
     }
@@ -55,7 +51,6 @@ export const PlayGamesProvider = ({ children }: { children: ReactNode }) => {
             return response;
         } catch (e) {
             const error = await e as AxiosError
-            console.log(error)
             throw new AppError(error.response!.status, error.message);
         }
     }
@@ -66,7 +61,6 @@ export const PlayGamesProvider = ({ children }: { children: ReactNode }) => {
             return response;
         } catch (e) {
             const error = await e as AxiosError
-            console.log(error)
             throw new AppError(error.response!.status, error.message);
         }
     }
@@ -78,7 +72,6 @@ export const PlayGamesProvider = ({ children }: { children: ReactNode }) => {
             return response;
         } catch (e) {
             const error = await e as AxiosError
-            console.log(error)
             throw new AppError(error.response!.status, error.message);
         }
     }
