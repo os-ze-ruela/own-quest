@@ -226,10 +226,18 @@ export default function Profile() {
                     {/* <CardSubInfos>{listgame.game.createdBy!.name}</CardSubInfos> */}
                     <CardStatusInfos
                       status={
-                        listgame.is_ongoing ? "Em andamento" : "Finalizado"
+                        listgame.not_possible_continue
+                          ? "Interrompido"
+                          : listgame.is_ongoing
+                          ? "Em andamento"
+                          : "Finalizado"
                       }
                     >
-                      {listgame.is_ongoing ? "Em andamento" : "Finalizado"}
+                      {listgame.not_possible_continue
+                        ? "Interrompido"
+                        : listgame.is_ongoing
+                        ? "Em andamento"
+                        : "Finalizado"}
                     </CardStatusInfos>
                   </CardInfos>
                   <ButtonHist>Ver Histórico</ButtonHist>
