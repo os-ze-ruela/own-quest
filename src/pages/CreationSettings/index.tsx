@@ -1,6 +1,6 @@
 import { Alert, Backdrop, CircularProgress, LinearProgress, Snackbar } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import GPT from "../../assets/img/gpt.svg";
 import DialogUnpublishGame from "../../components/Dialog/DialogUnpublishGame";
 import HeaderCreation from "../../components/Header/HeaderCreation";
@@ -38,11 +38,12 @@ export default function CreationSettings() {
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
   const [titleTemp, setTitleTemp] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [listIds, setListIds] = useState<Number[]>([]);
   const [errorIAMessage, setErrorIAMessage] = useState<string>('');
 
   const [availableCategories, setAvailableCategories] = useState<Category[]>([]);
   const [addedCategories, setAddedCategories] = useState<Category[]>([]);
+
+  const history = useNavigate()
 
   // IMAGE USE STATES
   const fileInputRef = useRef<HTMLInputElement>(null);

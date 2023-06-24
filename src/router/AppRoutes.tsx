@@ -27,11 +27,10 @@ import Explorer from '../pages/Explorer';
 import GameHistory from '../pages/GameHistory/GameHistory';
 import { GameInfos } from '../pages/GameInfos';
 import MyGames from '../pages/MyGames';
+import PermissionDenied from '../pages/PermissionDenied';
 import Profile from '../pages/Profile';
 import { UserInfos } from '../pages/UserInfos';
 import VisualizationTest from '../pages/VisualizationTest/VisualizationTest';
-import { UserInfos} from '../pages/UserInfos';
-import PermissionDenied from '../pages/PermissionDenied';
 
 function AppRoutes() {
     function Private({ children }: { children: ReactNode }) {
