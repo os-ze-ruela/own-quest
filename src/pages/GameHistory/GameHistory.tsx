@@ -8,13 +8,21 @@ import { GameContext } from '../../contexts/game';
 import { GameHistoryDate, GameHistoryStyle, HistoryName, Title, TitleWrap } from '../../styles/GameHistory';
 import { api } from '../../services/api';
 import AppError from '../../core/app-error';
+import Game from '../Game/Game';
 
 interface Page {
-  button_answer: null | string;
+  button_title: null | string;
   button_id: null | string;
   id: number;
   page_game_id: number;
   page_title: string;
+}
+interface Game {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  createAt: string;
 }
 
 interface GameHistoryData {
@@ -24,6 +32,7 @@ interface GameHistoryData {
   is_ongoing: boolean;
   not_possible_continue: boolean;
   play_game_id: number;
+  game: Game;
 }
 
 function GameHistory() {
@@ -62,7 +71,7 @@ function GameHistory() {
       <GameHistoryStyle>
         <TitleWrap>
           <Title>Histórico de</Title>
-          <HistoryName>Nome da História</HistoryName>
+          {gameHistory && <HistoryName>{gameHistory.game.title}</HistoryName>}
         </TitleWrap>
         <GameHistoryDate>
           Iniciado em: {gameHistory ? format(parseISO(gameHistory.game_date_play), 'dd/MM/yyyy HH:mm') : 'Carregando...'}

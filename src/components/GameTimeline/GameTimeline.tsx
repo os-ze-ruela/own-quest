@@ -14,7 +14,7 @@ import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 
 
 interface Page {
-  button_answer: null | string;
+  button_title: null | string;
   button_id: null | string;
   id: number;
   page_game_id: number;
@@ -50,7 +50,7 @@ export default function GameTimeline({ historic, is_ongoing, is_finished, not_po
 
           <TimelineConnector />
 
-          {page.button_answer !== null ? (
+          {page.button_title !== null ? (
                   <>
                   <TimelineDot sx={{ color: 'white' }} variant="outlined">
                     <ArrowDownwardSharpIcon  sx={{ color: 'white' }}/>
@@ -58,17 +58,17 @@ export default function GameTimeline({ historic, is_ongoing, is_finished, not_po
                   </>
                 ) : (
                   <>
-                  {is_ongoing ? (
-                  <TimelineDot color='warning'>
-                    <HourglassTopSharpIcon  sx={{ color: 'white' }}/>
+                  {not_possible_continue ? (
+                  <TimelineDot color="error">
+                    <CloseSharpIcon sx={{ color: 'white' }} />
                   </TimelineDot>
+                  ) : is_ongoing ? (
+                    <TimelineDot color='warning'>
+                      <HourglassTopSharpIcon  sx={{ color: 'white' }}/>
+                    </TimelineDot>
                   ) : is_finished ? (
                     <TimelineDot color="success">
                       <CheckSharpIcon sx={{ color: 'white' }} />
-                    </TimelineDot>
-                  ) : not_possible_continue ? (
-                    <TimelineDot color="error">
-                      <CloseSharpIcon sx={{ color: 'white' }} />
                     </TimelineDot>
                   ) : (
                     <TimelineDot variant="outlined" sx={{ color: 'white' }}>
@@ -79,19 +79,19 @@ export default function GameTimeline({ historic, is_ongoing, is_finished, not_po
                 )}
 
 
-          {page.button_answer !== null && (
+          {page.button_title !== null && (
             <TimelineConnector />
           )}
           
         </TimelineSeparator>
 
-        {page.button_answer !== null ? (
+        {page.button_title !== null ? (
         <TimelineContent 
         sx={{ py: '50px', px: 2, m: 'auto 0', color: 'white'}}
         variant="body2"
         >
           <Typography sx={{ fontFamily: 'FiraCode-Light' }}>
-            Botão: {page.button_answer}
+            Botão: {page.button_title}
           </Typography>
         </TimelineContent>
           
@@ -101,9 +101,9 @@ export default function GameTimeline({ historic, is_ongoing, is_finished, not_po
           variant="body2"
           >
            <Typography sx={{ fontFamily: 'FiraCode-Light' }}>
-              {is_ongoing ? "História em andamento"
+              {not_possible_continue ? "Não é possível finalizar história"
+                : is_ongoing ? "História em andamento" 
                 : is_finished ? "História finalizada" 
-                : not_possible_continue ? "Não é possível finalizar história" 
                 : ""}
           </Typography>
           </TimelineContent>
