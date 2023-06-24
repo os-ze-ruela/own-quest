@@ -227,14 +227,14 @@ export default function Profile() {
                     <CardStatusInfos
                       status={
                         listgame.not_possible_continue
-                          ? "Interrompido"
+                          ? "Interrompido por nova versão"
                           : listgame.is_ongoing
                           ? "Em andamento"
                           : "Finalizado"
                       }
                     >
                       {listgame.not_possible_continue
-                        ? "Interrompido"
+                        ? "Interrompido por nova versão"
                         : listgame.is_ongoing
                         ? "Em andamento"
                         : "Finalizado"}
