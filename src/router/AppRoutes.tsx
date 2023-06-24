@@ -84,7 +84,7 @@ function AppRoutes() {
                                             <Route path={USER_DESCRIPTION + '/:nickname'} element={<Private><UserInfos /></Private>}></Route>
                                             <Route path={TEST} element={<VisualizationTest />} > </Route>
                                             <Route path={GAME + '/:id' + SETTINGS} element={<Private><CreationSettings /></Private>} > </Route>
-                                            <Route path={GAME_HISTORY} element={<Private><GameHistory /></Private>} > </Route>
+                                            <Route path={GAME_HISTORY + '/:id'} element={<Private><GameHistory /></Private>} > </Route>
                                         </Routes>
                                     </UserProvider>
                                 </OpenAIProvider>

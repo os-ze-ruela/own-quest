@@ -179,6 +179,12 @@ export const getButton = async (id: number) => {
     return await api.delete(`/button/${id}`)
 }
 
+
+export const fetchGameHistory = async(id: number) => {
+    return await api.get(`/play-games/${id}`)
+}
+
+
 // --- Verification ---
 
 export const sendEmail = async () => {
