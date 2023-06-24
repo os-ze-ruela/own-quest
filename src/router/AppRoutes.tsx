@@ -12,29 +12,32 @@ import Recover from '../pages/Recover';
 import Register from '../pages/Register';
 import Validated from '../pages/Validated';
 
+import { Backdrop, CircularProgress } from '@mui/material';
 import { AuthContext, AuthProvider } from '../contexts/auth';
 import { CategoryProvider } from '../contexts/category';
 import { CreationProvider } from '../contexts/creation';
-import { PlayGamesProvider } from '../contexts/play-games';
 import { GameProvider } from '../contexts/game';
 import { OpenAIProvider } from '../contexts/openai';
+import { PlayGamesProvider } from '../contexts/play-games';
 import { UserProvider } from '../contexts/user';
 import { EMAIL_NOT_VALIDATED, EMAIL_VALIDATED, EXPLORER, GAME, GAME_DESCRIPTION, GAME_HISTORY, HOME, LANDING_PAGE, LOGIN, MYGAMES, NEW_PASSWORD, PLAYGAME, PROFILE, RECOVER_PASSWORD, REGISTER, SETTINGS, TEST, USER_DESCRIPTION } from '../core/app-urls';
 import CreationSettings from '../pages/CreationSettings';
 import Explorer from '../pages/Explorer';
+import GameHistory from '../pages/GameHistory/GameHistory';
 import { GameInfos } from '../pages/GameInfos';
 import MyGames from '../pages/MyGames';
 import Profile from '../pages/Profile';
+import { UserInfos } from '../pages/UserInfos';
 import VisualizationTest from '../pages/VisualizationTest/VisualizationTest';
-import { UserInfos} from '../pages/UserInfos';
-import GameHistory from '../pages/GameHistory/GameHistory';
 
 function AppRoutes() {
     function Private({ children }: { children: ReactNode }) {
         const { authenticated, loading } = useContext(AuthContext)
 
         if (loading) {
-            return <></>
+            return <Backdrop open={true} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <CircularProgress />
+            </Backdrop>
         }
 
         if (!authenticated) {
@@ -78,7 +81,7 @@ function AppRoutes() {
                                             <Route path={GAME + '/:id'} element={<Private><Creation /></Private>} > </Route>
                                             <Route path={PLAYGAME + '/:id'} element={<Private><Game /></Private>} > </Route>
                                             <Route path={PROFILE} element={<Private><Profile /></Private>} > </Route>
-                                            <Route path={MYGAMES} element={<Private><MyGames/></Private>} > </Route>
+                                            <Route path={MYGAMES} element={<Private><MyGames /></Private>} > </Route>
                                             <Route path={EXPLORER} element={<Explorer />}></Route>
                                             <Route path={GAME_DESCRIPTION + '/:id'} element={<GameInfos />} > </Route>
                                             <Route path={USER_DESCRIPTION + '/:nickname'} element={<Private><UserInfos /></Private>}></Route>

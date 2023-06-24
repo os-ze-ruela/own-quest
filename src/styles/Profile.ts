@@ -239,11 +239,12 @@ export const CardGame = styled.div`
     background-color: #202331;
     position: relative;
     margin-bottom: 20px;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    background-color: #323440;
+        transform: translateY(-2px);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: #323440;
     }
 `
 
@@ -272,17 +273,17 @@ export const CardSubInfos = styled.h1`
     padding-left: 0.5em;
 `
 interface CardStatusInfosProps {
-  status: string;
+    status: string;
 }
 
 const getStatusColor = (status: string): string => {
-  const colorMap: { [key: string]: string } = {
-    'Em andamento': '#FEE504',
-    'Finalizado': '#66AB4E',
-    'Interrompido por nova versão': '#DC4747',
-  };
+    const colorMap: { [key: string]: string } = {
+        'Em andamento': '#FEE504',
+        'Finalizado': '#66AB4E',
+        'Interrompido por nova versão': '#DC4747',
+    };
 
-  return colorMap[status] || 'black'; 
+    return colorMap[status] || 'black';
 };
 
 export const CardStatusInfos = styled.h1<CardStatusInfosProps>`
@@ -294,8 +295,10 @@ export const CardStatusInfos = styled.h1<CardStatusInfosProps>`
   position: absolute;
   bottom: 0;
 `
-export const ButtonHist = styled.button`
+export const ButtonHist = styled.a`
     background-color: #568EA3;
+    text-decoration: none;
+    border-style: none;
     font-weight: bold;
     font-size: 12pt;
     height: 40px;
@@ -311,7 +314,16 @@ export const ButtonHist = styled.button`
     cursor: pointer;
     font-family: FiraCode-SemiBold;
     font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: all 0.2s ease-in-out;
     
+    &:hover {
+        transform: scale(1.02);
+    }
+
     @media screen and (max-width: 1024px) {
         font-size: 1rem;
     }

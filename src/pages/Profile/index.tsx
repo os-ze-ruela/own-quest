@@ -1,10 +1,15 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AiOutlineHistory } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
 import { MdOutlineLockPerson } from "react-icons/md";
+import { useLocation, useNavigate } from "react-router-dom";
 import HeaderLogged from "../../components/Header/HeaderLogged";
 import EmailNotValidatedWarning from "../../components/Warning/EmailNotValidated";
 import { AuthContext } from "../../contexts/auth";
+import { GameContext } from "../../contexts/game";
+import AppError from "../../core/app-error";
+import { GAME_HISTORY } from "../../core/app-urls";
 import { UserImagePlaceholder } from "../../styles/Header";
 import {
   BtnCancel,
@@ -26,7 +31,6 @@ import {
   ProfileInfo,
   ProfileOpt,
   ProfileStyle,
-  Select,
   Separator,
   Text,
   Text2,
@@ -35,24 +39,30 @@ import {
   UserImage,
   WrapCardGame,
   WrapTextButton,
-  YourProfileTitle,
+  YourProfileTitle
 } from "../../styles/Profile";
-import { AiOutlineHistory } from "react-icons/ai";
-import { GameContext } from "../../contexts/game";
-import AppError from "../../core/app-error";
+
 
 export default function Profile() {
   const { user, refresh, logout } = useContext(AuthContext);
   const { getUserPlayingAllGames, userPlayingAllGames } =
     useContext(GameContext);
-  const [isSelected1, setIsSelected1] = useState(true);
-  const [isSelected2, setIsSelected2] = useState(false);
-  const [isSelected3, setIsSelected3] = useState(false);
-  const [activeButton, setActiveButton] = useState<number | null>(1);
+  const [selectedTab, setSelectedTab] = useState<number>(1);
   const [playingGames, setPlayingGames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tabParam = searchParams.get('tab');
+    const tabNumber = tabParam ? parseInt(tabParam) : 1;
+    setSelectedTab(tabNumber);
+  }, [location.search]);
+
   const fetchGames = async () => {
+
     try {
       await Promise.all([getUserPlayingAllGames()]);
       setIsLoading(false);
@@ -63,7 +73,7 @@ export default function Profile() {
         try {
           await refresh();
           await fetchGames();
-        } catch (e) {}
+        } catch (e) { }
       }
     }
   };
@@ -73,20 +83,8 @@ export default function Profile() {
   }, []);
 
   const handleButtonClick = (buttonIndex: number) => {
-    setActiveButton(buttonIndex);
-    if (buttonIndex === 1) {
-      setIsSelected1(true);
-      setIsSelected2(false);
-      setIsSelected3(false);
-    } else if (buttonIndex === 2) {
-      setIsSelected1(false);
-      setIsSelected2(true);
-      setIsSelected3(false);
-    } else {
-      setIsSelected1(false);
-      setIsSelected2(false);
-      setIsSelected3(true);
-    }
+    navigate(`/profile?tab=${buttonIndex}`);
+    setSelectedTab(buttonIndex)
   };
 
   const handleLogoutClick = () => {
@@ -113,21 +111,21 @@ export default function Profile() {
           </ProfileIdent>
           <BtnOpt
             onClick={() => handleButtonClick(1)}
-            className={activeButton === 1 ? "active" : ""}
+            className={selectedTab === 1 ? "active" : ""}
           >
             <BiUserCircle />
             Sua conta
           </BtnOpt>
           <BtnOpt
             onClick={() => handleButtonClick(2)}
-            className={activeButton === 2 ? "active" : ""}
+            className={selectedTab === 2 ? "active" : ""}
           >
             <MdOutlineLockPerson />
             Login e Segurança
           </BtnOpt>
           <BtnOpt
             onClick={() => handleButtonClick(3)}
-            className={activeButton === 3 ? "active" : ""}
+            className={selectedTab === 3 ? "active" : ""}
           >
             <AiOutlineHistory />
             Histórico de jogos
@@ -137,7 +135,7 @@ export default function Profile() {
             Sair
           </BtnOpt>
         </ProfileOpt>
-        {isSelected1 && (
+        {selectedTab === 1 && (
           <ProfileInfo>
             {user!.email_validated ? (
               <></>
@@ -173,15 +171,15 @@ export default function Profile() {
               </Text>
               <EditButton>Editar</EditButton>
             </WrapTextButton>
-            <Separator />
+            {/* <Separator />
 
             <Titles>Que uso você vai dar ao Own Quest?</Titles>
             <Select>
               <option>Selecione uma opção</option>
-            </Select>
+            </Select> */}
           </ProfileInfo>
         )}
-        {isSelected2 && (
+        {selectedTab === 2 && (
           <LoginInfo>
             <LoginTitle>Login e Segurança</LoginTitle>
             <Separator />
@@ -205,7 +203,7 @@ export default function Profile() {
             <BtnCancel>Excluir conta</BtnCancel>
           </LoginInfo>
         )}
-        {isSelected3 && (
+        {selectedTab === 3 && (
           <WrapCardGame>
             <HistoricTitle>Histórico de Jogos</HistoricTitle>
 
@@ -229,18 +227,18 @@ export default function Profile() {
                         listgame.not_possible_continue
                           ? "Interrompido por nova versão"
                           : listgame.is_ongoing
-                          ? "Em andamento"
-                          : "Finalizado"
+                            ? "Em andamento"
+                            : "Finalizado"
                       }
                     >
                       {listgame.not_possible_continue
                         ? "Interrompido por nova versão"
                         : listgame.is_ongoing
-                        ? "Em andamento"
-                        : "Finalizado"}
+                          ? "Em andamento"
+                          : "Finalizado"}
                     </CardStatusInfos>
                   </CardInfos>
-                  <ButtonHist>Ver Histórico</ButtonHist>
+                  <ButtonHist href={GAME_HISTORY + '/' + listgame.play_game_id} >Ver Histórico</ButtonHist>
                 </CardGame>
               );
             })}

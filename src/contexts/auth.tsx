@@ -6,10 +6,11 @@ import { EMAIL_NOT_VALIDATED, HOME, LANDING_PAGE } from "../core/app-urls";
 import {
   api,
   createSession,
+  getUserByAccessToken,
   refreshToken,
-  signupUser,
-  verifyEmail,
   sendEmail,
+  signupUser,
+  verifyEmail
 } from "../services/api";
 
 type AuthContextType = {
@@ -71,11 +72,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   const recoveredUser = localStorage.getItem("user");
+  //   if (recoveredUser) {
+  //     setUser(JSON.parse(recoveredUser));
+  //   }
+  //   setLoading(false);
+  // }, []);
+
   useEffect(() => {
+    const tokensJSON = localStorage.getItem("token");
+    const tokens = JSON.parse(tokensJSON!);
+
     const recoveredUser = localStorage.getItem("user");
+
     if (recoveredUser) {
       setUser(JSON.parse(recoveredUser));
     }
+
+    if (tokens) {
+      api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
+      getUserByAcessToken()
+    }
+    
     setLoading(false);
   }, []);
 
@@ -107,7 +126,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
 
       setUser(loggedUser);
-      console.log("set user");
       navigate(HOME);
     } catch (e) {
       const error = (await e) as AxiosError;
@@ -118,7 +136,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (error.response?.data) {
         const { statusCode, message } = error.response.data as ErrorData;
         if (statusCode && message) {
-          throw new AppError( statusCode, message)
+          throw new AppError(statusCode, message)
         }
       }
       throw new AppError(
@@ -151,8 +169,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  async function getUserByAcessToken() {
+    try {
+      const response = await getUserByAccessToken();
+      const userData = await response.data;
+
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      setUser(userData);
+    } catch (e) {
+      const error = (await e) as AxiosError;
+      console.error(
+        `Erro (${error.response?.status}) ao buscar user by access (${error.message})`,
+        error
+      );
+    }
+  }
+
   function logout() {
-    console.log("logout");
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     api.defaults.headers.Authorization = null;
@@ -168,20 +202,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     confirmPassword: string,
     birthDate: string
   ) {
-    if (nickname === "") {
+    if (nickname == null || nickname === "") {
       throw new AppError(400, "Preencha o campo de seu nickname, por favor.");
-    } else if (name === "") {
+    } else if (name == null || name === "") {
       throw new AppError(400, "Preencha o campo de seu nome, por favor.");
-    } else if (email === "") {
+    } else if (email == null || email === "") {
       throw new AppError(400, "Preencha o campo de seu e-mail, por favor.");
-    } else if (birthDate === "") {
+    } else if (birthDate == null || birthDate === "") {
       throw new AppError(
         400,
         "Preencha o campo de sua data de nascimento, por favor."
       );
-    } else if (password === "") {
+    } else if (password == null || password === "") {
       throw new AppError(400, "Preencha o campo de sua senha, por favor.");
-    } else if (confirmPassword === "") {
+    } else if (confirmPassword == null || confirmPassword === "") {
       throw new AppError(
         400,
         "Preencha o campo de confirmação da senha, por favor."
@@ -199,20 +233,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     confirmPassword: string,
     birthDate: string
   ) {
-    try {
-      await validRegister(
-        name,
-        nickname,
-        email,
-        password,
-        confirmPassword,
-        birthDate
-      );
-    } catch (e) {
-      const error = (await e) as AppError;
-      throw error;
-    }
-
+    
     try {
       const response = await signupUser(
         name,
@@ -241,14 +262,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (error.response?.data) {
         const { statusCode, message } = error.response.data as ErrorData;
         if (statusCode && message) {
-          throw new AppError( statusCode, message)
+          throw new AppError(statusCode, message)
         }
       }
       throw new AppError(
         400,
         "Erro ao realizar cadastro, tente novamente mais tarde.",
       );
-        
+
     }
   }
 
@@ -295,28 +316,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   async function sendRecover(email: string) {
-  try {
-    const tokensJSON = localStorage.getItem("token");
-    const tokens = JSON.parse(tokensJSON!);
+    try {
+      const tokensJSON = localStorage.getItem("token");
+      const tokens = JSON.parse(tokensJSON!);
 
-    const headers = {
-      Authorization: `Bearer ${tokens}`,
-    };
+      const headers = {
+        Authorization: `Bearer ${tokens}`,
+      };
 
-    const payload = {
-      email: email,
-    };
+      const payload = {
+        email: email,
+      };
 
-    const response = await api.post("/user/send-recover-password-email", payload, { headers });
-    console.log("Email enviado com sucesso!");
-  } catch (error) {
-    const e = (await error) as AxiosError;
-    throw e;
+      const response = await api.post("/user/send-recover-password-email", payload, { headers });
+      console.log("Email enviado com sucesso!");
+    } catch (error) {
+      const e = (await error) as AxiosError;
+      throw e;
+    }
   }
-}
 
 
-  async function updatePassword(id:number, pswd:string, pswd2:string) {
+  async function updatePassword(id: number, pswd: string, pswd2: string) {
     try {
       const tokensJSON = localStorage.getItem("token");
       const tokens = JSON.parse(tokensJSON!);
