@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { CreationContext } from "../../contexts/creation";
 
@@ -43,9 +43,7 @@ const SelectBoxComponent: React.FC<SelectBoxProps> = ({
   const { destinyPage } = useContext(CreationContext)
   const { indexSelected } = useContext(CreationContext)
 
-  useEffect(() => {
-    console.log("destiny page = "+destinyPage)
-  }, [destinyPage])
+
 
   return (
     <SelectBoxWrapper>

@@ -187,10 +187,13 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
         
         `;
 
+    try {
+      const response = await chat(defaultPrompt);
+      return response
+    } catch (error) {
+      throw new AppError(500, 'Ocorreu um problema ao gerar a sua história com ia')
 
-    const response = await chat(defaultPrompt);
-
-    return response
+    }
   }
 
 

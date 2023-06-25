@@ -19,6 +19,10 @@ export const FiltersContainer = styled.div`
     -moz-box-sizing: border-box; 
     -webkit-box-sizing: border-box; 
     box-sizing: border-box; 
+    
+    @media screen and (max-width: 1024px) {
+      padding: 0px 1rem;
+    }
 `
 
 export const SearchContainer = styled.div`
@@ -257,6 +261,10 @@ export const CardMostViewGameWrapper = styled.a`
       margin-top: 1rem;
     }
   }
+
+  @media screen and (max-width: 1024px) {
+      width: 100%;
+    }
 `;
 
 export const CardMostViewGameImageSpace = styled.div`
