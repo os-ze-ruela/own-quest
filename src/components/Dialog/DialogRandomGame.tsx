@@ -1,14 +1,10 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { IoMdClose } from "react-icons/io";
 import styled from 'styled-components';
-import { useContext, useEffect, useRef, useState } from "react";
 import { CategoryContext } from '../../contexts/category';
 import AppError from '../../core/app-error';
 import { api } from '../../services/api';
 import SelectBoxComponent from '../SelectBoxComponent/SelectBoxComponent';
-import { IoMdClose, IoIosOptions } from "react-icons/io";
-import { BsFillChatSquareTextFill } from "react-icons/bs";
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 
 type DialogRandomGameProps = {
@@ -27,7 +23,7 @@ const DialogContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
+  width: 50%;
   background-color: #282C3E;
   border-radius: 15px;
   padding: 16px;
@@ -37,6 +33,12 @@ const DialogContainer = styled.div`
   font-family: FiraCode-SemiBold;
   color: white;
   box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.5);
+  text-align: center;
+
+  @media screen and (max-width: 768px) {
+    width: 80%;
+  }
+
 `;
 
 const SelectWrapper = styled.div`
@@ -59,8 +61,10 @@ export const Button = styled.button`
     font-family: FiraCode-SemiBold;
     font-weight: 400;
     margin-top: 25px;
+
     @media screen and (max-width: 1024px) {
         font-size: 1rem;
+        width: 60%;
     }
 
     &:hover {
@@ -136,15 +140,6 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
   const [numPages, setNumPages] = useState(3);
   const { categories, getCategories } = useContext(CategoryContext)
   // const [selected, setSelected] = useState(false);
-    
-
-
-  const handleGenerateClick = () => {
-    // Lógica para gerar o jogo randomicamente
-    console.log('Categoria:', category);
-    console.log('Número de Páginas:', numPages);
-  };
-
 
   const fetchAllRequests = async () => {
     try {

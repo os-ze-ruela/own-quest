@@ -3,7 +3,7 @@ import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
 import User from "../models/User";
 import UserCategory from "../models/UserCategory";
-import { api, getUserByNickname, postLikeGame, postUnLikeGame, postFollowUser, postUnfollowUser } from "../services/api";
+import { api, getUserByNickname, postFollowUser, postLikeGame, postUnLikeGame, postUnfollowUser } from "../services/api";
 type UserContextType = {
     likeGame: (gameId: string) => Promise<void>
     unlikeGame: (gameId: string) => Promise<void>
@@ -26,7 +26,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const toggleDrawer = () => {
         setOpen(!open);
     };
-
+    
     async function likeGame(gameId: string): Promise<void> {
         try {
             await postLikeGame(gameId)
@@ -40,7 +40,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             }
         }
     };
-    
+
 
     async function unlikeGame(gameId: string): Promise<void> {
         try {
@@ -65,16 +65,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
             const response = await getUserByNickname(userNickname)
             const { id, name, email, nickname,
-                    birthDate, followers, following,
-                    photo, createdAt, isDeleted,
-                    isFollowing, categories } = response.data
+                birthDate, followers, following,
+                photo, createdAt, isDeleted,
+                isFollowing, categories } = response.data
 
             const userCategories = categories.map((category: any) => {
                 const { id, title, color, timesUsed } = category
                 return new UserCategory({ id, title, color, timesUsed });
             });
 
-            setVisitingUser( new User({
+            setVisitingUser(new User({
                 id: id,
                 name: name,
                 email: email,
@@ -113,7 +113,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             }
         }
     };
-    
+
 
     async function unfollowUser(followerId: string, followedId: string): Promise<void> {
         try {

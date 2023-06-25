@@ -14,6 +14,10 @@ export const signupUser = async (name: string, nickname: string, email: string, 
     return await api.post('/auth/signup', { name, nickname, email, password, birthDate })
 }
 
+export const patchUser = async (userId: number, name: string, nickname: string) => {
+    return await api.patch('/user', { "id": userId, "name": name, "nickname": nickname, })
+}
+
 export const refreshToken = async () => {
     return await api.post('/auth/refresh')
 }

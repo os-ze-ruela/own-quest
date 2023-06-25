@@ -116,7 +116,8 @@ export const YourProfileTitle = styled.p`
     font-size: 30px;
 `
 export const Separator = styled.hr`
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #FFFFFF9E;
+    border-radius: 12px;
 `
 export const WrapTextButton = styled.div`
     flex-direction: row;

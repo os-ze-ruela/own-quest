@@ -6,7 +6,9 @@ import { EMAIL_NOT_VALIDATED, HOME, LANDING_PAGE } from "../core/app-urls";
 import {
   api,
   createSession,
+  getUserAuthenticated,
   getUserByAccessToken,
+  patchUser,
   refreshToken,
   sendEmail,
   signupUser,
@@ -34,6 +36,9 @@ type AuthContextType = {
     password: string,
     confirmPassword: string,
     birthDate: string
+  ) => Promise<void>;
+  updateUser: (
+    userId: number, name: string, nickname: string
   ) => Promise<void>;
   refresh: () => Promise<void>;
   logout: () => void;
@@ -96,15 +101,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
       getUserByAcessToken()
     }
-    
+
     setLoading(false);
   }, []);
 
   useEffect(() => {
     if (!!user) {
       setLoading(false)
-    } 
-}, [user, setUser])
+    }
+  }, [user, setUser])
 
   async function validLogin(email: string, password: string) {
     if (email === "") {
@@ -240,7 +245,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     confirmPassword: string,
     birthDate: string
   ) {
-    
+
     try {
       const response = await signupUser(
         name,
@@ -280,6 +285,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  async function updateUser(userId: number, name: string, nickname: string): Promise<void> {
+    try {
+      await patchUser(userId, name, nickname)
+      user!.name = name
+      user!.nickname = nickname
+    } catch (e) {
+      const error = await e as AxiosError
+      console.error(`Erro (${error.response?.status}) ao editar perfil ${userId}`, error);
+      if (error.response?.status === 409) {
+        throw new AppError(409, 'O nickname escolhido já está sendo utilizado')
+      } else if (error.response?.status === 400) {
+        throw new AppError(400, 'Usuário não encontrado')
+      } else if (error.response?.status === 401) {
+        throw new AppError(error.response?.status, 'Credenciais Incorretas')
+      }
+    }
+  };
+
+
   async function validateEmail(
     access_token: string,
     token: string
@@ -301,10 +325,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (error.response?.data) {
         const { statusCode, message } = error.response.data as ErrorData;
         if (statusCode && message) {
-          throw new AppError( statusCode, message)
+          throw new AppError(statusCode, message)
         }
       } else {
-        throw new AppError( 400, 'Erro ao verificar o e-mail.')
+        throw new AppError(400, 'Erro ao verificar o e-mail.')
       }
     }
   }
@@ -379,23 +403,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const response = await getUserByAccessToken()
       const loggedUser = await response.data
       setUser(loggedUser)
-      
-    } catch(e) {
-        const error = (await e) as AxiosError;
-        console.error(
-          `Erro (${error.response?.status}) ao recuperar usuário:`,
-          error
-        );
-        if (error.response?.data) {
-          const { statusCode, message } = error.response.data as ErrorData;
-          if (statusCode && message) {
-            throw new AppError( statusCode, message)
-          }
+
+    } catch (e) {
+      const error = (await e) as AxiosError;
+      console.error(
+        `Erro (${error.response?.status}) ao recuperar usuário:`,
+        error
+      );
+      if (error.response?.data) {
+        const { statusCode, message } = error.response.data as ErrorData;
+        if (statusCode && message) {
+          throw new AppError(statusCode, message)
         }
-        throw new AppError(
-          400,
-          "Erro ao realizar recuperação de usuário.",
-        );
+      }
+      throw new AppError(
+        400,
+        "Erro ao realizar recuperação de usuário.",
+      );
     }
   }
 
@@ -411,6 +435,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         register,
         refresh,
         logout,
+        updateUser,
         validateEmail,
         sendValidateEmail,
         sendRecover,
