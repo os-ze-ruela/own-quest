@@ -32,11 +32,21 @@ export const CardHighlightGameWrapper = styled.a`
     transform: translateY(-4px);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   }
+
+  @media screen and (max-width: 1024px) {
+      height: auto;
+      padding-bottom: 2rem;
+    }
 `;
 
 export const CardHighlightGameImageSpace = styled.div`
   height: 50%;
   width: 100%;
+
+
+  @media screen and (max-width: 1024px) {
+    height: 250px;
+  }
 `
 
 export const CardHighlightGameImage = styled.img`
@@ -64,6 +74,10 @@ export const CardHighlightGameContentWrapper = styled.div`
     font-size: 0.9rem;
     max-lines: 3;
     line-break: auto;
+
+    @media screen and (max-width: 1024px) {
+      max-lines: 5;
+    }
   }
  
 `;

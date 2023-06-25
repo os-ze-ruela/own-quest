@@ -52,7 +52,7 @@ function Login() {
               <RegisterLink href={REGISTER}> Cadastre-se </RegisterLink>
             </RegisterText>
 
-            <Label htmlFor="email">Email ou nickname</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
               type="email"
               name="email"

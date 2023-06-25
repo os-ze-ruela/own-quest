@@ -14,6 +14,10 @@ export const signupUser = async (name: string, nickname: string, email: string, 
     return await api.post('/auth/signup', { name, nickname, email, password, birthDate })
 }
 
+export const patchUser = async (userId: number, name: string, nickname: string) => {
+    return await api.patch('/user', { "id": userId, "name": name, "nickname": nickname, })
+}
+
 export const refreshToken = async () => {
     return await api.post('/auth/refresh')
 }
@@ -325,4 +329,21 @@ export const postIncrementAIGameGeneration = async (userId: number) => {
     return await api.post(`/ia-generation/game`, {
         "userId": userId
     })
+}
+
+// COMMENTS
+export const postComment = async (autorId: number, gameId: number, content: string) => {
+    return await api.post(`/comment`, {
+        "userId": autorId,
+        "gameId": gameId,
+        "content": content
+    })
+}
+
+export const deleteCommentById = async (commentId: number) => {
+    return await api.delete(`/comment/${commentId}`)
+}
+
+export const fetchCommentsByGameId = async (gameId: string) => {
+    return await api.get(`/comment/${gameId}`)
 }

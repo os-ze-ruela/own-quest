@@ -1,4 +1,4 @@
-import { Backdrop, Badge, Box, ToggleButton, ToggleButtonGroup, styled } from '@mui/material';
+import { Alert, Backdrop, Badge, Box, Snackbar, ToggleButton, ToggleButtonGroup, styled } from '@mui/material';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import CardMyGame from '../../components/Cards/CardMyGame';
 import { CardMyGameShimmer } from '../../components/Cards/CardMyGameShimmer';
 import EmptyCard from '../../components/Cards/EmptyCard';
 import DialogRandomGame from '../../components/Dialog/DialogRandomGame';
+import Drawer from '../../components/Drawer/Drawer';
 import HeaderLogged from '../../components/Header/HeaderLogged';
 import EmailNotValidatedWarning from '../../components/Warning/EmailNotValidated';
 import { AuthContext } from '../../contexts/auth';
@@ -38,6 +39,8 @@ const MyGames = () => {
   const [categorySelected, setCategorySelected] = useState('Aventura')
   const [description, setDescription] = useState('')
   const [selectedOption, setSelectedOption] = useState(false)
+  const [errorIASnackbar, setErrorIASnackbar] = useState<boolean>(false);
+  const [errorIAMessage, setErrorIAMessage] = useState<string>('');
 
   const fetchGames = async () => {
     try {
@@ -73,16 +76,35 @@ const MyGames = () => {
 
     let randomGame = ""
 
+
+    try {
+      randomGame = await generateRandomGameByDescription(numPageSelected, categorySelected, description)
+    } catch (error: any) {
+      setIsLoadingGame(false);
+      setErrorIASnackbar(true)
+      setErrorIAMessage(error!.message)
+      return
+    }
+
+    let randomGameJSON: any;
+
+    try {
+      randomGameJSON = JSON.parse(randomGame)
+    } catch (error: any) {
+      setIsLoadingGame(false);
+      setErrorIASnackbar(true)
+      setErrorIAMessage('Ocorreu um erro ao gerar a sua história, pedimos desculpa')
+      return
+    }
+
+
     try {
       await incrementAIGameGeneration(user!.id)
     } catch (e) {
-      console.log("Limite excedido")
+      setErrorIASnackbar(true)
+      setErrorIAMessage('O seu limite de criação de histórias com IA foi excedido')
       return
     }
-    randomGame = await generateRandomGameByDescription(numPageSelected, categorySelected, description)
-
-    let randomGameJSON = JSON.parse(randomGame)
-
 
     const matchingCategory = categories.find(category => category.title === randomGameJSON.categories)
     let categoryIds = []
@@ -98,6 +120,8 @@ const MyGames = () => {
       navigate(GAME + '/' + gameId)
     } catch (error) {
       setIsLoadingGame(false);
+      setErrorIASnackbar(true)
+      setErrorIAMessage('Ocorreu um erro ao gerar a sua história, pedimos desculpa')
     }
   }
 
@@ -107,7 +131,7 @@ const MyGames = () => {
     let timer: NodeJS.Timeout;
 
     if (isLoadingGame) {
-      const totalTime = 20000; //12s de loading
+      const totalTime = 3000 * numPageSelected; //12s de loading
       const updateInterval = 100;
       const increment = 100 / (totalTime / updateInterval);
 
@@ -189,6 +213,14 @@ const MyGames = () => {
 
   return (
     <>
+      <Drawer />
+      <Snackbar
+        open={errorIASnackbar}
+        autoHideDuration={4000}
+        onClose={() => { setErrorIASnackbar(false) }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+        <Alert severity="error">{errorIAMessage}</Alert>
+      </Snackbar>
       <Backdrop
         sx={{ color: '#fff', background: 'rgba(0, 0, 0, 0.8)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoadingGame}
@@ -286,9 +318,9 @@ const MyGames = () => {
                   isPublished={game.isPublished}
                   description={game.description}
                   categories={game.categories}
-                  />
-                  ))
-                  ) :
+                />
+              ))
+            ) :
               (
                 filterGames.map((game, index) => (
                   <CardMyGame
