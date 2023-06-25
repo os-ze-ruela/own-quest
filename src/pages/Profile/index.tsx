@@ -19,6 +19,11 @@ import {
   ProfileOpt,
   ProfileStyle,
   UserImage,
+  WrapCardGame,
+  WrapTextButton,
+  YourProfileTitle,
+} from "../../styles/Profile";
+import { UserContext } from "../../contexts/user";
 } from "../../styles/Profile";
 import HistoricOfGamesTab from "./pages/HistoricOfGames";
 import ProfileTab from "./pages/Profile";
@@ -27,24 +32,25 @@ import SecurityTab from "./pages/Security";
 
 export default function Profile() {
   const { user, refresh, logout } = useContext(AuthContext);
+  const { updateProfileItens } = useContext(UserContext);
   const { getUserPlayingAllGames, userPlayingAllGames } =
     useContext(GameContext);
   const [selectedTab, setSelectedTab] = useState<number>(1);
-  const [playingGames, setPlayingGames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [editinName, setEditingName] = useState(false);
+  const [name, setName] = useState(user!.name);
 
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    const tabParam = searchParams.get('tab');
+    const tabParam = searchParams.get("tab");
     const tabNumber = tabParam ? parseInt(tabParam) : 1;
     setSelectedTab(tabNumber);
   }, [location.search]);
 
   const fetchGames = async () => {
-
     try {
       await Promise.all([getUserPlayingAllGames()]);
       setIsLoading(false);
@@ -55,7 +61,7 @@ export default function Profile() {
         try {
           await refresh();
           await fetchGames();
-        } catch (e) { }
+        } catch (e) {}
       }
     }
   };
@@ -66,13 +72,23 @@ export default function Profile() {
 
   const handleButtonClick = (buttonIndex: number) => {
     navigate(`/profile?tab=${buttonIndex}`);
-    setSelectedTab(buttonIndex)
+    setSelectedTab(buttonIndex);
   };
 
   const handleLogoutClick = () => {
     logout();
   };
 
+  const toggleEditingName = () => {
+    if (editinName){
+      updateProfileItens(user!.id.toString(), name, user!.nickname)
+    }
+    setEditingName(!editinName);
+  };
+
+  const handleNameChange = (event: { target: { value: any; }; }) => {
+    setName(event.target.value);
+  };
   const pages = [
     <ProfileTab/>,
     <SecurityTab/>,

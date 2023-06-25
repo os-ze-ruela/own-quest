@@ -1,4 +1,5 @@
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useContext, useEffect, useState } from "react";
+
 import AskRegisterBar from "../../components/Bar/AskRegisterBar";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
@@ -12,11 +13,31 @@ import {
   RecoverStyle,
   Title,
 } from "../../styles/NewPword";
+import { AuthContext } from "../../contexts/auth";
+import { useLocation } from "react-router-dom";
+import { MessageError, MessageSuccess } from "../../styles/Recover";
 
 export default function NewPword() {
+  const { resetPassword } = useContext(AuthContext);
   const [pswd, setPswd] = useState("");
   const [pswdConf, setPswdConf] = useState("");
   const [showError, setShowError] = useState(false);
+  const [token, setToken] = useState('');
+  const [email, setEmail] = useState('');
+  const [showErr, setShowErr] = useState(false);
+  const [showSucc, setShowSucc] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [messageErr, setMessageErr] = useState("");
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tokenParam = params.get('token');
+    const emailParam = params.get('email')
+    setEmail(emailParam!)
+    setToken(tokenParam!);
+  }, [location]);
 
   const handlePswdChange = (event: {
     target: { value: SetStateAction<string> };
@@ -31,16 +52,23 @@ export default function NewPword() {
   };
 
   async function compareAndSend(password: string, password2: string) {
-    if(password === password2){
-        console.log(password)
-        console.log(password2)
-    }else{
-        console.log(password)
-        console.log(password2)
-        setShowError(true)
-        //Mostrar um erro na tela
+    if (password === password2) {
+      setLoading(true);
+      setShowSucc(false);
+      setShowErr(false);
+      try {
+        await resetPassword(email, token, password); 
+        setShowSucc(true);
+        setMessageErr("Senha alterada com sucesso!");
+      } catch (error) {
+        console.error(error);
+        setShowError(true);
+        
+      }
+    } else {
+      setShowError(true);
+      setMessageErr("As senhas não correspondem");
     }
-
   }
 
   return (
@@ -54,18 +82,25 @@ export default function NewPword() {
         <SubTitle>caso tenha requisitado a recuperação</SubTitle>
         <Label htmlFor="newpswd">Nova senha</Label>
         <Input
-          type="text"
+          type="password" 
           name="newpswd"
           value={pswd}
           onChange={handlePswdChange}
         />
         <Label2 htmlFor="confirmpswd">Confirmar nova senha</Label2>
         <Input
-          type="text"
+          type="password" 
           name="confirmpswd"
           value={pswdConf}
           onChange={handlePswdConf}
         />
+
+        { showErr &&
+            <MessageError>{messageErr}</MessageError>}
+
+        { showSucc &&
+            <MessageSuccess>{messageErr}</MessageSuccess>}
+
         <ButtonRecover
           onClick={async () => {
             await compareAndSend(pswd, pswdConf);

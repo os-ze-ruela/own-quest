@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppError from "../core/app-error";
@@ -47,6 +47,7 @@ type AuthContextType = {
   sendRecover: (email: string) => Promise<void>;
   updatePassword: (id: number, pswd1: string, pswd2: string) => Promise<void>;
   getUserAuth: () => Promise<void>;
+  resetPassword: (email: string, tokenSenha: string, newPassword: string) => Promise<void>
 };
 
 interface User {
@@ -423,6 +424,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  const resetPassword = async (email: string, tokenSenha: string, newPassword: string) => {
+    const url = '/user/recover-account'; 
+    
+    try {
+      const tokensJSON = localStorage.getItem("token");
+      const tokens = JSON.parse(tokensJSON!);
+      
+      const config = {
+        headers: {
+          Authorization: `Bearer ${tokens}`, 
+        },
+      };
+
+      const data = {
+        email: email,
+        token: tokenSenha,
+        newPassword: newPassword,
+      };
+      const response = await api.patch(url, data, config);
+      console.log(response.data); 
+    }catch(error){
+      const e = (await error) as AxiosError;
+      throw e;
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -432,6 +459,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         validLogin,
         login,
         validRegister,
+        resetPassword,
         register,
         refresh,
         logout,
