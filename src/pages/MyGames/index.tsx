@@ -76,7 +76,7 @@ const MyGames = () => {
 
     let randomGame = ""
 
-  
+
     try {
       randomGame = await generateRandomGameByDescription(numPageSelected, categorySelected, description)
     } catch (error: any) {
@@ -86,6 +86,18 @@ const MyGames = () => {
       return
     }
 
+    let randomGameJSON: any;
+
+    try {
+      randomGameJSON = JSON.parse(randomGame)
+    } catch (error: any) {
+      setIsLoadingGame(false);
+      setErrorIASnackbar(true)
+      setErrorIAMessage('Ocorreu um erro ao gerar a sua história, pedimos desculpa')
+      return
+    }
+
+
     try {
       await incrementAIGameGeneration(user!.id)
     } catch (e) {
@@ -93,9 +105,6 @@ const MyGames = () => {
       setErrorIAMessage('O seu limite de criação de histórias com IA foi excedido')
       return
     }
-
-    let randomGameJSON = JSON.parse(randomGame)
-
 
     const matchingCategory = categories.find(category => category.title === randomGameJSON.categories)
     let categoryIds = []
@@ -111,6 +120,8 @@ const MyGames = () => {
       navigate(GAME + '/' + gameId)
     } catch (error) {
       setIsLoadingGame(false);
+      setErrorIASnackbar(true)
+      setErrorIAMessage('Ocorreu um erro ao gerar a sua história, pedimos desculpa')
     }
   }
 
@@ -202,7 +213,7 @@ const MyGames = () => {
 
   return (
     <>
-    <Drawer/>
+      <Drawer />
       <Snackbar
         open={errorIASnackbar}
         autoHideDuration={4000}
