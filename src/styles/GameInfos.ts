@@ -37,7 +37,7 @@ export const GameInfosWrapper = styled.div`
     width: 100%;
     margin-top: 2rem;
     gap: 1rem;
-    margin-bottom: 8rem;
+    margin-bottom: 2rem;
 
     @media screen and (max-width: 1024px) {
         flex-direction: column;

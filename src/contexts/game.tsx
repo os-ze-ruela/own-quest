@@ -2,48 +2,52 @@ import { AxiosError } from "axios";
 import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
 import Category from "../models/Category";
+import Comment, { IComment } from "../models/Comment";
 import Game from "../models/Game";
 import PlayGames from "../models/PlayGame";
-import { api, deleteGame, deleteGameCategoryByID, fetchGameById, fetchGameHistory, fetchHighlightGame, findGamesByTitle, getGamesByCategory, getHotGames, getUserGamesByToken, getUserPlayAllGames, getUserPlayGames, patchGame, postFullGame, postGame, postGameCategoryByID, publishGame, reportGame, unpublishGame } from "../services/api";
+import { api, deleteCommentById, deleteGame, deleteGameCategoryByID, fetchCommentsByGameId, fetchGameById, fetchGameHistory, fetchHighlightGame, findGamesByTitle, getGamesByCategory, getHotGames, getUserGamesByToken, getUserPlayAllGames, getUserPlayGames, patchGame, postComment, postFullGame, postGame, postGameCategoryByID, publishGame, reportGame, unpublishGame } from "../services/api";
 
 
 
 
 type GameContextType = {
+    setEditingGame: (game: Game) => void;
+    getGameById: (id: string) => Promise<void>;
+    createGame: () => Promise<number>;
+    deleteGameByID: (id: number) => void;
+    updateGame: (game: Game) => Promise<any>;
+    getUserPlayingGames: () => Promise<void>;
+    getUserPlayingAllGames: () => Promise<void>;
+    getUserGames: () => Promise<void>;
+    getHighlightGame: () => Promise<void>;
+    getHotGamesForHome: () => Promise<void>;
+    searchGamesByTitle: (title: string) => Promise<void>;
+    setPagesOfHotGames: (page: number) => void;
+    reportGameById: (gameId: number, userId: number, complain: string) => Promise<void>;
+    pagesOfHotGames: number;
+    userGames: Game[];
+    userPlayingGames: PlayGames[];
+    userPlayingAllGames: PlayGames[];
+    hotGames: Game[];
+    searchGames: Game[];
+    editingGame: Game | null;
+    highlightGame: Game | null;
+    createFullGame: (game: Game) => Promise<number>;
+    addGameCategoryByID: (id: number, categories: Number[]) => Promise<void>;
+    deleteGameCategory: (idGame: number, idCategory: number) => Promise<void>;
+    loading: boolean;
+    fetchGamesByCategory: (id: number) => Promise<void>;
+    gamesByCategory: Game[];
+    published: boolean;
+    setPublished: (status: boolean) => void;
+    publishGameById: (id: number) => Promise<any>;
+    unpublishGameById: (id: number) => Promise<any>;
+    getGameHistoryById: (idPlayGame: number) => Promise<any>;
+    commentGame: (comment: Comment) => Promise<Comment>;
+    deleteComment: (commentId: number) => Promise<any>;
+    listAllCommentsByGameId: (gameId: string) => Promise<Comment[]>;
+};
 
-    setEditingGame: (game: Game) => void,
-    getGameById: (id: string) => Promise<void>,
-    createGame: () => Promise<number>,
-    deleteGameByID: (id: number) => void,
-    updateGame: (game: Game) => Promise<any>,
-    getUserPlayingGames: () => Promise<void>,
-    getUserPlayingAllGames: () => Promise<void>,
-    getUserGames: () => Promise<void>,
-    getHighlightGame: () => Promise<void>,
-    getHotGamesForHome: () => Promise<void>,
-    searchGamesByTitle: (title: string) => Promise<void>,
-    setPagesOfHotGames: (page: number) => void,
-    reportGameById: (gameId: number, userId: number, complain: string) => Promise<void>,
-    pagesOfHotGames: number,
-    userGames: Game[],
-    userPlayingGames: PlayGames[],
-    userPlayingAllGames: PlayGames[],
-    hotGames: Game[],
-    searchGames: Game[],
-    editingGame: Game | null,
-    highlightGame: Game | null,
-    createFullGame: (game: Game) => Promise<number>,
-    addGameCategoryByID: (id: number, categories: Number[]) => Promise<void>,
-    deleteGameCategory: (idGame: number, idCategory: number) => Promise<void>
-    loading: boolean,
-    fetchGamesByCategory: (id: number) => Promise<void>,
-    gamesByCategory: Game[],
-    published: boolean,
-    setPublished: (status: boolean) => void
-    publishGameById: (id: number) => Promise<any>
-    unpublishGameById: (id: number) => Promise<any>
-    getGameHistoryById: (idPlayGame: number) => Promise<any>
-}
 
 export const GameContext = createContext<GameContextType>({} as GameContextType)
 
@@ -171,7 +175,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         try {
             const response = await fetchGameHistory(idPlayGame);
             return response.data
-            
+
         } catch (error) {
 
             console.error(error)
@@ -549,6 +553,40 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    async function commentGame(comment: Comment): Promise<Comment> {
+        try {
+            const response = await postComment(comment.author.id, comment.gameId, comment.comment);
+            comment.id = response.data.id;
+            const commentInstance: Comment = new Comment(comment);
+            return commentInstance;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async function deleteComment(commentId: number): Promise<any> {
+        try {
+            await deleteCommentById(commentId);
+        } catch (error) {
+            console.error(error)
+            throw error
+        }
+    }
+
+    async function listAllCommentsByGameId(gameId: string): Promise<Comment[]> {
+        try {
+            const response = await fetchCommentsByGameId(gameId);
+            const comments: IComment[] = response.data;
+            const commentInstances: Comment[] = comments.map((comment) => new Comment(comment));
+            return commentInstances;
+        } catch (error) {
+            console.log(`error comments`)
+            console.error(error);
+            throw error;
+        }
+    }
+
 
     return (
         <GameContext.Provider value={{
@@ -583,7 +621,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             setPublished,
             publishGameById,
             unpublishGameById,
-            getGameHistoryById
+            getGameHistoryById,
+            commentGame,
+            deleteComment,
+            listAllCommentsByGameId
 
         }}>
             {children}

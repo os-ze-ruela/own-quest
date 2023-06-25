@@ -324,3 +324,20 @@ export const postIncrementAIGameGeneration = async (userId: number) => {
         "userId": userId
     })
 }
+
+// COMMENTS
+export const postComment = async (autorId: number, gameId: number, content: string) => {
+    return await api.post(`/comment`, {
+        "userId": autorId,
+        "gameId": gameId,
+        "content": content
+    })
+}
+
+export const deleteCommentById = async (commentId: number) => {
+    return await api.delete(`/comment/${commentId}`)
+}
+
+export const fetchCommentsByGameId = async (gameId: string) => {
+    return await api.get(`/comment/${gameId}`)
+}
