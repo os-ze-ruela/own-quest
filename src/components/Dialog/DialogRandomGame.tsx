@@ -3,20 +3,19 @@ import { IoMdClose } from "react-icons/io";
 import styled from 'styled-components';
 import { CategoryContext } from '../../contexts/category';
 import AppError from '../../core/app-error';
-import { api } from '../../services/api';
 import SelectBoxComponent from '../SelectBoxComponent/SelectBoxComponent';
 
 
 type DialogRandomGameProps = {
-    onClose: () => void;
-    handleGenerateRandomStorie: () => void;
-    handleCategoryChange: (categorySelected: string) => void;
-    handleNumPagesChange: (number: string) => void;
-    selectedOption: boolean;
-    setSelectedOption: (option: boolean) => void;
-    description: string;
-    setDescription: (category: string) => void;
-  };
+  onClose: () => void;
+  handleGenerateRandomStorie: () => void;
+  handleCategoryChange: (categorySelected: string) => void;
+  handleNumPagesChange: (number: string) => void;
+  selectedOption: boolean;
+  setSelectedOption: (option: boolean) => void;
+  description: string;
+  setDescription: (category: string) => void;
+};
 
 const DialogContainer = styled.div`
   position: fixed;
@@ -134,7 +133,7 @@ export const DescriptionInput = styled.textarea`
 `
 
 
-const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRandomStorie, onClose, handleCategoryChange, handleNumPagesChange, selectedOption, setSelectedOption, description, setDescription}) => {
+const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRandomStorie, onClose, handleCategoryChange, handleNumPagesChange, selectedOption, setSelectedOption, description, setDescription }) => {
   const [category, setCategory] = useState('');
   // const [description, setDescription] = useState('');
   const [numPages, setNumPages] = useState(3);
@@ -143,10 +142,6 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
 
   const fetchAllRequests = async () => {
     try {
-      const tokensJSON = localStorage.getItem('token')
-      const tokens = JSON.parse(tokensJSON!)
-      api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
-
       await Promise.all([
         getCategories()
       ]);
@@ -172,9 +167,9 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
   return (
 
     <DialogContainer>
-      <CloseButton onClick={onClose}><IoMdClose size={40}/></CloseButton>
+      <CloseButton onClick={onClose}><IoMdClose size={40} /></CloseButton>
       <h3>Gerar Jogo Aleatório</h3>
-        {/* <ToggleButtonGroup
+      {/* <ToggleButtonGroup
         value={alignment}
         exclusive
         onChange={handleAlignment}
@@ -195,9 +190,9 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
         autoComplete="off"
         value={description}
         placeholder="Descreva brevemente a história que deseja gerar"
-        onChange={(event) => {setDescription(event.target.value)}}
+        onChange={(event) => { setDescription(event.target.value) }}
       />
-      
+
       {/* </>) : 
       (
       <></>
@@ -205,11 +200,11 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
     }
        */}
       <>
-      <h5>Escolha uma categoria para história:</h5>
-      <SelectBoxComponent defaultValue="Categoria" pageList={categories.map((category, index) => `${category.title}`)} onChange={handleCategoryChange} />
+        <h5>Escolha uma categoria para história:</h5>
+        <SelectBoxComponent defaultValue="Categoria" pageList={categories.map((category, index) => `${category.title}`)} onChange={handleCategoryChange} />
       </>
       <h5>Selecione o número de páginas da história:</h5>
-      <SelectBoxComponent defaultValue="Páginas" pageList={['3','4','5','6', '7', '8', '9', '10']} onChange={handleNumPagesChange} />
+      <SelectBoxComponent defaultValue="Páginas" pageList={['3', '4', '5', '6', '7', '8', '9', '10']} onChange={handleNumPagesChange} />
       <Button onClick={handleGenerateRandomStorie}>Gerar</Button>
       {/* </SelectWrapper> */}
     </DialogContainer>

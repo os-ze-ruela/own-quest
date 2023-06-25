@@ -120,7 +120,7 @@ const MyGames = () => {
     let timer: NodeJS.Timeout;
 
     if (isLoadingGame) {
-      const totalTime = 20000; //12s de loading
+      const totalTime = 3000 * numPageSelected; //12s de loading
       const updateInterval = 100;
       const increment = 100 / (totalTime / updateInterval);
 
