@@ -39,30 +39,31 @@ import {
   UserImage,
   WrapCardGame,
   WrapTextButton,
-  YourProfileTitle
+  YourProfileTitle,
 } from "../../styles/Profile";
-
+import { UserContext } from "../../contexts/user";
 
 export default function Profile() {
   const { user, refresh, logout } = useContext(AuthContext);
+  const { updateProfileItens } = useContext(UserContext);
   const { getUserPlayingAllGames, userPlayingAllGames } =
     useContext(GameContext);
   const [selectedTab, setSelectedTab] = useState<number>(1);
-  const [playingGames, setPlayingGames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [editinName, setEditingName] = useState(false);
+  const [name, setName] = useState(user!.name);
 
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    const tabParam = searchParams.get('tab');
+    const tabParam = searchParams.get("tab");
     const tabNumber = tabParam ? parseInt(tabParam) : 1;
     setSelectedTab(tabNumber);
   }, [location.search]);
 
   const fetchGames = async () => {
-
     try {
       await Promise.all([getUserPlayingAllGames()]);
       setIsLoading(false);
@@ -73,7 +74,7 @@ export default function Profile() {
         try {
           await refresh();
           await fetchGames();
-        } catch (e) { }
+        } catch (e) {}
       }
     }
   };
@@ -84,11 +85,22 @@ export default function Profile() {
 
   const handleButtonClick = (buttonIndex: number) => {
     navigate(`/profile?tab=${buttonIndex}`);
-    setSelectedTab(buttonIndex)
+    setSelectedTab(buttonIndex);
   };
 
   const handleLogoutClick = () => {
     logout();
+  };
+
+  const toggleEditingName = () => {
+    if (editinName){
+      updateProfileItens(user!.id.toString(), name, user!.nickname)
+    }
+    setEditingName(!editinName);
+  };
+
+  const handleNameChange = (event: { target: { value: any; }; }) => {
+    setName(event.target.value);
   };
 
   return (
@@ -150,9 +162,19 @@ export default function Profile() {
             <WrapTextButton>
               <Text>
                 <Titles>Nome</Titles>
-                <TitlesInfo>{user!.name}</TitlesInfo>
+                {editinName ? (
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={handleNameChange}
+                  />
+                ) : (
+                  <TitlesInfo>{user!.name}</TitlesInfo>
+                )}
               </Text>
-              <EditButton>Editar</EditButton>
+              <EditButton onClick={toggleEditingName}>
+                {editinName ? "Salvar" : "Editar"}
+              </EditButton>
             </WrapTextButton>
             <Separator />
 
@@ -227,18 +249,20 @@ export default function Profile() {
                         listgame.not_possible_continue
                           ? "Interrompido por nova versão"
                           : listgame.is_ongoing
-                            ? "Em andamento"
-                            : "Finalizado"
+                          ? "Em andamento"
+                          : "Finalizado"
                       }
                     >
                       {listgame.not_possible_continue
                         ? "Interrompido por nova versão"
                         : listgame.is_ongoing
-                          ? "Em andamento"
-                          : "Finalizado"}
+                        ? "Em andamento"
+                        : "Finalizado"}
                     </CardStatusInfos>
                   </CardInfos>
-                  <ButtonHist href={GAME_HISTORY + '/' + listgame.play_game_id} >Ver Histórico</ButtonHist>
+                  <ButtonHist href={GAME_HISTORY + "/" + listgame.play_game_id}>
+                    Ver Histórico
+                  </ButtonHist>
                 </CardGame>
               );
             })}

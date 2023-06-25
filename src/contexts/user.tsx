@@ -3,7 +3,7 @@ import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
 import User from "../models/User";
 import UserCategory from "../models/UserCategory";
-import { api, getUserByNickname, postLikeGame, postUnLikeGame, postFollowUser, postUnfollowUser } from "../services/api";
+import { api, getUserByNickname, postLikeGame, postUnLikeGame, postFollowUser, postUnfollowUser, updateProfile } from "../services/api";
 type UserContextType = {
     likeGame: (gameId: string) => Promise<void>
     unlikeGame: (gameId: string) => Promise<void>
@@ -13,7 +13,8 @@ type UserContextType = {
     followUser: (followerId: string, followedId: string) => Promise<void>
     unfollowUser: (followerId: string, followedId: string) => Promise<void>
     open: boolean,
-    setOpen: (open: boolean) => void
+    setOpen: (open: boolean) => void,
+    updateProfileItens: (userId: string, name: string, nickname: string) => Promise<void>
 }
 
 export const UserContext = createContext<UserContextType>({} as UserContextType)
@@ -129,8 +130,25 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    async function updateProfileItens(userId: string, name: string, nickname: string): Promise<void>{
+        try {
+            const tokensJSON = localStorage.getItem('token')
+            const tokens = JSON.parse(tokensJSON!)
+            api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
+            await updateProfile(userId, name, nickname)
+        } catch (e) {
+            const error = await e as AxiosError
+            console.error(`Erro (${error.response?.status}) ao parar de seguir usuário ${userId}`, error);
+            if (error.response?.status === 409) {
+                throw new AppError(409, 'O nickname escolhido já está sendo utilizado')
+            } else if (error.response?.status === 401) {
+                throw new AppError(error.response?.status, 'Credenciais Incorretas')
+            }
+        }
+    }
+
     return (
-        <UserContext.Provider value={{ likeGame, unlikeGame, findUserByNickname, followUser, unfollowUser, setOpen, visitingUser, setVisitingUser, open }}>
+        <UserContext.Provider value={{ likeGame, unlikeGame, findUserByNickname, followUser, unfollowUser, setOpen, visitingUser, setVisitingUser, open, updateProfileItens }}>
             {children}
         </UserContext.Provider>
     )
