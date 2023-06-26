@@ -242,6 +242,10 @@ export const getUserByNickname = async (nickname: string) => {
     return await api.get(`/user/find/${nickname}`)
 }
 
+export const updateProfile = async (userId: string, name: string, nickname: string) => {
+    return await api.patch(`/user`, {userId, name, nickname})
+}
+
 export const postFollowUser = async (followerId: string, followedId: string) => {
     return await api.post(`/user/${followerId}/follow/${followedId}`)
 }
@@ -249,6 +253,8 @@ export const postFollowUser = async (followerId: string, followedId: string) => 
 export const postUnfollowUser = async (followerId: string, followedId: string) => {
     return await api.delete(`/user/${followerId}/unfollow/${followedId}`)
 }
+
+
 
 // ----- IMAGE UPLOAD -----
 
