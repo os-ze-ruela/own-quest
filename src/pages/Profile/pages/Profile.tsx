@@ -10,6 +10,7 @@ import {
   Text,
   Titles,
   TitlesInfo,
+  WrapButtons,
   WrapTextButton,
   YourProfileTitle,
 } from "../../../styles/Profile";
@@ -17,10 +18,8 @@ import {
 export default function ProfileTab() {
   const [editingName, setEditingName] = useState(false);
   const [editingNickname, setEditingNickname] = useState(false);
-  
   const { user } = useContext(AuthContext);
   const { updateProfileInfo } = useContext(UserContext);
-
   const [newName, setNewName] = useState(user!.name);
   const [newNickname, setNewNickname] = useState(user!.nickname);
   const [userId, setUserId] = useState(user!.id);
@@ -65,13 +64,18 @@ export default function ProfileTab() {
               onChange={(e) => setNewName(e.target.value)}
             />
           ) : (
-            <TitlesInfo>{user!.name}</TitlesInfo>
+            <TitlesInfo>{newName}</TitlesInfo>
           )}
         </Text>
         {editingName ? (
-          <EditButton onClick={() => handleSaveName()}>Salvar</EditButton>
+            <WrapButtons>
+                <EditButton onClick={() => handleSaveName()}>Salvar</EditButton>
+                <EditButton onClick={() => setEditingName(false)}>Cancelar</EditButton>
+            </WrapButtons>
+            
         ) : (
-          <EditButton onClick={() => setEditingName(true)}>Editar</EditButton>
+            <EditButton onClick={() => setEditingName(true)}>Editar</EditButton>
+           
         )}
       </WrapTextButton>
       <Separator />
@@ -94,11 +98,14 @@ export default function ProfileTab() {
               onChange={(e) => setNewNickname(e.target.value)}
             />
           ) : (
-            <TitlesInfo>@{user!.nickname}</TitlesInfo>
+            <TitlesInfo>@{newNickname}</TitlesInfo>
           )}
         </Text>
         {editingNickname ? (
-          <EditButton onClick={() => handleSaveNickname()}>Salvar</EditButton>
+          <WrapButtons>
+              <EditButton onClick={() => handleSaveNickname()}>Salvar</EditButton>
+              <EditButton onClick={() => setEditingNickname(false)}>Cancelar</EditButton>
+          </WrapButtons>
         ) : (
           <EditButton onClick={() => setEditingNickname(true)}>
             Editar

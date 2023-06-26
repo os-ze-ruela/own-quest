@@ -22,6 +22,10 @@ export const patchUser = async (userId: number, name: string, nickname: string) 
     return await api.patch('/user', { "id": userId, "name": name, "nickname": nickname, })
 }
 
+export const serDelete = async (userId: number) => {
+    return await api.delete('/user/delete', { params: { "id": userId } });
+  }
+
 export const refreshToken = async () => {
     return await api.post('/auth/refresh')
 }
