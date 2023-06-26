@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import EmailNotValidatedWarning from "../../../components/Warning/EmailNotValidated";
 import { AuthContext } from "../../../contexts/auth";
+import { UserContext } from "../../../contexts/user";
 import {
   EditButton,
   InputChange,
@@ -12,7 +13,6 @@ import {
   WrapTextButton,
   YourProfileTitle,
 } from "../../../styles/Profile";
-import { UserContext } from "../../../contexts/user";
 
 export default function ProfileTab() {
   const [editingName, setEditingName] = useState(false);
@@ -27,7 +27,7 @@ export default function ProfileTab() {
 
   const handleSaveName = async () => {
     try{
-        await updateProfileInfo(userId.toString(), newName, newNickname)
+        await updateProfileInfo(userId, newName, newNickname)
         setEditingName(false)
     }catch(e){
         console.log("Erro")
@@ -36,7 +36,7 @@ export default function ProfileTab() {
 
   const handleSaveNickname = async () => {
     try{
-        await updateProfileInfo(userId.toString(), newName, newNickname)
+        await updateProfileInfo(userId, newName, newNickname)
         setEditingNickname(false)
     }catch(e){
         console.log("Erro")

@@ -1,9 +1,9 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
 import User from "../models/User";
 import UserCategory from "../models/UserCategory";
-import { api, getUserByNickname, postLikeGame, postUnLikeGame, postFollowUser, postUnfollowUser, updateProfile} from "../services/api";
+import { api, getUserByNickname, patchUser, postFollowUser, postLikeGame, postUnLikeGame, postUnfollowUser } from "../services/api";
 type UserContextType = {
     likeGame: (gameId: string) => Promise<void>
     unlikeGame: (gameId: string) => Promise<void>
@@ -14,7 +14,7 @@ type UserContextType = {
     unfollowUser: (followerId: string, followedId: string) => Promise<void>
     open: boolean,
     setOpen: (open: boolean) => void,
-    updateProfileInfo: (userId: string, name: string, nickname: string) => Promise<void>,
+    updateProfileInfo: (userId: number, name: string, nickname: string) => Promise<void>,
     deleteUser: (idUsuario: string) => Promise<void>
 }
 
@@ -132,27 +132,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     };
 
 
-    async function updateProfileInfo  (idUsuario: string, novoNome: string, novoNickname: string): Promise<void> {
-        const url = '/user'; 
-
+    async function updateProfileInfo  (idUsuario: number, novoNome: string, novoNickname: string): Promise<void> {
         try {
-            const tokensJSON = localStorage.getItem("token");
-            const tokens = JSON.parse(tokensJSON!);
-    
-            const config = {
-              headers: {
-                Authorization: `Bearer ${tokens.access_token}`, 
-              },
-            };
-
-            const body = {
-                idUsuario: idUsuario,
-                nome: novoNome,
-                nickname: novoNickname
-            };
-
-          const response = await api.patch(url, body, config);
-      
+          const response = await patchUser(idUsuario, novoNome, novoNickname);
           console.log(response.data); 
         } catch (error) {
           console.error('Erro na troca de nome e nickname:', error);
