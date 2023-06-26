@@ -113,6 +113,7 @@ export const RegisterInputs = styled.div`
 
 export const Input = styled.input`
     display: flex;
+    outline: none;
     margin-left: 0.5em;
     // flex-direction: column;
     background-color: #30354B;
@@ -121,6 +122,7 @@ export const Input = styled.input`
     margin-bottom: 1em;
     border: none;
     border-radius: 0.7em;
+    padding: 4px 1rem;
     // padding: 0.6em;
     width: 100%;
     height: 40px;

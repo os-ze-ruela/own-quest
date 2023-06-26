@@ -19,10 +19,10 @@ function Login() {
     setShowError(false)
     try {
       await login(email, password)
-    } catch(e) {
+    } catch (e) {
       const error = await e as AppError
       setMessageError(error.message)
-      setShowError(true)  
+      setShowError(true)
     }
     setLoading(false)
   }
@@ -35,64 +35,70 @@ function Login() {
 
   const [showError, setShowError] = useState(false)
   const [messageError, setMessageError] = useState('')
-  
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await SubmitLogin()
+  };
+
   return (
     <>
       <Header page='Registrar' redirect={REGISTER} />
       <LoginStyle>
         <ImgAstro src={ASTRO} />
         <FieldsDiv>
-          <LoginInputs>
-            <Title>Bem-vindo de volta!</Title>
+          <form onSubmit={handleSubmit}>
+            <LoginInputs>
+              <Title>Bem-vindo de volta!</Title>
 
-            <SubTitle>É um prazer te ver de novo por aqui!</SubTitle>
+              <SubTitle>É um prazer te ver de novo por aqui!</SubTitle>
 
-            <RegisterText>
-              Ainda não tem uma conta?
-              <RegisterLink href={REGISTER}> Cadastre-se </RegisterLink>
-            </RegisterText>
-
-            <Label htmlFor="email">Email</Label>
-            <Input
-              type="email"
-              name="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              />
-            <Label htmlFor="password">Senha</Label>
-            <InputButtonDiv>
+              <RegisterText>
+                Ainda não tem uma conta?
+                <RegisterLink href={REGISTER}> Cadastre-se </RegisterLink>
+              </RegisterText>
+              <Label htmlFor="email">Email</Label>
               <Input
-                name="password"
-                type={isRevealPassword ? "text" : "password"}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
+                type="email"
+                name="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+              />
+              <Label htmlFor="password">Senha</Label>
+              <InputButtonDiv>
+                <Input
+                  name="password"
+                  type={isRevealPassword ? "text" : "password"}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
                 />
-              <HideButton
-                title={isRevealPassword ? "Hide password" : "Show password"}
-                src={isRevealPassword ? hidePasswordImg : showPasswordImg}
-                onClick={() => setIsRevealPassword(prevState => !prevState)}
+                <HideButton
+                  title={isRevealPassword ? "Hide password" : "Show password"}
+                  src={isRevealPassword ? hidePasswordImg : showPasswordImg}
+                  onClick={() => setIsRevealPassword(prevState => !prevState)}
                 />
-            </InputButtonDiv>
-          </LoginInputs>
-          { showError &&
-            <MessageError>{messageError}</MessageError>}
-          
-          <LoginRecoverItemsDiv>
+              </InputButtonDiv>
+            </LoginInputs>
+            {showError &&
+              <MessageError>{messageError}</MessageError>}
 
-            <ButtonLogin onClick={async () => await SubmitLogin()} disabled={loading}>
-              {loading ? <CircularProgress size={20} color="inherit" /> : 'Entrar'}
-            </ButtonLogin>
-            
-            <RecoverText>
-              Esqueceu sua senha? <br />
-              <RecoverLink href={RECOVER_PASSWORD}>Recupere aqui</RecoverLink>
-            </RecoverText>
-          </LoginRecoverItemsDiv>
+            <LoginRecoverItemsDiv>
+
+              <ButtonLogin type='submit' disabled={loading}>
+                {loading ? <CircularProgress size={20} color="inherit" /> : 'Entrar'}
+              </ButtonLogin>
+
+              <RecoverText>
+                Esqueceu sua senha? <br />
+                <RecoverLink href={RECOVER_PASSWORD}>Recupere aqui</RecoverLink>
+              </RecoverText>
+            </LoginRecoverItemsDiv>
+          </form>
         </FieldsDiv>
-      </LoginStyle>
+      </LoginStyle >
       <AskRegisterBar />
       <Footer />
-            
+
     </>
   )
 }
