@@ -8,6 +8,7 @@ import Drawer from "../../components/Drawer/Drawer";
 import HeaderLogged from "../../components/Header/HeaderLogged";
 import { AuthContext } from "../../contexts/auth";
 import { GameContext } from "../../contexts/game";
+import { UserContext } from "../../contexts/user";
 import AppError from "../../core/app-error";
 import { UserImagePlaceholder } from "../../styles/Header";
 import {
@@ -18,12 +19,7 @@ import {
   ProfileIdent,
   ProfileOpt,
   ProfileStyle,
-  UserImage,
-  WrapCardGame,
-  WrapTextButton,
-  YourProfileTitle,
-} from "../../styles/Profile";
-import { UserContext } from "../../contexts/user";
+  UserImage
 } from "../../styles/Profile";
 import HistoricOfGamesTab from "./pages/HistoricOfGames";
 import ProfileTab from "./pages/Profile";
