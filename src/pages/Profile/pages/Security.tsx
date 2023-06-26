@@ -14,7 +14,7 @@ export default function SecurityTab() {
 
   const handleConfirmDelete = () => {
     try{
-        deleteUser(user!.id.toString())
+        deleteUser(user!.id)
         setShowConfirmationDialog(false);
     }catch(e){
         console.error("Erro ao excluir a conta:", e);

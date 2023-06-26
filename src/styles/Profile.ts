@@ -135,7 +135,7 @@ export const Text = styled.div`
     flex-direction: column;
 `
 export const EditButton = styled.button`
-    width: 12%;
+    width: 18%;
     height: 20%;
     background-color: #202331;
     color: white;
@@ -371,3 +371,11 @@ export const ButtonHist = styled.a`
         }
     }
     `;
+
+    export const WrapButtons = styled.div`
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        padding-left: 2em;
+        width: 50%;
+    `

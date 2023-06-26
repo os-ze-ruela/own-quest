@@ -3,7 +3,7 @@ import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
 import User from "../models/User";
 import UserCategory from "../models/UserCategory";
-import { api, getUserByNickname, patchUser, postFollowUser, postLikeGame, postUnLikeGame, postUnfollowUser } from "../services/api";
+import { api, getUserByNickname, patchUser, postFollowUser, postLikeGame, postUnLikeGame, postUnfollowUser, serDelete } from "../services/api";
 type UserContextType = {
     likeGame: (gameId: string) => Promise<void>
     unlikeGame: (gameId: string) => Promise<void>
@@ -15,7 +15,7 @@ type UserContextType = {
     open: boolean,
     setOpen: (open: boolean) => void,
     updateProfileInfo: (userId: number, name: string, nickname: string) => Promise<void>,
-    deleteUser: (idUsuario: string) => Promise<void>
+    deleteUser: (idUsuario: number) => Promise<void>
 }
 
 export const UserContext = createContext<UserContextType>({} as UserContextType)
@@ -139,32 +139,17 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         } catch (error) {
           console.error('Erro na troca de nome e nickname:', error);
         }
-      };
+    };
 
-      async function deleteUser(idUsuario: string): Promise<void> {
+    async function deleteUser(idUsuario: number): Promise<void> {
         const url = '/user/delete';
-      
-        try {
-          const tokensJSON = localStorage.getItem("token");
-          const tokens = JSON.parse(tokensJSON!);
-      
-          const config = {
-            headers: {
-              Authorization: `Bearer ${tokens.access_token}`,
-            },
-          };
-      
-          const body = {
-            idUsuario: idUsuario,
-          };
-      
-          const response = await api.delete(url, { data: body, headers: config.headers });
-      
-          console.log(response.data);
-        } catch (error) {
-          console.error('Erro ao deletar o usuário:', error);
+        try{
+            const response = await serDelete(idUsuario)
+        }catch(e){
+            console.error('Erro ao deletar usuário',e)
         }
-      };
+    }
+
 
     return (
         <UserContext.Provider value={{ deleteUser, likeGame, unlikeGame, findUserByNickname, followUser, unfollowUser, setOpen, visitingUser, setVisitingUser, open, updateProfileInfo }}>
