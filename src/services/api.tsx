@@ -10,6 +10,10 @@ export const createSession = async (email: string, password: string) => {
     return await api.post('/auth/signin', { email, password })
 }
 
+// export const closeSession = async () => {
+//     return await api.post('auth/logout')
+// }
+
 export const signupUser = async (name: string, nickname: string, email: string, password: string, birthDate: string) => {
     return await api.post('/auth/signup', { name, nickname, email, password, birthDate })
 }
@@ -29,6 +33,14 @@ export const getUserByAccessToken = async () => {
 // GAME CONTEXT
 export const getUserGamesByToken = async () => {
     return await api.get('/user/games')
+}
+
+export const getUserGamesById = async (id: number) => {
+    return await api.get(`user/${id}/games`)
+}
+
+export const getUserRelevantsGamesById = async (id: number) => {
+    return await api.get(`user/${id}/relevants`)
 }
 
 export const getHotGames = async (page: number) => {
@@ -228,10 +240,6 @@ export const postUnLikeGame = async (gameId: string) => {
 
 export const getUserByNickname = async (nickname: string) => {
     return await api.get(`/user/find/${nickname}`)
-}
-
-export const getUserAuthenticated = async () => {
-    return await api.get(`/user`)
 }
 
 export const postFollowUser = async (followerId: string, followedId: string) => {

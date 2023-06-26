@@ -255,9 +255,9 @@ export const GameListContainer = styled.div`
 export const ListGamesCardContainer = styled.div.attrs((props: { translateX: string, }) => props)`
     position: relative;
     display: flex;
-    justify-content: space-between;
+    //justify-content: space-between;
     width: 100%;
-    gap: 0rem;
+    gap: 1rem;
     padding: 0px 2rem;
     flex-wrap: wrap;
 

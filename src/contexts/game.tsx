@@ -5,7 +5,7 @@ import Category from "../models/Category";
 import Comment, { IComment } from "../models/Comment";
 import Game from "../models/Game";
 import PlayGames from "../models/PlayGame";
-import { api, deleteCommentById, deleteGame, deleteGameCategoryByID, fetchCommentsByGameId, fetchGameById, fetchGameHistory, fetchHighlightGame, findGamesByTitle, getGamesByCategory, getHotGames, getUserGamesByToken, getUserPlayAllGames, getUserPlayGames, patchGame, postComment, postFullGame, postGame, postGameCategoryByID, publishGame, reportGame, unpublishGame } from "../services/api";
+import { api, deleteCommentById, deleteGame, deleteGameCategoryByID, fetchCommentsByGameId, fetchGameById, fetchGameHistory, fetchHighlightGame, findGamesByTitle, getGamesByCategory, getHotGames, getUserGamesByToken, getUserPlayAllGames, getUserPlayGames, getUserRelevantsGamesById, getUserGamesById, patchGame, postComment, postFullGame, postGame, postGameCategoryByID, publishGame, reportGame, unpublishGame } from "../services/api";
 
 
 
@@ -46,6 +46,8 @@ type GameContextType = {
     commentGame: (comment: Comment) => Promise<Comment>;
     deleteComment: (commentId: number) => Promise<any>;
     listAllCommentsByGameId: (gameId: string) => Promise<Comment[]>;
+    getRelevantsGamesForCreatorPage: (userId: number) => Promise<void>;
+    getUserGamesByIdForCreatorPage: (userId: number) => Promise<void>;
 };
 
 
@@ -264,6 +266,50 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    async function getUserGamesByIdForCreatorPage(userId: number): Promise<void> {
+        try {
+
+            const tokensJSON = localStorage.getItem('token')
+            const tokens = JSON.parse(tokensJSON!)
+            api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
+
+            const response = await getUserGamesById(userId)
+            console.log('jogos', response.data)
+            const gamesData = response.data;
+
+            const userGames = gamesData.map((gameData: { categories: any[]; id: any; title: any; description: any; favorites: any; image: any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any; }) => {
+                const categories = gameData.categories.map((categoryData) => {
+                    return new Category(categoryData.category);
+                });
+
+                return {
+                    id: gameData.id,
+                    title: gameData.title,
+                    description: gameData.description,
+                    image: gameData.image,
+                    favorites: gameData.favorites,
+                    isEditing: gameData.isEditing,
+                    isPublished: gameData.isPublished,
+                    isDeleted: gameData.isDeleted,
+                    createdAt: gameData.createdAt,
+                    categories: categories
+                };
+            });
+
+            setUserGames(userGames);
+        } catch (e: any) {
+            setUserGames([]);
+
+            const error = await e as AxiosError
+            console.error(`Erro (${error.response?.status}) ao buscar jogos:`, error);
+            if (error.response?.status === 400) {
+                throw new AppError(400, 'Usuário não encontrado')
+            } else if (error.response?.status === 401) {
+                throw new AppError(error.response?.status, 'Credenciais Incorretas')
+            }
+        }
+    };
+
     async function getHotGamesForHome(): Promise<void> {
         try {
 
@@ -274,7 +320,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             setPagesOfHotGames(pagesOfHotGames + 1)
 
             const response = await getHotGames(pagesOfHotGames)
-
             const gamesData = response.data;
 
             const newHotGames = gamesData.map((gameData: {
@@ -317,6 +362,55 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    async function getRelevantsGamesForCreatorPage(userId: number): Promise<void> {
+        try {
+            const tokensJSON = localStorage.getItem('token')
+            const tokens = JSON.parse(tokensJSON!)
+            api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
+
+            const response = await getUserRelevantsGamesById(userId)
+            console.log('response', response.data)
+            const gamesData = response.data;
+
+            const newHotGames = gamesData.map((gameData: {
+                game: {
+                    createdBy: any; categories: any[]; id: any; title: any; description: any; image: any; favorites: any; isEditing: any; isPublished: any; isDeleted: any; createdAt: any;
+                };
+            }) => {
+                const categories = gameData.game.categories.map((categoryData) => {
+                    return new Category(categoryData.category);
+                });
+
+                return {
+                    id: gameData.game.id,
+                    title: gameData.game.title,
+                    description: gameData.game.description,
+                    image: gameData.game.image,
+                    favorites: gameData.game.favorites,
+                    isEditing: gameData.game.isEditing,
+                    isPublished: gameData.game.isPublished,
+                    isDeleted: gameData.game.isDeleted,
+                    createdAt: gameData.game.createdAt,
+                    createdBy: gameData.game.createdBy,
+                    categories: categories,
+                };
+            });
+
+            const hotGamesTemp = [...hotGames, ...newHotGames]
+
+            setHotGames(hotGamesTemp);
+        } catch (e: any) {
+            setHotGames([]);
+
+            const error = await e as AxiosError
+            console.error(`Erro (${error.response?.status}) ao buscar jogos:`, error);
+            if (error.response?.status === 400) {
+                throw new AppError(400, 'Usuário não encontrado')
+            } else if (error.response?.status === 401) {
+                throw new AppError(error.response?.status, 'Credenciais Incorretas')
+            }
+        }
+    };
 
     async function addGameCategoryByID(id: number, categories: Number[]): Promise<void> {
         try {
@@ -624,7 +718,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             getGameHistoryById,
             commentGame,
             deleteComment,
-            listAllCommentsByGameId
+            listAllCommentsByGameId,
+            getRelevantsGamesForCreatorPage,
+            getUserGamesByIdForCreatorPage
 
         }}>
             {children}

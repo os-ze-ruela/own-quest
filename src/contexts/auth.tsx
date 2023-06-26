@@ -6,7 +6,6 @@ import { EMAIL_NOT_VALIDATED, HOME, LANDING_PAGE } from "../core/app-urls";
 import {
   api,
   createSession,
-  getUserAuthenticated,
   getUserByAccessToken,
   patchUser,
   refreshToken,
@@ -46,7 +45,6 @@ type AuthContextType = {
   sendValidateEmail: () => Promise<void>;
   sendRecover: (email: string) => Promise<void>;
   updatePassword: (id: number, pswd1: string, pswd2: string) => Promise<void>;
-  getUserAuth: () => Promise<void>;
 };
 
 interface User {
@@ -105,12 +103,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(false);
   }, []);
 
-  useEffect(() => {
-    if (!!user) {
-      setLoading(false)
-    }
-  }, [user, setUser])
-
   async function validLogin(email: string, password: string) {
     if (email === "") {
       throw new AppError(400, "Informe o e-mail da sua conta cadastrada.");
@@ -134,6 +126,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const tokens = await response.data.tokens;
 
       localStorage.setItem("token", JSON.stringify(tokens));
+      localStorage.setItem("user", JSON.stringify(loggedUser));
 
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
 
@@ -260,6 +253,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const tokens = await response.data.tokens;
 
       localStorage.setItem("token", JSON.stringify(tokens));
+      localStorage.setItem("user", JSON.stringify(loggedUser));
 
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
       setUser(loggedUser)
@@ -314,7 +308,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const tokenJSON = JSON.parse(recoveredToken);
         api.defaults.headers.Authorization = `Bearer ${tokenJSON.access_token}`;
         await verifyEmail(token);
-        await getUserAuth()
+        await getUserByAcessToken()
       } else {
         api.defaults.headers.Authorization = `Bearer ${access_token}`;
         await verifyEmail(token);
@@ -394,35 +388,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  async function getUserAuth() {
-    try {
-      const tokensJSON = localStorage.getItem("token");
-      const tokens = JSON.parse(tokensJSON!);
-      api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
-
-      const response = await getUserByAccessToken()
-      const loggedUser = await response.data
-      setUser(loggedUser)
-
-    } catch (e) {
-      const error = (await e) as AxiosError;
-      console.error(
-        `Erro (${error.response?.status}) ao recuperar usuário:`,
-        error
-      );
-      if (error.response?.data) {
-        const { statusCode, message } = error.response.data as ErrorData;
-        if (statusCode && message) {
-          throw new AppError(statusCode, message)
-        }
-      }
-      throw new AppError(
-        400,
-        "Erro ao realizar recuperação de usuário.",
-      );
-    }
-  }
-
   return (
     <AuthContext.Provider
       value={{
@@ -440,7 +405,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         sendValidateEmail,
         sendRecover,
         updatePassword,
-        getUserAuth
       }}
     >
       {children}

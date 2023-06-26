@@ -5,9 +5,12 @@ import Header from '../../components/Header/Header';
 import HeaderLogged from '../../components/Header/HeaderLogged';
 import { AuthContext } from '../../contexts/auth';
 import { UserContext } from '../../contexts/user';
-import { LOGIN } from '../../core/app-urls';
-import { CategoryInfoLabel, CategoryInfoWrapper, CategoryWrapper, DescriptionWrapper, DenounceButton, UserActionsWrapper, UserInfosMain, UserInfosWrapper, UserNickname, UserPhotoWrapper, UsersInfosWrapper, FollowButton, DescriptionInfoWrapper, UserPhoto, UserPhotoPlaceholder } from '../../styles/UserInfos';
+import { EXPLORER, LOGIN } from '../../core/app-urls';
+import { CategoryInfoLabel, CategoryInfoWrapper, CategoryWrapper, DescriptionWrapper, DenounceButton, UserActionsWrapper, UserInfosMain, UserInfosWrapper, UserNickname, UserPhotoWrapper, UsersInfosWrapper, FollowButton, DescriptionInfoWrapper, UserPhoto, UserPhotoPlaceholder, GameListContainer, ListGamesCardContainer } from '../../styles/UserInfos';
 import AppError from '../../core/app-error';
+import { GameContext } from '../../contexts/game';
+import { CardExplorerHotShimmer } from '../../components/Cards/CardExplorerHotShimmer';
+import CardMostViewGame from '../../components/Cards/CardMostViewGame';
 
 
 export const UserInfos = () => {
@@ -18,9 +21,10 @@ export const UserInfos = () => {
     const { findUserByNickname, visitingUser, setVisitingUser, followUser, unfollowUser } = useContext(UserContext)
     const { authenticated, user } = useContext(AuthContext)
     const [loading, setLoading] = useState(true)
-    // const [loadingGames, setLoadingGames] = useState(true)
+    const [loadingGames, setLoadingGames] = useState(true)
     const [following, setFollowing] = useState(false);
-    // const { hotGames, getHotGamesForHome } = useContext(GameContext)
+    const { userGames, getUserGamesByIdForCreatorPage } = useContext(GameContext)
+    const navigate = useNavigate()
 
     const handleClick = async () => {
         if (!following) {
@@ -46,41 +50,29 @@ export const UserInfos = () => {
         }
     };
 
-    // const fetchGames = async () => {
-    //     try {
-    //       await Promise.all([getHotGamesForHome()]);
-    //       setTimeout(() => {
-    //         setLoadingGames(false)
-    //       }, 500);
-    //     } catch (e) {
-    //       setLoadingGames(false)
-    //       const error = await e as AppError
-    //       if (error.statusCode === 401) {
-    //         try {
-    //           await refresh()
-    //           await fetchGames()
-    //         } catch (e) {
-    //           logout()
-    //         }
-    //       }
-    //     }
-    // };
+    const fetchGames= async () => {
+        try {
+          await getUserGamesByIdForCreatorPage(visitingUser?.id ?? 0)
+          setLoadingGames(false)
+        } catch (e) {
+          setLoadingGames(false)
+          const error = await e as AppError
+          console.log('Erro ao carregar jogos de usuário pelo id', error)
+        }
+    };
 
     async function getUserByNickname(nickname: string): Promise<void> {
         try {
-            // setLoading(true)
             await findUserByNickname(nickname);
 
         } catch (error) {
-            // setLoading(false)
             console.error(error)
-            // navigate(EXPLORER)
+            navigate(EXPLORER)
         }
     }
 
     useEffect(() => {
         getUserByNickname(nickname!)
-        // fetchGames()
     }, [])
 
     useEffect(() => {
@@ -88,6 +80,7 @@ export const UserInfos = () => {
             setTimeout(() => {
                 setLoading(false)
                 setFollowing(visitingUser.isFollowing)
+                fetchGames()
             }, 1000);  
         } else {
             setLoading(true)
@@ -186,15 +179,14 @@ export const UserInfos = () => {
                             
                         </UserActionsWrapper>)}
                 </UserInfosWrapper>
-                </UserInfosMain>
-                {/* {loadingGames ?
+                 {loading ?
                     (<Skeleton variant="rounded" animation="wave" width='40%' height='40px' style={{ marginTop: '12px' }} />)
                     :
                     (<UserInfosWrapper>
                         <h2>Histórias de @{visitingUser?.nickname}</h2>
                     </UserInfosWrapper>)} 
-                </UserInfosMain>
-                {/* <GameListContainer>
+            </UserInfosMain>
+                { <GameListContainer>
                     <ListGamesCardContainer>
                     {loadingGames ? (
                         <>
@@ -203,19 +195,19 @@ export const UserInfos = () => {
                         <CardExplorerHotShimmer />
                         <CardExplorerHotShimmer />
                         </>
-                    ) : hotGames.map((game, index) => (
+                    ) : userGames.map((game, index) => (
                         <CardMostViewGame
                         key={index}
                         id={game.id}
                         title={game.title}
-                        imageSrc={game.image != null ? game.image : `https://picsum.photos/300/200?random=4`}
+                        imageSrc={game.image}
                         description={game.description}
                         categories={game.categories}
-                        createdByNickname={game.createdBy!.nickname}
+                        createdByNickname={visitingUser?.nickname ?? '@'}
                         />
                     ))}
                     </ListGamesCardContainer>
-                </GameListContainer> */}
+                </GameListContainer> }
         </>
     );
 }
