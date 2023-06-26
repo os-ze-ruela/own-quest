@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { IoMdClose } from "react-icons/io";
 import styled from 'styled-components';
+import { AuthContext } from '../../contexts/auth';
 import { CategoryContext } from '../../contexts/category';
 import AppError from '../../core/app-error';
 import SelectBoxComponent from '../SelectBoxComponent/SelectBoxComponent';
@@ -138,6 +139,7 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
   // const [description, setDescription] = useState('');
   const [numPages, setNumPages] = useState(3);
   const { categories, getCategories } = useContext(CategoryContext)
+  const { user } = useContext(AuthContext)
   // const [selected, setSelected] = useState(false);
 
   const fetchAllRequests = async () => {
@@ -169,22 +171,6 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
     <DialogContainer>
       <CloseButton onClick={onClose}><IoMdClose size={40} /></CloseButton>
       <h3>Gerar Jogo Aleatório</h3>
-      {/* <ToggleButtonGroup
-        value={alignment}
-        exclusive
-        onChange={handleAlignment}
-        aria-label="text alignment"
-      >
-        <ToggleButton onClick={()=>setSelectedOption(false)} value="left" aria-label="left aligned">
-          <IoIosOptions size={20} color="white" />
-        </ToggleButton>
-        <ToggleButton onClick={()=>setSelectedOption(true)} value="center" aria-label="centered">
-          <BsFillChatSquareTextFill size={20} color="white"/>
-        </ToggleButton>
-      </ToggleButtonGroup> */}
-      {/* <SelectWrapper>
-      {selectedOption ? (
-      <> */}
       <DescriptionInput
         name="StoryDescription"
         autoComplete="off"
@@ -192,19 +178,20 @@ const DialogRandomGame: React.FC<DialogRandomGameProps> = ({ handleGenerateRando
         placeholder="Descreva brevemente a história que deseja gerar"
         onChange={(event) => { setDescription(event.target.value) }}
       />
-
-      {/* </>) : 
-      (
-      <></>
-      )
-    }
-       */}
       <>
         <h5>Escolha uma categoria para história:</h5>
         <SelectBoxComponent defaultValue="Categoria" pageList={categories.map((category, index) => `${category.title}`)} onChange={handleCategoryChange} />
       </>
       <h5>Selecione o número de páginas da história:</h5>
-      <SelectBoxComponent defaultValue="Páginas" pageList={['3', '4', '5', '6', '7', '8', '9', '10']} onChange={handleNumPagesChange} />
+      <SelectBoxComponent
+        defaultValue="Páginas"
+        pageList={
+          user!.is_premium ?
+            ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25']
+            : ['3', '4', '5', '6', '7', '8', '9', '10']
+        }
+        onChange={handleNumPagesChange}
+      />
       <Button onClick={handleGenerateRandomStorie}>Gerar</Button>
       {/* </SelectWrapper> */}
     </DialogContainer>
