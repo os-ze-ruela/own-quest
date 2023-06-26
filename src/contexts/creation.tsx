@@ -299,9 +299,10 @@ export const CreationProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const handleSelectChange = (selected: string) => {
-    let selectedSliced = Number(selected.slice(selected.length - 1))
+    let selectedSliced = Number(selected.split(" ")[1])
     let pagesTemp = [...pages];
     let buttons = [...pagesTemp[indexSelected].buttons]
+    console.log("Selecionou = ", selectedSliced)
     buttons[indexButton].nextPageId = pagesTemp[selectedSliced-1].id
     setDestinyPage(findPageIndex(pages, buttons[indexButton].nextPageId))
     updateButton(pagesTemp[indexSelected].buttons[indexButton])
