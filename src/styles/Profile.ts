@@ -330,3 +330,44 @@ export const ButtonHist = styled.a`
     }
 
 `
+    export const InputChange = styled.input`
+        border: none;
+        background-color: #282C3E;
+        color: white;
+        margin-bottom: 2em;
+        cursor: auto;
+        border-color: transparent;
+        outline: none;
+        font-size: 20;
+    `
+    export const ConfirmationDialog = styled.div`
+    font-family: FiraCode-Bold;
+    font-weight: 500;
+    justify-content: center;
+    width: 50%;
+    background-color: #568EA3;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+    `;
+
+    export const DialogButtons = styled.div`
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    
+    button {
+        background-color: #E03140CC;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+        background-color: #202331;
+        }
+    }
+    `;

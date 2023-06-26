@@ -246,6 +246,10 @@ export const postUnfollowUser = async (followerId: string, followedId: string) =
     return await api.delete(`/user/${followerId}/unfollow/${followedId}`)
 }
 
+export const userDelete = async () =>{
+    return await api.delete(`/user/delete`)
+}
+
 
 
 // ----- IMAGE UPLOAD -----

@@ -28,7 +28,7 @@ import SecurityTab from "./pages/Security";
 
 export default function Profile() {
   const { user, refresh, logout } = useContext(AuthContext);
-  const { updateProfileItens } = useContext(UserContext);
+  const { updateProfileInfo } = useContext(UserContext);
   const { getUserPlayingAllGames, userPlayingAllGames } =
     useContext(GameContext);
   const [selectedTab, setSelectedTab] = useState<number>(1);
@@ -75,16 +75,8 @@ export default function Profile() {
     logout();
   };
 
-  const toggleEditingName = () => {
-    if (editinName){
-      updateProfileItens(user!.id.toString(), name, user!.nickname)
-    }
-    setEditingName(!editinName);
-  };
+ 
 
-  const handleNameChange = (event: { target: { value: any; }; }) => {
-    setName(event.target.value);
-  };
   const pages = [
     <ProfileTab/>,
     <SecurityTab/>,

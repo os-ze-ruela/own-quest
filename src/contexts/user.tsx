@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
 import User from "../models/User";
@@ -14,7 +14,8 @@ type UserContextType = {
     unfollowUser: (followerId: string, followedId: string) => Promise<void>
     open: boolean,
     setOpen: (open: boolean) => void,
-    updateProfileItens: (userId: string, name: string, nickname: string) => Promise<void>
+    updateProfileInfo: (userId: string, name: string, nickname: string) => Promise<void>,
+    deleteUser: (idUsuario: string) => Promise<void>
 }
 
 export const UserContext = createContext<UserContextType>({} as UserContextType)
@@ -130,25 +131,61 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    async function updateProfileItens(userId: string, name: string, nickname: string): Promise<void>{
+
+    async function updateProfileInfo  (idUsuario: string, novoNome: string, novoNickname: string): Promise<void> {
+        const url = '/user'; 
+
         try {
-            const tokensJSON = localStorage.getItem('token')
-            const tokens = JSON.parse(tokensJSON!)
-            api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`
-            await updateProfile(userId, name, nickname)
-        } catch (e) {
-            const error = await e as AxiosError
-            console.error(`Erro (${error.response?.status}) ao parar de seguir usuário ${userId}`, error);
-            if (error.response?.status === 409) {
-                throw new AppError(409, 'O nickname escolhido já está sendo utilizado')
-            } else if (error.response?.status === 401) {
-                throw new AppError(error.response?.status, 'Credenciais Incorretas')
-            }
+            const tokensJSON = localStorage.getItem("token");
+            const tokens = JSON.parse(tokensJSON!);
+    
+            const config = {
+              headers: {
+                Authorization: `Bearer ${tokens.access_token}`, 
+              },
+            };
+
+            const body = {
+                idUsuario: idUsuario,
+                nome: novoNome,
+                nickname: novoNickname
+            };
+
+          const response = await api.patch(url, body, config);
+      
+          console.log(response.data); 
+        } catch (error) {
+          console.error('Erro na troca de nome e nickname:', error);
         }
-    }
+      };
+
+      async function deleteUser(idUsuario: string): Promise<void> {
+        const url = '/user/delete';
+      
+        try {
+          const tokensJSON = localStorage.getItem("token");
+          const tokens = JSON.parse(tokensJSON!);
+      
+          const config = {
+            headers: {
+              Authorization: `Bearer ${tokens.access_token}`,
+            },
+          };
+      
+          const body = {
+            idUsuario: idUsuario,
+          };
+      
+          const response = await api.delete(url, { data: body, headers: config.headers });
+      
+          console.log(response.data);
+        } catch (error) {
+          console.error('Erro ao deletar o usuário:', error);
+        }
+      };
 
     return (
-        <UserContext.Provider value={{ likeGame, unlikeGame, findUserByNickname, followUser, unfollowUser, setOpen, visitingUser, setVisitingUser, open, updateProfileItens }}>
+        <UserContext.Provider value={{ deleteUser, likeGame, unlikeGame, findUserByNickname, followUser, unfollowUser, setOpen, visitingUser, setVisitingUser, open, updateProfileInfo }}>
             {children}
         </UserContext.Provider>
     )
