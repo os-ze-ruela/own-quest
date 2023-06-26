@@ -17,6 +17,7 @@ export const UserInfosMain = styled.main`
     h2 {
         color: #FFFFFF;
         margin: 12px 0px;
+        margin-top: 3rem;
         font-family: FiraCode-Bold;
     }
 `
@@ -219,7 +220,7 @@ export const FollowButton = styled.button`
     font-family: FiraCode-Regular;
 
     &.following {
-        background-color: rgba(80, 120, 120, 0.6);
+        background-color: rgba(80, 110, 110, 0.7);
     }
 
     &.blocked {
@@ -255,9 +256,10 @@ export const GameListContainer = styled.div`
 export const ListGamesCardContainer = styled.div.attrs((props: { translateX: string, }) => props)`
     position: relative;
     display: flex;
-    justify-content: space-between;
+    justify-content: start-flex;
+    overflow: scroll;
     width: 100%;
-    gap: 0rem;
+    gap: 1rem;
     padding: 0px 2rem;
     flex-wrap: wrap;
 
