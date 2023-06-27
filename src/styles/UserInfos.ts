@@ -262,6 +262,7 @@ export const ListGamesCardContainer = styled.div.attrs((props: { translateX: str
     gap: 1rem;
     padding: 0px 2rem;
     flex-wrap: wrap;
+    overflow: hidden;
 
     -moz-box-sizing: border-box; 
     -webkit-box-sizing: border-box; 
