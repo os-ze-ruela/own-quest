@@ -33,9 +33,22 @@ function Register() {
   async function submitRegister() {
     setLoading(true)
     setShowError(false)
+    
     try {
+      console.log(birthDate)
+      var partes = birthDate.split("/"); // Divide a string nos caracteres "/"
+      var dia = parseInt(partes[0], 10); // Converte o dia em um número inteiro
+      var mes = parseInt(partes[1], 10); // Converte o mês em um número inteiro (tenha em mente que em JavaScript, os meses são baseados em zero, então janeiro é 0, fevereiro é 1, etc.)
+      var ano = parseInt(partes[2], 10); // Converte o ano em um número inteiro
+
+      console.log(ano, mes - 1, dia)
+      var data = new Date(ano, mes - 1, dia);
+
+      console.log(data)
+      const date = data.toISOString()
+
       await validRegister(name, nickname, email, password, confirmPassword, birthDate);
-      await register(name, nickname, email, password, confirmPassword, new Date(birthDate).toISOString())
+      await register(name, nickname, email, password, confirmPassword, date)
     } catch (e) {
       const error = await e as AppError
       setMessageError(error.message)
