@@ -338,7 +338,7 @@ export const GameInfos = () => {
                         imageSrc={game.image}
                         description={game.description}
                         categories={game.categories}
-                        createdByNickname={'teste'}
+                        createdByNickname={game.createdBy!.nickname}
                       />)
                     ))}
                   </ListGamesCardContainer>
