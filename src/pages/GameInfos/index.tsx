@@ -324,30 +324,30 @@ export const GameInfos = () => {
                     (<CommentsSection gameId={visitingGame?.id} />)
                 }
                 <HorizontalListWrapper>
-                    <TitleListGames>Histórias semelhantes para você jogar</TitleListGames>
-                    <GameListContainer>
-                        <ListGamesCardContainer>
-                            {loading ? (
-                                <>
-                                    <CardExplorerHotShimmer />
-                                    <CardExplorerHotShimmer />
-                                    <CardExplorerHotShimmer />
-                                    <CardExplorerHotShimmer />
-                                </>
-                            ) : (gamesByCategory.map((game, index) => (
-                                <CardMostViewGame
-                                    key={index}
-                                    id={game.id}
-                                    title={game.title}
-                                    imageSrc={game.image}
-                                    description={game.description}
-                                    categories={game.categories}
-                                    createdByNickname={'teste'}
-                                />)
-                            ))}
-                        </ListGamesCardContainer>
-                    </GameListContainer>
-                </HorizontalListWrapper>
+                <TitleListGames>Histórias semelhantes para você jogar</TitleListGames>
+                <GameListContainer>
+                  <ListGamesCardContainer>
+                    {loading ? (
+                      <>
+                        <CardExplorerHotShimmer />
+                        <CardExplorerHotShimmer />
+                        <CardExplorerHotShimmer />
+                        <CardExplorerHotShimmer />
+                      </>
+                    ) : (gamesByCategory.map((game, index) => (
+                      <CardMostViewGame
+                        key={index}
+                        id={game.id}
+                        title={game.title}
+                        imageSrc={game.image}
+                        description={game.description}
+                        categories={game.categories}
+                        createdByNickname={game.createdBy!.nickname}
+                      />)
+                    ))}
+                  </ListGamesCardContainer>
+                </GameListContainer>
+              </HorizontalListWrapper>
             </GameInfosMain>
         </>
     );
