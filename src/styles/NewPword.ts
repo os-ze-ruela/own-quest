@@ -12,7 +12,7 @@ export const RecoverStyle = styled.div`
 export const Title = styled.div`
     font-weight: bold;
     color: white;
-    padding-top: 2.5rem;
+    padding-top: 1.5;
     padding-bottom: 0em;
     font-size: 2.5rem;
     margin-left: 0.1em;

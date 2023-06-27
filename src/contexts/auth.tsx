@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppError from "../core/app-error";
@@ -7,6 +7,7 @@ import {
   api,
   createSession,
   getUserByAccessToken,
+  patchUser,
   refreshToken,
   sendEmail,
   signupUser,
@@ -35,13 +36,16 @@ type AuthContextType = {
     confirmPassword: string,
     birthDate: string
   ) => Promise<void>;
+  updateUser: (
+    userId: number, name: string, nickname: string
+  ) => Promise<void>;
   refresh: () => Promise<void>;
   logout: () => void;
   validateEmail: (access_token: string, token: string) => Promise<void>;
   sendValidateEmail: () => Promise<void>;
   sendRecover: (email: string) => Promise<void>;
   updatePassword: (id: number, pswd1: string, pswd2: string) => Promise<void>;
-  getUserAuth: () => Promise<void>;
+  resetPassword: (email: string, tokenSenha: string, newPassword: string) => Promise<void>
 };
 
 interface User {
@@ -96,15 +100,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
       getUserByAcessToken()
     }
-    
+
     setLoading(false);
   }, []);
-
-  useEffect(() => {
-    if (!!user) {
-      setLoading(false)
-    } 
-}, [user, setUser])
 
   async function validLogin(email: string, password: string) {
     if (email === "") {
@@ -129,6 +127,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const tokens = await response.data.tokens;
 
       localStorage.setItem("token", JSON.stringify(tokens));
+      localStorage.setItem("user", JSON.stringify(loggedUser));
 
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
 
@@ -240,7 +239,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     confirmPassword: string,
     birthDate: string
   ) {
-    
+
     try {
       const response = await signupUser(
         name,
@@ -255,6 +254,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const tokens = await response.data.tokens;
 
       localStorage.setItem("token", JSON.stringify(tokens));
+      localStorage.setItem("user", JSON.stringify(loggedUser));
 
       api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
       setUser(loggedUser)
@@ -280,6 +280,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  async function updateUser(userId: number, name: string, nickname: string): Promise<void> {
+    try {
+      await patchUser(userId, name, nickname)
+      user!.name = name
+      user!.nickname = nickname
+    } catch (e) {
+      const error = await e as AxiosError
+      console.error(`Erro (${error.response?.status}) ao editar perfil ${userId}`, error);
+      if (error.response?.status === 409) {
+        throw new AppError(409, 'O nickname escolhido já está sendo utilizado')
+      } else if (error.response?.status === 400) {
+        throw new AppError(400, 'Usuário não encontrado')
+      } else if (error.response?.status === 401) {
+        throw new AppError(error.response?.status, 'Credenciais Incorretas')
+      }
+    }
+  };
+
+
   async function validateEmail(
     access_token: string,
     token: string
@@ -290,7 +309,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const tokenJSON = JSON.parse(recoveredToken);
         api.defaults.headers.Authorization = `Bearer ${tokenJSON.access_token}`;
         await verifyEmail(token);
-        await getUserAuth()
+        await getUserByAcessToken()
       } else {
         api.defaults.headers.Authorization = `Bearer ${access_token}`;
         await verifyEmail(token);
@@ -301,10 +320,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (error.response?.data) {
         const { statusCode, message } = error.response.data as ErrorData;
         if (statusCode && message) {
-          throw new AppError( statusCode, message)
+          throw new AppError(statusCode, message)
         }
       } else {
-        throw new AppError( 400, 'Erro ao verificar o e-mail.')
+        throw new AppError(400, 'Erro ao verificar o e-mail.')
       }
     }
   }
@@ -370,32 +389,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  async function getUserAuth() {
+  const resetPassword = async (email: string, tokenSenha: string, newPassword: string) => {
+    const url = '/user/recover-account'; 
+    
     try {
       const tokensJSON = localStorage.getItem("token");
       const tokens = JSON.parse(tokensJSON!);
-      api.defaults.headers.Authorization = `Bearer ${tokens.access_token}`;
-
-      const response = await getUserByAccessToken()
-      const loggedUser = await response.data
-      setUser(loggedUser)
       
-    } catch(e) {
-        const error = (await e) as AxiosError;
-        console.error(
-          `Erro (${error.response?.status}) ao recuperar usuário:`,
-          error
-        );
-        if (error.response?.data) {
-          const { statusCode, message } = error.response.data as ErrorData;
-          if (statusCode && message) {
-            throw new AppError( statusCode, message)
-          }
-        }
-        throw new AppError(
-          400,
-          "Erro ao realizar recuperação de usuário.",
-        );
+      const config = {
+        headers: {
+          Authorization: `Bearer ${tokens}`, 
+        },
+      };
+
+      const data = {
+        email: email,
+        token: tokenSenha,
+        newPassword: newPassword,
+      };
+      const response = await api.patch(url, data, config);
+      console.log(response.data); 
+    }catch(error){
+      const e = (await error) as AxiosError;
+      throw e;
     }
   }
 
@@ -408,14 +424,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         validLogin,
         login,
         validRegister,
+        resetPassword,
         register,
         refresh,
         logout,
+        updateUser,
         validateEmail,
         sendValidateEmail,
         sendRecover,
         updatePassword,
-        getUserAuth
       }}
     >
       {children}

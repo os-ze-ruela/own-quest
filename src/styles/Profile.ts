@@ -116,7 +116,8 @@ export const YourProfileTitle = styled.p`
     font-size: 30px;
 `
 export const Separator = styled.hr`
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #FFFFFF9E;
+    border-radius: 12px;
 `
 export const WrapTextButton = styled.div`
     flex-direction: row;
@@ -134,7 +135,7 @@ export const Text = styled.div`
     flex-direction: column;
 `
 export const EditButton = styled.button`
-    width: 12%;
+    width: 18%;
     height: 20%;
     background-color: #202331;
     color: white;
@@ -329,3 +330,52 @@ export const ButtonHist = styled.a`
     }
 
 `
+    export const InputChange = styled.input`
+        border: none;
+        background-color: #282C3E;
+        color: white;
+        margin-bottom: 2em;
+        cursor: auto;
+        border-color: transparent;
+        outline: none;
+        font-size: 20;
+    `
+    export const ConfirmationDialog = styled.div`
+    font-family: FiraCode-Bold;
+    font-weight: 500;
+    justify-content: center;
+    width: 50%;
+    background-color: #568EA3;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+    `;
+
+    export const DialogButtons = styled.div`
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    
+    button {
+        background-color: #E03140CC;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+        background-color: #202331;
+        }
+    }
+    `;
+
+    export const WrapButtons = styled.div`
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        padding-left: 2em;
+        width: 50%;
+    `

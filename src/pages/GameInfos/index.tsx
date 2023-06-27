@@ -6,6 +6,7 @@ import { CardExplorerHotShimmer } from '../../components/Cards/CardExplorerHotSh
 import CardMostViewGame from '../../components/Cards/CardMostViewGame';
 import DialogReportGame from '../../components/Dialog/DialogReportGame';
 import DialogResumeGame from '../../components/Dialog/DialogResumeGame';
+import CommentsSection from '../../components/GameInfos/CommentsSection';
 import Header from '../../components/Header/Header';
 import HeaderLogged from '../../components/Header/HeaderLogged';
 import ImagePlaceholder from '../../components/ImagePlaceholder/ImagePlaceholder';
@@ -319,6 +320,9 @@ export const GameInfos = () => {
                             </GameActionsWrapper>
                         )}
                 </GameInfosWrapper>
+                {loading ? (<></>) :
+                    (<CommentsSection gameId={visitingGame?.id} />)
+                }
                 <HorizontalListWrapper>
                 <TitleListGames>Histórias semelhantes para você jogar</TitleListGames>
                 <GameListContainer>

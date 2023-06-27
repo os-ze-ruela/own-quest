@@ -141,9 +141,11 @@ export const HideButton = styled.img`
 `
 export const Input = styled.input`
     display: flex;
+    outline: none;
     /* margin-left: 0.5em; */
     flex-direction: column;
     background-color: #30354B;
+    padding: 4px 1rem;
     color: white;
     font-family: FiraCode-Regular;
     margin-bottom: 1em;

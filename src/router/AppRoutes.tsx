@@ -53,7 +53,9 @@ function AppRoutes() {
         const { authenticated, loading } = useContext(AuthContext)
 
         if (loading) {
-            return <div>Carregando...</div>
+            return <Backdrop open={true} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <CircularProgress />
+            </Backdrop>
         }
 
         if (authenticated) {

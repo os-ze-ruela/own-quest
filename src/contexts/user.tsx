@@ -3,7 +3,7 @@ import { ReactNode, createContext, useState } from "react";
 import AppError from "../core/app-error";
 import User from "../models/User";
 import UserCategory from "../models/UserCategory";
-import { api, getUserByNickname, postLikeGame, postUnLikeGame, postFollowUser, postUnfollowUser } from "../services/api";
+import { api, getUserByNickname, patchUser, postFollowUser, postLikeGame, postUnLikeGame, postUnfollowUser, serDelete } from "../services/api";
 type UserContextType = {
     likeGame: (gameId: string) => Promise<void>
     unlikeGame: (gameId: string) => Promise<void>
@@ -13,7 +13,9 @@ type UserContextType = {
     followUser: (followerId: string, followedId: string) => Promise<void>
     unfollowUser: (followerId: string, followedId: string) => Promise<void>
     open: boolean,
-    setOpen: (open: boolean) => void
+    setOpen: (open: boolean) => void,
+    updateProfileInfo: (userId: number, name: string, nickname: string) => Promise<void>,
+    deleteUser: (idUsuario: number) => Promise<void>
 }
 
 export const UserContext = createContext<UserContextType>({} as UserContextType)
@@ -26,7 +28,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const toggleDrawer = () => {
         setOpen(!open);
     };
-
+    
     async function likeGame(gameId: string): Promise<void> {
         try {
             await postLikeGame(gameId)
@@ -40,7 +42,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             }
         }
     };
-    
+
 
     async function unlikeGame(gameId: string): Promise<void> {
         try {
@@ -65,16 +67,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
             const response = await getUserByNickname(userNickname)
             const { id, name, email, nickname,
-                    birthDate, followers, following,
-                    photo, createdAt, isDeleted,
-                    isFollowing, categories } = response.data
+                birthDate, followers, following,
+                photo, createdAt, isDeleted,
+                isFollowing, categories } = response.data
 
             const userCategories = categories.map((category: any) => {
                 const { id, title, color, timesUsed } = category
                 return new UserCategory({ id, title, color, timesUsed });
             });
 
-            setVisitingUser( new User({
+            setVisitingUser(new User({
                 id: id,
                 name: name,
                 email: email,
@@ -113,7 +115,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             }
         }
     };
-    
+
 
     async function unfollowUser(followerId: string, followedId: string): Promise<void> {
         try {
@@ -129,8 +131,28 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+
+    async function updateProfileInfo  (idUsuario: number, novoNome: string, novoNickname: string): Promise<void> {
+        try {
+          const response = await patchUser(idUsuario, novoNome, novoNickname);
+          console.log(response.data); 
+        } catch (error) {
+          console.error('Erro na troca de nome e nickname:', error);
+        }
+    };
+
+    async function deleteUser(idUsuario: number): Promise<void> {
+        const url = '/user/delete';
+        try{
+            const response = await serDelete(idUsuario)
+        }catch(e){
+            console.error('Erro ao deletar usuário',e)
+        }
+    }
+
+
     return (
-        <UserContext.Provider value={{ likeGame, unlikeGame, findUserByNickname, followUser, unfollowUser, setOpen, visitingUser, setVisitingUser, open }}>
+        <UserContext.Provider value={{ deleteUser, likeGame, unlikeGame, findUserByNickname, followUser, unfollowUser, setOpen, visitingUser, setVisitingUser, open, updateProfileInfo }}>
             {children}
         </UserContext.Provider>
     )

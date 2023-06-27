@@ -10,9 +10,21 @@ export const createSession = async (email: string, password: string) => {
     return await api.post('/auth/signin', { email, password })
 }
 
+// export const closeSession = async () => {
+//     return await api.post('auth/logout')
+// }
+
 export const signupUser = async (name: string, nickname: string, email: string, password: string, birthDate: string) => {
     return await api.post('/auth/signup', { name, nickname, email, password, birthDate })
 }
+
+export const patchUser = async (userId: number, name: string, nickname: string) => {
+    return await api.patch('/user', { "id": userId, "name": name, "nickname": nickname, })
+}
+
+export const serDelete = async (userId: number) => {
+    return await api.delete('/user/delete', { params: { "id": userId } });
+  }
 
 export const refreshToken = async () => {
     return await api.post('/auth/refresh')
@@ -25,6 +37,14 @@ export const getUserByAccessToken = async () => {
 // GAME CONTEXT
 export const getUserGamesByToken = async () => {
     return await api.get('/user/games')
+}
+
+export const getUserGamesById = async (id: number) => {
+    return await api.get(`user/${id}/games`)
+}
+
+export const getUserRelevantsGamesById = async (id: number) => {
+    return await api.get(`user/${id}/relevants`)
 }
 
 export const getHotGames = async (page: number) => {
@@ -226,8 +246,8 @@ export const getUserByNickname = async (nickname: string) => {
     return await api.get(`/user/find/${nickname}`)
 }
 
-export const getUserAuthenticated = async () => {
-    return await api.get(`/user`)
+export const updateProfile = async (userId: string, name: string, nickname: string) => {
+    return await api.patch(`/user`, {userId, name, nickname})
 }
 
 export const postFollowUser = async (followerId: string, followedId: string) => {
@@ -237,6 +257,12 @@ export const postFollowUser = async (followerId: string, followedId: string) => 
 export const postUnfollowUser = async (followerId: string, followedId: string) => {
     return await api.delete(`/user/${followerId}/unfollow/${followedId}`)
 }
+
+export const userDelete = async () =>{
+    return await api.delete(`/user/delete`)
+}
+
+
 
 // ----- IMAGE UPLOAD -----
 
@@ -319,4 +345,21 @@ export const postIncrementAIGameGeneration = async (userId: number) => {
     return await api.post(`/ia-generation/game`, {
         "userId": userId
     })
+}
+
+// COMMENTS
+export const postComment = async (autorId: number, gameId: number, content: string) => {
+    return await api.post(`/comment`, {
+        "userId": autorId,
+        "gameId": gameId,
+        "content": content
+    })
+}
+
+export const deleteCommentById = async (commentId: number) => {
+    return await api.delete(`/comment/${commentId}`)
+}
+
+export const fetchCommentsByGameId = async (gameId: string) => {
+    return await api.get(`/comment/${gameId}`)
 }
