@@ -2,7 +2,7 @@ import axios from "axios";
 import Category from "../models/Category";
 
 export const api = axios.create({
-    baseURL: 'https://deploy.ownquest.games',
+    baseURL: 'https://own-quest-server-production.up.railway.app',
 })
 
 // AUTH CONTEXT
