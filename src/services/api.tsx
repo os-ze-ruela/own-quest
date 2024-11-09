@@ -2,7 +2,7 @@ import axios from "axios";
 import Category from "../models/Category";
 
 export const api = axios.create({
-    baseURL: 'https://web-production-5842.up.railway.app',
+    baseURL: 'https://own-quest-server.onrender.com',
 })
 
 // AUTH CONTEXT

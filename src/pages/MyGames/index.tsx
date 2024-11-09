@@ -64,6 +64,14 @@ const MyGames = () => {
     fetchGames()
   }, [])
 
+  const isValidJson = (str: string) => {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  };
 
   const handleClickGenerateRandomStorie = async () => {
     setCreatingGame(true);
@@ -74,11 +82,15 @@ const MyGames = () => {
     setCreatingGame(false);
     setIsLoadingGame(true);
 
-    let randomGame = ""
-
+    let randomGame: any = null
 
     try {
-      randomGame = await generateRandomGameByDescription(numPageSelected, categorySelected, description)
+      randomGame = await generateRandomGameByDescription(
+        numPageSelected,
+        categorySelected,
+        description,
+        user?.id ?? 0
+      )
     } catch (error: any) {
       setIsLoadingGame(false);
       setErrorIASnackbar(true)
@@ -86,36 +98,16 @@ const MyGames = () => {
       return
     }
 
-    let randomGameJSON: any;
-
-    try {
-      randomGameJSON = JSON.parse(randomGame)
-    } catch (error: any) {
-      setIsLoadingGame(false);
-      setErrorIASnackbar(true)
-      setErrorIAMessage('Ocorreu um erro ao gerar a sua história, pedimos desculpa')
-      return
-    }
-
-
-    try {
-      await incrementAIGameGeneration(user!.id)
-    } catch (e) {
-      setErrorIASnackbar(true)
-      setErrorIAMessage('O seu limite de criação de histórias com IA foi excedido')
-      return
-    }
-
-    const matchingCategory = categories.find(category => category.title === randomGameJSON.categories)
+    const matchingCategory = categories.find(category => category.title === randomGame.categories)
     let categoryIds = []
 
     if (matchingCategory) {
       categoryIds.push(matchingCategory.id)
-      randomGameJSON.categories = categoryIds
+      randomGame.categories = categoryIds
     }
 
     try {
-      const gameId = await createRandomGame(randomGameJSON)
+      const gameId = await createRandomGame(randomGame)
       setIsLoadingGame(false);
       navigate(GAME + '/' + gameId)
     } catch (error) {
@@ -274,7 +266,7 @@ const MyGames = () => {
           <div style={{ marginRight: '2rem' }}>
             <Badge
               color={3 - (user!.game_ia_generation_count ?? 0) <= 0 ? 'warning' : 'success'}
-              badgeContent={3 - user!.game_ia_generation_count ?? 0}
+              badgeContent={3 - (user!.game_ia_generation_count ?? 0)}
               invisible={user!.is_premium}
             >
               <RandomDescriptionButton onClick={handleClickGenerateRandomStorie}>

@@ -4,7 +4,7 @@ import { GameContext } from '../contexts/game';
 import AppError from '../core/app-error';
 import { Button } from "../models/Button";
 import { Page } from "../models/Page";
-import { generateDescriptionWithIA, generateImageWithIA, postButton, postIncrementAIGameGeneration, postPage } from "../services/api";
+import { api, generateDescriptionWithIA, postButton, postIncrementAIGameGeneration, postPage } from "../services/api";
 
 interface ErrorData {
   statusCode: number;
@@ -19,7 +19,7 @@ type OpenAIContextType = {
   improveDescription: (userId: number, description: string) => Promise<string>,
   generateImage: (userId: number, description: string) => Promise<string>,
   generateRandomGame: (numPages: number, category: string) => Promise<string>
-  generateRandomGameByDescription: (numPages: number, category: string, description: string) => Promise<string>
+  generateRandomGameByDescription: (numPages: number, category: string, description: string, userId: number) => Promise<string>
   incrementAIGameGeneration: (userId: number) => Promise<void>
 }
 
@@ -62,8 +62,8 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
   async function generateImage(userId: number, description: string): Promise<string> {
 
     try {
-      const response = await generateImageWithIA(userId, description);
-      return response.data.image
+      const response = await api.post('/ia-generation/image', { description: description, userId: userId });
+      return response.data.image as string;
     } catch (e) {
       const error = (await e) as AppError;
       throw error;
@@ -121,78 +121,14 @@ export const OpenAIProvider = ({ children }: { children: ReactNode }) => {
     return response
   }
 
-  async function generateRandomGameByDescription(numPages: number, category: string, description: string): Promise<string> {
+  async function generateRandomGameByDescription(numPages: number, category: string, description: string, userId: number): Promise<string> {
     console.log("generateRandomGameByDescription...")
-    console.log("Numero de paginas = ", numPages)
-    const defaultPrompt =
-      `
-        Eu tenho uma plataforma de criação de histórias e desejo criar histórias aleatórias. Todas histórias seguem um padrão de criação. 
-
-        Regra 1: A história possui uma ou mais categorias (Aventura, ação, terror, suspense, e outras.), possui um título e uma descrição.
-        
-        Regra 2: Cada história é dividida em páginas. Cada página possui: um título, uma descrição, botões, uma cor e um indicação se é uma página de final da história 
-        
-        Regra 3: Pode haver uma ou mais páginas de final de história.
-        
-        Regra 4: Caso seja uma página final "is_last_page"='true'.
-        
-        Regra 5: Todas as páginas possuem necessariamente dois ou mais botões, menos as páginas finais, que não possuem botões
-        
-        Regra 6: Cada botão possui um título, uma cor, e cada botão redireciona para outra página da história (pode ser uma página já visitada ou não, porém um botão não pode redirecionar para a própria página). 
-        
-        Regra 7: As cores das páginas e dos botões podem variar de acordo com a história.
-        
-        Parâmetros para criação da história: 
-        Descrição da História: ${description}
-        Categoria da História: ${category}
-        Número de páginas da história:  ${numPages}
-        
-        Com base no conjunto de regras e parâmetros gere um nova história baseada na descrição e na categoria da história, seguindo o seguinte formato JSON:
-        
-                 {
-                                        "title": "",
-                                        "description": "",
-                                        "image": "",
-                                        "categories": "",
-                                        “pages”: [
-                                            {
-                                            "id": 1
-                                                "title": "",
-                                                "description": "",
-                                                "color": "#568EA3",
-                                                "number_page": 0,
-                                                "is_last_page": false,
-                                                "icon": "",
-                                                "buttons": [
-                                                    {
-                                                        "id": 1
-                                                        "title": "",
-                                                        "nextPageId": 1,
-                                                        "icon": "",
-                                                        "color": "#202331"
-                                                    },
-                                                    {
-                                                        "id": 2
-                                                        "title": "",
-                                                        "nextPageId": 2,
-                                                        "icon": "",
-                                                        "color": "#202331"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                        }
-                         
-                         Retorne como resposta, apenas o JSON.
-        
-        `;
-
     try {
-      const response = await chat(defaultPrompt);
-      return response
+      const response = await api.post('/ia-generation/game', { description: description, numPages: numPages, category: category, userId: userId });
+      console.log("Resposta da geração de jogo com descrição = ", response.data)
+      return response.data
     } catch (error) {
       throw new AppError(500, 'Ocorreu um problema ao gerar a sua história com ia')
-
     }
   }
 
